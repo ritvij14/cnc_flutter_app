@@ -1,4 +1,4 @@
-import 'package:cnc_flutter_app/screens/home_screen.dart';
+import 'package:cnc_flutter_app/screens/base_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class _NutritionAppState extends State<NutritionApp> {
         pages: [
           MaterialPage(
               key: ValueKey('Home'),
-              child: LoginScreen()),
+              child: BaseScreen()),
         ],
         onPopPage: (route, result) {
           if(!route.didPop(result)) return false;

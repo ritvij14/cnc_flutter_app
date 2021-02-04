@@ -1,4 +1,6 @@
 import 'package:cnc_flutter_app/models/destination_model.dart';
+import 'package:cnc_flutter_app/screens/error_screen.dart';
+import 'package:cnc_flutter_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class DestinationView extends StatefulWidget {
@@ -25,13 +27,13 @@ class _DestinationViewState extends State<DestinationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.destination.title} Text'),
+        title: Text('${widget.destination.title}'),
         backgroundColor: widget.destination.color,
       ),
       backgroundColor: widget.destination.color[100],
       body: Container(
         alignment: Alignment.center,
-        child: TextField(controller: _textController),
+        child: widget.destination.statefulWidget,
       ),
     );
   }
@@ -41,4 +43,5 @@ class _DestinationViewState extends State<DestinationView> {
     _textController.dispose();
     super.dispose();
   }
+
 }
