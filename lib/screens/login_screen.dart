@@ -1,14 +1,19 @@
+import 'package:cnc_flutter_app/connections/db_helper.dart';
+import 'package:cnc_flutter_app/connections/mysql_connector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'base_screen.dart';
+import '../nutrition_app.dart';
+import 'navigator_screen.dart';
 
 const users = const {
-  'test@gmail.com' : 'test1234',
+  'test@gmail.com': 'test1234',
   'hunter@gmail.com': 'hunter',
-  '':'',
+  '': '',
 };
 
 class LoginScreen extends StatelessWidget {
+  var db = new DBHelper();
+
   Duration get loginTime => Duration(milliseconds: 2250);
 
   Future<String> _authUser(LoginData data) {
@@ -42,9 +47,7 @@ class LoginScreen extends StatelessWidget {
       onLogin: _authUser,
       onSignup: _authUser,
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => BaseScreen(),
-        ));
+        Navigator.pushReplacementNamed(context, '/home');
       },
       onRecoverPassword: _recoverPassword,
     );
