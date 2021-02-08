@@ -1,7 +1,11 @@
 import 'package:cnc_flutter_app/connections/mysql_connector.dart';
 import 'package:cnc_flutter_app/models/user_model.dart';
+import 'package:cnc_flutter_app/screens/diet_tracking_screen.dart';
+import 'package:cnc_flutter_app/screens/fitness_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
+import 'package:cnc_flutter_app/screens/summary_screen.dart';
+import 'package:cnc_flutter_app/screens/symptom_tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -16,17 +20,16 @@ class NutritionApp extends StatelessWidget {
         '/': (context) => LoginScreen(),
         '/login': (context) => LoginScreen(),
         '/home' : (context) => NavigatorScreen(),
+        '/summary' : (context) => SummaryScreen(),
+        '/dietTracking' : (context) => DietTrackingScreen(),
+        '/fitnessTracking' : (context) => FitnessTrackingScreen(),
+        '/symptomTracking' : (context) => SymptomTrackingScreen(),
+
+
+
+
       }
     );
-    //   future: Mysql.verifyUser(),
-    //   builder: (BuildContext context, AsyncSnapshot<User> snapshot){
-    //     if (snapshot.hasData){
-    //       User user = snapshot.data;
-    //       return HomeScreen();
-    //     }
-    //     return LoginScreen();
-    //   },
-    // );
   }
 
   static String determineInitRoute() {
@@ -36,3 +39,5 @@ class NutritionApp extends StatelessWidget {
     return '/';
   }
 }
+
+
