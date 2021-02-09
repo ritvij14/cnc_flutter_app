@@ -25,7 +25,7 @@ class ProfileBody extends StatelessWidget {
               }),
           ProfileMenu(
               text: "Personal Details",
-              icon: "/assets/icons/Accessibility New.svg",
+              icon: "assets/icons/Accessibility New.svg",
               press: () {
                 // Navigate to the DetailsScreen
                 Navigator.of(context).push(MaterialPageRoute(
@@ -34,7 +34,7 @@ class ProfileBody extends StatelessWidget {
               }),
           ProfileMenu(
             text: "Notifications",
-            icon: "../assets/icons/Bell.svg",
+            icon: "assets/icons/Bell.svg",
             press: () {},
           ),
           ProfileMenu(
