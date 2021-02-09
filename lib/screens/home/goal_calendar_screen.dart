@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-void main() => runApp(GoalCalendar());
+// void main() => runApp(GoalCalendar());
 
 class GoalCalendar extends StatelessWidget {
   @override
@@ -164,11 +164,13 @@ class _CalendarPageState extends State<CalendarPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             FloatingActionButton(
+              heroTag: 'button1',
               child: Icon(Icons.add),
               onPressed: _showAddDialog,
               backgroundColor: Theme.of(context).primaryColor,
             ),
             FloatingActionButton(
+              heroTag: 'button2',
               child: Icon(Icons.delete_outline),
               onPressed: _showDeleteDialogs,
               backgroundColor: Theme.of(context).primaryColor,

@@ -1,7 +1,7 @@
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:flutter/material.dart';
 
-import 'food_screen.dart';
+import '../food_screen.dart';
 
 class DietTrackingScreen extends StatefulWidget {
   @override

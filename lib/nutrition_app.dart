@@ -1,11 +1,12 @@
 import 'package:cnc_flutter_app/connections/mysql_connector.dart';
 import 'package:cnc_flutter_app/models/user_model.dart';
-import 'package:cnc_flutter_app/screens/diet_tracking_screen.dart';
-import 'package:cnc_flutter_app/screens/fitness_tracking_screen.dart';
+import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/screens/home/diet_tracking_screen.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/screens/home/fitness_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
 import 'package:cnc_flutter_app/screens/summary_screen.dart';
-import 'package:cnc_flutter_app/screens/symptom_tracking_screen.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/screens/home/symptom_tracking_screen.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_bloc.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_state.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class NutritionApp extends StatelessWidget {
                   '/dietTracking': (context) => DietTrackingScreen(),
                   '/fitnessTracking': (context) => FitnessTrackingScreen(),
                   '/symptomTracking': (context) => SymptomTrackingScreen(),
+                  '/goals': (context) => GoalCalendar(),
                 });
           },
         ),
