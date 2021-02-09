@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:flutter/material.dart';
 
@@ -9,34 +12,29 @@ class DietTrackingScreen extends StatefulWidget {
 }
 
 class _DietTrackingScreenState extends State<DietTrackingScreen> {
+  var db = new DBHelper();
+  List<Food> foodList = [];
+
+  getFood() async {
+    var response = await db.getFood();
+    var data = json.decode(response.body);
+    for (int i = 0; i < data.length; i++) {
+      // for (int i = 0; i < 10; i++) {
+      Food food = new Food(
+          data[i]['description'],
+          data[i]['kcal'],
+          data[i]['proteinInGrams'],
+          data[i]['carbohydratesInGrams'],
+          data[i]['fatInGrams']);
+      foodList.add(food);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Food> foodList = [];
-    Food food1 =
-        new Food('Baby food, apples and chicken', 65, 2.16, 10.87, 1.38);
-    Food food2 = new Food('Baby food, apples and ham', 62, 2.6, 10.9, 0.9);
-    Food food3 = new Food(
-        'Baby food, animal crackers, cinnamon', 434.64, 6.32, 70.84, 14.387);
-    Food food4 =
-        new Food('Baby food, apples and sweet potato', 64, 0.3, 15.3, 0.22);
-    Food food5 = new Food('Banana bread', 260.086, 3.77, 44.393, 7.968);
-    foodList.add(food1);
-    foodList.add(food2);
-    foodList.add(food3);
-    foodList.add(food4);
-    foodList.add(food5);
-    foodList.add(food1);
-    foodList.add(food2);
-    foodList.add(food3);
-    foodList.add(food4);
-    foodList.add(food5);
-    return MaterialApp(
-      title: 'Diet Log',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Diet Log'),
-        ),
-        body: ListView.builder(
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        return ListView.builder(
           itemCount: foodList.length,
           itemBuilder: (context, index) {
             return ListTile(
@@ -44,31 +42,16 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            FoodPage(foodList[index].description)));
+                        builder: (context) => FoodPage(foodList[index])));
               },
               title: Text(foodList[index].description),
               subtitle: Text('Calories: ' + foodList[index].kcal.toString()),
               trailing: Icon(Icons.food_bank),
             );
           },
-        ),
-      ),
+        );
+      },
+      future: getFood(),
     );
-
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text('Diet Log'),
-    //     // actions: <Widget>[
-    //     //   IconButton(
-    //     //       icon: Icon(Icons.search),
-    //     //       onPressed: () {
-    //     //         showSearch(context: context, delegate: SearchScreen());
-    //     //       })
-    //     // ],
-    //   )
-    //   ,
-    //   body: Text('Diet Tracking Screen'),
-    // );
   }
 }

@@ -1,4 +1,3 @@
-import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/widgets/summary_widget.dart';
 import 'package:flutter/material.dart';
 
