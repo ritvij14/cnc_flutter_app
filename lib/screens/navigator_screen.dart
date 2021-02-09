@@ -34,8 +34,8 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
     HomeScreen(),
     HomeScreen(),
     HomeScreen(),
-    WelcomeScreen(),
-    ProfileScreen(),
+    HomeScreen(),
+    HomeScreen(),
   ];
 
   @override
@@ -52,9 +52,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Nutrition App'),
-      // ),
+      appBar: AppBar(
+        title: Text('Nutrition App'),
+      ),
       body: getCurrentScreen(),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
