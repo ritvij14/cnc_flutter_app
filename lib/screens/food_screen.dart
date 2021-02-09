@@ -52,14 +52,6 @@ class FoodProfile extends State<FoodPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Nutrients per 100 grams'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            setState(() {
-              Navigator.pop(context);
-            });
-          },
-        ),
       ),
       body: Container(
         child: ListView(
