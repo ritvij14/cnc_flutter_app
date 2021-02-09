@@ -1,8 +1,8 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
+import '../widgets/profile_body_widget.dart';
+
+class ProfileScreen extends StatelessWidget {
   static String routeName = "/profile";
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Profile"),
       ),
-      // body: Body(),
+      body: ProfileBody(),
     );
   }
 }

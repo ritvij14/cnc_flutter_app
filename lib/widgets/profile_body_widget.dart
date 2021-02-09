@@ -1,11 +1,11 @@
-import 'package:cnc_flutter_app/screens/account_screen.dart';
-import 'package:cnc_flutter_app/screens/preferences_screen.dart';
-import 'package:cnc_flutter_app/widgets/profile_menu_widget.dart';
-import 'package:cnc_flutter_app/widgets/profile_pic_widget.dart';
+import 'package:cnc_flutter_app/screens/temp_details_screen.dart';
 import 'package:flutter/material.dart';
+import '../screens/account_screen.dart';
+import '../screens/preferences_screen.dart';
+import 'profile_menu_widget.dart';
+import 'profile_pic_widget.dart';
 
-
-class Body extends StatelessWidget {
+class ProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -16,16 +16,25 @@ class Body extends StatelessWidget {
           SizedBox(height: 20),
           ProfileMenu(
               text: "My Account",
-              icon: "assets/icons/User Icon.svg",
+              icon: "./assets/icons/User Icon.svg",
               press: () {
                 // Navigate to the PreferencePage
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AccountPage(),
-                ));}
-          ),
+                  builder: (context) => AccountScreen(),
+                ));
+              }),
+          ProfileMenu(
+              text: "Personal Details",
+              icon: "/assets/icons/Accessibility New.svg",
+              press: () {
+                // Navigate to the DetailsScreen
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => TempDetailsScreen(),
+                ));
+              }),
           ProfileMenu(
             text: "Notifications",
-            icon: "assets/icons/Bell.svg",
+            icon: "../assets/icons/Bell.svg",
             press: () {},
           ),
           ProfileMenu(
@@ -34,14 +43,9 @@ class Body extends StatelessWidget {
               press: () {
                 // Navigate to the PreferencePage
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PreferencePage(),
-                ));}
-          ),
-          // ProfileMenu(
-          //   text: "Help Center",
-          //   icon: "assets/icons/Camera Icon.svg",
-          //   press: () {},
-          // ),
+                  builder: (context) => PreferenceScreen(),
+                ));
+              }),
           ProfileMenu(
             text: "Log Out",
             icon: "assets/icons/Log out.svg",

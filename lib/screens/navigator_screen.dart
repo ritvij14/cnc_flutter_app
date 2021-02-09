@@ -9,6 +9,18 @@ import 'home_screen.dart';
 // import 'profile/profile_page.dart';
 // import 'welcome/welcome_screen.dart';
 
+import 'package:flutter/cupertino.dart';
+import '../settings/preferences.dart';
+import '../theme/bloc/theme_bloc.dart';
+import '../theme/bloc/theme_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'profile_screen.dart';
+
+
+
+
+
 class NavigatorScreen extends StatefulWidget {
   @override
   _NavigatorScreenState createState() => _NavigatorScreenState();
@@ -22,16 +34,27 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
     HomeScreen(),
     HomeScreen(),
     HomeScreen(),
-    HomeScreen(),
-    HomeScreen(),
+    WelcomeScreen(),
+    ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTheme();
+  }
+
+  _loadTheme() async {
+    context.bloc<ThemeBloc>().add(ThemeEvent(appTheme: Preferences.getTheme()));
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Nutrition App'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Nutrition App'),
+      // ),
       body: getCurrentScreen(),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

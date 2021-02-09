@@ -1,27 +1,28 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 
-
-class WelcomeScreen extends StatefulWidget {
+class TempDetailsScreen extends StatefulWidget {
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _TempDetailsScreenState createState() => _TempDetailsScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _TempDetailsScreenState extends State<TempDetailsScreen> {
   int _age;
+
   int _height;
   int _weight;
   int _yearsLastDiag;
   int _counter = 0;
 
-  String dropDownActivity;
-  String dropDownColon;
+  String dropDownActivity = "Lightly Active";
+  String dropDownColon = "Stage 0";
   String dropDownRectum;
-  String dropDownSurgery;
 
-  bool _colon = false;
+  // String dropDownSurgery =" ";
+
+  bool _colon = true;
   bool _rectum = false;
-  bool _surgery = false;
+  bool _surgery = true;
   bool _chemo = false;
   bool _radiation = false;
 
@@ -34,7 +35,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Map<String, bool> surgeryType = {
     'Colectomy': false,
-    'Ileostomy': false,
+    'Ileostomy': true,
     'Polypectomy': false,
     'Other': false,
   };
@@ -49,9 +50,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Map<String, bool> frequentIssues = {
     'Abdominal Pain': false,
-    'Appetite Loss': false,
-    'Bloating': false,
-    'Constipation': false,
+    'Appetite Loss': true,
+    'Bloating': true,
+    'Constipation': true,
     "Diarrhea": false,
     'Nausea/Vomiting': false,
     'Stoma Problems': false,
@@ -59,71 +60,46 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _buildAge() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Age',
-        hintText: 'Enter your age in years.',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int age = int.tryParse(value);
-        if (age == null) {
-          return 'Field Required';
-        } else if (age <= 0) {
-          return 'Age must be greater than 0';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _age = int.tryParse(value);
-      },
-    );
+  final TextEditingController _ageController = new TextEditingController();
+  int userAge = 33;
+  final TextEditingController _heightController = new TextEditingController();
+  int userHeight = 65;
+  final TextEditingController _weightController = new TextEditingController();
+  int userWeight = 130;
+  final TextEditingController _diagYearsController =
+      new TextEditingController();
+  int userDiagYears = 1;
+
+  @override
+  void initState() {
+    _ageController.text = userAge.toString();
+    _heightController.text = userHeight.toString();
+    _weightController.text = userWeight.toString();
+    _diagYearsController.text = userDiagYears.toString();
+    return super.initState();
   }
 
-  Widget _buildHeight() {
+  Widget _buildIntTextFormField(String label, String hint,
+      TextEditingController controller, int variable) {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'Height(in)',
-        hintText: 'Enter your height in inches.',
+        labelText: label,
+        hintText: hint,
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
+      controller: controller,
       validator: (String value) {
-        int height = int.tryParse(value);
-        if (height == null) {
+        int input = int.tryParse(value);
+        if (input == null) {
           return 'Field Required';
-        } else if (height <= 0) {
-          return 'Height must be greater than 0';
+        } else if (input <= 0) {
+          return label + ' must be greater than 0';
         }
         return null;
       },
       onSaved: (String value) {
-        _height = int.tryParse(value);
-      },
-    );
-  }
-
-  Widget _buildWeight() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Weight(lbs)',
-        hintText: 'Enter your weight in pounds(lbs).',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int weight = int.tryParse(value);
-        if (weight == null) {
-          return 'Field Required';
-        } else if (weight <= 0) {
-          return 'Weight must be greater than 0';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _weight = int.tryParse(value);
+        variable = int.tryParse(value);
       },
     );
   }
@@ -188,9 +164,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget _buildActivity() {
     return DropdownButtonFormField(
       decoration: InputDecoration(
-          labelText: 'Usual Activity Level',
-          border: OutlineInputBorder(),
-          hintText: "Usual Activity Level"),
+        labelText: 'Usual Activity Level',
+        hintText: "hint text",
+        border: OutlineInputBorder(),
+      ),
       value: dropDownActivity,
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String Value) {
@@ -303,6 +280,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: ListTile(
           title: const Text('yes'),
           leading: Radio(
+            activeColor: Theme.of(context).buttonColor,
             value: true,
             groupValue: cancer == "rectum" ? _rectum : _colon,
             onChanged: (value) {
@@ -319,6 +297,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: ListTile(
           title: const Text('no'),
           leading: Radio(
+            activeColor: Theme.of(context).buttonColor,
             value: false,
             groupValue: cancer == "rectum" ? _rectum : _colon,
             onChanged: (value) {
@@ -371,27 +350,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           .map((recStage) =>
               DropdownMenuItem(value: recStage, child: Text("$recStage")))
           .toList(),
-    );
-  }
-
-  Widget _buildDiagnosis() {
-    return TextFormField(
-      decoration: InputDecoration(
-        // labelText: 'Last Cancer Diagnosis(years)',
-        hintText: 'Years since last cancer diagnosis',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int years = int.tryParse(value);
-        if (years == null) {
-          return 'Field Required';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _yearsLastDiag = int.tryParse(value);
-      },
     );
   }
 
@@ -454,18 +412,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text(
-                'Cancer History',style: TextStyle(fontSize: 18)
-              ),
+              child: Text('Cancer History', style: TextStyle(fontSize: 18)),
             ),
           ),
           SizedBox(height: 20),
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text(
-                'Do you have colon cancer?',style: TextStyle(fontSize: 16)
-              ),
+              child: Text('Do you have colon cancer?',
+                  style: TextStyle(fontSize: 16)),
             ),
           ),
           _buildCancerHistoryYN("colon"),
@@ -474,7 +429,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text('Do you have rectum cancer?',style: TextStyle(fontSize: 16)),
+              child: Text('Do you have rectum cancer?',
+                  style: TextStyle(fontSize: 16)),
             ),
           ),
           _buildCancerHistoryYN("rectum"),
@@ -485,13 +441,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                        'How many years has it been since your last cancer (any type of cancer) diagnosis?',style: TextStyle(fontSize: 16)),
+                        'How many years has it been since your last cancer (any type of cancer) diagnosis?',
+                        style: TextStyle(fontSize: 16)),
                   ),
                 )
               : SizedBox(height: 0),
           SizedBox(height: 10),
           _rectum == true || _colon == true
-              ? _buildDiagnosis()
+              ? _buildIntTextFormField("", 'Years since last cancer diagnosis',
+                  _diagYearsController, _yearsLastDiag)
               : SizedBox(height: 10),
         ],
       ),
@@ -504,6 +462,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: ListTile(
           title: const Text('yes'),
           leading: Radio(
+            activeColor: Theme.of(context).buttonColor,
             value: true,
             groupValue: treatment == "surgery"
                 ? _surgery
@@ -528,6 +487,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: ListTile(
           title: const Text('no'),
           leading: Radio(
+            activeColor: Theme.of(context).buttonColor,
             value: false,
             groupValue: treatment == "surgery"
                 ? _surgery
@@ -590,9 +550,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text(
-                'Have you had cancer surgery?',style: TextStyle(fontSize: 16)
-              ),
+              child: Text('Have you had cancer surgery?',
+                  style: TextStyle(fontSize: 16)),
             ),
           ),
           _buildTreatmentYN("surgery"),
@@ -601,7 +560,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text('Have you had radiation therapy?',style: TextStyle(fontSize: 16)),
+              child: Text('Have you had radiation therapy?',
+                  style: TextStyle(fontSize: 16)),
             ),
           ),
           _buildTreatmentYN("radiation"),
@@ -609,7 +569,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text('Have you had chemotherapy?',style: TextStyle(fontSize: 16)),
+              child: Text('Have you had chemotherapy?',
+                  style: TextStyle(fontSize: 16)),
             ),
           ),
           _buildTreatmentYN("chemo"),
@@ -650,6 +611,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Personal Details"),
+      ),
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.all(24),
@@ -658,20 +622,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text("Welcome!", style: TextStyle(fontSize: 25)),
                 SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text("Please fill out the following forms:", style: TextStyle(fontSize: 18)),
-                  ),
-                ),
+                _buildIntTextFormField(
+                    "Age", 'Enter your age in years.', _ageController, _age),
                 SizedBox(height: 10),
-                _buildAge(),
+                _buildIntTextFormField(
+                    "Height",
+                    'Enter your height in inches(in).',
+                    _heightController,
+                    _height),
                 SizedBox(height: 10),
-                _buildHeight(),
-                SizedBox(height: 10),
-                _buildWeight(),
+                _buildIntTextFormField(
+                    "Weight",
+                    'Enter your weight in pounds(lbs).',
+                    _weightController,
+                    _height),
                 SizedBox(height: 10),
                 _buildActivity(),
                 SizedBox(height: 10),
@@ -700,7 +665,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 SizedBox(height: 10),
                 RaisedButton(
                   child: Text(
-                    'Submit',
+                    'Save',
                     style: TextStyle(color: Theme.of(context).highlightColor),
                   ),
                   onPressed: () {

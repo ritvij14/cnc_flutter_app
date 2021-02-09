@@ -27,7 +27,7 @@ class ProfileMenu extends StatelessWidget {
         child: Row(
           children: [
             SvgPicture.asset(
-              icon,
+             icon,
               color: Theme.of(context).highlightColor,
               width: 22,
             ),
