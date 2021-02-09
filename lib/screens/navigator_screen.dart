@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 import 'ask_screen.dart';
+import 'diet_tracking_screen.dart';
 import 'home_screen.dart';
 // import 'ask/ask_page.dart';
 // import 'home_page.dart';
@@ -21,7 +22,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   List<Widget> screens = <Widget>[
     HomeScreen(),
     HomeScreen(),
-    HomeScreen(),
+    DietTrackingScreen(),
     HomeScreen(),
     HomeScreen(),
   ];
@@ -31,6 +32,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Nutrition App'),
+        automaticallyImplyLeading: true,
       ),
       body: getCurrentScreen(),
       bottomNavigationBar: BottomNavigationBar(
