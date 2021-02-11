@@ -1,3 +1,5 @@
+import 'package:cnc_flutter_app/screens/food_screen.dart';
+import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   List<Widget> screens = <Widget>[
     HomeScreen(),
     HomeScreen(),
-    HomeScreen(),
+    DietTrackingScreen(),
     WelcomeScreen(),
     ProfileScreen(),
   ];

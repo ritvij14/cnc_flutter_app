@@ -1,4 +1,3 @@
-import 'package:cnc_flutter_app/screens/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/widgets/summary_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('Track Symptoms'),
                   onPressed: () {
                     Navigator.pushNamed(context, '/fitnessTracking');
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  child: Text('Goals'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/goals');
                   },
                 ),
               ),
