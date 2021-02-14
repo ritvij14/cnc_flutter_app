@@ -2,7 +2,6 @@ import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 // void main() {
 //   runApp(new MaterialApp(
 //     home: new FoodPage(),
@@ -37,10 +36,11 @@ class FoodProfile extends State<FoodPage> {
         child: ListView(
           children: <Widget>[
             Text('Calories: ' + currentFood.kcal.toString()),
-            Text('Protein: ' + currentFood.protein.toString() + 'g'),
-            Text(
-                'Carbohydrates: ' + currentFood.carbohydrates.toString() + 'g'),
-            Text('Fat: ' + currentFood.fat.toString() + 'g')
+            Text('Protein: ' + currentFood.proteinInGrams.toString() + 'g'),
+            Text('Carbohydrates: ' +
+                currentFood.carbohydratesInGrams.toString() +
+                'g'),
+            Text('Fat: ' + currentFood.fatInGrams.toString() + 'g')
           ],
         ),
       ),

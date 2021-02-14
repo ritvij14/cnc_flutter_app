@@ -20,12 +20,12 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
     var data = json.decode(response.body);
     for (int i = 0; i < data.length; i++) {
       // for (int i = 0; i < 10; i++) {
-      Food food = new Food(
-          data[i]['description'],
-          data[i]['kcal'],
-          data[i]['proteinInGrams'],
-          data[i]['carbohydratesInGrams'],
-          data[i]['fatInGrams']);
+      Food food = new Food();
+      food.description = data[i]['description'];
+      food.kcal = data[i]['kcal'];
+      food.proteinInGrams = data[i]['proteinInGrams'];
+      food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
+      food.fatInGrams = data[i]['fatInGrams'];
       foodList.add(food);
     }
   }
