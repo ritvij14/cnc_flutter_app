@@ -39,7 +39,6 @@ class LoginScreen extends StatelessWidget {
       if (await db.isEmailValid(data.name) == false) {
         return 'Username does not exist';
       }
-      //password doesn't match username in db
       if (await db.login(data.name, data.password) == 'invalid') {
         return 'Incorrect password';
       }
