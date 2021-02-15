@@ -26,6 +26,12 @@ class FitnessActivity {
   int getCalories() {
     return minutes * intensity;
   }
+  // factory FitnessActivity.fromJson(Map<String, dynamic> json){
+  //   return FitnessActivity();
+  //     type: json['type'],
+  //     // intensity: json['intensity'],
+  //     // minutes: json['minutes'],
+  // }
 }
 
 final List<FitnessActivity> fitnessActivityModelList = [
