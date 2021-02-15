@@ -2,20 +2,20 @@ import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class FitnessTrackingPopupInputWidget extends StatefulWidget {
+class FitnessTrackingPopupModifyActivity extends StatefulWidget {
   FitnessActivity fitnessActivity;
 
-  FitnessTrackingPopupInputWidget(FitnessActivity fitnessActivity) {
+  FitnessTrackingPopupModifyActivity(FitnessActivity fitnessActivity) {
     this.fitnessActivity = fitnessActivity;
   }
 
   @override
-  _FitnessTrackingPopupInputWidgetState createState() =>
-      _FitnessTrackingPopupInputWidgetState();
+  _FitnessTrackingPopupModifyActivityState createState() =>
+      _FitnessTrackingPopupModifyActivityState();
 }
 
-class _FitnessTrackingPopupInputWidgetState
-    extends State<FitnessTrackingPopupInputWidget> {
+class _FitnessTrackingPopupModifyActivityState
+    extends State<FitnessTrackingPopupModifyActivity> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -1,4 +1,4 @@
-import 'package:cnc_flutter_app/widgets/fitness_tracking_list_tile_widget.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
 
 class FitnessActivity {
   String type;
@@ -15,7 +15,9 @@ class FitnessActivity {
 
   }
 
-  FitnessActivity.emptyConstructor();
+  FitnessActivity.emptyConstructor() {
+    this.minutes = 0;
+  }
 
   int _calculateCalories(String type, int minutes, int intensity){
     return minutes * intensity;

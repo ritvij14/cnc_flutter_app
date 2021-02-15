@@ -1,7 +1,7 @@
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:flutter/material.dart';
 
-import 'fitness_tracking_popup_input_widget.dart';
+import 'fitness_tracking_popup_modify_activity_widget.dart';
 
 class FitnessTrackingListTile extends StatefulWidget {
   FitnessActivity fitnessActivity;
@@ -36,7 +36,7 @@ class _FitnessTrackingListTileState extends State<FitnessTrackingListTile> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                content: FitnessTrackingPopupInputWidget(widget.fitnessActivity),
+                content: FitnessTrackingPopupModifyActivity(widget.fitnessActivity),
               );
             }).then((val){
               refresh();
