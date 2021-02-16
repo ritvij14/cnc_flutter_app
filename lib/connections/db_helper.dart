@@ -39,8 +39,9 @@ class DBHelper {
     return response;
   }
 
-  Future<http.Response> saveFormInfo( String userId,
-     String birthDate,
+  Future<http.Response> saveFormInfo(
+      String userId,
+      String birthDate,
       String race,
       String ethnicity,
       String height,
@@ -58,6 +59,8 @@ class DBHelper {
       String surgeryType) async {
     var requestUrl = baseUrl +
         'api/users/save/' +
+        userId +
+        "/" +
         birthDate +
         '/' +
         race +
@@ -90,7 +93,8 @@ class DBHelper {
         '/' +
         surgeryType;
     http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+        await http.post(Uri.encodeFull(requestUrl), headers: {});
+    print(requestUrl);
     return response;
   }
 }
