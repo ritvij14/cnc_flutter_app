@@ -5,7 +5,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:clipboard/clipboard.dart';
 
-void main() => runApp(GoalCalendar());
+// void main() => runApp(GoalCalendar());
 
 class GoalCalendar extends StatelessWidget {
   @override
