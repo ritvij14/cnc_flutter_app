@@ -130,7 +130,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             Container(
               padding: EdgeInsets.all(15.0),
-              color: Theme.of(context).buttonColor,
+              color: Theme.of(context).accentColor,
               alignment: Alignment.bottomLeft,
               child: Text(
                 'Personal Goals',
