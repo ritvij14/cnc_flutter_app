@@ -1,3 +1,4 @@
+import 'package:cnc_flutter_app/screens/details_screen_strepper.dart';
 import 'package:cnc_flutter_app/screens/temp_details_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/account_screen.dart';
@@ -29,7 +30,7 @@ class ProfileBody extends StatelessWidget {
               press: () {
                 // Navigate to the DetailsScreen
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => TempDetailsScreen(),
+                  builder: (context) => DetailsScreen(),
                 ));
               }),
           ProfileMenu(
