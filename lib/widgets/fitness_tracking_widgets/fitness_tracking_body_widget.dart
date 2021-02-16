@@ -37,7 +37,7 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
             }
           ).then((val){
             setState(() {
-              widget.fitnessActivityList.add(val);
+              widget.fitnessActivityList.insert(0, val);
             });
           });
         },
