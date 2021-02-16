@@ -38,4 +38,11 @@ class DBHelper {
         await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
+
+  Future<http.Response> getActivities() async {
+    var requestUrl = baseUrl + 'api/activity/all';
+    http.Response response =
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
 }
