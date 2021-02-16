@@ -746,9 +746,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if (formKeys[currentStep].currentState.validate()) {
       formKeys[currentStep].currentState.save();
 
-      currentStep + 1 != steps.length
-          ? goTo(currentStep + 1)
-          : setState(() => complete = true);
+      if (currentStep + 1 != steps.length) {
+        goTo(currentStep + 1);
+        setState(() => complete = false);
+      } else {
+        setState(() => complete = true);
+      }
       if (complete) {
         submit();
       }
