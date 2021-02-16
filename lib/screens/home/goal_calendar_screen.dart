@@ -10,6 +10,8 @@ import 'package:clipboard/clipboard.dart';
 class GoalCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return CalendarPage();
+
     return MaterialApp(
       title: 'Goal Calendar',
       theme: ThemeData(
@@ -128,7 +130,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             Container(
               padding: EdgeInsets.all(15.0),
-              color: Colors.blue[800],
+              color: Theme.of(context).buttonColor,
               alignment: Alignment.bottomLeft,
               child: Text(
                 'Personal Goals',

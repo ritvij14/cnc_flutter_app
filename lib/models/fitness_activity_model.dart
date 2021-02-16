@@ -1,4 +1,4 @@
-import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
+import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
 
 class FitnessActivity {
   String type;
@@ -7,31 +7,30 @@ class FitnessActivity {
   int calories;
 
   //intensity can be a scale, 1-5
-  FitnessActivity(String type, int minutes, int intensity){
+  FitnessActivity(String type, int minutes, int intensity) {
     this.type = type;
-    this. minutes = minutes;
+    this.minutes = minutes;
     this.intensity = intensity;
     this.calories = _calculateCalories(type, minutes, intensity);
-
   }
 
   FitnessActivity.emptyConstructor() {
     this.minutes = 0;
   }
 
-  int _calculateCalories(String type, int minutes, int intensity){
+  int _calculateCalories(String type, int minutes, int intensity) {
     return minutes * intensity;
   }
 
   int getCalories() {
     return minutes * intensity;
   }
-  // factory FitnessActivity.fromJson(Map<String, dynamic> json){
-  //   return FitnessActivity();
-  //     type: json['type'],
-  //     // intensity: json['intensity'],
-  //     // minutes: json['minutes'],
-  // }
+// factory FitnessActivity.fromJson(Map<String, dynamic> json){
+//   return FitnessActivity();
+//     type: json['type'],
+//     // intensity: json['intensity'],
+//     // minutes: json['minutes'],
+// }
 }
 
 final List<FitnessActivity> fitnessActivityModelList = [
@@ -46,7 +45,4 @@ final List<FitnessActivity> fitnessActivityModelList = [
   FitnessActivity('jogging', 10, 2),
   FitnessActivity('jogging', 10, 2),
   FitnessActivity('jogging', 20, 3),
-
-
 ];
-
