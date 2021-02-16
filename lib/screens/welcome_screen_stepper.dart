@@ -710,6 +710,27 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
+  _successfulAlert() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Form successfully submitted'),
+
+          actions: <Widget>[
+            TextButton(
+              child: Text('CLOSE'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   final List<GlobalKey<FormState>> formKeys = [
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
@@ -793,7 +814,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     db.saveFormInfo(
         "1",
-        birthDate,
+        birthDate.toString(),
         dropDownRace,
         dropDownEthnicities,
         height.toString(),
@@ -804,12 +825,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         colonStage,
         _rectum.toString(),
         rectumStage,
-        lastDiagDate,
+        lastDiagDate.toString(),
         _surgery.toString(),
         _radiation.toString(),
         _chemo.toString(),
         checkedSurgeryTypes);
 
+
+    _successfulAlert();
     print("is submitting!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   }
 
