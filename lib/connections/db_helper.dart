@@ -38,4 +38,11 @@ class DBHelper {
         await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
+
+  Future<http.Response> searchFood(String query) async {
+    var requestUrl = baseUrl + 'api/food/' + query + '/';
+    http.Response response =
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
 }
