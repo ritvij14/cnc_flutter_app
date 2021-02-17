@@ -2,12 +2,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:clipboard/clipboard.dart';
 
 // void main() => runApp(GoalCalendar());
 
 class GoalCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return CalendarPage();
+
     return MaterialApp(
       title: 'Goal Calendar',
       theme: ThemeData(
@@ -126,7 +130,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             Container(
               padding: EdgeInsets.all(15.0),
-              color: Colors.blue[800],
+              color: Theme.of(context).accentColor,
               alignment: Alignment.bottomLeft,
               child: Text(
                 'Personal Goals',
@@ -137,48 +141,88 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
             ),
-            ..._selectedEvents.map((event) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 70),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.blue[800])
-                ),
-                child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(event,
-                      style: TextStyle(color: Colors.pinkAccent,
-                          fontWeight: FontWeight.bold,fontSize: 16),)
-                ),
-              ),
-            )),
+            _events[_controller.selectedDay] != null
+                ? _buildListView()
+                : SizedBox(height: 0),
+            // ..._selectedEvents.map((event) => Padding(
+            //       padding:
+            //           const EdgeInsets.symmetric(vertical: 5, horizontal: 70),
+            //       child: Container(
+            //         width: MediaQuery.of(context).size.width,
+            //         decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(10),
+            //             color: Colors.white,
+            //             border: Border.all(color: Colors.blue[800])),
+            //         child: Padding(
+            //             padding: const EdgeInsets.all(8.0),
+            //             child: Text(
+            //               event,
+            //               style: TextStyle(
+            //                   color: Colors.pinkAccent,
+            //                   fontWeight: FontWeight.bold,
+            //                   fontSize: 16),
+            //             )),
+            //       ),
+            //     )),
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            FloatingActionButton(
-              heroTag: 'button1',
-              child: Icon(Icons.add),
-              onPressed: _showAddDialog,
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-            FloatingActionButton(
-              heroTag: 'button2',
-              child: Icon(Icons.delete_outline),
-              onPressed: _showDeleteDialogs,
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          ],
+        padding: EdgeInsets.only(right: 10),
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: _showAddDialog,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
       ),
     );
+  }
+
+  Widget _buildListView() {
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: _events[_controller.selectedDay].length,
+        itemBuilder: (context, index) {
+          final sweets = _events[index];
+
+          return Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            child: Container(
+              color: Colors.white,
+              child: ListTile(
+                title: Text(_events[_controller.selectedDay][index].toString()),
+              ),
+            ),
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                  caption: 'Copy',
+                  color: Colors.grey[400],
+                  icon: Icons.content_copy,
+                  onTap: () {
+                    FlutterClipboard.copy(
+                        _events[_controller.selectedDay][index].toString());
+                  }),
+              IconSlideAction(
+                  caption: 'Delete',
+                  color: Colors.red,
+                  icon: Icons.delete,
+                  onTap: () {
+                    _events[_controller.selectedDay].removeAt(index);
+                    prefs.setString("events", json.encode(encodeMap(_events)));
+                    _eventController.clear();
+                    setState(() {
+                      if (_events[_controller.selectedDay] != null) {
+                        _selectedEvents = _events[_controller.selectedDay];
+                      }
+                    });
+                  }),
+            ],
+          );
+        });
+  }
+
+  void _showSnackBar(BuildContext context, String text) {
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   _showAddDialog() async {

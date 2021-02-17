@@ -45,6 +45,6 @@ class NutritionApp extends StatelessWidget {
     //check if logged in,
     //check if completed questionnaire,
     //if both are true login
-    return '/home';
+    return '/';
   }
 }

@@ -1,5 +1,6 @@
-import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
+
 import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
+import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
 
 class FitnessActivityModel {
   String type;
@@ -32,8 +33,6 @@ class FitnessActivityModel {
     return FitnessActivityModel((json['type'] as String).capitalize(), int.parse((json['minutes'] as String)),
         int.parse(json['intensity'] as String));
   }
-
-
 }
 
 final List<FitnessActivityModel> fitnessActivityModelList = [
@@ -48,4 +47,5 @@ final List<FitnessActivityModel> fitnessActivityModelList = [
   FitnessActivityModel('jogging', 10, 2),
   FitnessActivityModel('jogging', 10, 2),
   FitnessActivityModel('jogging', 20, 3),
+
 ];

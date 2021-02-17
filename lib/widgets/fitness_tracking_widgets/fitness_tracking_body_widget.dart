@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
+
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
-import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
+import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'fitness_tracking_popup_input_activity_widget.dart';
@@ -13,8 +14,9 @@ class FitnessTrackingBody extends StatefulWidget {
   List<FitnessActivityModel> fitnessActivityList = [];
 
   FitnessTrackingBody(List<FitnessActivityModel> fitnessActivityList) {
+
     //to-do swap to db connection
-    // this.fitnessActivityList = fitnessActivityList;
+    this.fitnessActivityList = fitnessActivityList;
   }
 
   @override
@@ -37,6 +39,7 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
           );
         },
         future: getActivities(),
+
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).accentColor,
@@ -52,6 +55,7 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
               // addActivity(val);
               // if (val != null) widget.fitnessActivityList.insert(0, val);
               // print(widget.fitnessActivityList.length);
+
             });
           });
         },
@@ -119,4 +123,5 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
     //
     // });
   }
+
 }

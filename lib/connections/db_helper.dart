@@ -38,4 +38,77 @@ class DBHelper {
         await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
+  Future<http.Response> searchFood(String query) async {
+    var requestUrl = baseUrl + 'api/food/' + query + '/';
+    http.Response response =
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> saveFormInfo(
+      String userId,
+      String birthDate,
+      String race,
+      String ethnicity,
+      String height,
+      String weight,
+      String activityLevel,
+      String gIIssues,
+      String colonCancer,
+      String colonStage,
+      String rectumCancer,
+      String rectumStage,
+      String lastDiagDate,
+      String surgery,
+      String radiation,
+      String chemotherapy,
+      String surgeryType) async {
+    var requestUrl = baseUrl +
+        'api/users/save/' +
+        userId +
+        "/" +
+        birthDate +
+        '/' +
+        race +
+        '/' +
+        ethnicity +
+        '/' +
+        height +
+        '/' +
+        weight +
+        '/' +
+        activityLevel +
+        '/' +
+        gIIssues +
+        '/' +
+        colonCancer +
+        '/' +
+        colonStage +
+        '/' +
+        rectumCancer +
+        '/' +
+        rectumStage +
+        '/' +
+        lastDiagDate +
+        '/' +
+        surgery +
+        '/' +
+        radiation +
+        '/' +
+        chemotherapy +
+        '/' +
+        surgeryType;
+    http.Response response =
+        await http.post(Uri.encodeFull(requestUrl), headers: {});
+    print(requestUrl);
+    return response;
+  }
+
+  Future<http.Response> getActivities() async {
+    var requestUrl = baseUrl + 'api/activity/all';
+    http.Response response =
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
 }
