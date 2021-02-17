@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'fitness_tracking_popup_modify_activity_widget.dart';
 
 class FitnessTrackingListTile extends StatefulWidget {
-  FitnessActivity fitnessActivity;
+  FitnessActivityModel fitnessActivity;
 
-  FitnessTrackingListTile(FitnessActivity fitnessActivity) {
+  FitnessTrackingListTile(FitnessActivityModel fitnessActivity) {
     this.fitnessActivity = fitnessActivity;
   }
 

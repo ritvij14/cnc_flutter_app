@@ -1,11 +1,12 @@
+import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FitnessTrackingPopupInputActivity extends StatefulWidget {
-  FitnessActivity fitnessActivity;
+  FitnessActivityModel fitnessActivity;
 
-  FitnessTrackingPopupInputActivity(FitnessActivity fitnessActivity) {
+  FitnessTrackingPopupInputActivity(FitnessActivityModel fitnessActivity) {
     this.fitnessActivity = fitnessActivity;
   }
 
@@ -16,6 +17,7 @@ class FitnessTrackingPopupInputActivity extends StatefulWidget {
 
 class _FitnessTrackingPopupInputActivityState
     extends State<FitnessTrackingPopupInputActivity> {
+  final db = FitnessActivityDBHelper();
   final _formKey = GlobalKey<FormState>();
 
   // bool _activityCompleted = false;
@@ -41,7 +43,8 @@ class _FitnessTrackingPopupInputActivityState
                     hint: Text('select'),
                     onChanged: (type) =>
                         setState(() => widget.fitnessActivity.type = type),
-                    validator: (value) => value == null ? 'Activity required' : null,
+                    validator: (value) =>
+                        value == null ? 'Activity required' : null,
                     items: [
                       'running',
                       'walking',
@@ -101,8 +104,10 @@ class _FitnessTrackingPopupInputActivityState
                     hint: Text('select'),
                     onChanged: (type) =>
                         setState(() => widget.fitnessActivity.intensity = type),
-                    validator: (value) => value == null ? 'Activity required' : null,
-                    items: [1,2,3,4,5].map<DropdownMenuItem<int>>((int value) {
+                    validator: (value) =>
+                        value == null ? 'Activity required' : null,
+                    items:
+                        [1, 2, 3, 4, 5].map<DropdownMenuItem<int>>((int value) {
                       return DropdownMenuItem<int>(
                         value: value,
                         child: Text(value.toString()),
@@ -170,6 +175,7 @@ class _FitnessTrackingPopupInputActivityState
               child: Text('Submit'),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
+                  db.saveNewActivity(widget.fitnessActivity);
                   Navigator.pop(context, widget.fitnessActivity);
                 }
               },
@@ -178,9 +184,5 @@ class _FitnessTrackingPopupInputActivityState
         ),
       ),
     );
-  }
-
-  void saveMethod() {
-    print('Saved Activity');
   }
 }
