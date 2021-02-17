@@ -49,9 +49,9 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
                     FitnessActivityModel.emptyConstructor());
               }).then((val) {
             setState(() {
-              addActivity(val);
-              if (val != null) widget.fitnessActivityList.insert(0, val);
-              print(widget.fitnessActivityList.length);
+              // addActivity(val);
+              // if (val != null) widget.fitnessActivityList.insert(0, val);
+              // print(widget.fitnessActivityList.length);
             });
           });
         },
@@ -115,9 +115,8 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
         .map((data) => FitnessActivityModel.fromJson(data))
         .toList();
     widget.fitnessActivityList = fa;
-  }
-
-  addActivity(FitnessActivityModel fitnessActivityModel) async {
-    await db.addActivity(fitnessActivityModel);
+    // setState(() {
+    //
+    // });
   }
 }
