@@ -1,20 +1,22 @@
+
+import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
 
-class FitnessActivity {
+class FitnessActivityModel {
   String type;
   int minutes;
   int intensity;
   int calories;
 
   //intensity can be a scale, 1-5
-  FitnessActivity(String type, int minutes, int intensity) {
+  FitnessActivityModel(String type, int minutes, int intensity) {
     this.type = type;
     this.minutes = minutes;
     this.intensity = intensity;
     this.calories = _calculateCalories(type, minutes, intensity);
   }
 
-  FitnessActivity.emptyConstructor() {
+  FitnessActivityModel.emptyConstructor() {
     this.minutes = 0;
   }
 
@@ -25,24 +27,25 @@ class FitnessActivity {
   int getCalories() {
     return minutes * intensity;
   }
-// factory FitnessActivity.fromJson(Map<String, dynamic> json){
-//   return FitnessActivity();
-//     type: json['type'],
-//     // intensity: json['intensity'],
-//     // minutes: json['minutes'],
-// }
+
+  factory FitnessActivityModel.fromJson(dynamic json) {
+    print(json.toString());
+    return FitnessActivityModel((json['type'] as String).capitalize(), int.parse((json['minutes'] as String)),
+        int.parse(json['intensity'] as String));
+  }
 }
 
-final List<FitnessActivity> fitnessActivityModelList = [
-  FitnessActivity('running', 10, 5),
-  FitnessActivity('cycling', 22, 3),
-  FitnessActivity('swimming', 52, 4),
-  FitnessActivity('running', 4, 5),
-  FitnessActivity('hiking', 100, 2),
-  FitnessActivity('running', 50, 3),
-  FitnessActivity('running', 63, 4),
-  FitnessActivity('walking', 10, 2),
-  FitnessActivity('jogging', 10, 2),
-  FitnessActivity('jogging', 10, 2),
-  FitnessActivity('jogging', 20, 3),
+final List<FitnessActivityModel> fitnessActivityModelList = [
+  FitnessActivityModel('running', 10, 5),
+  FitnessActivityModel('cycling', 22, 3),
+  FitnessActivityModel('swimming', 52, 4),
+  FitnessActivityModel('running', 4, 5),
+  FitnessActivityModel('hiking', 100, 2),
+  FitnessActivityModel('running', 50, 3),
+  FitnessActivityModel('running', 63, 4),
+  FitnessActivityModel('walking', 10, 2),
+  FitnessActivityModel('jogging', 10, 2),
+  FitnessActivityModel('jogging', 10, 2),
+  FitnessActivityModel('jogging', 20, 3),
+
 ];

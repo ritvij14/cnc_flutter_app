@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FitnessTrackingPopupModifyActivity extends StatefulWidget {
-  FitnessActivity fitnessActivity;
+  FitnessActivityModel fitnessActivity;
 
-  FitnessTrackingPopupModifyActivity(FitnessActivity fitnessActivity) {
+  FitnessTrackingPopupModifyActivity(FitnessActivityModel fitnessActivity) {
     this.fitnessActivity = fitnessActivity;
   }
 
@@ -31,12 +31,12 @@ class _FitnessTrackingPopupModifyActivityState
                 elevation: 16,
                 hint: Text('Select Activity'),
                 items: [
-                  'running',
-                  'walking',
-                  'cycling',
-                  'jogging',
-                  'swimming',
-                  'hiking'
+                  'Running',
+                  'Walking',
+                  'Cycling',
+                  'Jogging',
+                  'Swimming',
+                  'Hiking'
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -81,16 +81,16 @@ class _FitnessTrackingPopupModifyActivityState
               Container(
                 width: 125,
                 child: TextFormField(
-                    initialValue: widget.fitnessActivity.minutes.toString(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                    decoration: InputDecoration(
-                      hintText: "Enter duration",
-                    ),
+                  initialValue: widget.fitnessActivity.minutes.toString(),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: "Enter duration",
+                  ),
                   onChanged: (text) {
-                      widget.fitnessActivity.minutes = int.parse(text);
+                    widget.fitnessActivity.minutes = int.parse(text);
                   },
                 ),
               )
