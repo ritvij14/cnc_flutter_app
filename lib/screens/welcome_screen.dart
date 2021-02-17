@@ -2,12 +2,12 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 
 
-class WelcomeScreen extends StatefulWidget {
+class WelcomeScreen1 extends StatefulWidget {
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _WelcomeScreen1State createState() => _WelcomeScreen1State();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreen1State extends State<WelcomeScreen1> {
   int _age;
   int _height;
   int _weight;
@@ -128,62 +128,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  // Widget _buildHeight2() {
-  //   return Row(
-  //     children: <Widget>[
-  //       Expanded(
-  //         child: Container(
-  //           child: TextFormField(
-  //             decoration: InputDecoration(
-  //               labelText: 'feet',
-  //               hintText: 'feet',
-  //               border: OutlineInputBorder(),
-  //             ),
-  //             keyboardType: TextInputType.number,
-  //             validator: (String value) {
-  //               int weight = int.tryParse(value);
-  //               if (weight == null || weight <= 0) {
-  //                 return 'Weight must be greater than 0';
-  //               }
-  //               return null;
-  //             },
-  //             onSaved: (String value) {
-  //               _weight = int.tryParse(value);
-  //             },
-  //           ),
-  //         ),
-  //       ),
-  //       Expanded(
-  //         child: Text('ft'),
-  //       ),
-  //       Expanded(
-  //         child: SizedBox(width: 1),
-  //       ),
-  //       Expanded(
-  //         child: Container(
-  //           child: TextFormField(
-  //             decoration: InputDecoration(
-  //               labelText: 'inches',
-  //               hintText: 'inches',
-  //               border: OutlineInputBorder(),
-  //             ),
-  //             keyboardType: TextInputType.number,
-  //             validator: (String value) {
-  //               int weight = int.tryParse(value);
-  //               if (weight == null || weight <= 0) {
-  //                 return 'Weight must be greater than 0';
-  //               }
-  //               return null;
-  //             },
-  //             onSaved: (String value) {
-  //               _weight = int.tryParse(value);
-  //             },
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildActivity() {
     return DropdownButtonFormField(
@@ -709,8 +653,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     }
 
                     _formKey.currentState.save();
-
-                    print(_age);
 
                     //Send to API
                   },
