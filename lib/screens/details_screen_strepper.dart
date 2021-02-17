@@ -24,9 +24,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
   String dropDownRectum;
   String dropDownSurgery;
   String dropDownRace;
-  String dropDownEthnicities ;
+  String dropDownEthnicities;
 
-  bool _colon ;
+  bool _colon;
+
   bool _rectum;
   bool _surgery;
   bool _chemo;
@@ -91,28 +92,105 @@ class _DetailsScreenState extends State<DetailsScreen> {
     'Stage 4',
   ];
 
-
-
   setUserData() {
     userAgeMonth = 10;
     userAgeDay = 31;
-    userYearMonth = 2000;
+    userAgeYear= 1984;
     userInchesHeight = 1;
     userFeetHeight = 6;
     userWeight = 135;
-    userDiagYear = 2;
-    userDiagMonth = 1;
+    userDiagYear = 2019;
+    // userDiagMonth = 1;
     dropDownColon = "Stage 1";
     dropDownRectum;
     dropDownSurgery;
     dropDownRace = 'Prefer not to say';
     dropDownEthnicities = 'Prefer not to say';
+    dropDownBirthMonth = "Jan";
+    dropDownBirthDay = "1";
+    dropDownDiagMonth = "Feb";
 
     _colon = true;
     _rectum = false;
     _surgery = false;
     _chemo = true;
     _radiation = false;
+  }
+
+  List<String> _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'April',
+    "May",
+    'June',
+    'July',
+    'Aug',
+    'Sept',
+    "Oct",
+    'Nov',
+    'Dec'
+  ];
+
+  List<String> _days = List<String>.generate(31, (int index) => '${index + 1}');
+
+  String dropDownBirthMonth;
+  String dropDownBirthDay;
+  String dropDownDiagMonth;
+
+  Widget _buildMonth(String field) {
+    return DropdownButtonFormField(
+      isExpanded: true,
+      decoration: InputDecoration(
+        labelText: 'Month',
+        border: OutlineInputBorder(),
+        hintText: "Month",
+      ),
+      value: dropDownBirthMonth,
+      validator: (value) => value == null ? 'Field Required' : null,
+      onChanged: (String Value) {
+        setState(() {
+          if (field == "birth") {
+            dropDownBirthMonth = Value;
+            _month = _months.indexOf(Value) + 1;
+          } else {
+            dropDownDiagMonth = Value;
+            _diagMonth = _months.indexOf(Value) + 1;
+          }
+        });
+      },
+      items: _months
+          .map((month) => DropdownMenuItem(value: month, child: Text("$month")))
+          .toList(),
+    );
+  }
+
+  Widget _buildDay() {
+    return Container(
+        width: 10.0,
+        child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButtonFormField(
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Day',
+                    border: OutlineInputBorder(),
+                    hintText: "Day",
+                  ),
+                  value: dropDownBirthDay,
+                  validator: (value) => value == null ? 'Field Required' : null,
+                  onChanged: (String Value) {
+                    setState(() {
+                      dropDownBirthDay = Value;
+                      _day = _days.indexOf(Value) + 1;
+                    });
+                  },
+                  items: _days
+                      .map((day) =>
+                      DropdownMenuItem(value: day, child: Text("$day")))
+                      .toList(),
+                ))));
   }
 
   Widget _buildBirthMonth() {
@@ -185,6 +263,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
         labelText: 'Year',
         hintText: 'YYYY',
         border: OutlineInputBorder(),
+        contentPadding:
+        new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
       ),
       keyboardType: TextInputType.number,
       controller: _ageYearController,
@@ -309,7 +389,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       },
       items: _ethnicities
           .map((ethnicity) =>
-              DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
+          DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
           .toList(),
     );
   }
@@ -338,7 +418,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       },
       items: _activity
           .map((actLevel) =>
-              DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
+          DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
           .toList(),
     );
   }
@@ -441,7 +521,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       },
       items: _cancerStages
           .map((colStage) =>
-              DropdownMenuItem(value: colStage, child: Text("$colStage")))
+          DropdownMenuItem(value: colStage, child: Text("$colStage")))
           .toList(),
     );
   }
@@ -461,7 +541,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       },
       items: _cancerStages
           .map((recStage) =>
-              DropdownMenuItem(value: recStage, child: Text("$recStage")))
+          DropdownMenuItem(value: recStage, child: Text("$recStage")))
           .toList(),
     );
   }
@@ -498,13 +578,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
         labelText: 'Year',
         hintText: 'YYYY',
         border: OutlineInputBorder(),
+        contentPadding:
+        new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
       ),
       keyboardType: TextInputType.number,
       controller: _diagYearController,
       validator: (String value) {
         int year = int.tryParse(value);
-        if (year == null || year <= 0) {
-          return 'Year must be greater than 0';
+        if (year == null || year < 0) {
+          return 'Field Required';
         }
         return null;
       },
@@ -549,25 +631,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
               : SizedBox(height: 0),
           _rectum == true || _colon == true
               ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                        'When was your last cancer (any type of cancer) diagnosis?',
-                        style: TextStyle(fontSize: 16)),
-                  ),
-                )
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text(
+                  'When was your last cancer (any type of cancer) diagnosis?',
+                  style: TextStyle(fontSize: 16)),
+            ),
+          )
               : SizedBox(height: 0),
           _rectum == true || _colon == true
               ? SizedBox(height: 10)
               : SizedBox(height: 0),
           _rectum == true || _colon == true
-              ? _buildLastDiagMonth()
-              : SizedBox(height: 10),
-          _rectum == true || _colon == true
-              ? SizedBox(height: 10)
-              : SizedBox(height: 0),
-          _rectum == true || _colon == true
-              ? _buildLastDiagYear()
+              ? Row(children: <Widget>[
+            Expanded(
+              child: _buildMonth("diag"),
+            ),
+            Expanded(
+              child: _buildLastDiagYear(),
+            ),
+          ])
               : SizedBox(height: 10),
         ],
       ),
@@ -584,15 +667,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
             groupValue: treatment == "surgery"
                 ? _surgery
                 : treatment == "chemo"
-                    ? _chemo
-                    : _radiation,
+                ? _chemo
+                : _radiation,
             onChanged: (value) {
               setState(() {
                 treatment == "surgery"
                     ? _surgery = value
                     : treatment == "chemo"
-                        ? _chemo = value
-                        : _radiation = value;
+                    ? _chemo = value
+                    : _radiation = value;
                 // Navigator.of(context, rootNavigator: true).pop();
                 // _buildCancerHistory();
               });
@@ -608,15 +691,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
             groupValue: treatment == "surgery"
                 ? _surgery
                 : treatment == "chemo"
-                    ? _chemo
-                    : _radiation,
+                ? _chemo
+                : _radiation,
             onChanged: (value) {
               setState(() {
                 treatment == "surgery"
                     ? _surgery = value
                     : treatment == "chemo"
-                        ? _chemo = value
-                        : _radiation = value;
+                    ? _chemo = value
+                    : _radiation = value;
                 // Navigator.of(context, rootNavigator: true).pop();
                 // _buildCancerHistory();
               });
@@ -667,12 +750,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
           _buildTreatmentYN("surgery"),
           _surgery == true
               ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text('What procedure did you have?',
-                        style: TextStyle(fontSize: 16)),
-                  ),
-                )
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text('What procedure did you have?',
+                  style: TextStyle(fontSize: 16)),
+            ),
+          )
               : SizedBox(height: 0),
           _surgery == true ? _buildSurgeryDropdown() : SizedBox(height: 0),
           SizedBox(height: 20),
@@ -819,19 +902,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final TextEditingController _ageDayController = new TextEditingController();
   int userAgeDay;
   final TextEditingController _ageYearController = new TextEditingController();
-  int userYearMonth;
+  int userAgeYear;
   final TextEditingController _heightInchesController =
-      new TextEditingController();
+  new TextEditingController();
   int userInchesHeight;
   final TextEditingController _heightFeetController =
-      new TextEditingController();
+  new TextEditingController();
   int userFeetHeight;
   final TextEditingController _weightController = new TextEditingController();
   int userWeight;
   final TextEditingController _diagYearController = new TextEditingController();
   int userDiagYear;
   final TextEditingController _diagMonthController =
-      new TextEditingController();
+  new TextEditingController();
   int userDiagMonth;
 
   @override
@@ -839,7 +922,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     setUserData();
     _ageMonthController.text = userAgeMonth.toString();
     _ageDayController.text = userAgeDay.toString();
-    _ageYearController.text = userYearMonth.toString();
+    _ageYearController.text = userAgeYear.toString();
     _heightFeetController.text = userFeetHeight.toString();
     _heightInchesController.text = userInchesHeight.toString();
     _weightController.text = userWeight.toString();
@@ -958,11 +1041,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         SizedBox(height: 5),
-                        _buildBirthMonth(),
-                        SizedBox(height: 10),
-                        _buildBirthDay(),
-                        SizedBox(height: 10),
-                        _buildBirthYear(),
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: _buildMonth("birth"),
+                          ),
+                          Expanded(
+                            child: _buildDay(),
+                          ),
+                          Expanded(
+                            child: _buildBirthYear(),
+                          ),
+                        ]),
+
                         SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerLeft,

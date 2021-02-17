@@ -23,72 +23,147 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   int _month = 0;
   int _day = 0;
 
+  List<String> _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'April',
+    "May",
+    'June',
+    'July',
+    'Aug',
+    'Sept',
+    "Oct",
+    'Nov',
+    'Dec'
+  ];
+
+  List<String> _days = List<String>.generate(31, (int index) => '${index + 1}');
+
+  String dropDownBirthMonth;
+  String dropDownBirthDay;
+  String dropDownDiagMonth;
   Widget birthDay;
   Widget birthMonth;
   Widget birthYear;
 
-  Widget _buildBirthMonth() {
-    return TextFormField(
+  Widget _buildMonth(String field) {
+    return DropdownButtonFormField(
+      isExpanded: true,
       decoration: InputDecoration(
         labelText: 'Month',
-        hintText: 'MM',
         border: OutlineInputBorder(),
+        hintText: "Month",
       ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int month = int.tryParse(value);
-        if (month == null) {
-          return "Field Required";
-        } else if (month <= 0 || month >= 13) {
-          return 'Month must be an integer 1 to 12';
-        }
-        return null;
+      value: dropDownBirthMonth,
+      validator: (value) => value == null ? 'Field Required' : null,
+      onChanged: (String Value) {
+        setState(() {
+          if (field == "birth") {
+            dropDownBirthMonth = Value;
+            _month = _months.indexOf(Value) + 1;
+          } else {
+            dropDownDiagMonth = Value;
+            _diagMonth = _months.indexOf(Value) + 1;
+          }
+        });
       },
-      onSaved: (String value) {
-        _month = int.tryParse(value);
-        print("SAVING MONTH");
-      },
+      items: _months
+          .map((month) => DropdownMenuItem(value: month, child: Text("$month")))
+          .toList(),
     );
   }
 
-  Widget _buildBirthDay() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Day',
-        hintText: 'DD',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int day = int.tryParse(value);
-        if (day == null) {
-          return "Field Required";
-        } else if (day <= 0) {
-          return 'Day must be greater than 0';
-        } else if (day > 31) {
-          return 'Day cannot be greater than 31';
-        } else if (_day == 31) {
-          if (_month == 2 ||
-              _month == 4 ||
-              _month == 6 ||
-              _month == 9 ||
-              _month == 11) {
-            return 'Day cannot be 31 for the given month';
-          } else {
-            return null;
-          }
-        } else if (_day == 30) {
-          if (_month == 2) {
-            return 'Day cannot be 30 for the given month';
-          }
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _day = int.tryParse(value);
-      },
-    );
+  Widget _buildDay() {
+    return Container(
+        width: 10.0,
+        child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButtonFormField(
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Day',
+                    border: OutlineInputBorder(),
+                    hintText: "Day",
+                  ),
+                  value: dropDownBirthDay,
+                  validator: (value) => value == null ? 'Field Required' : null,
+                  onChanged: (String Value) {
+                    setState(() {
+                      dropDownBirthDay = Value;
+                      _day = _days.indexOf(Value) + 1;
+                    });
+                  },
+                  items: _days
+                      .map((day) =>
+                      DropdownMenuItem(value: day, child: Text("$day")))
+                      .toList(),
+                ))));
   }
+
+  // Widget _buildBirthMonth() {
+  //   return TextFormField(
+  //     decoration: InputDecoration(
+  //       labelText: 'Month',
+  //       hintText: 'MM',
+  //       border: OutlineInputBorder(),
+  //     ),
+  //     keyboardType: TextInputType.number,
+  //     validator: (String value) {
+  //       int month = int.tryParse(value);
+  //       if (month == null) {
+  //         return "Field Required";
+  //       } else if (month <= 0 || month >= 13) {
+  //         return 'Month must be an integer 1 to 12';
+  //       }
+  //       return null;
+  //     },
+  //     onSaved: (String value) {
+  //       _month = int.tryParse(value);
+  //       print("SAVING MONTH");
+  //     },
+  //   );
+  // }
+
+  // Widget _buildBirthDay() {
+  //   return TextFormField(
+  //     decoration: InputDecoration(
+  //       labelText: 'Day',
+  //       hintText: 'DD',
+  //       border: OutlineInputBorder(),
+  //     ),
+  //     keyboardType: TextInputType.number,
+  //     validator: (String value) {
+  //       int day = int.tryParse(value);
+  //       if (day == null) {
+  //         return "Field Required";
+  //       } else if (day <= 0) {
+  //         return 'Day must be greater than 0';
+  //       } else if (day > 31) {
+  //         return 'Day cannot be greater than 31';
+  //       } else if (_day == 31) {
+  //         if (_month == 2 ||
+  //             _month == 4 ||
+  //             _month == 6 ||
+  //             _month == 9 ||
+  //             _month == 11) {
+  //           return 'Day cannot be 31 for the given month';
+  //         } else {
+  //           return null;
+  //         }
+  //       } else if (_day == 30) {
+  //         if (_month == 2) {
+  //           return 'Day cannot be 30 for the given month';
+  //         }
+  //       }
+  //       return null;
+  //     },
+  //     onSaved: (String value) {
+  //       _day = int.tryParse(value);
+  //     },
+  //   );
+  // }
 
   Widget _buildBirthYear() {
     return TextFormField(
@@ -96,6 +171,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         labelText: 'Year',
         hintText: 'YYYY',
         border: OutlineInputBorder(),
+        contentPadding:
+        new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
       ),
       keyboardType: TextInputType.number,
       validator: (String value) {
@@ -249,7 +326,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _ethnicities
           .map((ethnicity) =>
-              DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
+          DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
           .toList(),
     );
   }
@@ -278,7 +355,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _activity
           .map((actLevel) =>
-              DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
+          DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
           .toList(),
     );
   }
@@ -421,7 +498,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _colonStages
           .map((colStage) =>
-              DropdownMenuItem(value: colStage, child: Text("$colStage")))
+          DropdownMenuItem(value: colStage, child: Text("$colStage")))
           .toList(),
     );
   }
@@ -441,7 +518,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _colonStages
           .map((recStage) =>
-              DropdownMenuItem(value: recStage, child: Text("$recStage")))
+          DropdownMenuItem(value: recStage, child: Text("$recStage")))
           .toList(),
     );
   }
@@ -450,30 +527,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   int _diagMonth = 0;
   Widget lastDiag;
 
-  Widget _buildLastDiagMonth() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Month(optional)',
-        hintText: 'MM',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int month = int.tryParse(value);
-        if (month == null) {
-          return null;
-        } else if (month <= 0) {
-          return 'Month must be greater than 0';
-        } else if (month >= 13) {
-          return 'Month cannot be greater than 12';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _diagMonth = int.tryParse(value);
-      },
-    );
-  }
+  // Widget _buildLastDiagMonth() {
+  //   return TextFormField(
+  //     decoration: InputDecoration(
+  //       labelText: 'Month(optional)',
+  //       hintText: 'MM',
+  //       border: OutlineInputBorder(),
+  //     ),
+  //     keyboardType: TextInputType.number,
+  //     validator: (String value) {
+  //       int month = int.tryParse(value);
+  //       if (month == null) {
+  //         return null;
+  //       } else if (month <= 0) {
+  //         return 'Month must be greater than 0';
+  //       } else if (month >= 13) {
+  //         return 'Month cannot be greater than 12';
+  //       }
+  //       return null;
+  //     },
+  //     onSaved: (String value) {
+  //       _diagMonth = int.tryParse(value);
+  //     },
+  //   );
+  // }
 
   Widget _buildLastDiagYear() {
     return TextFormField(
@@ -481,12 +558,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         labelText: 'Year',
         hintText: 'YYYY',
         border: OutlineInputBorder(),
+        contentPadding:
+        new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
       ),
       keyboardType: TextInputType.number,
       validator: (String value) {
         int year = int.tryParse(value);
-        if (year == null || year <= 0) {
-          return 'Year must be greater than 0';
+        if (year == null || year < 0) {
+          return 'Field Required';
         }
         return null;
       },
@@ -530,25 +609,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               : SizedBox(height: 0),
           _rectum == true || _colon == true
               ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                        'When was your last cancer (any type of cancer) diagnosis?',
-                        style: TextStyle(fontSize: 16)),
-                  ),
-                )
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text(
+                  'When was your last cancer (any type of cancer) diagnosis?',
+                  style: TextStyle(fontSize: 16)),
+            ),
+          )
               : SizedBox(height: 0),
           _rectum == true || _colon == true
               ? SizedBox(height: 10)
               : SizedBox(height: 0),
           _rectum == true || _colon == true
-              ? _buildLastDiagMonth()
-              : SizedBox(height: 10),
-          _rectum == true || _colon == true
-              ? SizedBox(height: 10)
-              : SizedBox(height: 0),
-          _rectum == true || _colon == true
-              ? _buildLastDiagYear()
+              ? Row(children: <Widget>[
+            Expanded(
+              child: _buildMonth("diag"),
+            ),
+            Expanded(
+              child: _buildLastDiagYear(),
+            ),
+          ])
               : SizedBox(height: 10),
         ],
       ),
@@ -565,15 +645,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             groupValue: treatment == "surgery"
                 ? _surgery
                 : treatment == "chemo"
-                    ? _chemo
-                    : _radiation,
+                ? _chemo
+                : _radiation,
             onChanged: (value) {
               setState(() {
                 treatment == "surgery"
                     ? _surgery = value
                     : treatment == "chemo"
-                        ? _chemo = value
-                        : _radiation = value;
+                    ? _chemo = value
+                    : _radiation = value;
                 // Navigator.of(context, rootNavigator: true).pop();
                 // _buildCancerHistory();
               });
@@ -589,15 +669,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             groupValue: treatment == "surgery"
                 ? _surgery
                 : treatment == "chemo"
-                    ? _chemo
-                    : _radiation,
+                ? _chemo
+                : _radiation,
             onChanged: (value) {
               setState(() {
                 treatment == "surgery"
                     ? _surgery = value
                     : treatment == "chemo"
-                        ? _chemo = value
-                        : _radiation = value;
+                    ? _chemo = value
+                    : _radiation = value;
                 // Navigator.of(context, rootNavigator: true).pop();
                 // _buildCancerHistory();
               });
@@ -650,12 +730,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           _buildTreatmentYN("surgery"),
           _surgery == true
               ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text('What procedure did you have?',
-                        style: TextStyle(fontSize: 16)),
-                  ),
-                )
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text('What procedure did you have?',
+                  style: TextStyle(fontSize: 16)),
+            ),
+          )
               : SizedBox(height: 0),
           _surgery == true ? _buildSurgeryDropdown() : SizedBox(height: 0),
           SizedBox(height: 20),
@@ -688,12 +768,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Empty Form Fields'),
+          title: Text('Current Forms Incomplete'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                    'You have left some required fields empty. Please be sure to fill the indicated fields.'),
+                    'You have left some required fields empty or have filled them out incorrectly. Please be sure to fill all the indicated fields correctly before moving to other forms.'),
               ],
             ),
           ),
@@ -717,7 +797,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Form successfully submitted'),
-
           actions: <Widget>[
             TextButton(
               child: Text('CLOSE'),
@@ -765,18 +844,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   goTo(int step) {
-    // for (int i = 0; i < formKeys.length; i++) {
-    //   if (!formKeys[i].currentState.validate()) {
-    //     StepState.error;
-    //   }
-    // }
-    setState(() => currentStep = step);
+    if (!formKeys[currentStep].currentState.validate()) {
+      _emptyFieldsAlert();
+    } else {
+      setState(() => currentStep = step);
+    }
   }
 
   var birthDate;
   var lastDiagDate;
 
   submit() {
+    // int birthMonth;
+    // for (int i = 0; i < _months.length; i++) {
+    //   if (_months[i] == dropDownBirthMonth) {
+    //     birthMonth = i + 1;
+    //   }
+    // }
+    //
+    // int diagMonth;
+    // for (int i = 0; i < _months.length; i++) {
+    //   if (_months[i] == dropDownBirthMonth) {
+    //     diagMonth = i + 1;
+    //   } else {
+    //     diagMonth = 1;
+    //   }
+    // }
     birthDate = new DateTime(_year, _month, _day);
     lastDiagDate = new DateTime(_diagYear, _diagMonth, 1);
     int height = (_heightFeet * 12) + _heightInches;
@@ -834,7 +927,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         _chemo.toString(),
         checkedSurgeryTypes);
 
-
     _successfulAlert();
     print("is submitting!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   }
@@ -854,17 +946,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final TextEditingController _ageYearController = new TextEditingController();
   int userYearMonth = 33;
   final TextEditingController _heightInchesController =
-      new TextEditingController();
+  new TextEditingController();
   int userInchesHeight = 65;
   final TextEditingController _heightFeetController =
-      new TextEditingController();
+  new TextEditingController();
   int userFeetHeight = 65;
   final TextEditingController _weightController = new TextEditingController();
   int userWeight = 130;
   final TextEditingController _diagYearController = new TextEditingController();
   int userDiagYear = 1;
   final TextEditingController _diagMonthController =
-      new TextEditingController();
+  new TextEditingController();
   int userDiagMonth = 1;
 
   @override
@@ -882,8 +974,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    birthDay = _buildBirthDay();
-    birthMonth = _buildBirthMonth();
+    // birthDay = _buildBirthDay();
+    // birthMonth = _buildBirthMonth();
     birthYear = _buildBirthYear();
     heightFeet = _buildHeightFeet();
     heightInches = _buildHeightInches();
@@ -896,7 +988,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     cancerTreatment = _buildCancerTreatment();
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Create an account'),
+        title: Text('Welcome!'),
       ),
       body: Column(children: <Widget>[
         Expanded(
@@ -920,11 +1012,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                         SizedBox(height: 5),
-                        birthMonth,
-                        SizedBox(height: 10),
-                        birthDay,
-                        SizedBox(height: 10),
-                        birthYear,
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: _buildMonth("birth"),
+                          ),
+                          Expanded(
+                            child: _buildDay(),
+                          ),
+                          Expanded(
+                            child: birthYear,
+                          ),
+                        ]),
+
                         SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerLeft,
