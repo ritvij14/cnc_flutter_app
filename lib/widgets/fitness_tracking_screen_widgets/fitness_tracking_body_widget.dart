@@ -4,9 +4,9 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
 
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
-import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
 import 'package:flutter/material.dart';
 
+import 'fitness_tracking_list_tile_widget.dart';
 import 'fitness_tracking_popup_input_activity_widget.dart';
 import 'fitness_tracking_popup_modify_activity_widget.dart';
 
@@ -54,7 +54,6 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
             setState(() {
               // addActivity(val);
               // if (val != null) widget.fitnessActivityList.insert(0, val);
-              // print(widget.fitnessActivityList.length);
 
             });
           });
@@ -114,7 +113,6 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
     // var fitnessActivityJson = jsonDecode(response)
     // Iterable l = json.decode(response.body);
     // print(json.decode(response.body));
-
     List<FitnessActivityModel> fa = (json.decode(response.body) as List)
         .map((data) => FitnessActivityModel.fromJson(data))
         .toList();

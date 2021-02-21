@@ -1,6 +1,5 @@
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
-import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_body_widget.dart';
-import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_popup_modify_activity_widget.dart';
+import 'package:cnc_flutter_app/widgets/fitness_tracking_screen_widgets/fitness_tracking_body_widget.dart';
 import 'package:flutter/material.dart';
 
 class FitnessTrackingScreen extends StatelessWidget {

@@ -1,23 +1,25 @@
 
 import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
-import 'package:cnc_flutter_app/widgets/fitness_tracking_widgets/fitness_tracking_list_tile_widget.dart';
 
 class FitnessActivityModel {
   String type;
   int minutes;
   int intensity;
   int calories;
+  DateTime dateTime;
 
   //intensity can be a scale, 1-5
-  FitnessActivityModel(String type, int minutes, int intensity) {
+  FitnessActivityModel(String type, int minutes, int intensity, DateTime dateTime) {
     this.type = type;
     this.minutes = minutes;
     this.intensity = intensity;
     this.calories = _calculateCalories(type, minutes, intensity);
+    this.dateTime = dateTime;
   }
 
   FitnessActivityModel.emptyConstructor() {
     this.minutes = 0;
+    this.dateTime = new DateTime.now();
   }
 
   int _calculateCalories(String type, int minutes, int intensity) {
@@ -29,23 +31,8 @@ class FitnessActivityModel {
   }
 
   factory FitnessActivityModel.fromJson(dynamic json) {
-    print(json.toString());
     return FitnessActivityModel((json['type'] as String).capitalize(), int.parse((json['minutes'] as String)),
-        int.parse(json['intensity'] as String));
+        int.parse(json['intensity'] as String), DateTime.parse(json['dateTime'] as String));
   }
 }
-
-final List<FitnessActivityModel> fitnessActivityModelList = [
-  FitnessActivityModel('running', 10, 5),
-  FitnessActivityModel('cycling', 22, 3),
-  FitnessActivityModel('swimming', 52, 4),
-  FitnessActivityModel('running', 4, 5),
-  FitnessActivityModel('hiking', 100, 2),
-  FitnessActivityModel('running', 50, 3),
-  FitnessActivityModel('running', 63, 4),
-  FitnessActivityModel('walking', 10, 2),
-  FitnessActivityModel('jogging', 10, 2),
-  FitnessActivityModel('jogging', 10, 2),
-  FitnessActivityModel('jogging', 20, 3),
-
-];
+final List<FitnessActivityModel> fitnessActivityModelList = [];
