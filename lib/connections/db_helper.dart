@@ -83,6 +83,13 @@ class DBHelper {
     return response;
   }
 
+  Future<http.Response> getFormCompletionStatus(userId) async {
+    var requestUrl = baseUrl + 'api/users/formstatus/' + userId;
+    http.Response response =
+    await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
   Future<http.Response> getActivities() async {
     var requestUrl = baseUrl + 'api/activity/all';
     http.Response response =
