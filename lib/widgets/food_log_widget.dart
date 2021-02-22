@@ -1,80 +1,102 @@
 // import 'dart:convert';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:cnc_flutter_app/connections/db_helper.dart';
+import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
+
 // import 'package:cnc_flutter_app/screens/food_screen.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FoodLog extends StatelessWidget {
-  List<Food> breakfast = [];
-  List<Food> lunch = [];
-  List<Food> dinner = [];
-  List<Food> snacks = [];
+class FoodLog extends StatefulWidget {
   String selectedDate;
 
-  FoodLog(String key) {
+  FoodLog(String selectedDate) {
+    this.selectedDate = selectedDate;
+  }
+
+  @override
+  _FoodLogState createState() => _FoodLogState(selectedDate);
+}
+
+class _FoodLogState extends State<FoodLog> {
+  List<Food> foods = [];
+  List<FoodLogEntry> foodLogEntries = [];
+  String selectedDate;
+  var d;
+
+  _FoodLogState(String key) {
     this.selectedDate = key;
   }
 
-  getBreakfast() {}
-
-  getLunch() {}
-
-  getDinner() {}
-
-  getSnacks() {}
-
-  generateFood() async {
-    var rng = new Random();
-    if (breakfast.length == 0 &&
-        lunch.length == 0 &&
-        dinner.length == 0 &&
-        snacks.length == 0) {
-      for (int i = 0; i < 4; i++) {
-        int numberOfFoods = rng.nextInt(5) + 1;
-        for (var j = 0; j < numberOfFoods; j++) {
-          Food food = new Food();
-          food.description = 'Example Food ' + i.toString() + j.toString();
-          food.kcal = rng.nextInt(250).toDouble();
-          food.proteinInGrams = rng.nextInt(30).toDouble();
-          food.carbohydratesInGrams = rng.nextInt(30).toDouble();
-          food.fatInGrams = rng.nextInt(30).toDouble();
-          if (i == 0) {
-            breakfast.add(food);
-          } else if (i == 1) {
-            lunch.add(food);
-          } else if (i == 2) {
-            dinner.add(food);
-          } else {
-            snacks.add(food);
-          }
-        }
-      }
-    }
-
+  deleteEntry(foodLogEntryId) async {
     var db = new DBHelper();
-    var response = await db.searchFood('');
-    // var data = json.decode(response.body);
-    // // for (int i = 0; i < data.length; i++) {
-    // for (int i = 0; i < 10; i++) {
-    //   Food food = new Food();
-    //   String description = data[i]['description'].toString();
-    //   description = description.replaceAll('"', "");
-    //   food.description = description;
-    //   food.kcal = data[i]['kcal'];
-    //   food.proteinInGrams = data[i]['proteinInGrams'];
-    //   food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
-    //   food.fatInGrams = data[i]['fatInGrams'];
-    //   breakfast.add(food);
-    // }
+    var response = await db.deleteFoodLogEntry(foodLogEntryId);
+    setState(() {
+
+    });
+  }
+
+  update() {
+    setState(() {
+
+    });
+  }
+
+  getFood() async {
+    foodLogEntries.clear();
+    var db = new DBHelper();
+    var response = await db.getFoodLog('1', selectedDate);
+    var data = json.decode(response.body);
+    // print(data[0]['entryTime'].runtimeType);
+    // var x = TimeOfDay.fromDateTime(data[0]['entryTime']);
+    // print(x);
+    // print(data);
+    for (int i = 0; i < data.length; i++) {
+      FoodLogEntry foodLogEntry = new FoodLogEntry();
+      foodLogEntry.id = data[i]['id'];
+      foodLogEntry.entryTime = data[i]['entryTime'];
+      foodLogEntry.date = data[i]['date'];
+      foodLogEntry.portion = data[i]['portion'];
+      // print(data[i]);
+      // print(data[i]['entryTime']);
+      Food food = new Food();
+      String description = data[i]['food']['description'].toString();
+      description = description.replaceAll('"', "");
+      food.description = description;
+      food.kcal = data[i]['food']['kcal'];
+      food.proteinInGrams = data[i]['food']['proteinInGrams'];
+      food.carbohydratesInGrams = data[i]['food']['carbohydratesInGrams'];
+      food.fatInGrams = data[i]['food']['fatInGrams'];
+      food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
+      food.saturatedFattyAcidsInGrams =
+          data[i]['food']['saturatedFattyAcidsInGrams'];
+      food.polyunsaturatedFattyAcidsInGrams =
+          data[i]['food']['polyunsaturatedFattyAcidsInGrams'];
+      food.monounsaturatedFattyAcidsInGrams =
+          data[i]['food']['monounsaturatedFattyAcidsInGrams'];
+      food.insolubleFiberInGrams = data[i]['food']['insolubleFiberInGrams'];
+      food.solubleFiberInGrams = data[i]['food']['solubleFiberInGrams'];
+      food.sugarInGrams = data[i]['food']['sugarInGrams'];
+      food.calciumInMilligrams = data[i]['food']['calciumInMilligrams'];
+      food.sodiumInMilligrams = data[i]['food']['sodiumInMilligrams'];
+      food.vitaminDInMicrograms = data[i]['food']['vitaminDInMicrograms'];
+      food.commonPortionSizeAmount = data[i]['food']['commonPortionSizeAmount'];
+      food.commonPortionSizeGramWeight =
+          data[i]['food']['commonPortionSizeGramWeight'];
+      food.commonPortionSizeDescription =
+          data[i]['food']['commonPortionSizeDescription'];
+      food.commonPortionSizeUnit = data[i]['food']['commonPortionSizeUnit'];
+      foodLogEntry.food = food;
+      foodLogEntries.add(foodLogEntry);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    generateFood();
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(vertical: 20),
       // child: Padding:
@@ -85,7 +107,7 @@ class FoodLog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "Breakfast",
+                "Meals",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -94,36 +116,18 @@ class FoodLog extends StatelessWidget {
               IconButton(
                   icon: Icon(Icons.add_circle),
                   onPressed: () {
-                    showSearch(context: context, delegate: FoodSearch());
+                    showSearch(context: context, delegate: FoodSearch(selectedDate)).then((value) =>update());
                   }),
             ],
           ),
         ),
-        // Row(
-        //
-        //   children: <Widget>[
-        //     Text(
-        //       "Breakfast",
-        //       style: TextStyle(
-        //           fontWeight: FontWeight.bold,
-        //           fontSize: 16,
-        //           fontFamily: "OpenSans"),
-        //     ),
-        //   ],
-        // ),
-
-        // Card(
-        //     child: Padding(
-        //         padding: const EdgeInsets.all(16.0),
-        //         child: Text("Breakfast", style: TextStyle(fontSize: 14.0)))),
         FutureBuilder(
           builder: (context, projectSnap) {
             return ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              // padding: EdgeInsets.all(16),
-              itemCount: breakfast.length,
+              itemCount: foodLogEntries.length,
               itemBuilder: (context, index) {
                 return Card(
                   elevation: 0,
@@ -136,66 +140,85 @@ class FoodLog extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              breakfast[index].description,
+                              foodLogEntries[index].food.description,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontFamily: "OpenSans"),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    breakfast[index]
-                                            .carbohydratesInGrams
-                                            .toString() +
-                                        "C",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    breakfast[index].proteinInGrams.toString() +
-                                        "P",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    breakfast[index].fatInGrams.toString() +
-                                        "F",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // print("Pressed");
-                                      // List<TrackedFood> foodToDelete = [food];
-                                      // var user = Provider.of<User>(context);
-                                      // var db = DatabaseService(uid: user.uid);
-                                      // db.deleteAFood(
-                                      //     foodToDelete, currentMeal.mealName);
-                                    },
-                                    child: Icon(
-                                      Icons.delete,
-                                      size: 20,
-                                    ),
-                                  )
-                                ],
-                              ),
                             ),
                           ],
                         ),
                         SizedBox(
                           width: double.infinity,
                           child: Container(
-                            child: Text(
-                              // breakfast[index].serving + " " + breakfast[index].unit,
-                              "1.0 serving(s) ",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: "OpenSans", fontSize: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  foodLogEntries[index].portion.toString() + " serving(s)",
+                                  // breakfast[index].serving + " " + breakfast[index].unit,
+                                  // "1.0 serving(s) ",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontFamily: "OpenSans", fontSize: 10),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                      (foodLogEntries[index]
+                                                .food
+                                                .carbohydratesInGrams * foodLogEntries[index].portion)
+                                                .toString() +
+                                            "C",
+                                        style: TextStyle(
+                                            fontFamily: "OpenSans",
+                                            fontSize: 10),
+                                      ),
+                                      Text(
+                                        (foodLogEntries[index]
+                                                .food
+                                                .proteinInGrams * foodLogEntries[index].portion)
+                                                .toString() +
+                                            "P",
+                                        style: TextStyle(
+                                            fontFamily: "OpenSans",
+                                            fontSize: 10),
+                                      ),
+                                      Text(
+                                          (foodLogEntries[index]
+                                                .food
+                                                .fatInGrams* foodLogEntries[index].portion)
+                                                .toString() +
+                                            "F",
+                                        style: TextStyle(
+                                            fontFamily: "OpenSans",
+                                            fontSize: 10),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          deleteEntry(foodLogEntries[index].id);
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          size: 20,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
+                            // child: Text(
+                            //   // breakfast[index].serving + " " + breakfast[index].unit,
+                            //   "1.0 serving(s) ",
+                            //   textAlign: TextAlign.left,
+                            //   style: TextStyle(
+                            //       fontFamily: "OpenSans", fontSize: 10),
+                            // ),
                           ),
                         ),
                       ],
@@ -205,356 +228,9 @@ class FoodLog extends StatelessWidget {
               },
             );
           },
-          future: getBreakfast(),
-        ),
-        // FlatButton(
-        //   onPressed: () {
-        //     Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //             builder: (context) => FoodSearch(breakfast)));
-        //   },
-        //   child: Text(
-        //     "Add More",
-        //   ),
-        // ),
-        Container(
-          padding: EdgeInsets.only(left: 5, right: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Lunch",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: "OpenSans"),
-              ),
-              IconButton(
-                  icon: Icon(Icons.add_circle),
-                  onPressed: () {
-                    showSearch(context: context, delegate: FoodSearch());
-                  }),
-            ],
-          ),
-        ),
-        FutureBuilder(
-          builder: (context, projectSnap) {
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: lunch.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              lunch[index].description,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "OpenSans"),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    lunch[index]
-                                            .carbohydratesInGrams
-                                            .toString() +
-                                        "C",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    lunch[index].proteinInGrams.toString() +
-                                        "P",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    lunch[index].fatInGrams.toString() + "F",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // print("Pressed");
-                                      // List<TrackedFood> foodToDelete = [food];
-                                      // var user = Provider.of<User>(context);
-                                      // var db = DatabaseService(uid: user.uid);
-                                      // db.deleteAFood(
-                                      //     foodToDelete, currentMeal.mealName);
-                                    },
-                                    child: Icon(
-                                      Icons.delete,
-                                      size: 20,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Container(
-                            child: Text(
-                              // breakfast[index].serving + " " + breakfast[index].unit,
-                              "1.0 serving(s) ",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: "OpenSans", fontSize: 10),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          future: getLunch(),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 5, right: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text("Dinner",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: "OpenSans"),
-              ),
-              IconButton(
-                  icon: Icon(Icons.add_circle),
-                  onPressed: () {
-                    showSearch(context: context, delegate: FoodSearch());
-                  }),
-            ],
-          ),
-        ),
-        FutureBuilder(
-          builder: (context, projectSnap) {
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: dinner.length,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              dinner[index].description,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "OpenSans"),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    dinner[index]
-                                            .carbohydratesInGrams
-                                            .toString() +
-                                        "C",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    dinner[index].proteinInGrams.toString() +
-                                        "P",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    dinner[index].fatInGrams.toString() + "F",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // print("Pressed");
-                                      // List<TrackedFood> foodToDelete = [food];
-                                      // var user = Provider.of<User>(context);
-                                      // var db = DatabaseService(uid: user.uid);
-                                      // db.deleteAFood(
-                                      //     foodToDelete, currentMeal.mealName);
-                                    },
-                                    child: Icon(
-                                      Icons.delete,
-                                      size: 20,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Container(
-                            child: Text(
-                              // breakfast[index].serving + " " + breakfast[index].unit,
-                              "1.0 serving(s) ",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: "OpenSans", fontSize: 10),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          future: getDinner(),
-        ),
-
-        Container(
-          padding: EdgeInsets.only(left: 5, right: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Snacks",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: "OpenSans"),
-              ),
-              IconButton(
-                  icon: Icon(Icons.add_circle),
-                  onPressed: () {
-                    showSearch(context: context, delegate: FoodSearch());
-                  }),
-            ],
-          ),
-        ),
-        FutureBuilder(
-          builder: (context, projectSnap) {
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: snacks.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              snacks[index].description,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "OpenSans"),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    snacks[index]
-                                            .carbohydratesInGrams
-                                            .toString() +
-                                        "C",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    snacks[index].proteinInGrams.toString() +
-                                        "P",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Text(
-                                    snacks[index].fatInGrams.toString() + "F",
-                                    style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // print("Pressed");
-                                      // List<TrackedFood> foodToDelete = [food];
-                                      // var user = Provider.of<User>(context);
-                                      // var db = DatabaseService(uid: user.uid);
-                                      // db.deleteAFood(
-                                      //     foodToDelete, currentMeal.mealName);
-                                    },
-                                    child: Icon(
-                                      Icons.delete,
-                                      size: 20,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Container(
-                            child: Text(
-                              // breakfast[index].serving + " " + breakfast[index].unit,
-                              "1.0 serving(s) ",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: "OpenSans", fontSize: 10),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          future: getSnacks(),
+          future: getFood(),
         ),
       ]),
     );
   }
-
-  // @override
-  // Widget build2(BuildContext context) {
-  //   generateFood();
-  //   return SingleChildScrollView(
-  //     padding: EdgeInsets.symmetric(vertical: 20),
-  //     child: Column(children: <Widget>[Expanded()]),
-  //   );
-  // }
 }

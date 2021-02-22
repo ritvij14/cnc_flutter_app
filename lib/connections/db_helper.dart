@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:http/http.dart' as http;
 
 class DBHelper {
@@ -38,6 +39,7 @@ class DBHelper {
         await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
+
   Future<http.Response> searchFood(String query) async {
     var requestUrl = baseUrl + 'api/food/' + query + '/';
     http.Response response =
@@ -50,57 +52,34 @@ class DBHelper {
       String birthDate,
       String race,
       String ethnicity,
+      String gender,
       String height,
       String weight,
       String activityLevel,
       String gIIssues,
-      String colonCancer,
-      String colonStage,
-      String rectumCancer,
-      String rectumStage,
+      bool colorectalCancer,
+      String colorectalStage,
       String lastDiagDate,
-      String surgery,
-      String radiation,
-      String chemotherapy,
-      String surgeryType) async {
+      String cancerTreatment) async {
     var requestUrl = baseUrl +
-        'api/users/save/' +
-        userId +
-        "/" +
-        birthDate +
-        '/' +
-        race +
-        '/' +
-        ethnicity +
-        '/' +
-        height +
-        '/' +
-        weight +
-        '/' +
-        activityLevel +
-        '/' +
-        gIIssues +
-        '/' +
-        colonCancer +
-        '/' +
-        colonStage +
-        '/' +
-        rectumCancer +
-        '/' +
-        rectumStage +
-        '/' +
-        lastDiagDate +
-        '/' +
-        surgery +
-        '/' +
-        radiation +
-        '/' +
-        chemotherapy +
-        '/' +
-        surgeryType;
-    http.Response response =
-        await http.post(Uri.encodeFull(requestUrl), headers: {});
-    print(requestUrl);
+        'api/users/form/save/';
+    var response = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'userId': userId,
+          'birthDate': birthDate,
+          'race': race,
+          'ethnicity': ethnicity,
+          'gender': gender,
+          'height': height,
+          'weight': weight,
+          'activityLevel': activityLevel,
+          'gastroIntestinalIssues': gIIssues,
+          'colorectalCancer': colorectalCancer,
+          'colorectalStage': colorectalStage,
+          'lastDiagDate': lastDiagDate,
+          'cancerTreatment': cancerTreatment
+        }));
     return response;
   }
 
@@ -111,4 +90,29 @@ class DBHelper {
     return response;
   }
 
+  Future<http.Response> getFoodLog(userId, date) async {
+    var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/' + date;
+    http.Response response =
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> deleteFoodLogEntry(foodLogEntryId) async {
+    var requestUrl = baseUrl + 'api/users/foodlog/delete/' + foodLogEntryId.toString();
+    http.Response response =
+        await http.delete(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> saveNewFoodLogEntry(entryTime, userId, foodId, portion) async {
+    var requestUrl = baseUrl + 'api/users/foodlog/save/' + entryTime.toString();
+    var uriResponse = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          // 'entryTime': entryTime.toIso8601String(),
+          'userId': userId,
+          'foodId': foodId,
+          'portion': portion,
+        }));
+  }
 }

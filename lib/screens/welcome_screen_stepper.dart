@@ -19,88 +19,128 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   List<Step> steps;
 
-  int _year = 0;
-  int _month = 0;
-  int _day = 0;
-
   List<String> _months = [
-    'Jan',
-    'Feb',
-    'Mar',
+    'January',
+    'February',
+    'March',
     'April',
     "May",
     'June',
     'July',
-    'Aug',
-    'Sept',
-    "Oct",
-    'Nov',
-    'Dec'
+    'August',
+    'September',
+    "October",
+    'November',
+    'December'
   ];
 
-  List<String> _days = List<String>.generate(31, (int index) => '${index + 1}');
+  List<String> _feet = List<String>.generate(9, (int index) => '${index + 1}');
+  List<String> _inches = List<String>.generate(12, (int index) => '${index}');
 
-  String dropDownBirthMonth;
-  String dropDownBirthDay;
   String dropDownDiagMonth;
-  Widget birthDay;
-  Widget birthMonth;
-  Widget birthYear;
 
-  Widget _buildMonth(String field) {
-    return DropdownButtonFormField(
-      isExpanded: true,
-      decoration: InputDecoration(
-        labelText: 'Month',
-        border: OutlineInputBorder(),
-        hintText: "Month",
-      ),
-      value: dropDownBirthMonth,
-      validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          if (field == "birth") {
-            dropDownBirthMonth = Value;
-            _month = _months.indexOf(Value) + 1;
-          } else {
-            dropDownDiagMonth = Value;
-            _diagMonth = _months.indexOf(Value) + 1;
-          }
-        });
-      },
-      items: _months
-          .map((month) => DropdownMenuItem(value: month, child: Text("$month")))
-          .toList(),
-    );
+  var _dateTime;
+  var result;
+
+  Widget _buildDatePicker() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text('Please select your birthday:',
+                  style: TextStyle(fontSize: 18)),
+            ),
+          ),
+          SizedBox(height: 5),
+          RaisedButton(
+            // shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.zero,
+            //     side: BorderSide(color:  Theme.of(context).primaryColor)
+            // ),
+            child: Text(
+              result != null ? result : 'SELECT DATE',
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).highlightColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            color: Colors.blue,
+            onPressed: () {
+              showDatePicker(
+                  context: context,
+                  initialDate:
+                  _dateTime == null ? DateTime.now() : _dateTime,
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now())
+                  .then((date) {
+                setState(() {
+                  _dateTime = date;
+                  result =
+                  "${_dateTime.month}/${_dateTime.day}/${_dateTime.year}";
+                });
+              });
+            },
+          ),
+        ]);
   }
 
-  Widget _buildDay() {
-    return Container(
-        width: 10.0,
-        child: DropdownButtonHideUnderline(
-            child: ButtonTheme(
-                alignedDropdown: true,
-                child: DropdownButtonFormField(
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    labelText: 'Day',
-                    border: OutlineInputBorder(),
-                    hintText: "Day",
-                  ),
-                  value: dropDownBirthDay,
-                  validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String Value) {
-                    setState(() {
-                      dropDownBirthDay = Value;
-                      _day = _days.indexOf(Value) + 1;
-                    });
-                  },
-                  items: _days
-                      .map((day) =>
-                      DropdownMenuItem(value: day, child: Text("$day")))
-                      .toList(),
-                ))));
-  }
+  // Widget _buildMonth(String field) {
+  //   return DropdownButtonFormField(
+  //     isExpanded: true,
+  //     decoration: InputDecoration(
+  //       labelText: 'Month',
+  //       border: OutlineInputBorder(),
+  //       hintText: "Month",
+  //     ),
+  //     value: dropDownBirthMonth,
+  //     validator: (value) => value == null ? 'Field Required' : null,
+  //     onChanged: (String Value) {
+  //       setState(() {
+  //         if (field == "birth") {
+  //           dropDownBirthMonth = Value;
+  //           _month = _months.indexOf(Value) + 1;
+  //         } else {
+  //           dropDownDiagMonth = Value;
+  //           _diagMonth = _months.indexOf(Value) + 1;
+  //         }
+  //       });
+  //     },
+  //     items: _months
+  //         .map((month) => DropdownMenuItem(value: month, child: Text("$month")))
+  //         .toList(),
+  //   );
+  // }
+  //
+  // Widget _buildDay() {
+  //   return Container(
+  //       width: 10.0,
+  //       child: DropdownButtonHideUnderline(
+  //           child: ButtonTheme(
+  //               alignedDropdown: true,
+  //               child: DropdownButtonFormField(
+  //                 isExpanded: true,
+  //                 decoration: InputDecoration(
+  //                   labelText: 'Day',
+  //                   border: OutlineInputBorder(),
+  //                   hintText: "Day",
+  //                 ),
+  //                 value: dropDownBirthDay,
+  //                 validator: (value) => value == null ? 'Field Required' : null,
+  //                 onChanged: (String Value) {
+  //                   setState(() {
+  //                     dropDownBirthDay = Value;
+  //                     _day = _days.indexOf(Value) + 1;
+  //                   });
+  //                 },
+  //                 items: _days
+  //                     .map((day) =>
+  //                         DropdownMenuItem(value: day, child: Text("$day")))
+  //                     .toList(),
+  //               ))));
+  // }
 
   // Widget _buildBirthMonth() {
   //   return TextFormField(
@@ -165,81 +205,94 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   //   );
   // }
 
-  Widget _buildBirthYear() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Year',
-        hintText: 'YYYY',
-        border: OutlineInputBorder(),
-        contentPadding:
-        new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int year = int.tryParse(value);
-        if (year == null) {
-          return "Field Required";
-        } else if (year <= 0) {
-          return 'Year must be greater than 0';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _year = int.tryParse(value);
-      },
-    );
-  }
+  // Widget _buildBirthYear() {
+  //   return TextFormField(
+  //     decoration: InputDecoration(
+  //       labelText: 'Year',
+  //       hintText: 'YYYY',
+  //       border: OutlineInputBorder(),
+  //       contentPadding:
+  //           new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
+  //     ),
+  //     keyboardType: TextInputType.number,
+  //     validator: (String value) {
+  //       int year = int.tryParse(value);
+  //       if (year == null) {
+  //         return "Field Required";
+  //       } else if (year <= 0) {
+  //         return 'Year must be greater than 0';
+  //       }
+  //       return null;
+  //     },
+  //     onSaved: (String value) {
+  //       _year = int.tryParse(value);
+  //     },
+  //   );
+  // }
 
   int _heightFeet = 0;
   int _heightInches = 0;
+  String dropDownFeet;
+  String dropDownInches;
   Widget heightFeet;
   Widget heightInches;
 
   Widget _buildHeightFeet() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Feet',
-        hintText: 'ft',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int height = int.tryParse(value);
-        if (height == null) {
-          return "Field Required";
-        } else if (height <= 0) {
-          return 'Height must be greater than 0';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _heightFeet = int.tryParse(value);
-      },
-    );
+    return Container(
+        width: 10.0,
+        child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButtonFormField(
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Feet',
+                    border: OutlineInputBorder(),
+                    hintText: "Feet",
+                  ),
+                  value: dropDownFeet,
+                  validator: (value) => value == null ? 'Field Required' : null,
+                  onChanged: (String Value) {
+                    setState(() {
+                      dropDownFeet = Value;
+                      _heightFeet = _feet.indexOf(Value) + 1;
+                    });
+                  },
+                  items: _feet
+                      .map((feet) =>
+                      DropdownMenuItem(value: feet, child: Text("$feet")))
+                      .toList(),
+                ))));
   }
 
   Widget _buildHeightInches() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Inches',
-        hintText: 'in',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int inches = int.tryParse(value);
-        if (inches == null) {
-          return null;
-        } else if (inches >= 12) {
-          return 'Inches must be less than 12';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _heightInches = int.tryParse(value);
-      },
-    );
+    return Container(
+        width: 10.0,
+        child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButtonFormField(
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Inches',
+                    border: OutlineInputBorder(),
+                    hintText: "Inches",
+                  ),
+                  value: dropDownInches,
+                  validator: (value) => value == null ? 'Field Required' : null,
+                  onChanged: (String Value) {
+                    setState(() {
+                      dropDownInches = Value;
+                      _heightInches = _inches.indexOf(Value) + 1;
+                    });
+                  },
+                  items: _inches
+                      .map((inch) =>
+                      DropdownMenuItem(value: inch, child: Text("$inch")))
+                      .toList(),
+                ))));
   }
+
 
   int _weight = 0;
   Widget weight;
@@ -267,6 +320,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
+  String dropDownGender;
+  List<String> _genders = [
+    'Male',
+    'Female',
+    'Other',
+    'Prefer not to say'
+  ];
+  Widget gender;
+
+  Widget _buildGender() {
+    return DropdownButtonFormField(
+      isExpanded: true,
+      decoration: InputDecoration(
+          labelText: 'Gender',
+          border: OutlineInputBorder(),
+          hintText: "Gender"),
+      value: dropDownGender,
+      validator: (value) => value == null ? 'Field Required' : null,
+      onChanged: (String Value) {
+        setState(() {
+          dropDownGender = Value;
+        });
+      },
+      items: _genders
+          .map((gender) =>
+          DropdownMenuItem(value: gender, child: Text("$gender")))
+          .toList(),
+    );
+  }
+
   String dropDownRace;
   List<String> _races = [
     'American Indian or Alaska Native',
@@ -274,8 +357,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Black or African American',
     'Native Hawaiian or Other Pacific Islander',
     'White',
-    'Two or More Races',
-    'Other',
+    'More than one Race',
+    'Unknown',
     'Prefer not to say',
   ];
   Widget race;
@@ -300,12 +383,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   String dropDownEthnicities;
   List<String> _ethnicities = [
-    'Not of Hispanic, Latino, or Spanish origin',
-    'Mexican, Mexican Am., Chicano',
-    "Puerto Rican",
-    'Cuban',
-    'Two or more Hispanic, Latino, or Spanish origin ethnicities',
-    'Other Hispanic, Latino, or Spanish origin',
+    'Hispanic or Latinx',
+    'Non-Hispanic or Latinx',
+    'Unknown',
     'Prefer not to say',
   ];
   Widget ethnicity;
@@ -405,38 +485,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text('Frequent Gastrointestinal Issues',
+              child: Text('Mark all the frequent symptoms you experience:',
                   style: TextStyle(fontSize: 18)),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('(at least once every week within the last 2 months)',
-                  style: TextStyle(fontSize: 16)),
             ),
           ),
           _buildGICheckBoxes(),
         ]));
   }
 
-  String dropDownColon;
-  String dropDownRectum;
+  String dropDownStage;
 
-  bool _colon = false;
-  bool _rectum = false;
+
+  bool _colorectal = false;
   bool _surgery = false;
-  bool _chemo = false;
-  bool _radiation = false;
 
-  Map<String, bool> surgeryType = {
-    'Colectomy': false,
-    'Ileostomy': false,
-    'Polypectomy': false,
+  Map<String, bool> treatmentType = {
+    'Surgery': false,
+    'Chemotherapy': false,
+    'Radiation': false,
     'Other': false,
+    'Uncertain': false,
   };
 
-  List<String> _colonStages = [
+  List<String> _cancerStages = [
     'Stage 0',
     'Stage 1',
     'Stage 2',
@@ -447,78 +518,73 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget cancerHistory;
 
   Widget _buildCancerHistoryYN(String cancer) {
-    return Row(children: <Widget>[
-      Expanded(
-        child: ListTile(
-          title: const Text('yes'),
-          leading: Radio(
-            value: true,
-            groupValue: cancer == "rectum" ? _rectum : _colon,
-            onChanged: (value) {
-              setState(() {
-                cancer == "rectum" ? _rectum = value : _colon = value;
-                // Navigator.of(context, rootNavigator: true).pop();
-                // _buildCancerHistory();
-              });
-            },
-          ),
+    return Container(
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5),
         ),
-      ),
-      Expanded(
-        child: ListTile(
-          title: const Text('no'),
-          leading: Radio(
-            value: false,
-            groupValue: cancer == "rectum" ? _rectum : _colon,
-            onChanged: (value) {
-              setState(() {
-                cancer == "rectum" ? _rectum = value : _colon = value;
-                // Navigator.of(context, rootNavigator: true).pop();
-                // _buildCancerHistory();
-              });
-            },
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text('Were you diagnosed with colorectal cancer?',
+                  style: TextStyle(fontSize: 16)),
+            ),
           ),
-        ),
-      ),
-    ]);
+          Row(children: <Widget>[
+            Expanded(
+              child: ListTile(
+                title: const Text('yes'),
+                leading: Radio(
+                  value: true,
+                  groupValue: _colorectal,
+                  onChanged: (value) {
+                    setState(() {
+                      _colorectal = value;
+                      // Navigator.of(context, rootNavigator: true).pop();
+                      // _buildCancerHistory();
+                    });
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListTile(
+                title: const Text('no'),
+                leading: Radio(
+                  value: false,
+                  groupValue: _colorectal,
+                  onChanged: (value) {
+                    setState(() {
+                      _colorectal = value;
+                      // Navigator.of(context, rootNavigator: true).pop();
+                      // _buildCancerHistory();
+                    });
+                  },
+                ),
+              ),
+            ),
+          ])
+        ]));
   }
 
-  Widget _buildColonDropdown() {
+  Widget _buildColonrectalDropdown() {
     return DropdownButtonFormField(
       decoration: InputDecoration(
-          labelText: 'Colon Cancer Stage',
+          labelText: 'Cancer Stage',
           border: OutlineInputBorder(),
-          hintText: "Colon Cancer Stage"),
-      value: dropDownColon,
+          hintText: "Cancer Stage"),
+      value: dropDownStage,
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String value) {
         setState(() {
-          dropDownColon = value;
+          dropDownStage = value;
         });
       },
-      items: _colonStages
+      items: _cancerStages
           .map((colStage) =>
           DropdownMenuItem(value: colStage, child: Text("$colStage")))
-          .toList(),
-    );
-  }
-
-  Widget _buildRectumDropdown() {
-    return DropdownButtonFormField(
-      decoration: InputDecoration(
-          labelText: 'Rectum Cancer Stage',
-          border: OutlineInputBorder(),
-          hintText: "Rectum Cancer Stage"),
-      value: dropDownRectum,
-      validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String value) {
-        setState(() {
-          dropDownRectum = value;
-        });
-      },
-      items: _colonStages
-          .map((recStage) =>
-          DropdownMenuItem(value: recStage, child: Text("$recStage")))
           .toList(),
     );
   }
@@ -527,30 +593,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   int _diagMonth = 0;
   Widget lastDiag;
 
-  // Widget _buildLastDiagMonth() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       labelText: 'Month(optional)',
-  //       hintText: 'MM',
-  //       border: OutlineInputBorder(),
-  //     ),
-  //     keyboardType: TextInputType.number,
-  //     validator: (String value) {
-  //       int month = int.tryParse(value);
-  //       if (month == null) {
-  //         return null;
-  //       } else if (month <= 0) {
-  //         return 'Month must be greater than 0';
-  //       } else if (month >= 13) {
-  //         return 'Month cannot be greater than 12';
-  //       }
-  //       return null;
-  //     },
-  //     onSaved: (String value) {
-  //       _diagMonth = int.tryParse(value);
-  //     },
-  //   );
-  // }
+
+  Widget _buildLastDiagMonth() {
+    return DropdownButtonFormField(
+      isExpanded: true,
+      decoration: InputDecoration(
+        labelText: 'Month',
+        border: OutlineInputBorder(),
+        hintText: "Month",
+      ),
+      value: dropDownDiagMonth,
+      validator: (value) => value == null ? 'Field Required' : null,
+      onChanged: (String Value) {
+        setState(() {
+          dropDownDiagMonth = Value;
+          _diagMonth = _months.indexOf(Value) + 1;
+        });
+      },
+      items: _months
+          .map((month) => DropdownMenuItem(value: month, child: Text("$month")))
+          .toList(),
+    );
+  }
 
   Widget _buildLastDiagYear() {
     return TextFormField(
@@ -558,14 +622,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         labelText: 'Year',
         hintText: 'YYYY',
         border: OutlineInputBorder(),
-        contentPadding:
-        new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
       ),
       keyboardType: TextInputType.number,
       validator: (String value) {
         int year = int.tryParse(value);
-        if (year == null || year < 0) {
-          return 'Field Required';
+        if (year == null || year <= 0) {
+          return 'Year must be greater than 0';
         }
         return null;
       },
@@ -576,189 +638,253 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Widget _buildCancerHistory() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('Do you have colon cancer?',
-                  style: TextStyle(fontSize: 16)),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        _buildCancerHistoryYN("colorectal"),
+        _colorectal == true ? SizedBox(height: 15) : SizedBox(height: 0),
+        _colorectal == true
+            ? Container(
+            padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(5),
             ),
-          ),
-          _buildCancerHistoryYN("colon"),
-          _colon == true ? _buildColonDropdown() : SizedBox(height: 0),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('Do you have rectum cancer?',
-                  style: TextStyle(fontSize: 16)),
+            child:
+            Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  child: Text(
+                      'If known, what cancer stage were you initially diagnosed?',
+                      style: TextStyle(fontSize: 16)),
+                ),
+              ),
+              SizedBox(height: 5),
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(child: _buildColonrectalDropdown()),
+                    IconButton(
+                      icon: Icon(Icons.help_outline, color: Colors.blue),
+                      tooltip: 'More Information',
+                      onPressed: () {
+                        setState(() {
+                          _cancerStagesAlert();
+                        });
+                      },
+                    ),
+                  ]),
+              SizedBox(height: 10),
+            ]))
+            : SizedBox(height: 0),
+        _colorectal == true ? SizedBox(height: 15) : SizedBox(height: 0),
+        _colorectal == true
+            ? Container(
+            padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(5),
             ),
-          ),
-          _buildCancerHistoryYN("rectum"),
-          _rectum == true ? _buildRectumDropdown() : SizedBox(height: 0),
-          _rectum == true || _colon == true
-              ? SizedBox(height: 20)
-              : SizedBox(height: 0),
-          _rectum == true || _colon == true
-              ? Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                  'When was your last cancer (any type of cancer) diagnosis?',
-                  style: TextStyle(fontSize: 16)),
-            ),
-          )
-              : SizedBox(height: 0),
-          _rectum == true || _colon == true
-              ? SizedBox(height: 10)
-              : SizedBox(height: 0),
-          _rectum == true || _colon == true
-              ? Row(children: <Widget>[
-            Expanded(
-              child: _buildMonth("diag"),
-            ),
-            Expanded(
-              child: _buildLastDiagYear(),
-            ),
-          ])
-              : SizedBox(height: 10),
-        ],
-      ),
+            child:
+            Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  child: Text('Approximate date of diagnosis:',
+                      style: TextStyle(fontSize: 16)),
+                ),
+              ),
+              SizedBox(height: 10),
+              _buildLastDiagMonth(),
+              SizedBox(height: 5),
+              _buildLastDiagYear(),
+              SizedBox(height: 10)
+            ]))
+            : SizedBox(height: 0),
+        _colorectal == true ? SizedBox(height: 10) : SizedBox(height: 0),
+        _colorectal == true ? _buildSurgeryDropdown() : SizedBox(height: 0),
+        _surgery == true ? SizedBox(height: 15) : SizedBox(height: 0),
+        _surgery == true ? _buildOstomyYN() : SizedBox(height: 0),
+      ],
+      // ),
     );
-  }
-
-  Widget _buildTreatmentYN(String treatment) {
-    return Row(children: <Widget>[
-      Expanded(
-        child: ListTile(
-          title: const Text('yes'),
-          leading: Radio(
-            value: true,
-            groupValue: treatment == "surgery"
-                ? _surgery
-                : treatment == "chemo"
-                ? _chemo
-                : _radiation,
-            onChanged: (value) {
-              setState(() {
-                treatment == "surgery"
-                    ? _surgery = value
-                    : treatment == "chemo"
-                    ? _chemo = value
-                    : _radiation = value;
-                // Navigator.of(context, rootNavigator: true).pop();
-                // _buildCancerHistory();
-              });
-            },
-          ),
-        ),
-      ),
-      Expanded(
-        child: ListTile(
-          title: const Text('no'),
-          leading: Radio(
-            value: false,
-            groupValue: treatment == "surgery"
-                ? _surgery
-                : treatment == "chemo"
-                ? _chemo
-                : _radiation,
-            onChanged: (value) {
-              setState(() {
-                treatment == "surgery"
-                    ? _surgery = value
-                    : treatment == "chemo"
-                    ? _chemo = value
-                    : _radiation = value;
-                // Navigator.of(context, rootNavigator: true).pop();
-                // _buildCancerHistory();
-              });
-            },
-          ),
-        ),
-      ),
-    ]);
   }
 
   Widget _buildSurgeryDropdown() {
-    return ListView(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      children: surgeryType.keys.map((String key) {
-        return new CheckboxListTile(
-          title: new Text(key),
-          value: surgeryType[key],
-          activeColor: Theme.of(context).buttonColor,
-          checkColor: Colors.white,
-          onChanged: (bool value) {
-            setState(() {
-              surgeryType[key] = value;
-            });
-          },
+    return Container(
+        padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text(
+                  'Which cancer treatments were performed to treat your colorectal cancer? Mark all that apply:',
+                  style: TextStyle(fontSize: 16)),
+            ),
+          ),
+          ListView(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: treatmentType.keys.map((String key) {
+              return new CheckboxListTile(
+                title: new Text(key),
+                value: treatmentType[key],
+                activeColor: Theme.of(context).buttonColor,
+                checkColor: Colors.white,
+                onChanged: (bool value) {
+                  setState(() {
+                    treatmentType[key] = value;
+                    if (key == 'Surgery') {
+                      if (_surgery) {
+                        _surgery = false;
+                      } else {
+                        _surgery = true;
+                      }
+                    }
+                  });
+                },
+              );
+            }).toList(),
+          )
+        ]));
+  }
+
+  bool _ostomy;
+
+  Widget _buildOstomyYN() {
+    return Container(
+        padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Row(children: <Widget>[
+            Text('Do you currently have an ostomy?',
+                style: TextStyle(fontSize: 16)),
+            Container(
+              padding: const EdgeInsets.all(0.0),
+              width: 30.0,
+              child: IconButton(
+                icon: Icon(Icons.help_outline, color: Colors.blue),
+                tooltip: 'More Information',
+                onPressed: () {
+                  setState(() {
+                    _ostomyAlert();
+                  });
+                },
+              ),
+            )
+          ]),
+          Row(children: <Widget>[
+            Expanded(
+              child: ListTile(
+                title: const Text('yes'),
+                leading: Radio(
+                  value: true,
+                  groupValue: _ostomy,
+                  onChanged: (value) {
+                    setState(() {
+                      _ostomy = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListTile(
+                title: const Text('no'),
+                leading: Radio(
+                  value: false,
+                  groupValue: _ostomy,
+                  onChanged: (value) {
+                    setState(() {
+                      _ostomy = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ])
+        ]));
+  }
+
+  _cancerStagesAlert() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cancer stages guide'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Stage 0:', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    'Cancer in its earliest stage, only in the lining. Cancer has not spread to lymph nodes or other parts of the body.'),
+                SizedBox(height: 15),
+                Text('Stage 1:', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    'Cancer has reached the muscle layer of the colon or rectum, but has not spread to lymph nodes or other parts of the body.'),
+                SizedBox(height: 15),
+                Text('Stage 2:', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    'Cancer has either grown through the wall of the colon, or rectum, or reached stomach lining. Nearby organs may be affected, but cancer has not spread to nearby lymph nodes.'),
+                SizedBox(height: 15),
+                Text('Stage 3:', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    'Cancer has spread to nearby lymph nodes and/or nearby organs.'),
+                SizedBox(height: 15),
+                Text('Stage 4:', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    'Most advanced cancer, cancer has reached distant organs.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('CLOSE'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
-      }).toList(),
+      },
     );
   }
 
-  Widget cancerTreatment;
-
-  Widget _buildCancerTreatment() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('Have you had cancer surgery?',
-                  style: TextStyle(fontSize: 16)),
+  _ostomyAlert() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text('More information on ostomy'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'An ostomy is a pouch that attaches to the body to collect waste.')
+              ],
             ),
           ),
-          _buildTreatmentYN("surgery"),
-          _surgery == true
-              ? Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('What procedure did you have?',
-                  style: TextStyle(fontSize: 16)),
+          actions: <Widget>[
+            TextButton(
+              child: Text('CLOSE'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-          )
-              : SizedBox(height: 0),
-          _surgery == true ? _buildSurgeryDropdown() : SizedBox(height: 0),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('Have you had radiation therapy?',
-                  style: TextStyle(fontSize: 16)),
-            ),
-          ),
-          _buildTreatmentYN("radiation"),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('Have you had chemotherapy?',
-                  style: TextStyle(fontSize: 16)),
-            ),
-          ),
-          _buildTreatmentYN("chemo"),
-          SizedBox(height: 10),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 
@@ -797,6 +923,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Form successfully submitted'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'You can view and update these forms fields in the PROFILE tab by tapping on the Personal Details button.'),
+              ],
+            ),
+          ),
           actions: <Widget>[
             TextButton(
               child: Text('CLOSE'),
@@ -820,7 +954,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   int currentStep = 0;
   bool complete = false;
-
+  bool isFirstStep = true;
+  bool isLastStep = false;
   next() {
     if (formKeys[currentStep].currentState.validate()) {
       formKeys[currentStep].currentState.save();
@@ -849,41 +984,43 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     } else {
       setState(() => currentStep = step);
     }
+
+    setState((){
+      currentStep = step;
+      if(currentStep == 0){
+        isFirstStep = true;
+        isLastStep = false;
+      }else if(currentStep + 1 < steps.length){
+        isFirstStep = false;
+        isLastStep = false;
+      } else{
+        isLastStep = true;
+      }
+    });
+
   }
 
   var birthDate;
   var lastDiagDate;
 
   submit() {
-    // int birthMonth;
-    // for (int i = 0; i < _months.length; i++) {
-    //   if (_months[i] == dropDownBirthMonth) {
-    //     birthMonth = i + 1;
-    //   }
-    // }
-    //
-    // int diagMonth;
-    // for (int i = 0; i < _months.length; i++) {
-    //   if (_months[i] == dropDownBirthMonth) {
-    //     diagMonth = i + 1;
-    //   } else {
-    //     diagMonth = 1;
-    //   }
-    // }
-    birthDate = new DateTime(_year, _month, _day);
+    birthDate = _dateTime;
     lastDiagDate = new DateTime(_diagYear, _diagMonth, 1);
     int height = (_heightFeet * 12) + _heightInches;
-    String checkedSurgeryTypes = "";
+    String checkedTreatmentTypes = "";
 
-    for (var key in surgeryType.keys) {
-      if (surgeryType[key]) {
-        if (checkedSurgeryTypes == "") {
-          checkedSurgeryTypes = key;
-        } else {
-          checkedSurgeryTypes += "," + key;
-        }
+    for (var key in treatmentType.keys) {
+
+      if (checkedTreatmentTypes  == "") {
+        checkedTreatmentTypes = treatmentType[key].toString();
+      } else {
+        checkedTreatmentTypes  += "," + (treatmentType[key].toString());
       }
     }
+
+    checkedTreatmentTypes +=  "," + (_ostomy.toString());
+
+
     String gIIssues = "";
     for (var key in frequentIssues.keys) {
       if (frequentIssues[key]) {
@@ -896,15 +1033,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       }
     }
 
-    String colonStage = "-1";
-    String rectumStage = "-1";
-    if (_colon) {
-      colonStage = dropDownColon.substring(6, 6);
-    }
-
-    if (_rectum) {
-      rectumStage = dropDownRectum.substring(6, 6);
-    }
 
     DBHelper db = new DBHelper();
 
@@ -913,20 +1041,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         birthDate.toString().split(" ")[0],
         dropDownRace.replaceAll(" ", "-"),
         dropDownEthnicities.replaceAll(" ", "-"),
+        dropDownGender.replaceAll(" ", "-"),
         height.toString(),
         _weight.toString(),
         dropDownActivity.replaceAll(" ", "-"),
         gIIssues,
-        _colon.toString(),
-        colonStage,
-        _rectum.toString(),
-        rectumStage,
+        _colorectal,
+        dropDownStage,
         lastDiagDate.toString().split(" ")[0],
-        _surgery.toString(),
-        _radiation.toString(),
-        _chemo.toString(),
-        checkedSurgeryTypes);
-
+        checkedTreatmentTypes );
     _successfulAlert();
     print("is submitting!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   }
@@ -976,7 +1099,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     // birthDay = _buildBirthDay();
     // birthMonth = _buildBirthMonth();
-    birthYear = _buildBirthYear();
+    // birthYear = _buildBirthYear();
     heightFeet = _buildHeightFeet();
     heightInches = _buildHeightInches();
     weight = _buildWeight();
@@ -985,7 +1108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     activity = _buildActivity();
     GIIssues = _buildGIIssues();
     cancerHistory = _buildCancerHistory();
-    cancerTreatment = _buildCancerTreatment();
+    // cancerTreatment = _buildCancerTreatment();
     return new Scaffold(
       appBar: AppBar(
         title: Text('Welcome!'),
@@ -1003,48 +1126,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     key: formKeys[0],
                     child: Column(
                       children: <Widget>[
-                        // BirthdayFormWidget(),
+                        _buildDatePicker(),
+                        SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            child: Text("Please enter your birth date:",
+                            child: Text(
+                                "Please make selections from the following dropdowns that best describe yourself:",
                                 style: TextStyle(fontSize: 18)),
                           ),
                         ),
-                        SizedBox(height: 5),
-                        Row(children: <Widget>[
-                          Expanded(
-                            child: _buildMonth("birth"),
-                          ),
-                          Expanded(
-                            child: _buildDay(),
-                          ),
-                          Expanded(
-                            child: birthYear,
-                          ),
-                        ]),
+                        // SizedBox(height: 5),
+                        // Row(children: <Widget>[
+                        //   Expanded(
+                        //     child: _buildMonth("birth"),
+                        //   ),
+                        //   Expanded(
+                        //     child: _buildDay(),
+                        //   ),
+                        //   Expanded(
+                        //     child: birthYear,
+                        //   ),
+                        // ]),
 
-                        SizedBox(height: 15),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            child: Text("What race are you?",
-                                style: TextStyle(fontSize: 18)),
-                          ),
-                        ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 10),
                         race,
-                        // RaceDropdownWidget(),
                         SizedBox(height: 15),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            child: Text("What is your ethnicity?",
-                                style: TextStyle(fontSize: 18)),
-                          ),
-                        ),
-                        SizedBox(height: 5),
                         ethnicity,
+                        SizedBox(height: 15),
+                        _buildGender(),
+                        SizedBox(height: 15),
                         // EthnicityDropdownWidget(),
                       ],
                     ),
@@ -1068,9 +1179,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                         SizedBox(height: 5),
-                        heightFeet,
-                        SizedBox(height: 10),
-                        heightInches,
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: heightFeet,
+                          ),
+
+                          //  SizedBox(height: 10),
+                          Expanded(
+                            child: heightInches,
+                          )
+                        ]),
                         // HeightFormWidget(),
                         SizedBox(height: 15),
                         Align(
@@ -1095,6 +1213,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         SizedBox(height: 5),
                         // ActivityDropdownWidget(),
                         activity,
+                        SizedBox(height: 15),
                       ],
                     ),
                   ),
@@ -1103,7 +1222,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Step(
                 state: _getState(3),
                 isActive: currentStep >= 2,
-                title: const Text('Gastrointestinal Issues'),
+                title: const Text('Frequent Symptoms'),
                 content: Container(
                   child: Form(
                     key: formKeys[2],
@@ -1111,6 +1230,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: <Widget>[
                         SizedBox(height: 5),
                         GIIssues,
+                        SizedBox(height: 15),
                         // GIIssuesCheckboxWidget(),
                       ],
                     ),
@@ -1128,34 +1248,65 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: <Widget>[
                         SizedBox(height: 5),
                         cancerHistory,
+                        SizedBox(height: 15),
                         // CancerHistoryWidget(),
                       ],
                     ),
                   ),
                 ),
               ),
-              Step(
-                state: _getState(5),
-                isActive: currentStep >= 4,
-                title: const Text('Cancer Treatment'),
-                content: Container(
-                  child: Form(
-                    key: formKeys[4],
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 5),
-                        cancerTreatment,
-                        // CancerTreatmentWidget(),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+              // Step(
+              //   state: _getState(5),
+              //   isActive: currentStep >= 4,
+              //   title: const Text('Cancer Treatment'),
+              //   content: Container(
+              //     child: Form(
+              //       key: formKeys[4],
+              //       child: Column(
+              //         children: <Widget>[
+              //           SizedBox(height: 5),
+              //           cancerTreatment,
+              //           // CancerTreatmentWidget(),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
             currentStep: currentStep,
             onStepContinue: next,
             onStepTapped: (step) => goTo(step),
             onStepCancel: cancel,
+            controlsBuilder: (BuildContext context,
+                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+              return Row(
+                children: <Widget>[
+                  isLastStep ?  FlatButton(
+                    onPressed:  onStepContinue,
+                    child: const Text('SUBMIT',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.blue,
+                  ) :  FlatButton(
+                    onPressed:  onStepContinue,
+                    child: const Text('CONTINUE',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.blue,
+                  ),
+                  new Padding(
+                    padding: new EdgeInsets.all(10),
+                  ),
+                  isFirstStep ? SizedBox(height:0) : FlatButton(
+                    onPressed: onStepCancel,
+                    child: const Text(
+                      'BACK',
+                      style: TextStyle( color: Colors.grey),
+                    ),
+                    // color: Colors.grey,
+                  ),
+                ],
+              );
+            },
+
           ),
         ),
       ]),

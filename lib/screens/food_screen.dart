@@ -1,3 +1,5 @@
+import 'package:cnc_flutter_app/connections/db_helper.dart';
+import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,429 +12,866 @@ import 'package:flutter/material.dart';
 
 class FoodPage extends StatefulWidget {
   Food selection;
+  String selectedDate;
 
-  FoodPage(Food selection) {
+  FoodPage(Food selection, String selectedDate) {
     this.selection = selection;
-    this.selection.fiberInGrams = 0;
-    this.selection.solubleFiberInGrams = 0;
-    this.selection.insolubleFiberInGrams = 0;
-    this.selection.calciumInMilligrams = 0;
-    this.selection.sodiumInMilligrams = 0;
-    this.selection.saturatedFattyAcidsInGrams = 0;
-    this.selection.polyunsaturatedFattyAcidsInGrams = 0;
-    this.selection.monounsaturatedFattyAcidsInGrams = 0;
-    this.selection.sugarInGrams = 0;
-    this.selection.alcoholInGrams = 0;
-    this.selection.vitaminDInMicrograms = 0;
+    this.selectedDate = selectedDate;
   }
 
   @override
-  FoodProfile createState() => FoodProfile(selection);
+  FoodProfile createState() => FoodProfile(selection, selectedDate);
 }
 
 class FoodProfile extends State<FoodPage> {
   Food currentFood;
+  String selectedDate;
 
-  FoodProfile(Food selection) {
+  bool showFat = false;
+  bool showCarbs = false;
+
+  DateTime entryTime = DateTime.now();
+  double portion = 1;
+
+
+
+  FoodProfile(Food selection, String selectedDate) {
     currentFood = selection;
+    this.selectedDate = selectedDate;
+  }
+
+
+  saveNewEntry() async {
+    var db = new DBHelper();
+    var time = entryTime.toString().substring(0, 19);
+    var combined = selectedDate + " " + time.split(" ")[1];
+    var toSend = combined.replaceAll(" ", "%20");
+    var response = await db.saveNewFoodLogEntry(toSend, 1, currentFood.id, portion);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(currentFood.description),
-        ),
-        body: SingleChildScrollView(
-          child: Column(children: [
-            SizedBox(
-              width: double.infinity,
-              child: DataTable(
-                headingRowColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                  return Colors.grey.withOpacity(0.3);
-                }),
-                // headingRowHeight: 2,
-                columns: <DataColumn>[
-                  DataColumn(
-                    label: Text(
-                      'Calories Per Serving                      ',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
+    if (showFat && showCarbs) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(currentFood.description),
+          ),
+          body: SingleChildScrollView(
+            child: Column(children: [
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Calories: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
                   ),
-                  DataColumn(
-                    label: Text(
-                      currentFood.kcal.toString(),
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
+                  trailing: Text(
+                    currentFood.kcal.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ],
-                rows: <DataRow>[
-                  DataRow(
-                    // color: MaterialStateProperty.resolveWith<Color>(
-                    //     (Set<MaterialState> states) {
-                    //   return Colors.grey.withOpacity(0.3);
-                    // }),
-                    cells: <DataCell>[
-                      DataCell(Text(
-                          'Total Protein                                     ')),
-                      DataCell(
-                          Text(currentFood.proteinInGrams.toString() + ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    color: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Colors.grey.withOpacity(0.3);
-                        }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Carbohydrates')),
-                      DataCell(Text(
-                          currentFood.carbohydratesInGrams.toString() + ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text('Total Fat')),
-                      DataCell(Text(currentFood.fatInGrams.toString() + ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    color: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Colors.grey.withOpacity(0.3);
-                        }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Alcohol')),
-                      DataCell(
-                          Text(currentFood.alcoholInGrams.toString() + ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    // color: MaterialStateProperty.resolveWith<Color>(
-                    //     (Set<MaterialState> states) {
-                    //   return Colors.grey.withOpacity(0.3);
-                    // }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Saturated Fatty Acids')),
-                      DataCell(Text(
-                          currentFood.saturatedFattyAcidsInGrams.toString() +
-                              ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    color: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Colors.grey.withOpacity(0.3);
-                        }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Polyunsaturated Fatty Acids')),
-                      DataCell(Text(currentFood.polyunsaturatedFattyAcidsInGrams
-                          .toString() +
-                          ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    // color: MaterialStateProperty.resolveWith<Color>(
-                    //     (Set<MaterialState> states) {
-                    //   return Colors.grey.withOpacity(0.3);
-                    // }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Monounsaturated Fatty Acids')),
-                      DataCell(Text(currentFood.monounsaturatedFattyAcidsInGrams
-                          .toString() +
-                          ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    color: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Colors.grey.withOpacity(0.3);
-                        }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Insoluble Fiber ')),
-                      DataCell(Text(
-                          currentFood.insolubleFiberInGrams.toString() + ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    // color: MaterialStateProperty.resolveWith<Color>(
-                    //     (Set<MaterialState> states) {
-                    //   return Colors.grey.withOpacity(0.3);
-                    // }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Soluble Fiber')),
-                      DataCell(Text(
-                          currentFood.solubleFiberInGrams.toString() + ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    color: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Colors.grey.withOpacity(0.3);
-                        }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Sugars')),
-                      DataCell(
-                          Text(currentFood.sugarInGrams.toString() + ' g')),
-                    ],
-                  ),
-                  DataRow(
-                    // color: MaterialStateProperty.resolveWith<Color>(
-                    //     (Set<MaterialState> states) {
-                    //   return Colors.grey.withOpacity(0.3);
-                    // }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Calcium')),
-                      DataCell(Text(
-                          currentFood.calciumInMilligrams.toString() + ' mg')),
-                    ],
-                  ),
-                  DataRow(
-                    color: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Colors.grey.withOpacity(0.3);
-                        }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Sodium')),
-                      DataCell(Text(
-                          currentFood.sodiumInMilligrams.toString() + ' mg')),
-                    ],
-                  ),
-                  DataRow(
-                    // color: MaterialStateProperty.resolveWith<Color>(
-                    //     (Set<MaterialState> states) {
-                    //   return Colors.grey.withOpacity(0.3);
-                    // }),
-                    cells: <DataCell>[
-                      DataCell(Text('Total Vitamin D')),
-                      DataCell(Text(
-                          currentFood.vitaminDInMicrograms.toString() +
-                              ' mcg')),
-                    ],
-                  ),
-
-                ],
+                ),
               ),
-            ),
-            // Container(
-            //   padding: EdgeInsets.only(left: 5, right: 0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: <Widget>[
-            //       Text(
-            //         "Macronutrients",
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 16,
-            //             fontFamily: "OpenSans"),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   width: double.infinity,
-            //   child: DataTable(
-            //     headingRowHeight: 2,
-            //     columns: const <DataColumn>[
-            //       DataColumn(
-            //         label: Text(
-            //           '',
-            //           style: TextStyle(fontStyle: FontStyle.italic),
-            //         ),
-            //       ),
-            //       DataColumn(
-            //         label: Text(
-            //           '',
-            //           style: TextStyle(fontStyle: FontStyle.italic),
-            //         ),
-            //       ),
-            //     ],
-            //     rows: <DataRow>[
-            //       DataRow(
-            //         // color: MaterialStateProperty.resolveWith<Color>(
-            //         //     (Set<MaterialState> states) {
-            //         //   return Colors.grey.withOpacity(0.3);
-            //         // }),
-            //         cells: <DataCell>[
-            //           DataCell(Text(
-            //               'Total Protein                                     ')),
-            //           DataCell(
-            //               Text(currentFood.proteinInGrams.toString() + ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         color: MaterialStateProperty.resolveWith<Color>(
-            //             (Set<MaterialState> states) {
-            //           return Colors.grey.withOpacity(0.3);
-            //         }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Carbohydrates')),
-            //           DataCell(Text(
-            //               currentFood.carbohydratesInGrams.toString() + ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Fat')),
-            //           DataCell(Text(currentFood.fatInGrams.toString() + ' g')),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // Container(
-            //   padding: EdgeInsets.only(left: 5, right: 0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: <Widget>[
-            //       Text(
-            //         "Micronutrients",
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 16,
-            //             fontFamily: "OpenSans"),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   width: double.infinity,
-            //   child: DataTable(
-            //     headingRowHeight: 2,
-            //     columns: const <DataColumn>[
-            //       DataColumn(
-            //         label: Text(
-            //           '',
-            //           style: TextStyle(fontStyle: FontStyle.italic),
-            //         ),
-            //       ),
-            //       DataColumn(
-            //         label: Text(
-            //           '',
-            //           style: TextStyle(fontStyle: FontStyle.italic),
-            //         ),
-            //       ),
-            //     ],
-            //     rows: <DataRow>[
-            //       DataRow(
-            //         color: MaterialStateProperty.resolveWith<Color>(
-            //             (Set<MaterialState> states) {
-            //           return Colors.grey.withOpacity(0.3);
-            //         }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Alcohol')),
-            //           DataCell(
-            //               Text(currentFood.alcoholInGrams.toString() + ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         // color: MaterialStateProperty.resolveWith<Color>(
-            //         //     (Set<MaterialState> states) {
-            //         //   return Colors.grey.withOpacity(0.3);
-            //         // }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Saturated Fatty Acids')),
-            //           DataCell(Text(
-            //               currentFood.saturatedFattyAcidsInGrams.toString() +
-            //                   ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         color: MaterialStateProperty.resolveWith<Color>(
-            //             (Set<MaterialState> states) {
-            //           return Colors.grey.withOpacity(0.3);
-            //         }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Polyunsaturated Fatty Acids')),
-            //           DataCell(Text(currentFood.polyunsaturatedFattyAcidsInGrams
-            //                   .toString() +
-            //               ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         // color: MaterialStateProperty.resolveWith<Color>(
-            //         //     (Set<MaterialState> states) {
-            //         //   return Colors.grey.withOpacity(0.3);
-            //         // }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Monounsaturated Fatty Acids')),
-            //           DataCell(Text(currentFood.monounsaturatedFattyAcidsInGrams
-            //                   .toString() +
-            //               ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         color: MaterialStateProperty.resolveWith<Color>(
-            //             (Set<MaterialState> states) {
-            //           return Colors.grey.withOpacity(0.3);
-            //         }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Insoluble Fiber ')),
-            //           DataCell(Text(
-            //               currentFood.insolubleFiberInGrams.toString() + ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         // color: MaterialStateProperty.resolveWith<Color>(
-            //         //     (Set<MaterialState> states) {
-            //         //   return Colors.grey.withOpacity(0.3);
-            //         // }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Soluble Fiber')),
-            //           DataCell(Text(
-            //               currentFood.solubleFiberInGrams.toString() + ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         color: MaterialStateProperty.resolveWith<Color>(
-            //             (Set<MaterialState> states) {
-            //           return Colors.grey.withOpacity(0.3);
-            //         }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Sugars')),
-            //           DataCell(
-            //               Text(currentFood.sugarInGrams.toString() + ' g')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         // color: MaterialStateProperty.resolveWith<Color>(
-            //         //     (Set<MaterialState> states) {
-            //         //   return Colors.grey.withOpacity(0.3);
-            //         // }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Calcium')),
-            //           DataCell(Text(
-            //               currentFood.calciumInMilligrams.toString() + ' mg')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         color: MaterialStateProperty.resolveWith<Color>(
-            //             (Set<MaterialState> states) {
-            //           return Colors.grey.withOpacity(0.3);
-            //         }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Sodium')),
-            //           DataCell(Text(
-            //               currentFood.sodiumInMilligrams.toString() + ' mg')),
-            //         ],
-            //       ),
-            //       DataRow(
-            //         // color: MaterialStateProperty.resolveWith<Color>(
-            //         //     (Set<MaterialState> states) {
-            //         //   return Colors.grey.withOpacity(0.3);
-            //         // }),
-            //         cells: <DataCell>[
-            //           DataCell(Text('Total Vitamin D')),
-            //           DataCell(Text(
-            //               currentFood.vitaminDInMicrograms.toString() +
-            //                   ' mcg')),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-          ]),
-        ));
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showFat = !showFat;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Fat ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.fatInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.fatInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Saturated fatty acids  ',
+                  ),
+                  trailing: Text(
+                    currentFood.saturatedFattyAcidsInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Polyunsaturated fatty acids  ',
+                  ),
+                  trailing: Text(
+                    currentFood.polyunsaturatedFattyAcidsInGrams.toString() +
+                        'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Monounsaturated fatty acids  ',
+                  ),
+                  trailing: Text(
+                    currentFood.monounsaturatedFattyAcidsInGrams.toString() +
+                        'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showCarbs = !showCarbs;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Carbohydrates ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.carbohydratesInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Insoluble Fiber  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.insolubleFiberInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Soluble Fiber  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.solubleFiberInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Sugars  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.sugarInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Protein ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.proteinInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Alcohol ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.alcoholInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Calcium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Sodium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Vitamin D ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ]),
+          ));
+    } else if (showFat) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(currentFood.description),
+          ),
+          body: SingleChildScrollView(
+            child: Column(children: [
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Calories: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.kcal.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showFat = !showFat;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Fat ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.fatInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.fatInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Saturated fatty acids  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.saturatedFattyAcidsInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Polyunsaturated fatty acids  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.polyunsaturatedFattyAcidsInGrams.toString() +
+                        'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Monounsaturated fatty acids  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.monounsaturatedFattyAcidsInGrams.toString() +
+                        'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showCarbs = !showCarbs;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Carbohydrates ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.carbohydratesInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Protein ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.proteinInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Alcohol ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.alcoholInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Calcium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Sodium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Vitamin D ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ]),
+          ));
+    } else if (showCarbs) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(currentFood.description),
+          ),
+          body: SingleChildScrollView(
+            child: Column(children: [
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Calories: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.kcal.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showFat = !showFat;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Fat ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.fatInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.fatInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showCarbs = !showCarbs;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Carbohydrates ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.carbohydratesInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Insoluble Fiber  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.insolubleFiberInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Soluble Fiber  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.solubleFiberInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Sugars  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.sugarInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Protein ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.proteinInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Alcohol ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.alcoholInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Calcium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Sodium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Vitamin D ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ]),
+          ));
+    } else {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(currentFood.description),
+          ),
+          body: SingleChildScrollView(
+            child: Column(children: [
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Calories: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.kcal.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showFat = !showFat;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Fat ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.fatInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.fatInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  onTap: () {
+                    showCarbs = !showCarbs;
+                    setState(() {});
+                  },
+                  title: Text(
+                    'Carbohydrates ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  subtitle: Text(
+                    'Tap for more information ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Wrap(
+                    spacing: 12, // space between two icons
+                    children: <Widget>[
+                      Text(
+                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ), // icon-1
+                      Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
+                    ],
+                  ),
+                  // trailing: Text(
+                  //   currentFood.carbohydratesInGrams.toString() + 'g',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Protein ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.proteinInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Alcohol ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.alcoholInGrams.toString() + 'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Calcium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Sodium ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Vitamin D ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              RaisedButton(
+                child: Text('Save'),
+                onPressed: () {
+                  saveNewEntry();
+                  Navigator.pop(context, null);
+                },
+              ),
+            ]),
+          ));
+    }
   }
 }
