@@ -1,11 +1,11 @@
 class Food {
+  int _id;
+
   int _baseId;
 
   String _keylist;
 
   String _description;
-
-  String _foodType;
 
   double _kcal;
 
@@ -31,60 +31,50 @@ class Food {
 
   double _monounsaturatedFattyAcidsInGrams;
 
-  double _cholesterolInMilligrams;
-
   double _sugarInGrams;
-
-  double _addedSugarsInGrams;
 
   double _alcoholInGrams;
 
-  double _caffeineInMilligrams;
-
-  double _ironInMilligrams;
-
-  double _potassiumInMilligrams;
-
-  double _phosphorusInMilligrams;
-
-  double _thiaminInMilligrams;
-
-  double _riboflavinInMilligrams;
-
-  double _niacinInMilligrams;
-
-  double _pantothenicAcidInMilligrams;
-
-  double _vitaminB6InMilligrams;
-
-  double _vitaminB12InMicrograms;
-
-  double _vitaminCInMilligrams;
-
-  double _folateInMicrograms;
-
-  double _vitaminAInInternationalUnits;
-
-  double _betaCaroteneInMicrograms;
-
-  double _lycopeneInMicrograms;
-
   double _vitaminDInMicrograms;
 
-  double _vitaminEInInternationalUnits;
+  double _commonPortionSizeAmount;
+
+  double _commonPortionSizeGramWeight;
+
+  String _commonPortionSizeDescription;
+
+  String _commonPortionSizeUnit;
+
+  int get id => _id;
+
+  set id(int value) {
+    _id = value;
+  }
 
   int get baseId => _baseId;
 
-  set baseId(int value) {
-    _baseId = value;
+  String get commonPortionSizeUnit => _commonPortionSizeUnit;
+
+  set commonPortionSizeUnit(String value) {
+    _commonPortionSizeUnit = value;
   }
 
-  String get keylist => _keylist;
+  String get commonPortionSizeDescription => _commonPortionSizeDescription;
 
-  double get vitaminEInInternationalUnits => _vitaminEInInternationalUnits;
+  set commonPortionSizeDescription(String value) {
+    _commonPortionSizeDescription = value;
+  }
 
-  set vitaminEInInternationalUnits(double value) {
-    _vitaminEInInternationalUnits = value;
+  double get commonPortionSizeGramWeight => _commonPortionSizeGramWeight;
+
+  set commonPortionSizeGramWeight(double value) {
+    _commonPortionSizeGramWeight = value;
+  }
+
+  double get commonPortionSizeAmount => _commonPortionSizeAmount;
+
+  set commonPortionSizeAmount(double value) {
+    _commonPortionSizeAmount = value;
   }
 
   double get vitaminDInMicrograms => _vitaminDInMicrograms;
@@ -93,118 +83,16 @@ class Food {
     _vitaminDInMicrograms = value;
   }
 
-  double get lycopeneInMicrograms => _lycopeneInMicrograms;
-
-  set lycopeneInMicrograms(double value) {
-    _lycopeneInMicrograms = value;
-  }
-
-  double get betaCaroteneInMicrograms => _betaCaroteneInMicrograms;
-
-  set betaCaroteneInMicrograms(double value) {
-    _betaCaroteneInMicrograms = value;
-  }
-
-  double get vitaminAInInternationalUnits => _vitaminAInInternationalUnits;
-
-  set vitaminAInInternationalUnits(double value) {
-    _vitaminAInInternationalUnits = value;
-  }
-
-  double get folateInMicrograms => _folateInMicrograms;
-
-  set folateInMicrograms(double value) {
-    _folateInMicrograms = value;
-  }
-
-  double get vitaminCInMilligrams => _vitaminCInMilligrams;
-
-  set vitaminCInMilligrams(double value) {
-    _vitaminCInMilligrams = value;
-  }
-
-  double get vitaminB12InMicrograms => _vitaminB12InMicrograms;
-
-  set vitaminB12InMicrograms(double value) {
-    _vitaminB12InMicrograms = value;
-  }
-
-  double get vitaminB6InMilligrams => _vitaminB6InMilligrams;
-
-  set vitaminB6InMilligrams(double value) {
-    _vitaminB6InMilligrams = value;
-  }
-
-  double get pantothenicAcidInMilligrams => _pantothenicAcidInMilligrams;
-
-  set pantothenicAcidInMilligrams(double value) {
-    _pantothenicAcidInMilligrams = value;
-  }
-
-  double get niacinInMilligrams => _niacinInMilligrams;
-
-  set niacinInMilligrams(double value) {
-    _niacinInMilligrams = value;
-  }
-
-  double get riboflavinInMilligrams => _riboflavinInMilligrams;
-
-  set riboflavinInMilligrams(double value) {
-    _riboflavinInMilligrams = value;
-  }
-
-  double get thiaminInMilligrams => _thiaminInMilligrams;
-
-  set thiaminInMilligrams(double value) {
-    _thiaminInMilligrams = value;
-  }
-
-  double get phosphorusInMilligrams => _phosphorusInMilligrams;
-
-  set phosphorusInMilligrams(double value) {
-    _phosphorusInMilligrams = value;
-  }
-
-  double get potassiumInMilligrams => _potassiumInMilligrams;
-
-  set potassiumInMilligrams(double value) {
-    _potassiumInMilligrams = value;
-  }
-
-  double get ironInMilligrams => _ironInMilligrams;
-
-  set ironInMilligrams(double value) {
-    _ironInMilligrams = value;
-  }
-
-  double get caffeineInMilligrams => _caffeineInMilligrams;
-
-  set caffeineInMilligrams(double value) {
-    _caffeineInMilligrams = value;
-  }
-
   double get alcoholInGrams => _alcoholInGrams;
 
   set alcoholInGrams(double value) {
     _alcoholInGrams = value;
   }
 
-  double get addedSugarsInGrams => _addedSugarsInGrams;
-
-  set addedSugarsInGrams(double value) {
-    _addedSugarsInGrams = value;
-  }
-
   double get sugarInGrams => _sugarInGrams;
 
   set sugarInGrams(double value) {
     _sugarInGrams = value;
-  }
-
-  double get cholesterolInMilligrams => _cholesterolInMilligrams;
-
-  set cholesterolInMilligrams(double value) {
-    _cholesterolInMilligrams = value;
   }
 
   double get monounsaturatedFattyAcidsInGrams =>
@@ -281,19 +169,19 @@ class Food {
     _kcal = value;
   }
 
-  String get foodType => _foodType;
-
-  set foodType(String value) {
-    _foodType = value;
-  }
-
   String get description => _description;
 
   set description(String value) {
     _description = value;
   }
 
+  String get keylist => _keylist;
+
   set keylist(String value) {
     _keylist = value;
+  }
+
+  set baseId(int value) {
+    _baseId = value;
   }
 }

@@ -30,6 +30,7 @@ dependencies:
   flutter_bloc: ^6.1.1
   equatable: ^0.4.0
   flutter_svg: ^0.18.0
+  share: any
 
   table_calendar: ^2.3.3
   shared_preferences: ^0.5.4+5
@@ -59,6 +60,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/placeholder_logo.png
+    - assets/logo.png
     - assets/
     - assets/images/popcat.jpg
     - assets/icons/Accessibility New.svg

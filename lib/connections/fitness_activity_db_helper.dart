@@ -23,7 +23,7 @@ class FitnessActivityDBHelper extends DBHelper {
           'type': fitnessActivityModel.type,
           'intensity': fitnessActivityModel.intensity.toString(),
           'minutes': fitnessActivityModel.minutes.toString(),
+          'dateTime': fitnessActivityModel.dateTime.toIso8601String(),
         }));
-    // print(await http.get(uriResponse.bodyFields['uri']));
   }
 }

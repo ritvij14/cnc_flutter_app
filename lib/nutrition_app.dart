@@ -5,13 +5,17 @@ import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
 import 'package:cnc_flutter_app/screens/summary_screen.dart';
+import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_bloc.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NutritionApp extends StatelessWidget {
-  String initialRoute = determineInitRoute();
+  final String initialRoute;
+
+  const NutritionApp({Key key, this.initialRoute}) : super(key: key);
 
 
   @override
@@ -33,18 +37,12 @@ class NutritionApp extends StatelessWidget {
                   '/dietTracking': (context) => DietTrackingScreen(),
                   '/fitnessTracking': (context) => FitnessTrackingScreen(),
                   '/symptomTracking': (context) => SymptomTrackingScreen(),
-                  '/goals': (context) => GoalCalendar(),
+                  '/goals': (context) => CalendarPage(),
+                  '/welcome': (context) => WelcomeScreen(),
                 });
           },
         ),
       );
     });
-  }
-
-  static String determineInitRoute() {
-    //check if logged in,
-    //check if completed questionnaire,
-    //if both are true login
-    return '/';
   }
 }
