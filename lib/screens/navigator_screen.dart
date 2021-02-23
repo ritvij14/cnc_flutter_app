@@ -1,5 +1,6 @@
 
 import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
+import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
 import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
     HomeScreen(),
     HomeScreen(),
     DietTrackingScreen(),
-    WelcomeScreen(),
+    CalendarPage(),
     ProfileScreen(),
   ];
 
@@ -85,9 +86,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
           ),
           BottomNavigationBarItem(
             icon: new Icon(
-              Icons.search,
+              Icons.verified,
             ),
-            label: "SEARCH",
+            label: "GOALS",
           ),
           BottomNavigationBarItem(
             icon: new Icon(

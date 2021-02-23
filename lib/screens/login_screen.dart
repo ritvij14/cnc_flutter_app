@@ -1,5 +1,6 @@
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/user_model.dart';
+import 'package:cnc_flutter_app/theme/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +13,7 @@ const users = const {
 
 class LoginScreen extends StatelessWidget {
   var db = new DBHelper();
+  bool formComplete = false;
 
   Duration get loginTime => Duration(milliseconds: 2000);
 
@@ -28,8 +30,14 @@ class LoginScreen extends StatelessWidget {
       }
       print('Authorization successful.');
       //auth was successful
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email', '${data.name}');
+      var response = await db.getFormCompletionStatus(data.name);
+      formComplete = response.toString() == 'true';
+
+      if (formComplete) {
+        print('form was completed');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('email', '${data.name}');
+      }
       return null;
     });
   }
@@ -44,8 +52,16 @@ class LoginScreen extends StatelessWidget {
       UserModel userModel = new UserModel(data.name, data.password);
       var response = db.registerNewUser(userModel);
       print(response.toString());
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email', '${data.name}');
+
+      var response2 = await db.getFormCompletionStatus(data.name);
+      formComplete = response2.toString() == 'true';
+
+      if (formComplete) {
+        print('form was completed');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('email', '${data.name}');
+      }
+
       return null;
       // return 'Error registering.';
     });
@@ -62,12 +78,29 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'ENACT',
-      logo: 'assets/placeholder_logo.png',
+      // title: 'ENACT',
+      logo: 'assets/logo.png',
+      title: '',
+      theme: LoginTheme(
+          primaryColor: Colors.white,
+          accentColor: Colors.black,
+          cardTheme: CardTheme(
+            color: Colors.blue
+          ),
+          // inputTheme: InputDecorationTheme(
+          //   // fillColor: Colors.blue
+          // ),
+          buttonTheme: LoginButtonTheme(
+            backgroundColor: Colors.blue[900],
+          )),
       onLogin: _authUser,
       onSignup: _registerUser,
       onSubmitAnimationCompleted: () {
-        Navigator.pushReplacementNamed(context, '/home');
+        if (formComplete) {
+          Navigator.pushReplacementNamed(context, '/home');
+        } else {
+          Navigator.pushReplacementNamed(context, '/welcome');
+        }
       },
       onRecoverPassword: _recoverPassword,
     );

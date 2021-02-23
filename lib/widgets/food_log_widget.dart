@@ -227,121 +227,134 @@ class _FoodLogState extends State<FoodLog> {
               itemCount: foodLogEntries.length,
               itemBuilder: (context, index) {
                 return Card(
-                  child: InkWell(
-                    onTap: () {
-                      showAlertDialog(context, foodLogEntries[index].id,
-                          'update', foodLogEntries[index].portion);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      color: Theme.of(context).primaryColor,
+                      child: InkWell(
+                        onTap: () {
+                          showAlertDialog(context, foodLogEntries[index].id,
+                              'update', foodLogEntries[index].portion);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Text(
-                                foodLogEntries[index].food.description,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "OpenSans"),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    foodLogEntries[index].portion.toString() +
-                                        " serving(s)",
-                                    // breakfast[index].serving + " " + breakfast[index].unit,
-                                    // "1.0 serving(s) ",
-                                    textAlign: TextAlign.left,
+                                    foodLogEntries[index].food.description,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontFamily: "OpenSans", fontSize: 10),
-                                  ),
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          (foodLogEntries[index]
-                                                          .food
-                                                          .carbohydratesInGrams *
-                                                      foodLogEntries[index]
-                                                          .portion)
-                                                  .toStringAsFixed(2) +
-                                              "C",
-                                          style: TextStyle(
-                                              fontFamily: "OpenSans",
-                                              fontSize: 10),
-                                        ),
-                                        Text(
-                                          (foodLogEntries[index]
-                                                          .food
-                                                          .proteinInGrams *
-                                                      foodLogEntries[index]
-                                                          .portion)
-                                                  .toStringAsFixed(2) +
-                                              "P",
-                                          style: TextStyle(
-                                              fontFamily: "OpenSans",
-                                              fontSize: 10),
-                                        ),
-                                        Text(
-                                          (foodLogEntries[index]
-                                                          .food
-                                                          .fatInGrams *
-                                                      foodLogEntries[index]
-                                                          .portion)
-                                                  .toStringAsFixed(2) +
-                                              "F",
-                                          style: TextStyle(
-                                              fontFamily: "OpenSans",
-                                              fontSize: 10),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            showAlertDialog(
-                                                context,
-                                                foodLogEntries[index].id,
-                                                "delete",
-                                                0);
-                                            // deleteEntry(foodLogEntries[index].id);
-                                          },
-                                          child: Icon(
-                                            Icons.delete,
-                                            size: 20,
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                        color: Theme.of(context).highlightColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "OpenSans"),
                                   ),
                                 ],
                               ),
-                              // child: Text(
-                              //   // breakfast[index].serving + " " + breakfast[index].unit,
-                              //   "1.0 serving(s) ",
-                              //   textAlign: TextAlign.left,
-                              //   style: TextStyle(
-                              //       fontFamily: "OpenSans", fontSize: 10),
-                              // ),
-                            ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        foodLogEntries[index].portion.toString() +
+                                            " serving(s)",
+                                        // breakfast[index].serving + " " + breakfast[index].unit,
+                                        // "1.0 serving(s) ",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: "OpenSans",
+                                            fontSize: 12,
+                                            color:
+                                            Theme.of(context).highlightColor),
+                                      ),
+                                      Container(
+                                        width:
+                                        MediaQuery.of(context).size.width / 3,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(
+                                              (foodLogEntries[index]
+                                                  .food
+                                                  .carbohydratesInGrams *
+                                                  foodLogEntries[index]
+                                                      .portion)
+                                                  .toStringAsFixed(2) +
+                                                  "C",
+                                              style: TextStyle(
+                                                  fontFamily: "OpenSans",
+                                                  fontSize: 12,
+                                                color: Theme.of(context).highlightColor,
+                                              ),
+                                            ),
+                                            Text(
+                                              (foodLogEntries[index]
+                                                  .food
+                                                  .proteinInGrams *
+                                                  foodLogEntries[index]
+                                                      .portion)
+                                                  .toStringAsFixed(2) +
+                                                  "P",
+                                              style: TextStyle(
+                                                  fontFamily: "OpenSans",
+                                                  fontSize: 12,
+                                                color: Theme.of(context).highlightColor,),
+
+                                            ),
+                                            Text(
+                                              (foodLogEntries[index]
+                                                  .food
+                                                  .fatInGrams *
+                                                  foodLogEntries[index]
+                                                      .portion)
+                                                  .toStringAsFixed(2) +
+                                                  "F",
+                                              style: TextStyle(
+                                                  fontFamily: "OpenSans",
+                                                  fontSize: 12,
+                                                color: Theme.of(context).highlightColor,),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                showAlertDialog(
+                                                    context,
+                                                    foodLogEntries[index].id,
+                                                    "delete",
+                                                    0);
+                                                // deleteEntry(foodLogEntries[index].id);
+                                              },
+                                              child: Icon(
+                                                Icons.delete,
+                                                size: 20,
+                                                color: Theme.of(context).highlightColor,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // child: Text(
+                                  //   // breakfast[index].serving + " " + breakfast[index].unit,
+                                  //   "1.0 serving(s) ",
+                                  //   textAlign: TextAlign.left,
+                                  //   style: TextStyle(
+                                  //       fontFamily: "OpenSans", fontSize: 10),
+                                  // ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  elevation: 0,
-                );
+                      elevation: 0,
+                    );
+
+
               },
             );
           },

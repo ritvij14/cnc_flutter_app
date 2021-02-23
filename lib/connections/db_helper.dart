@@ -33,6 +33,14 @@ class DBHelper {
     return response.body.toString() == 'valid';
   }
 
+  Future<bool> getFormCompletionStatus(String email) async {
+    var requestUrl =
+        baseUrl + 'api/users/formstatus/' + email;
+    http.Response response =
+    await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response.body.toString() == 'true';
+  }
+
   Future<http.Response> getFood() async {
     var requestUrl = baseUrl + 'api/food/all/';
     http.Response response =
@@ -83,12 +91,6 @@ class DBHelper {
     return response;
   }
 
-  Future<http.Response> getFormCompletionStatus(userId) async {
-    var requestUrl = baseUrl + 'api/users/formstatus/' + userId;
-    http.Response response =
-    await http.get(Uri.encodeFull(requestUrl), headers: {});
-    return response;
-  }
 
   // Future<http.Response> getActivities() async {
   //   var requestUrl = baseUrl + 'api/activity/all';
