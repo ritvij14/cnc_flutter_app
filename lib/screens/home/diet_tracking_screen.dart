@@ -1,4 +1,3 @@
-// import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
@@ -6,7 +5,6 @@ import 'package:cnc_flutter_app/widgets/food_log_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:scrolling_day_calendar/scrolling_day_calendar.dart';
 
-// import '../food_screen.dart';
 
 class DietTrackingScreen extends StatefulWidget {
   @override
@@ -17,10 +15,9 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
   var db = new DBHelper();
   List<Food> foodList = [];
 
-  // Widget _pageItems = FoodLog();
   DateTime selectedDate = DateTime.now();
-  DateTime startDate = DateTime.now().subtract(Duration(days: 10));
-  DateTime endDate = DateTime.now().add(Duration(days: 10));
+  DateTime startDate = DateTime.now().subtract(Duration(days: 8));
+  DateTime endDate = DateTime.now().add(Duration(days: 1));
   String widgetKeyFormat = "yyyy-MM-dd";
   Map<String, Widget> widgets = Map();
 
@@ -41,8 +38,6 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
         onDateChange: (direction, DateTime selectedDate) {
           setState(() {
             this.selectedDate = selectedDate;
-            // doStuff(selectedDate);
-            // pageItems = _widgetBuilder(selectedDate);
           });
         },
         dateStyle: TextStyle(

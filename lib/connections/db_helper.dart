@@ -111,14 +111,26 @@ class DBHelper {
     return response;
   }
 
-  Future<http.Response> saveNewFoodLogEntry(entryTime, userId, foodId, portion) async {
-    var requestUrl = baseUrl + 'api/users/foodlog/save/' + entryTime.toString();
+  Future<http.Response> saveNewFoodLogEntry(entryTime, date, userId, foodId, portion) async {
+    var requestUrl = baseUrl + 'api/users/foodlog/save/';
     var uriResponse = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
         body: json.encode({
-          // 'entryTime': entryTime.toIso8601String(),
+          'entryTime': entryTime,
+          'date': date,
           'userId': userId,
           'foodId': foodId,
+          'portion': portion,
+        }));
+  }
+
+  Future<http.Response> updateFoodLogEntry(id, entryTime, portion) async {
+    var requestUrl = baseUrl + 'api/users/foodlog/update/';
+    var uriResponse = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'id': id,
+          'entryTime': entryTime,
           'portion': portion,
         }));
   }

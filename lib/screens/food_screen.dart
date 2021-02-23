@@ -27,27 +27,43 @@ class FoodProfile extends State<FoodPage> {
   Food currentFood;
   String selectedDate;
 
+  // TimeOfDay timeOfDay = TimeOfDay.now();
+
   bool showFat = false;
   bool showCarbs = false;
 
   DateTime entryTime = DateTime.now();
   double portion = 1;
 
-
-
   FoodProfile(Food selection, String selectedDate) {
     currentFood = selection;
     this.selectedDate = selectedDate;
   }
 
-
   saveNewEntry() async {
     var db = new DBHelper();
     var time = entryTime.toString().substring(0, 19);
-    var combined = selectedDate + " " + time.split(" ")[1];
-    var toSend = combined.replaceAll(" ", "%20");
-    var response = await db.saveNewFoodLogEntry(toSend, 1, currentFood.id, portion);
+    time = time.split(" ")[1];
+    var dateTime = selectedDate + " " + time;
+    var response = await db.saveNewFoodLogEntry(
+        dateTime, selectedDate, 1, currentFood.id, portion);
   }
+
+  // _pickTime() async {
+  //   TimeOfDay t = await showTimePicker(
+  //       context: context,
+  //       initialTime: timeOfDay,
+  //     initialEntryMode: TimePickerEntryMode.input,
+  //     helpText: 'Time of Meal'
+  //     // cancelText: 'testing'
+  //
+  //   );
+  //   if(t != null)
+  //     setState(() {
+  //       timeOfDay = t;
+  //       print('Time of Day in food = ' + timeOfDay.toString());
+  //     });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +73,7 @@ class FoodProfile extends State<FoodPage> {
             title: Text(currentFood.description),
           ),
           body: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
             child: Column(children: [
               Ink(
                 color: Colors.grey.withOpacity(0.3),
@@ -68,7 +85,7 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.kcal.toString(),
+                    (currentFood.kcal * portion).toStringAsFixed(2),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -86,7 +103,7 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   subtitle: Text(
-                    'Tap for more information ',
+                    'Tap to hide additional information ',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic),
@@ -95,48 +112,61 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.fatInGrams.toString() + 'g',
+                        (currentFood.fatInGrams * portion).toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.fatInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Saturated fatty acids  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.saturatedFattyAcidsInGrams.toString() + 'g',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Ink(
-                child: ListTile(
-                  title: Text(
-                    'Polyunsaturated fatty acids  ',
-                  ),
-                  trailing: Text(
-                    currentFood.polyunsaturatedFattyAcidsInGrams.toString() +
+                    (currentFood.saturatedFattyAcidsInGrams * portion)
+                            .toStringAsFixed(2) +
                         'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Polyunsaturated fatty acids  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    (currentFood.polyunsaturatedFattyAcidsInGrams * portion)
+                            .toStringAsFixed(2) +
+                        'g',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Monounsaturated fatty acids  ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.monounsaturatedFattyAcidsInGrams.toString() +
+                    (currentFood.monounsaturatedFattyAcidsInGrams * portion)
+                            .toStringAsFixed(2) +
                         'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -155,7 +185,7 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   subtitle: Text(
-                    'Tap for more information ',
+                    'Tap to hide additional information ',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic),
@@ -164,19 +194,18 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        (currentFood.carbohydratesInGrams * portion)
+                                .toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.carbohydratesInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Insoluble Fiber  ',
@@ -185,12 +214,15 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.insolubleFiberInGrams.toString() + 'g',
+                    (currentFood.insolubleFiberInGrams * portion)
+                            .toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Soluble Fiber  ',
@@ -199,12 +231,15 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.solubleFiberInGrams.toString() + 'g',
+                    (currentFood.solubleFiberInGrams * portion)
+                            .toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Sugars  ',
@@ -213,7 +248,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.sugarInGrams.toString() + 'g',
+                    (currentFood.sugarInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -227,7 +263,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.proteinInGrams.toString() + 'g',
+                    (currentFood.proteinInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -241,7 +278,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.alcoholInGrams.toString() + 'g',
+                    (currentFood.alcoholInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -255,7 +293,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    (currentFood.calciumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -269,7 +309,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    (currentFood.sodiumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -283,10 +325,64 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    (currentFood.vitaminDInMicrograms * portion)
+                            .toStringAsFixed(2) +
+                        'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Serving Size',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                      Text(
+                        currentFood.commonPortionSizeAmount.toStringAsFixed(2) +
+                            " " +
+                            currentFood.commonPortionSizeUnit,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Number of Servings',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        width: 125,
+                        child: TextFormField(
+                          initialValue: portion.toStringAsFixed(2),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: "# of servings",
+                          ),
+                          onChanged: (text) {
+                            portion = double.parse(text);
+                            setState(() {});
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              RaisedButton(
+                child: Text('Save'),
+                onPressed: () {
+                  saveNewEntry();
+                  Navigator.pop(context, null);
+                },
               ),
             ]),
           ));
@@ -307,7 +403,7 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.kcal.toString(),
+                    (currentFood.kcal * portion).toStringAsFixed(2),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -325,7 +421,7 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   subtitle: Text(
-                    'Tap for more information ',
+                    'Tap to hide additional information ',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic),
@@ -334,16 +430,13 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.fatInGrams.toString() + 'g',
+                        (currentFood.fatInGrams * portion).toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.fatInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
@@ -356,7 +449,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.saturatedFattyAcidsInGrams.toString() + 'g',
+                    (currentFood.saturatedFattyAcidsInGrams * portion)
+                            .toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -371,7 +466,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.polyunsaturatedFattyAcidsInGrams.toString() +
+                    (currentFood.polyunsaturatedFattyAcidsInGrams * portion)
+                            .toStringAsFixed(2) +
                         'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -387,7 +483,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.monounsaturatedFattyAcidsInGrams.toString() +
+                    (currentFood.monounsaturatedFattyAcidsInGrams * portion)
+                            .toStringAsFixed(2) +
                         'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -415,16 +512,14 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        (currentFood.carbohydratesInGrams * portion)
+                                .toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.carbohydratesInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
@@ -436,7 +531,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.proteinInGrams.toString() + 'g',
+                    (currentFood.proteinInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -450,7 +546,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.alcoholInGrams.toString() + 'g',
+                    (currentFood.alcoholInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -464,7 +561,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    (currentFood.calciumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -478,7 +577,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    (currentFood.sodiumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -492,10 +593,64 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    (currentFood.vitaminDInMicrograms * portion)
+                            .toStringAsFixed(2) +
+                        'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Serving Size',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                      Text(
+                        currentFood.commonPortionSizeAmount.toStringAsFixed(2) +
+                            " " +
+                            currentFood.commonPortionSizeUnit,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Number of Servings',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        width: 125,
+                        child: TextFormField(
+                          initialValue: portion.toStringAsFixed(2),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: "# of servings",
+                          ),
+                          onChanged: (text) {
+                            portion = double.parse(text);
+                            setState(() {});
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              RaisedButton(
+                child: Text('Save'),
+                onPressed: () {
+                  saveNewEntry();
+                  Navigator.pop(context, null);
+                },
               ),
             ]),
           ));
@@ -516,7 +671,7 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.kcal.toString(),
+                    (currentFood.kcal * portion).toStringAsFixed(2),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -543,16 +698,13 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.fatInGrams.toString() + 'g',
+                        (currentFood.fatInGrams * portion).toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.fatInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
@@ -568,7 +720,7 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   subtitle: Text(
-                    'Tap for more information ',
+                    'Tap to hide additional information ',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic),
@@ -577,19 +729,18 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        (currentFood.carbohydratesInGrams * portion)
+                                .toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.carbohydratesInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Insoluble Fiber  ',
@@ -598,12 +749,15 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.insolubleFiberInGrams.toString() + 'g',
+                    (currentFood.insolubleFiberInGrams * portion)
+                            .toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Soluble Fiber  ',
@@ -612,12 +766,15 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.solubleFiberInGrams.toString() + 'g',
+                    (currentFood.solubleFiberInGrams * portion)
+                            .toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Ink(
+                color: Colors.grey.withOpacity(0.3),
                 child: ListTile(
                   title: Text(
                     'Sugars  ',
@@ -626,7 +783,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.sugarInGrams.toString() + 'g',
+                    (currentFood.sugarInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -640,7 +798,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.proteinInGrams.toString() + 'g',
+                    (currentFood.proteinInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -654,7 +813,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.alcoholInGrams.toString() + 'g',
+                    (currentFood.alcoholInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -668,7 +828,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    (currentFood.calciumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -682,7 +844,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    (currentFood.sodiumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -696,10 +860,64 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    (currentFood.vitaminDInMicrograms * portion)
+                            .toStringAsFixed(2) +
+                        'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Serving Size',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                      Text(
+                        currentFood.commonPortionSizeAmount.toStringAsFixed(2) +
+                            " " +
+                            currentFood.commonPortionSizeUnit,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Number of Servings',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        width: 125,
+                        child: TextFormField(
+                          initialValue: portion.toStringAsFixed(2),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: "# of servings",
+                          ),
+                          onChanged: (text) {
+                            portion = double.parse(text);
+                            setState(() {});
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              RaisedButton(
+                child: Text('Save'),
+                onPressed: () {
+                  saveNewEntry();
+                  Navigator.pop(context, null);
+                },
               ),
             ]),
           ));
@@ -719,8 +937,13 @@ class FoodProfile extends State<FoodPage> {
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic),
                   ),
+                  // subtitle: Text(
+                  //   currentFood.commonPortionSizeDescription
+                  //       .replaceAll('"', ''),
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
                   trailing: Text(
-                    currentFood.kcal.toString(),
+                    (currentFood.kcal * portion).toStringAsFixed(2),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -747,16 +970,13 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.fatInGrams.toString() + 'g',
+                        (currentFood.fatInGrams * portion).toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.fatInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
@@ -781,16 +1001,14 @@ class FoodProfile extends State<FoodPage> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        currentFood.carbohydratesInGrams.toString() + 'g',
+                        (currentFood.carbohydratesInGrams * portion)
+                                .toStringAsFixed(2) +
+                            'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
                     ],
                   ),
-                  // trailing: Text(
-                  //   currentFood.carbohydratesInGrams.toString() + 'g',
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
                 ),
               ),
               Ink(
@@ -802,7 +1020,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.proteinInGrams.toString() + 'g',
+                    (currentFood.proteinInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -816,7 +1035,8 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.alcoholInGrams.toString() + 'g',
+                    (currentFood.alcoholInGrams * portion).toStringAsFixed(2) +
+                        'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -830,7 +1050,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.calciumInMilligrams.toString() + 'mg',
+                    (currentFood.calciumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -844,7 +1066,9 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.sodiumInMilligrams.toString() + 'mg',
+                    (currentFood.sodiumInMilligrams * portion)
+                            .toStringAsFixed(2) +
+                        'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -858,11 +1082,63 @@ class FoodProfile extends State<FoodPage> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    currentFood.vitaminDInMicrograms.toString() + 'mcg',
+                    (currentFood.vitaminDInMicrograms * portion)
+                            .toStringAsFixed(2) +
+                        'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Serving Size',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                      Text(
+                        currentFood.commonPortionSizeAmount.toStringAsFixed(2) +
+                            " " +
+                            currentFood.commonPortionSizeUnit,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Number of Servings',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        width: 125,
+                        child: TextFormField(
+                          initialValue: portion.toStringAsFixed(2),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: "# of servings",
+                          ),
+                          onChanged: (text) {
+                            if (text.isEmpty) {
+                              portion = 1;
+                            } else {
+                              portion = double.parse(text);
+                            }
+                            setState(() {});
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+
               RaisedButton(
                 child: Text('Save'),
                 onPressed: () {
@@ -870,6 +1146,11 @@ class FoodProfile extends State<FoodPage> {
                   Navigator.pop(context, null);
                 },
               ),
+              // ListTile(
+              //   title: Text("Time: ${timeOfDay.hour}:${timeOfDay.minute}"),
+              //   trailing: Icon(Icons.keyboard_arrow_down),
+              //   onTap: _pickTime,
+              // ),
             ]),
           ));
     }
