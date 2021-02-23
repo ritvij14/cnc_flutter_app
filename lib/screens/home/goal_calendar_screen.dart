@@ -8,8 +8,6 @@ import 'package:share/share.dart';
 
 // void main() => runApp(GoalCalendar());
 
-void main() => runApp(GoalCalendar());
-
 class GoalCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
