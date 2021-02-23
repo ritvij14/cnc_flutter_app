@@ -103,10 +103,10 @@ class _CalendarPageState extends State<CalendarPage> {
           children: <Widget>[
             TableCalendar(
               events: _events,
-              initialCalendarFormat: CalendarFormat.month,
+              initialCalendarFormat: CalendarFormat.week,
               calendarStyle: CalendarStyle(
                   canEventMarkersOverflow: true,
-                  todayColor: Colors.pink,
+                  todayColor:  Theme.of(context).accentColor,
                   selectedColor: Theme.of(context).primaryColor,
                   todayStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -152,7 +152,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             Container(
               padding: EdgeInsets.all(15.0),
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColor,
               alignment: Alignment.bottomLeft,
               child: Text(
                 'Weekly Goals',
@@ -167,7 +167,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
             Container(
               padding: EdgeInsets.all(15.0),
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColor,
               alignment: Alignment.bottomLeft,
               child: Text(
                 'Personal Goals',
