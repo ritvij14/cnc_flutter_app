@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cnc_flutter_app/models/user_model.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,7 +29,6 @@ class DBHelper {
         baseUrl + 'api/users/login/' + email + '/' + password + '/';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
-    print('here');
     // print(json.decode(response.body));
     return response.body.toString() == 'valid';
   }
@@ -90,12 +90,28 @@ class DBHelper {
     return response;
   }
 
-  Future<http.Response> getActivities() async {
-    var requestUrl = baseUrl + 'api/activity/all';
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
-    return response;
+  // Future<http.Response> getActivities() async {
+  //   var requestUrl = baseUrl + 'api/activity/all';
+  //   http.Response response =
+  //       await http.get(Uri.encodeFull(requestUrl), headers: {});
+  //   return response;
+  // }
+
+  Future<http.Response> registerNewUser(UserModel userModel) async {
+    var requestUrl =
+        baseUrl + 'api/users/register/';
+    var uriResponse = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'email': userModel.email,
+          'password': userModel.password,
+        }));
   }
+//       await http.get(Uri.encodeFull(requestUrl), headers: {"Content-Type": "application/json"});
+//   // print(json.decode(response.body));
+//   print(response.body.toString());
+//   return response.body.toString() == 'registered';
+// }
 
   Future<http.Response> getFoodLog(userId, date) async {
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/' + date;
@@ -135,3 +151,4 @@ class DBHelper {
         }));
   }
 }
+
