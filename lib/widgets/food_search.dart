@@ -10,6 +10,11 @@ class FoodSearch extends SearchDelegate<String> {
   var recentSearchList = [];
   List<Food> foodList = [];
   Food selection;
+  String selectedDate;
+
+  FoodSearch(String selectedDate) {
+    this.selectedDate = selectedDate;
+  }
 
   Future<bool> getFood() async {
     foodList.clear();
@@ -18,11 +23,26 @@ class FoodSearch extends SearchDelegate<String> {
     var data = json.decode(response.body);
     for (int i = 0; i < data.length; i++) {
       Food food = new Food();
+      food.id = data[i]['id'];
       food.description = data[i]['description'];
       food.kcal = data[i]['kcal'];
       food.proteinInGrams = data[i]['proteinInGrams'];
       food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
       food.fatInGrams = data[i]['fatInGrams'];
+      food.alcoholInGrams = data[i]['alcoholInGrams'];
+      food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
+      food.polyunsaturatedFattyAcidsInGrams = data[i]['polyunsaturatedFattyAcidsInGrams'];
+      food.monounsaturatedFattyAcidsInGrams = data[i]['monounsaturatedFattyAcidsInGrams'];
+      food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
+      food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
+      food.sugarInGrams = data[i]['sugarInGrams'];
+      food.calciumInMilligrams = data[i]['calciumInMilligrams'];
+      food.sodiumInMilligrams = data[i]['sodiumInMilligrams'];
+      food.vitaminDInMicrograms = data[i]['vitaminDInMicrograms'];
+      food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
+      food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
+      food.commonPortionSizeDescription = data[i]['commonPortionSizeDescription'];
+      food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
       foodList.add(food);
     }
     return true;
@@ -68,10 +88,13 @@ class FoodSearch extends SearchDelegate<String> {
             itemBuilder: (context, index) {
               return ListTile(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FoodPage(foodList[index])));
+                  Navigator.of(context).push(new MaterialPageRoute(builder: (_)=> FoodPage(foodList[index], selectedDate)),)
+                      .then((val)=>{getFood()});
+
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => FoodPage(foodList[index], selectedDate)));
                 },
                 title: Text(foodList[index].description),
                 subtitle: Text('Calories: ' + foodList[index].kcal.toString()),
@@ -93,14 +116,26 @@ class FoodSearch extends SearchDelegate<String> {
           itemBuilder: (context, index) {
             return ListTile(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FoodPage(searchResults[index])));
+                Navigator.of(context).push(new MaterialPageRoute(builder: (_)=> FoodPage(foodList[index], selectedDate)),)
+                    .then((val)=>{getFood()});
+
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => FoodPage(foodList[index], selectedDate)));
               },
+
+
+
+              // onTap: () {
+              //   Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => FoodPage(searchResults[index], selectedDate)));
+              // },
               title: Text(searchResults[index].description),
               subtitle: Text(
-                  'Calories: ' + searchResults[index].kcal.toString()),
+                  'Calories: ' + searchResults[index].kcal.toString() + ' — ' + searchResults[index].commonPortionSizeAmount.toString() + ' ' + searchResults[index].commonPortionSizeDescription.toString()),
               trailing: Icon(Icons.food_bank),
             );
           },

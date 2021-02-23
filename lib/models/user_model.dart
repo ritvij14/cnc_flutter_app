@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
-class User{
+class UserModel{
   // final int id;
   String email;
   // final String name;
   String password;
 
-  User();
+  UserModel(String email, String password){
+    this.email = email;
+    this.password = password;
+  }
 
 }

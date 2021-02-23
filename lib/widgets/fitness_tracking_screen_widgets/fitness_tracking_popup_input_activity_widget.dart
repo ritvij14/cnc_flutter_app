@@ -2,6 +2,8 @@ import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+
 
 class FitnessTrackingPopupInputActivity extends StatefulWidget {
   FitnessActivityModel fitnessActivity;
@@ -19,19 +21,26 @@ class _FitnessTrackingPopupInputActivityState
     extends State<FitnessTrackingPopupInputActivity> {
   final db = FitnessActivityDBHelper();
   final _formKey = GlobalKey<FormState>();
-
-  // bool _activityCompleted = false;
-  // bool _intensityCompleted = false;
-  // bool _minutesCompleted = false;
-  // bool _formComplete = false;
+  TextEditingController dateCtl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      elevation: 20,
       content: Form(
         key: _formKey,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('New Fitness Activity'),
+              ],
+            ),
+            Divider(
+              thickness: 2,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,12 +55,12 @@ class _FitnessTrackingPopupInputActivityState
                     validator: (value) =>
                         value == null ? 'Activity required' : null,
                     items: [
-                      'running',
-                      'walking',
-                      'cycling',
-                      'jogging',
-                      'swimming',
-                      'hiking'
+                      'Running',
+                      'Walking',
+                      'Cycling',
+                      'Jogging',
+                      'Swimming',
+                      'Hiking',
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -62,37 +71,6 @@ class _FitnessTrackingPopupInputActivityState
                 ),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text('Activity'),
-            //     DropdownButton<String>(
-            //       value: widget.fitnessActivity.type,
-            //       icon: Icon(Icons.arrow_downward),
-            //       elevation: 16,
-            //       hint: Text('Select Activity'),
-            //       items: [
-            //         'running',
-            //         'walking',
-            //         'cycling',
-            //         'jogging',
-            //         'swimming',
-            //         'hiking'
-            //       ].map<DropdownMenuItem<String>>((String value) {
-            //         return DropdownMenuItem<String>(
-            //           value: value,
-            //           child: Text(value),
-            //         );
-            //       }).toList(),
-            //       onChanged: (String newValue) {
-            //         _activityCompleted = true;
-            //         setState(() {
-            //           widget.fitnessActivity.type = newValue;
-            //         });
-            //       },
-            //     ),
-            //   ],
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -105,7 +83,7 @@ class _FitnessTrackingPopupInputActivityState
                     onChanged: (type) =>
                         setState(() => widget.fitnessActivity.intensity = type),
                     validator: (value) =>
-                        value == null ? 'Activity required' : null,
+                        value == null ? 'Intensity required' : null,
                     items:
                         [1, 2, 3, 4, 5].map<DropdownMenuItem<int>>((int value) {
                       return DropdownMenuItem<int>(
@@ -117,31 +95,6 @@ class _FitnessTrackingPopupInputActivityState
                 ),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text('Intensity'),
-            //     DropdownButton<int>(
-            //       value: widget.fitnessActivity.intensity,
-            //       icon: Icon(Icons.arrow_downward),
-            //       elevation: 16,
-            //       hint: Text('Select Intensity'),
-            //       items:
-            //           [1, 2, 3, 4, 5].map<DropdownMenuItem<int>>((int value) {
-            //         return DropdownMenuItem<int>(
-            //           value: value,
-            //           child: Text(value.toString()),
-            //         );
-            //       }).toList(),
-            //       onChanged: (int newValue) {
-            //         _intensityCompleted = true;
-            //         setState(() {
-            //           widget.fitnessActivity.intensity = newValue;
-            //         });
-            //       },
-            //     ),
-            //   ],
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -151,7 +104,7 @@ class _FitnessTrackingPopupInputActivityState
                   child: TextFormField(
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Enter number of minutes.';
+                        return 'Minutes required';
                       }
                       return null;
                     },
@@ -161,24 +114,65 @@ class _FitnessTrackingPopupInputActivityState
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                     ],
                     decoration: InputDecoration(
-                      hintText: "Enter duration",
+                      hintText: "enter",
                     ),
                     onChanged: (text) {
-                      // _minutesCompleted = true;
                       widget.fitnessActivity.minutes = int.parse(text);
                     },
                   ),
                 )
               ],
             ),
-            RaisedButton(
-              child: Text('Submit'),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  db.saveNewActivity(widget.fitnessActivity);
-                  Navigator.pop(context, widget.fitnessActivity);
-                }
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Date'),
+                Container(
+                  width: 125,
+                  child: TextFormField(
+                    controller: dateCtl,
+                    decoration: InputDecoration(
+                      hintText: 'select'
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Date required';
+                      }
+                      return null;
+                    },
+                    // initialValue: '',
+                    onTap: () async {
+                      DateTime date = DateTime.now();
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      date = await showDatePicker(
+                        context: context,
+                        initialDate: widget.fitnessActivity.dateTime,
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime.now());
+                      // dateCtl.text = date.toIso8601String();
+                      dateCtl.text = DateFormat('yyyy-MM-dd').format(date);
+                      // dateCtl.text = date.toString();
+                      widget.fitnessActivity.dateTime = date;
+                    },
+                    // onChanged: (text){
+                    //   // widget.fitnessActivity.dateTime = DateTime.parse(text);
+                    // },
+                  ),
+
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: RaisedButton(
+                child: Text('Submit'),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    db.saveNewActivity(widget.fitnessActivity);
+                    Navigator.pop(context, widget.fitnessActivity);
+                  }
+                },
+              ),
             ),
           ],
         ),
