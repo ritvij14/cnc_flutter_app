@@ -14,8 +14,6 @@ class FitnessTrackingBody extends StatefulWidget {
   List<FitnessActivityModel> fitnessActivityList = [];
 
   FitnessTrackingBody(List<FitnessActivityModel> fitnessActivityList) {
-
-    //to-do swap to db connection
     this.fitnessActivityList = fitnessActivityList;
   }
 
@@ -50,39 +48,11 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
               builder: (BuildContext context) {
                 return FitnessTrackingPopupInputActivity(
                     FitnessActivityModel.emptyConstructor());
-              }).then((val) {
-            setState(() {
-              // addActivity(val);
-              // if (val != null) widget.fitnessActivityList.insert(0, val);
-
-            });
-          });
+              }).then((val) => update());
         },
       ),
     );
 
-    // return Scaffold(
-    // body: ListView(
-    //   children: buildFitnessTrackingListTileWidgets(widget.fitnessActivityList),
-    // ),
-    // floatingActionButton: FloatingActionButton(
-    //   backgroundColor: Theme.of(context).accentColor,
-    //   child: Icon(Icons.add),
-    //   onPressed: (){
-    //     showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) {
-    //         return FitnessTrackingPopupInputActivity(FitnessActivity.emptyConstructor());
-    //       }
-    //     ).then((val){
-    //       setState(() {
-    //         if(val != null)
-    //         widget.fitnessActivityList.insert(0, val);
-    //       });
-    //     });
-    //   },
-    // ),
-    // );
   }
 
   List<FitnessTrackingListTile> buildFitnessTrackingListTileWidgets(
@@ -96,30 +66,18 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
     return fitnessTrackingListTileList;
   }
 
-  // getActivities() async {
-  //   var response = await db.getActivities();
-  //   var data = json.decode(response.body);
-  //   for (int i = 0; i < data.length; i++){
-  //     FitnessActivity fitnessActivity = new FitnessActivity(
-  //       data[i]['type'],
-  //       data[i]['intensity'],
-  //       data[i]['minutes']);
-  //     widget.fitnessActivityList.add(fitnessActivity);
-  //   }
-  //   widget.fitnessActivityList.add(FitnessActivity('running', 100, 3));
-  // }
   getActivities() async {
+    widget.fitnessActivityList.clear();
     var response = await db.getActivities();
-    // var fitnessActivityJson = jsonDecode(response)
-    // Iterable l = json.decode(response.body);
-    // print(json.decode(response.body));
     List<FitnessActivityModel> fa = (json.decode(response.body) as List)
         .map((data) => FitnessActivityModel.fromJson(data))
         .toList();
     widget.fitnessActivityList = fa;
-    // setState(() {
-    //
-    // });
+  }
+
+  void update() {
+    setState(() {
+    });
   }
 
 }
