@@ -55,6 +55,13 @@ class DBHelper {
     return response;
   }
 
+  Future<http.Response> getUserInfo(userId) async {
+    var requestUrl = baseUrl + 'api/users/' + userId + '/get';
+    http.Response response =
+    await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
   Future<http.Response> saveFormInfo(
       String userId,
       String birthDate,

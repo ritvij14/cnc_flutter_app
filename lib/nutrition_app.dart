@@ -30,7 +30,7 @@ class NutritionApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 theme: themeState.themeData,
                 routes: {
-                  '/': (context) => LoginScreen(),
+                  '/': (context) =>LoginScreen(),
                   '/login': (context) => LoginScreen(),
                   '/home': (context) => NavigatorScreen(),
                   '/summary': (context) => SummaryScreen(),
