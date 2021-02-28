@@ -43,6 +43,7 @@ class FoodSearch extends SearchDelegate<String> {
       food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
       food.commonPortionSizeDescription = data[i]['commonPortionSizeDescription'];
       food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
+      food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
       foodList.add(food);
     }
     return true;
