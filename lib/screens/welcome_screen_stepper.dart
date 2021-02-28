@@ -11,6 +11,7 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -148,11 +149,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           icon: Icon(Icons.policy, color: Colors.blue),
           tooltip: 'Private Policy',
           onPressed: () {
-            setState(() {});
+            setState(() {
+              openUrl();
+            });
           },
         ),
       )
     ]);
+  }
+
+  void openUrl() {
+    String url =
+        'https://www.privacypolicies.com/live/1407360e-2832-431e-a2a3-32d08bf7b34a';
+    launch(url);
   }
 
   Widget _buildOptIn() {

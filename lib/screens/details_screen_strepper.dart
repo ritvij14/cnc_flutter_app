@@ -27,12 +27,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
   String dropDownInches;
   String dropDownDiagMonth;
 
-  bool _colorectal;
-  bool _surgery;
-  bool _ostomy;
+  bool _colorectal = false;
+  bool _surgery= false;
+  bool _ostomy = false;
 
   var _dateTime;
-  var result;
 
   List<String> _feet = List<String>.generate(9, (int index) => '${index + 1}');
   List<String> _inches = List<String>.generate(12, (int index) => '${index}');
@@ -59,8 +58,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Map<String, bool> frequentIssues = {
     'Abdominal Pain': false,
-    'Appetite Loss': true,
-    'Bloating': true,
+    'Appetite Loss': false,
+    'Bloating':false,
     'Constipation': false,
     "Diarrhea": false,
     'Nausea/Vomiting': false,
@@ -91,10 +90,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
   ];
 
   Map<String, bool> treatmentType = {
-    'Surgery': true,
+    'Surgery': false,
     'Chemotherapy': false,
     'Radiation': false,
-    'Other': true,
+    'Other': false,
     'Uncertain': false,
   };
 
@@ -102,42 +101,101 @@ class _DetailsScreenState extends State<DetailsScreen> {
     var db = new DBHelper();
     var response = await db.getUserInfo("1");
     var data = json.decode(response.body);
-    print(data);
+    // print(data);
+     _dateTime = data['dateOfBirth'];
+    dropDownEthnicities = data['ethnicity'].toString().replaceAll('-', ' ');
+    dropDownRace =  data['race'].toString().replaceAll('-', ' ');
+    dropDownGender = data['gender'].toString().replaceAll('-', ' ');
+    userWeight = data['weight'];
+    var totalHeight = data['height'];
+    dropDownInches = totalHeight.remainder(12).toString();
+    var tempHeight = totalHeight / 12;
+    dropDownFeet = tempHeight.truncate().toString();
+
+    if (data['colorectal']){
+      _colorectal = true;
+      var tempDiagDate = data["diagnosisDate"];
+      var tempMonth = "${tempDiagDate.month}";
+      dropDownDiagMonth =  _months[num.parse(tempMonth) - 1];
+      dropDownStage = "Stage " + data['stage'].toString();
+      userDiagYear = num.parse("${tempDiagDate.year}");
+      bool tempSurgery =false;
+      bool tempChemo =false;
+      bool tempRad=false;
+      bool tempOther=false;
+      bool tempUncertain=false;
+
+      if(data['surgery'] != null){
+        tempSurgery = true;
+        _surgery =true;
+      }
+      if(data['chemo'] != null){
+        tempChemo = true;
+      }
+      if(data['radiation'] != null){
+        tempRad = true;
+      }
+      if(data['other'] != null){
+        tempOther= true;
+      }
+      if(data['uncertain'] != null){
+        tempUncertain = true;
+      }
+
+      treatmentType = {
+        'Surgery': tempSurgery,
+        'Chemotherapy': tempChemo,
+        'Radiation': tempRad,
+        'Other': tempOther,
+        'Uncertain': tempUncertain,
+      };
+      if (data['ostomy']){
+        _ostomy = true;
+      }
+    }
+
+    bool abdominalPain=false;
+    bool appetiteLoss=false;
+    bool bloating=false;
+    bool constipation=false;
+    bool diarrhea=false;
+    bool nausea=false;
+    bool stomaProblems=false;
+
+    if(data['abdominalPain'] != null){
+      abdominalPain = true;
+    }
+    if(data['appetiteLoss'] != null){
+      appetiteLoss = true;
+    }
+    if(data['bloating'] != null){
+      bloating = true;
+    }
+    if(data['constipation'] != null){
+      constipation= true;
+    }
+    if(data['diarrhea'] != null){
+      diarrhea= true;
+    }
+    if(data['nausea'] != null){
+      nausea= true;
+    }
+    if(data[' stomaProblems'] != null){
+      stomaProblems= true;
+    }
+
+    frequentIssues = {
+      'Abdominal Pain': abdominalPain,
+      'Appetite Loss': appetiteLoss,
+      'Bloating':bloating,
+      'Constipation': constipation,
+      "Diarrhea": diarrhea,
+      'Nausea/Vomiting':nausea,
+      'Stoma Problems': stomaProblems,
+    };
 
 
-
-
-
-
-
-
-
-
-
-
-
-    dropDownFeet = "5";
-    dropDownInches = "7";
-    userWeight = 135;
-    userDiagYear = 2019;
-    dropDownGender = "Female";
-    dropDownStage = "Stage 1";
-    dropDownRace = 'More than one Race';
-    dropDownEthnicities = 'Prefer not to say';
-
-    dropDownDiagMonth = "February";
-    _colorectal = true;
-    _surgery = true;
-    _ostomy = false;
-    _dateTime = DateTime.now();
-    result = "${_dateTime.month}/${_dateTime.day}/${_dateTime.year}";
   }
-
-  // List<String> _days = List<String>.generate(31, (int index) => '${index + 1}');
-  //
-  // String dropDownBirthMonth;
-  // String dropDownBirthDay;
-  // String dropDownDiagMonth;
 
   Widget _buildBirthDatePicker() {
     return Row(
@@ -785,14 +843,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Content Saved'),
-          // content: SingleChildScrollView(
-          //   child: ListBody(
-          //     children: <Widget>[
-          //       Text(
-          //           'You have left some required fields empty. Please be sure to fill the indicated fields.'),
-          //     ],
-          //   ),
-          // ),
           actions: <Widget>[
             TextButton(
               child: Text('CLOSE'),
@@ -820,9 +870,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool isLastStep = false;
 
   next() {
-    // if (!userConsent) {
-    //   _agreementAlert();
-    // } else
     if (formKeys[currentStep].currentState.validate()) {
       formKeys[currentStep].currentState.save();
 
@@ -834,12 +881,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
       }
       if (complete) {
         submit();
-        // _successfulAlert();
+        _savedAlert();
       }
     }
-    // else if (!userOptIn) {
-    //   _optOutAlert();
-    //   submit();
+
   }
 
   cancel() {
@@ -1111,6 +1156,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ]),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          submit();
           _savedAlert();
         },
         label: Text(
