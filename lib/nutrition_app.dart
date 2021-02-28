@@ -2,12 +2,13 @@ import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/fitness_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
 import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';
-import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
+import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/summary_screen.dart';
 import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_bloc.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_state.dart';
+import 'package:cnc_flutter_app/widgets/fitness_tracking_screen_widgets/fitness_tracking_popup_input_activity_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +40,7 @@ class NutritionApp extends StatelessWidget {
                   '/symptomTracking': (context) => SymptomTrackingScreen(),
                   '/goals': (context) => CalendarPage(),
                   '/welcome': (context) => WelcomeScreen(),
+                  '/inputActivity': (context) => FitnessTrackingPopupInputActivity(),
                 });
           },
         ),

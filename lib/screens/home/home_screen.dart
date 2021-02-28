@@ -1,3 +1,6 @@
+import 'package:cnc_flutter_app/widgets/home_screen_widgets/activity_summary_widget.dart';
+import 'package:cnc_flutter_app/widgets/home_screen_widgets/diet_summary_widget.dart';
+import 'package:cnc_flutter_app/widgets/home_screen_widgets/symptom_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/summary_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +13,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+      ),
       body: Padding(
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: ListView(
@@ -20,30 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: RaisedButton(
-                  child: Text('Track Diet'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/dietTracking');
-                  },
-                ),
+                child: DietSummaryWidget(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: RaisedButton(
-                  child: Text('Track Physical Activity'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/fitnessTracking');
-                  },
-                ),
+                child: ActivitySummaryWidget(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: RaisedButton(
-                  child: Text('Track Symptoms'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/fitnessTracking');
-                  },
-                ),
+                child: SymptomSummaryWidget(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -6,11 +6,7 @@ import 'package:intl/intl.dart';
 
 
 class FitnessTrackingPopupInputActivity extends StatefulWidget {
-  FitnessActivityModel fitnessActivity;
-
-  FitnessTrackingPopupInputActivity(FitnessActivityModel fitnessActivity) {
-    this.fitnessActivity = fitnessActivity;
-  }
+  FitnessActivityModel fitnessActivity = new FitnessActivityModel.emptyConstructor();
 
   @override
   _FitnessTrackingPopupInputActivityState createState() =>
@@ -25,9 +21,8 @@ class _FitnessTrackingPopupInputActivityState
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      elevation: 20,
-      content: Form(
+    return Scaffold(
+      body: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -164,14 +159,21 @@ class _FitnessTrackingPopupInputActivityState
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: RaisedButton(
-                child: Text('Submit'),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    db.saveNewActivity(widget.fitnessActivity);
-                    Navigator.pop(context, widget.fitnessActivity);
-                  }
-                },
+              child: Row(
+                children: [
+                  RaisedButton(
+                    child: Text('Cancel')
+                  ),
+                  RaisedButton(
+                    child: Text('Submit'),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        db.saveNewActivity(widget.fitnessActivity);
+                        Navigator.pop(context, widget.fitnessActivity);
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
           ],

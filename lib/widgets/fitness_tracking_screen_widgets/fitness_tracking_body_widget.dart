@@ -46,8 +46,7 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
           showDialog(
               context: context,
               builder: (BuildContext context) {
-                return FitnessTrackingPopupInputActivity(
-                    FitnessActivityModel.emptyConstructor());
+                return FitnessTrackingPopupInputActivity();
               }).then((val) => update());
         },
       ),

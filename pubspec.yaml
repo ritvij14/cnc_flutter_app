@@ -28,6 +28,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^6.1.1
+  flutter_speed_dial_material_design: ^2.0.0
   equatable: ^0.4.0
   flutter_svg: ^0.18.0
   share: any
