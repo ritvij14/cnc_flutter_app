@@ -1407,7 +1407,7 @@ class FoodProfile extends State<FoodPage> {
                             width: 150,
                             child: InkWell(
                               // onTap: () => showPickerModal(context),
-                              onTap: () => showPicker(context),
+                              onTap: () => showPickerModal(context),
                               child: Padding(
                                 padding: EdgeInsets.all(10.0),
                                 child: Padding(

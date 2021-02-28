@@ -1,3 +1,4 @@
+import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_diet_chart_widget.dart';
 import 'package:cnc_flutter_app/widgets/summary_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SummaryWidget(),
+                // child: SummaryWidget(),
+                child: WeeklyDietChart(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

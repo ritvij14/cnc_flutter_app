@@ -25,6 +25,7 @@ class FoodSearch extends SearchDelegate<String> {
       Food food = new Food();
       food.id = data[i]['id'];
       food.description = data[i]['description'];
+      food.description = food.description.replaceAll('"', '');
       food.kcal = data[i]['kcal'];
       food.proteinInGrams = data[i]['proteinInGrams'];
       food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];

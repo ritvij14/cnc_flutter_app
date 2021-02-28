@@ -34,6 +34,7 @@ dependencies:
   fraction: ^1.2.1
   flutter_picker:
     git: git://github.com/yangyxd/flutter_picker.git
+  percent_indicator: "^2.1.7+2"
 
 
   table_calendar: ^2.3.3
