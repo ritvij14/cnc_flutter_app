@@ -32,6 +32,7 @@ class _WeeklyDietChartState extends State<WeeklyDietChart> {
         CarouselSlider(
           options: CarouselOptions(
             height: 270,
+            enableInfiniteScroll: false,
             viewportFraction: 1.0,
             onPageChanged: (index, reason) {
               setState(() {
@@ -51,7 +52,7 @@ class _WeeklyDietChartState extends State<WeeklyDietChart> {
             return Container(
               width: 10.0,
               height: 10.0,
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+              margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _currentIndex == index ? Colors.blueAccent : Colors.grey,

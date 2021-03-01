@@ -65,7 +65,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String dropDownEthnicities;
   List<String> _ethnicities = [
     'Hispanic or Latinx',
-    'Non-Hispanic or Latinx',
+    'Non Hispanic or Latinx',
     'Unknown',
     'Prefer not to say',
   ];
@@ -116,19 +116,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool userConsent = false;
   bool userOptIn = true;
 
-  Widget _buildConsentBox() {
-    return CheckboxListTile(
-      title: Text("I agree to the Cancer DietAssist Terms of Service"),
-      subtitle: Text("Please also read the Private Policy."),
-      value: userConsent,
-      onChanged: (newValue) {
-        setState(() {
-          userConsent = newValue;
-        });
-      },
-      controlAffinity: ListTileControlAffinity.leading,
-    );
-  }
+
 
   Widget _buildtemp() {
     return Row(children: <Widget>[
@@ -1033,14 +1021,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       }
     }
 
-    if (gIIssues == "") {
-      gIIssues = "na";
-    }
-
-    if (!_colorectal) {
-      dropDownStage = "na";
-      checkedTreatmentTypes = "na";
-    }
+    // if (gIIssues == "") {
+    //   gIIssues = "na";
+    // }
+    //
+    // if (!_colorectal) {
+    //   dropDownStage = "na";
+    //   checkedTreatmentTypes = "na";
+    // }
 
     DBHelper db = new DBHelper();
 
