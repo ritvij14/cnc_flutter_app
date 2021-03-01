@@ -41,6 +41,7 @@ dependencies:
   table_calendar: ^2.3.3
   shared_preferences: ^0.5.4+5
   scrolling_day_calendar: 2.0.1
+  url_launcher: ^5.7.10
 
 
   # The following adds the Cupertino Icons font to your application.
