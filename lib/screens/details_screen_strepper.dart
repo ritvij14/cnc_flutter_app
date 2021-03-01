@@ -18,6 +18,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   int _diagMonth;
   int _diagYear;
 
+  String dropDownActivity;
   String dropDownStage;
   String dropDownSurgery;
   String dropDownGender;
@@ -28,10 +29,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
   String dropDownDiagMonth;
 
   bool _colorectal = false;
-  bool _surgery= false;
+  bool _surgery = false;
   bool _ostomy = false;
 
   var _dateTime;
+  String buns;
 
   List<String> _feet = List<String>.generate(9, (int index) => '${index + 1}');
   List<String> _inches = List<String>.generate(12, (int index) => '${index}');
@@ -51,7 +53,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   List<String> _ethnicities = [
     'Hispanic or Latinx',
-    'Non-Hispanic or Latinx',
+    'Non Hispanic or Latinx',
     'Unknown',
     'Prefer not to say',
   ];
@@ -59,7 +61,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Map<String, bool> frequentIssues = {
     'Abdominal Pain': false,
     'Appetite Loss': false,
-    'Bloating':false,
+    'Bloating': false,
     'Constipation': false,
     "Diarrhea": false,
     'Nausea/Vomiting': false,
@@ -101,46 +103,54 @@ class _DetailsScreenState extends State<DetailsScreen> {
     var db = new DBHelper();
     var response = await db.getUserInfo("1");
     var data = json.decode(response.body);
-    // print(data);
-     _dateTime = data['dateOfBirth'];
+    print(data);
+    _dateTime = data['dateOfBirth'];
+    buns = data['dateOfBirth'].toString().split("T")[0];
+    print(buns);
+    String year = buns.split("-")[0];
+    String month = buns.split("-")[1];
+    String day = buns.split("-")[2];
+    buns = month + '-' + day + '-' + year;
+    dateCtl.text = buns;
+    dropDownActivity = data['activityLevel'].toString().replaceAll('-', ' ');
     dropDownEthnicities = data['ethnicity'].toString().replaceAll('-', ' ');
-    dropDownRace =  data['race'].toString().replaceAll('-', ' ');
+    dropDownRace = data['race'].toString().replaceAll('-', ' ');
     dropDownGender = data['gender'].toString().replaceAll('-', ' ');
     userWeight = data['weight'];
+    _weightController.text = userWeight.toString();
+
+    // print(userWeight.runtimeType);
     var totalHeight = data['height'];
     dropDownInches = totalHeight.remainder(12).toString();
+    _heightInches = totalHeight.remainder(12);
     var tempHeight = totalHeight / 12;
     dropDownFeet = tempHeight.truncate().toString();
+    _heightFeet = tempHeight.truncate();
 
-    if (data['colorectal']){
+    if (data['colorectal']) {
       _colorectal = true;
-      var tempDiagDate = data["diagnosisDate"];
+      var tempDiagDate = DateTime.parse(data["diagnosisDate"]);
       var tempMonth = "${tempDiagDate.month}";
-      dropDownDiagMonth =  _months[num.parse(tempMonth) - 1];
+      print(tempMonth);
+      dropDownDiagMonth = _months[num.parse(tempMonth) - 1];
+      _diagMonth = num.parse(tempMonth);
       dropDownStage = "Stage " + data['stage'].toString();
       userDiagYear = num.parse("${tempDiagDate.year}");
-      bool tempSurgery =false;
-      bool tempChemo =false;
-      bool tempRad=false;
-      bool tempOther=false;
-      bool tempUncertain=false;
+      _diagYearController.text = userDiagYear.toString();
+      _diagYear = userDiagYear;
+      bool tempSurgery = false;
+      bool tempChemo = false;
+      bool tempRad = false;
+      bool tempOther = false;
+      bool tempUncertain = false;
 
-      if(data['surgery'] != null){
-        tempSurgery = true;
-        _surgery =true;
-      }
-      if(data['chemo'] != null){
-        tempChemo = true;
-      }
-      if(data['radiation'] != null){
-        tempRad = true;
-      }
-      if(data['other'] != null){
-        tempOther= true;
-      }
-      if(data['uncertain'] != null){
-        tempUncertain = true;
-      }
+        tempSurgery = data['surgery'];
+        _surgery = true;
+        tempChemo = data['chemo'];
+        tempRad = data['radiation'];
+        tempOther = data['other'];
+        tempUncertain = data['uncertain'];
+
 
       treatmentType = {
         'Surgery': tempSurgery,
@@ -149,86 +159,90 @@ class _DetailsScreenState extends State<DetailsScreen> {
         'Other': tempOther,
         'Uncertain': tempUncertain,
       };
-      if (data['ostomy']){
+      if (data['ostomy']) {
         _ostomy = true;
       }
     }
 
-    bool abdominalPain=false;
-    bool appetiteLoss=false;
-    bool bloating=false;
-    bool constipation=false;
-    bool diarrhea=false;
-    bool nausea=false;
-    bool stomaProblems=false;
+    bool abdominalPain = false;
+    bool appetiteLoss = false;
+    bool bloating = false;
+    bool constipation = false;
+    bool diarrhea = false;
+    bool nausea = false;
+    bool stomaProblems = false;
 
-    if(data['abdominalPain'] != null){
+    if (data['abdominalPain'] != null) {
       abdominalPain = true;
     }
-    if(data['appetiteLoss'] != null){
+    if (data['appetiteLoss'] != null) {
       appetiteLoss = true;
     }
-    if(data['bloating'] != null){
+    if (data['bloating'] != null) {
       bloating = true;
     }
-    if(data['constipation'] != null){
-      constipation= true;
+    if (data['constipation'] != null) {
+      constipation = true;
     }
-    if(data['diarrhea'] != null){
-      diarrhea= true;
+    if (data['diarrhea'] != null) {
+      diarrhea = true;
     }
-    if(data['nausea'] != null){
-      nausea= true;
+    if (data['nausea'] != null) {
+      nausea = true;
     }
-    if(data[' stomaProblems'] != null){
-      stomaProblems= true;
+    if (data[' stomaProblems'] != null) {
+      stomaProblems = true;
     }
 
     frequentIssues = {
       'Abdominal Pain': abdominalPain,
       'Appetite Loss': appetiteLoss,
-      'Bloating':bloating,
+      'Bloating': bloating,
       'Constipation': constipation,
       "Diarrhea": diarrhea,
-      'Nausea/Vomiting':nausea,
+      'Nausea/Vomiting': nausea,
       'Stoma Problems': stomaProblems,
     };
-
-
   }
 
   Widget _buildBirthDatePicker() {
-    return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Expanded(child: Text('Your birthday:', style: TextStyle(fontSize: 18))),
-        Expanded(
-            child: Container(
-          child: TextFormField(
-            controller: dateCtl,
-            decoration: InputDecoration(hintText: 'Select Date'),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Date required';
-              }
-              return null;
-            },
-            onTap: () async {
-              DateTime date = DateTime.now();
-              FocusScope.of(context).requestFocus(new FocusNode());
-              date = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now());
+    return FutureBuilder(
+        builder: (context, projectSnap) {
+          return Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(child: Text('Your birthday:', style: TextStyle(fontSize: 18))),
+              Expanded(
+                  child: Container(
+                    child: TextFormField(
+                      // initialValue: '5',
+                      controller: dateCtl,
+                      decoration: InputDecoration(hintText: 'Select Date'),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Date required';
+                        }
+                        return null;
+                      },
+                      onTap: () async {
+                        DateTime date = DateTime.now();
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now());
 
-              dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
-              _dateTime = dateCtl.text;
-            },
-          ),
-        ))
-      ],
-    );
+                        dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
+                        _dateTime = dateCtl.text;
+                      },
+                    ),
+                  ))
+            ],
+          );
+        },
+        future: setUserData());
+
   }
 
   Widget _buildHeightFeet() {
@@ -288,12 +302,39 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Widget _buildWeight(TextEditingController controller) {
+    return FutureBuilder(
+        builder: (context, projectSnap) {
+          return TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Weight(lbs)',
+              hintText: 'Enter your weight in pounds(lbs).',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
+            controller: _weightController,
+            validator: (String value) {
+              int weight = int.tryParse(value);
+              if (weight == null) {
+                return 'Field Required';
+              } else if (weight <= 0) {
+                return 'Weight must be greater than 0';
+              }
+              return null;
+            },
+            onChanged: (String value) {
+              _weight = int.tryParse(value);
+              print(_weight);
+            },
+          );
+        },
+        future: setUserData());
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'Weight(lbs)',
         hintText: 'Enter your weight in pounds(lbs).',
         border: OutlineInputBorder(),
       ),
+      // initialValue: userWeight.toString(),
       keyboardType: TextInputType.number,
       controller: _weightController,
       validator: (String value) {
@@ -377,27 +418,32 @@ class _DetailsScreenState extends State<DetailsScreen> {
     'Moderately Active',
     'Vigorously Active',
   ];
-  String dropDownActivity = 'Lightly Active';
+
   Widget activity;
 
   Widget _buildActivity() {
-    return DropdownButtonFormField(
-      decoration: InputDecoration(
-          labelText: 'Activity Level',
-          border: OutlineInputBorder(),
-          hintText: "Activity Level"),
-      value: dropDownActivity,
-      validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownActivity = Value;
-        });
-      },
-      items: _activity
-          .map((actLevel) =>
-              DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
-          .toList(),
-    );
+    return FutureBuilder(
+        builder: (context, projectSnap) {
+          return DropdownButtonFormField(
+            decoration: InputDecoration(
+                labelText: 'Activity Level',
+                border: OutlineInputBorder(),
+                hintText: "Activity Level"),
+            value: dropDownActivity,
+            validator: (value) => value == null ? 'Field Required' : null,
+            onChanged: (String Value) {
+              dropDownActivity = Value;
+              // setState(() {
+              // });
+            },
+            items: _activity
+                .map((actLevel) =>
+                DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
+                .toList(),
+          );
+        },
+        future: setUserData());
+
   }
 
   Widget _buildGICheckBoxes() {
@@ -413,9 +459,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
           activeColor: Theme.of(context).buttonColor,
           checkColor: Colors.white,
           onChanged: (bool value) {
-            setState(() {
-              frequentIssues[key] = value;
-            });
+            frequentIssues[key] = value;
+            // setState(() {
+              // frequentIssues[key] = value;
+            // });
           },
         );
       }).toList(),
@@ -884,7 +931,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
         _savedAlert();
       }
     }
-
   }
 
   cancel() {
@@ -957,6 +1003,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
 
     DBHelper db = new DBHelper();
+    db.deleteUserGiIssues("1");
 
     db.saveFormInfo(
         "1",
@@ -982,7 +1029,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
-  final TextEditingController dateCtl = TextEditingController();
+  final TextEditingController dateCtl = new TextEditingController();
 
   // final TextEditingController _ageMonthController = new TextEditingController();
   // int userAgeMonth;
@@ -997,7 +1044,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   // new TextEditingController();
   // int userFeetHeight;
   final TextEditingController _weightController = new TextEditingController();
-  int userWeight;
+  int userWeight = 1;
   final TextEditingController _diagYearController = new TextEditingController();
   int userDiagYear;
 
@@ -1015,6 +1062,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     // _heightInchesController.text = userInchesHeight.toString();
     _weightController.text = userWeight.toString();
     _diagYearController.text = userDiagYear.toString();
+
     // _diagMonthController.text = userDiagMonth.toString();
     return super.initState();
   }
@@ -1035,7 +1083,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 title: const Text('Health and Fitness'),
                 content: Container(
                   child: Form(
-                    key: formKeys[1],
+                    key: formKeys[0],
                     child: Column(
                       children: <Widget>[
                         Align(
@@ -1070,7 +1118,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 title: const Text('Frequent Symptoms'),
                 content: Container(
                   child: Form(
-                    key: formKeys[2],
+                    key: formKeys[1],
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 5),
@@ -1087,7 +1135,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 title: const Text('Cancer History'),
                 content: Container(
                   child: Form(
-                    key: formKeys[3],
+                    key: formKeys[2],
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 5),
@@ -1104,7 +1152,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 isActive: currentStep >= 3,
                 content: Container(
                   child: Form(
-                    key: formKeys[4],
+                    key: formKeys[3],
                     child: Column(
                       children: <Widget>[
                         _buildBirthDatePicker(),

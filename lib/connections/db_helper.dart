@@ -136,6 +136,13 @@ class DBHelper {
     return response;
   }
 
+  Future<http.Response> deleteUserGiIssues(userId) async {
+    var requestUrl = baseUrl + 'api/users/'+userId+'/delete/issues/';
+    http.Response response =
+    await http.delete(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
   Future<http.Response> saveNewFoodLogEntry(entryTime, date, userId, foodId, portion) async {
     var requestUrl = baseUrl + 'api/users/foodlog/save/';
     var uriResponse = await http.post(requestUrl,
