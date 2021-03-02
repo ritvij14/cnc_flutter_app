@@ -26,13 +26,59 @@ class _SymptomTrackingListTileState extends State<SymptomTrackingListTile> {
   Widget build(BuildContext context) {
     return ListTile(
         // title:Text(numberOfSymptoms.toString() + ' Symptoms'),
-      title: Text((numberOfSymptoms == 1) ? '1 Symptom' : numberOfSymptoms.toString() + ' Symptoms'),
-        subtitle: Text('test'),
-    trailing: Text(DateFormat('yyyy-MM-dd').format(widget.symptomModel.dateTime)));
+        title: Text((numberOfSymptoms == 1)
+            ? '1 Symptom'
+            : numberOfSymptoms.toString() + ' Symptoms'),
+        subtitle: Text(buildSymptomText()),
+        trailing: Text(
+            DateFormat('MM/dd/yyyy').format(widget.symptomModel.dateTime)));
   }
 
-  String buildText() {
-    return '';
+  String buildSymptomText() {
+    String symptoms = '';
+    if (numberOfSymptoms == 0) {
+      return 'No symptoms';
+    } else if (numberOfSymptoms == 1) {
+      return (widget.symptomModel.abdominalPain == true)
+          ? 'Abdominal Pain'
+          : (widget.symptomModel.vomiting == true)
+              ? 'Vomiting'
+              : (widget.symptomModel.stomaProblems == true)
+                  ? 'Stoma Problems'
+                  : (widget.symptomModel.nausea == true)
+                      ? 'Nausea'
+                      : (widget.symptomModel.diarrhea == true)
+                          ? 'Diarrhea'
+                          : (widget.symptomModel.constipation == true)
+                              ? 'Constipation'
+                              : (widget.symptomModel.bloating == true)
+                                  ? 'Bloating'
+                                  : (widget.symptomModel.appetiteLoss == true)
+                                      ? 'Appetite Loss'
+                                      : '';
+    } else {
+      if (widget.symptomModel.abdominalPain == true){
+        symptoms = symptoms + 'Abdominal Pain, ';
+      }      if (widget.symptomModel.vomiting == true){
+        symptoms = symptoms + 'Vomiting, ';
+      }      if (widget.symptomModel.stomaProblems == true){
+        symptoms = symptoms + 'Stoma Problems, ';
+      }      if (widget.symptomModel.nausea == true){
+        symptoms = symptoms + 'Nausea, ';
+      }      if (widget.symptomModel.diarrhea == true){
+        symptoms = symptoms + 'Diarrhea, ';
+      }      if (widget.symptomModel.constipation == true){
+        symptoms = symptoms + 'Constipation, ';
+      }      if (widget.symptomModel.bloating == true){
+        symptoms = symptoms + 'Bloating, ';
+      }      if (widget.symptomModel.appetiteLoss == true){
+        symptoms = symptoms + 'Appetite Loss, ';
+      } if (widget.symptomModel.other != ''){
+        symptoms = symptoms + 'Other, ';
+      }
+    }
+    symptoms = symptoms.substring(0, symptoms.lastIndexOf(","));
+    return symptoms;
   }
 
   int countSymptoms() {

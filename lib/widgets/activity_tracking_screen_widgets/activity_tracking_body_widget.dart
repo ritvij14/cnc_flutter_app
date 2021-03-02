@@ -39,17 +39,17 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
         future: getActivities(),
 
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).accentColor,
-        child: Icon(Icons.add),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return ActivityTrackingInputScreen();
-              }).then((val) => update());
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Theme.of(context).accentColor,
+      //   child: Icon(Icons.add),
+      //   onPressed: () {
+      //     showDialog(
+      //         context: context,
+      //         builder: (BuildContext context) {
+      //           return ActivityTrackingInputScreen();
+      //         }).then((val) => update());
+      //   },
+      // ),
     );
 
   }
