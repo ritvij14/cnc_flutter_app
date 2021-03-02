@@ -7,6 +7,9 @@ class ArticlesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Articles'),
+      ),
       body: ListView(
         children: [
           Text('Articles Screen')

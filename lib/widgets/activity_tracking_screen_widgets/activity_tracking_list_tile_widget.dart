@@ -31,8 +31,8 @@ class _FitnessTrackingListTileState extends State<FitnessTrackingListTile> {
           ' at intensity level ' +
           widget.fitnessActivity.intensity.toString() +
           '\n' +
-          DateFormat('yyyy-MM-dd').format(widget.fitnessActivity.dateTime)),
-      trailing: Text(widget.fitnessActivity.getCalories().toString() + 'cal'),
+          DateFormat('MM/dd/yyyy').format(widget.fitnessActivity.dateTime)),
+      trailing: Text(widget.fitnessActivity.getCalories().toString() + ' mets'),
       onTap: () async {
         print(widget.fitnessActivity.intensity);
         await showDialog(
