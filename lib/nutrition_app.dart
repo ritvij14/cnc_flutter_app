@@ -1,5 +1,5 @@
+import 'package:cnc_flutter_app/screens/home/activity_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
-import 'package:cnc_flutter_app/screens/home/fitness_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
 import 'package:cnc_flutter_app/screens/home/home_screen.dart';
 import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';

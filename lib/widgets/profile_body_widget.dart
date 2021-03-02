@@ -1,6 +1,5 @@
 import 'package:cnc_flutter_app/screens/details_screen_strepper.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
-import 'package:cnc_flutter_app/screens/temp_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/profile/account_screen.dart';

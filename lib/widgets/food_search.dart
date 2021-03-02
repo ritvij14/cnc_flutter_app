@@ -139,30 +139,30 @@ class FoodSearch extends SearchDelegate<String> {
 
   Color getColor(String category) {
     if (category == 'Vegetables and vegetable products') {
-      return Colors.green;
+      return Colors.green[700];
     } else if (category == 'Meat, fish, and poultry') {
-      return Colors.deepPurple;
+      return Colors.deepPurple[300];
     } else if (category == 'Beverages') {
-      return Colors.pink;
+      return Colors.teal[400];
     } else if (category == 'Desserts' ||
         category == 'Candy, sugar, and sweets') {
       return Colors.pink[300];
     } else if (category == 'Grain products') {
-      return Colors.amber;
+      return Colors.orange[300];
     } else if (category == 'Milk, cream, cheese, and related products') {
-      return Colors.blue;
+      return Colors.blue[600];
     } else if (category == 'Fats, oils, and nuts') {
-      return Colors.brown;
+      return Colors.brown[600];
     } else if (category == 'Eggs and related products') {
-      return Colors.yellow[100];
+      return Colors.yellow[200];
     } else if (category == 'Fruits and fruit products') {
       return Colors.red;
     } else if (category == 'Commercial entrees and dinners') {
-      return Colors.lightGreenAccent;
+      return Colors.lightGreen[600];
     } else if (category == 'Soups, gravy, and sauces') {
-      return Colors.deepOrangeAccent;
+      return Colors.deepOrange[400];
     }
-    return Colors.teal;
+    return Colors.indigo[400];
   }
 
   @override

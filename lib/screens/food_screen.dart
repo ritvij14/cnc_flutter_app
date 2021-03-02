@@ -43,16 +43,8 @@ class FoodProfile extends State<FoodPage> {
   FoodProfile(Food selection, String selectedDate) {
     currentFood = selection;
     this.selectedDate = selectedDate;
-    // for (double i = 0.25; i < 10; i += 0.25) {
-    //   var key;
-    //   if (i <= 1) {
-    //     key = i.toFraction().toString();
-    //   } else {
-    //     key = i.toMixedFraction().toString();
-    //   }
-    //   dropdownOptions[key] = i;
-    // }
-    if (portion <= 1) {
+
+    if (portion <= 1 || portion % 1 == 0) {
       servingAsFraction = portion.toFraction().toString();
       actualServingAsFraction = portion.toFraction().toString();
     } else {
@@ -152,7 +144,7 @@ class FoodProfile extends State<FoodPage> {
             initialSecondSelection = 0;
           }
           actualPortion = portion;
-          if (portion <= 1) {
+          if (portion <= 1 || portion % 1 == 0) {
             servingAsFraction = portion.toFraction().toString();
             actualServingAsFraction = portion.toFraction().toString();
           } else {
@@ -160,8 +152,6 @@ class FoodProfile extends State<FoodPage> {
             actualServingAsFraction = portion.toMixedFraction().toString();
           }
           setState(() {
-            // saveNewEntry();
-            // Navigator.pop(context, null);
           });
         }).showModal(this.context); //_scaffoldKey.currentState);
   }
@@ -230,8 +220,6 @@ class FoodProfile extends State<FoodPage> {
             actualServingAsFraction = portion.toMixedFraction().toString();
           }
           setState(() {
-            // saveNewEntry();
-            // Navigator.pop(context, null);
           });
         });
     picker.show(_scaffoldKey.currentState);

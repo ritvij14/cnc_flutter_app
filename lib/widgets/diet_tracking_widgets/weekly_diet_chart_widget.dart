@@ -29,22 +29,27 @@ class _WeeklyDietChartState extends State<WeeklyDietChart> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        CarouselSlider(
-          options: CarouselOptions(
-            height: 270,
-            enableInfiniteScroll: false,
-            viewportFraction: 1.0,
-            onPageChanged: (index, reason) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/dietTracking');
+          },
+          child: CarouselSlider(
+            options: CarouselOptions(
+              height: 270,
+              enableInfiniteScroll: false,
+              viewportFraction: 1.0,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            ),
+            items: cardList
+                .map((item) => Container(
+                      child: item,
+                    ))
+                .toList(),
           ),
-          items: cardList
-              .map((item) => Container(
-                    child: item,
-                  ))
-              .toList(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
