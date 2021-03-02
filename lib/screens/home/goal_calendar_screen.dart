@@ -6,6 +6,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:share/share.dart';
 
+import '../choose_goals_screen.dart';
+import '../weekly_goals_screen.dart';
+
 // void main() => runApp(GoalCalendar());
 
 void main() => runApp(GoalCalendar());
@@ -43,6 +46,9 @@ class _CalendarPageState extends State<CalendarPage> {
   TextEditingController _eventController2;
   SharedPreferences prefs2;
 
+  int totalWeeklyGoalsCompleted;
+  int totalPersonalGoalsCompleted;
+
   @override
   void initState() {
     super.initState();
@@ -70,9 +76,12 @@ class _CalendarPageState extends State<CalendarPage> {
   initPrefs() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
+      totalWeeklyGoalsCompleted = prefs.getInt("weekly goal total");
+      totalPersonalGoalsCompleted = prefs.getInt("personal goal total");
       _events = Map<DateTime, List<dynamic>>.from(
           decodeMap(json.decode(prefs.getString("events") ?? "{}")));
     });
+
   }
 
   Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
@@ -163,7 +172,40 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
             ),
+
+          Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              child: Text('Choose Weekly Goals'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>
+                    ChooseWeeklyGoals()),
+                );
+              },
+            ),
+          ),
+
+            Container(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                child: Text('Weekly Goal View'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        WeeklyGoals()),
+                  );
+                },
+              ),
+            ),
+
             _buildWeeklyView(),
+
+            totalWeeklyGoalsCompleted != null
+                ? _buildGetWeeklyCompleted()
+                : SizedBox(height: 0),
 
             Container(
               padding: EdgeInsets.all(15.0),
@@ -178,18 +220,49 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
             ),
+
+            Container(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                child: Text('Add a Personal Goal'),
+                onPressed: _showAddDialog,
+              ),
+            ),
+
             _events[_controller.selectedDay] != null
                 ? _buildListView()
+                : SizedBox(height: 0),
+
+            totalPersonalGoalsCompleted != null
+                ? _buildGetPersonalCompleted()
                 : SizedBox(height: 0),
           ],
         ),
       ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.only(right: 10),
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: _showAddDialog,
-          backgroundColor: Theme.of(context).primaryColor,
+    );
+  }
+
+  Widget _buildGetWeeklyCompleted() {
+    return Container(
+      padding: EdgeInsets.all(15.0),
+      child: Text(
+        'Total Weekly Goals Completed: ' + prefs.getInt("weekly goal total").toString(),
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGetPersonalCompleted() {
+    return Container(
+      padding: EdgeInsets.all(15.0),
+      child: Text(
+        'Total Personal Goals Completed: ' + prefs.getInt("personal goal total").toString(),
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Theme.of(context).primaryColor,
         ),
       ),
     );
@@ -210,6 +283,31 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             actions: <Widget>[
+              IconSlideAction(
+                caption: 'Complete',
+                color: Colors.green,
+                icon: Icons.check,
+                onTap: () {
+
+                  if (totalPersonalGoalsCompleted == null){
+                    totalPersonalGoalsCompleted = 1;
+                    prefs.setInt("goal total", totalPersonalGoalsCompleted);
+                  } else {
+                    totalPersonalGoalsCompleted = (totalPersonalGoalsCompleted + 1);
+                    prefs.setInt("goal total", totalPersonalGoalsCompleted);
+                  }
+
+                  _events[_controller.selectedDay].removeAt(index);
+                  prefs.setInt("personal goal total", totalPersonalGoalsCompleted);
+                  _eventController.clear();
+                  setState(() {
+                    if (_events[_controller.selectedDay] != null) {
+                      _selectedEvents = _events[_controller.selectedDay];
+                    }
+                    _showSnackBar(context, 'Deleted Goal');
+                  });
+                },
+              ),
               IconSlideAction(
                   caption: 'Copy',
                   color: Colors.grey[400],
@@ -249,7 +347,6 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget _buildWeeklyView() {
-
     return ListView.builder(
         shrinkWrap: true,
         itemCount: _events2[_controller2.selectedDay].length,
@@ -264,6 +361,30 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             actions: <Widget>[
+              IconSlideAction(
+                  caption: 'Completed',
+                  color: Colors.green,
+                  icon: Icons.check,
+                  onTap: () {
+
+                    if (totalWeeklyGoalsCompleted == null){
+                      totalWeeklyGoalsCompleted = 1;
+                      prefs.setInt("weekly goal total", totalWeeklyGoalsCompleted);
+                    } else {
+                      totalWeeklyGoalsCompleted = (totalWeeklyGoalsCompleted + 1);
+                      prefs.setInt("weekly goal total", totalWeeklyGoalsCompleted);
+                    }
+
+                    _events2[_controller2.selectedDay].removeAt(index);
+                    prefs.setInt("weekly goal total", totalWeeklyGoalsCompleted);
+                    _eventController2.clear();
+                    setState(() {
+                      if (_events2[_controller2.selectedDay] != null) {
+                        _selectedEvents2 = _events2[_controller2.selectedDay];
+                      }
+                      _showSnackBar(context, 'Completed Goal');
+                    });
+                  }),
               IconSlideAction(
                   caption: 'Copy',
                   color: Colors.grey[400],
@@ -341,40 +462,6 @@ class _CalendarPageState extends State<CalendarPage> {
       }
     });
   }
-
-  _showDeleteDialogs() async {
-    await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(
-                  "Delete Goals\n\nEnter the number of the goal in order to delete the goal."),
-              content: TextField(
-                controller: _eventController,
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Delete"),
-                  onPressed: () {
-                    if (_eventController.text.isEmpty) return;
-                    if (_events[_controller.selectedDay] != null) {
-                      String temp = _eventController.text;
-                      int temp2 = int.parse(temp);
-                      temp2 = temp2 - 1;
-                      if (temp2 < _events[_controller.selectedDay].length) {
-                        _events[_controller.selectedDay].removeAt(temp2);
-                      }
-                    }
-                    prefs.setString("events", json.encode(encodeMap(_events)));
-                    _eventController.clear();
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            ));
-    setState(() {
-      if (_events[_controller.selectedDay] != null) {
-        _selectedEvents = _events[_controller.selectedDay];
-      }
-    });
-  }
 }
+
+
