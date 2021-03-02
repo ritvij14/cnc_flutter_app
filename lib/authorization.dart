@@ -5,7 +5,11 @@ class Authorization {
   Future<bool> isLogged() async {
     var sharedPref = await SharedPreferences.getInstance();
     String email = sharedPref.getString('email');
-    print(email != null);
+    if(email != null){
+      print('User is already logged in, routing to home');
+    } else {
+      print('User is not logged in, routing to login');
+    }
     return email != null;
   }
 }

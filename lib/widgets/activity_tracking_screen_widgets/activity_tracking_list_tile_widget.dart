@@ -1,7 +1,7 @@
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'fitness_tracking_popup_modify_activity_widget.dart';
+import 'activity_tracking_popup_modify_activity_widget.dart';
 
 class FitnessTrackingListTile extends StatefulWidget {
   FitnessActivityModel fitnessActivity;

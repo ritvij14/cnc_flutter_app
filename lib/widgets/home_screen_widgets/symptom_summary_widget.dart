@@ -9,7 +9,7 @@ class SymptomSummaryWidget extends StatelessWidget {
       child: InkWell(
         child: Text('Placeholder for Symptom Summary.'),
         onTap: () {
-          Navigator.pushNamed(context, '/fitnessTracking');
+          Navigator.pushNamed(context, '/symptomTracking');
         },
       ),
     );

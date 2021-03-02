@@ -15,6 +15,6 @@ void main() async {
   await Preferences.init();
   HttpOverrides.global = new MyHttpOverrides();
   // ignore: unrelated_type_equality_checks
-  final NutritionApp nutritionApp = NutritionApp(initialRoute: loggedIn == true ? '/home' : '/',);
+  final NutritionApp nutritionApp = NutritionApp(initialRoute: loggedIn == true ? '/' : '/login',);
   runApp(nutritionApp);
 }

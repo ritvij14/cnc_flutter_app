@@ -13,7 +13,7 @@ const users = const {
 
 class LoginScreen extends StatelessWidget {
   var db = new DBHelper();
-  bool formComplete = false;
+  bool formComplete = true;
 
   Duration get loginTime => Duration(milliseconds: 2000);
 
@@ -30,14 +30,21 @@ class LoginScreen extends StatelessWidget {
       }
       print('Authorization successful.');
       //auth was successful
+
+      //TODO - fix welcome screener check
       var response = await db.getFormCompletionStatus(data.name);
-      formComplete = response.toString() == 'true';
+      // formComplete = response.toString() == 'true';
+
+      formComplete = true;
+
+      print('During authorize user, form complete was recognized as ' + formComplete.toString());
 
       if (formComplete) {
-        print('form was completed');
+        print('Welcome screener is already completed. Logging in and saving user to device.');
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', '${data.name}');
       }
+
       return null;
     });
   }
@@ -56,6 +63,7 @@ class LoginScreen extends StatelessWidget {
       var response2 = await db.getFormCompletionStatus(data.name);
       formComplete = response2.toString() == 'true';
 
+      print('form complete = ' + formComplete.toString());
       if (formComplete) {
         print('form was completed');
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -63,7 +71,6 @@ class LoginScreen extends StatelessWidget {
       }
 
       return null;
-      // return 'Error registering.';
     });
   }
 
@@ -96,11 +103,7 @@ class LoginScreen extends StatelessWidget {
       onLogin: _authUser,
       onSignup: _registerUser,
       onSubmitAnimationCompleted: () {
-        if (formComplete) {
-          Navigator.pushReplacementNamed(context, '/home');
-        } else {
-          Navigator.pushReplacementNamed(context, '/welcome');
-        }
+          Navigator.pushReplacementNamed(context, '/');
       },
       onRecoverPassword: _recoverPassword,
     );
