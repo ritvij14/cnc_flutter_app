@@ -1,8 +1,9 @@
 import 'package:cnc_flutter_app/screens/details_screen_strepper.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
+import 'package:cnc_flutter_app/screens/temp_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../screens/account_screen.dart';
+import '../screens/profile/account_screen.dart';
 import '../screens/preferences_screen.dart';
 import 'profile_menu_widget.dart';
 import 'profile_pic_widget.dart';
@@ -54,7 +55,7 @@ class ProfileBody extends StatelessWidget {
             press: () async {
               var prefs = await SharedPreferences.getInstance();
               prefs?.clear();
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],

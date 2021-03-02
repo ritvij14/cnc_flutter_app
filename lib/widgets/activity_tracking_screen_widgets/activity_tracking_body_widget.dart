@@ -6,23 +6,23 @@ import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:flutter/material.dart';
 
-import 'fitness_tracking_list_tile_widget.dart';
-import 'fitness_tracking_popup_input_activity_widget.dart';
-import 'fitness_tracking_popup_modify_activity_widget.dart';
+import 'activity_tracking_list_tile_widget.dart';
+import 'activity_tracking_input_activity_widget.dart';
+import 'activity_tracking_popup_modify_activity_widget.dart';
 
-class FitnessTrackingBody extends StatefulWidget {
+class ActivityTrackingBody extends StatefulWidget {
   List<FitnessActivityModel> fitnessActivityList = [];
 
-  FitnessTrackingBody(List<FitnessActivityModel> fitnessActivityList) {
+  ActivityTrackingBody(List<FitnessActivityModel> fitnessActivityList) {
     this.fitnessActivityList = fitnessActivityList;
   }
 
   @override
-  _FitnessTrackingBodyState createState() => _FitnessTrackingBodyState();
+  _ActivityTrackingBodyState createState() => _ActivityTrackingBodyState();
 }
 
-class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
-  var db = new FitnessActivityDBHelper();
+class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
+  var db = new ActivityDBHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +39,17 @@ class _FitnessTrackingBodyState extends State<FitnessTrackingBody> {
         future: getActivities(),
 
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).accentColor,
-        child: Icon(Icons.add),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return FitnessTrackingPopupInputActivity(
-                    FitnessActivityModel.emptyConstructor());
-              }).then((val) => update());
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Theme.of(context).accentColor,
+      //   child: Icon(Icons.add),
+      //   onPressed: () {
+      //     showDialog(
+      //         context: context,
+      //         builder: (BuildContext context) {
+      //           return ActivityTrackingInputScreen();
+      //         }).then((val) => update());
+      //   },
+      // ),
     );
 
   }
