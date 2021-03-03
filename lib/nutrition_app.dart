@@ -3,6 +3,7 @@ import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
 import 'package:cnc_flutter_app/screens/home/home_screen.dart';
 import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';
+import 'package:cnc_flutter_app/screens/home/weight_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
 import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/summary_screen.dart';
@@ -44,6 +45,7 @@ class NutritionApp extends StatelessWidget {
                   '/welcome': (context) => WelcomeScreen(),
                   '/inputActivity': (context) => ActivityTrackingInputScreen(),
                   '/inputSymptom' : (context) => SymptomTrackingInputScreen(),
+                  '/inputMetrics' : (context) => WeightTrackingScreen(),
                 });
           },
         ),

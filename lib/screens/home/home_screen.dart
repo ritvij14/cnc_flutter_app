@@ -56,6 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pushNamed(context, '/inputActivity');
               }
           ),
+          SpeedDialChild(
+              child: IconButton(
+                  icon: Image.asset('assets/icons/Weight.svg')),
+              label: 'Log Weight',
+              onTap: (){
+                Navigator.pushNamed(context, '/inputActivity');
+              }
+          ),
         ],
       ),
 

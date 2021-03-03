@@ -52,46 +52,6 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: getCurrentScreen(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // floatingActionButton: SpeedDial(
-      //   icon: Icons.add,
-      //   backgroundColor: Theme
-      //       .of(context)
-      //       .accentColor,
-      //   children: [
-      //     SpeedDialChild(
-      //         child: Icon(Icons.food_bank),
-      //       label: 'Log Food',
-      //       onTap: (){
-      //           showSearch(
-      //               context: context,
-      //               delegate: FoodSearch(DateTime.now().toString()));
-      //           // Navigator.pushNamed(context, '/inputActivity');
-      //       }
-      //     ),
-      //     SpeedDialChild(
-      //         child: Icon(Icons.directions_run),
-      //         label: 'Log Activity',
-      //         onTap: (){
-      //           Navigator.pushNamed(context, '/inputActivity');
-      //         }
-      //     ),
-      //     SpeedDialChild(
-      //         child: Icon(Icons.thermostat_outlined),
-      //         label: 'Log Symptoms',
-      //         onTap: (){
-      //           Navigator.pushNamed(context, '/inputSymptom');
-      //         }
-      //     ),
-      //     SpeedDialChild(
-      //         child: Icon(Icons.question_answer),
-      //         label: 'Log Questions',
-      //         onTap: (){
-      //           Navigator.pushNamed(context, '/inputActivity');
-      //         }
-      //     ),
-      //   ],
-      // ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         color: Theme
