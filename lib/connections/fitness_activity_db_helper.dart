@@ -4,7 +4,7 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:http/http.dart' as http;
 
-class FitnessActivityDBHelper extends DBHelper {
+class ActivityDBHelper extends DBHelper {
   var baseUrl = 'https://10.0.2.2:7777/';
 
   Future<http.Response> getActivities() async {

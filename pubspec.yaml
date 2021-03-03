@@ -28,13 +28,22 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^6.1.1
+  flutter_speed_dial: ^2.1.1
   equatable: ^0.4.0
   flutter_svg: ^0.18.0
   share: any
+  fraction: ^1.2.1
+  flutter_picker:
+    git: git://github.com/yangyxd/flutter_picker.git
+  percent_indicator: "^2.1.7+2"
+  carousel_slider: ^3.0.0
+  font_awesome_flutter: ^8.11.0
+
 
   table_calendar: ^2.3.3
   shared_preferences: ^0.5.4+5
   scrolling_day_calendar: 2.0.1
+  url_launcher: ^5.7.10
 
 
   # The following adds the Cupertino Icons font to your application.

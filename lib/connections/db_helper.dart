@@ -1,19 +1,10 @@
 import 'dart:convert';
 
 import 'package:cnc_flutter_app/models/user_model.dart';
-import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:http/http.dart' as http;
 
 class DBHelper {
   var baseUrl = 'https://10.0.2.2:7777/';
-
-  //
-  // http.Response response = await http.get(Uri.encodeFull(url), headers: {
-  // "Authorization": "Bearer 5e46v0tks21zqvnloyua8e76bcsui9",
-  // "Client-Id": "874uve10v0bcn3rmp2bq4cvz8fb5wj"
-  // });
-
-  // topStreamerInfo = json.decode(response.body);
 
   Future<bool> isEmailValid(String email) async {
     var requestUrl = baseUrl + 'api/users/checkIfEmailExists/' + email;
@@ -29,7 +20,6 @@ class DBHelper {
         baseUrl + 'api/users/login/' + email + '/' + password + '/';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
-    // print(json.decode(response.body));
     return response.body.toString() == 'valid';
   }
 
@@ -52,6 +42,13 @@ class DBHelper {
     var requestUrl = baseUrl + 'api/food/' + query + '/';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> getUserInfo(userId) async {
+    var requestUrl = baseUrl + 'api/users/' + userId + '/get';
+    http.Response response =
+    await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 
@@ -91,6 +88,33 @@ class DBHelper {
     return response;
   }
 
+  Future<http.Response> updateFormInfo(
+      String userId,
+      String birthDate,
+      String race,
+      String ethnicity,
+      String gender,
+      String height,
+      String weight,
+      String activityLevel,
+  ) async {
+    var requestUrl = baseUrl +
+        'api/users/form/update/';
+    var response = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'userId': userId,
+          'birthDate': birthDate,
+          'race': race,
+          'ethnicity': ethnicity,
+          'gender': gender,
+          'height': height,
+          'weight': weight,
+          'activityLevel': activityLevel,
+        }));
+    return response;
+  }
+
 
   // Future<http.Response> getActivities() async {
   //   var requestUrl = baseUrl + 'api/activity/all';
@@ -109,11 +133,7 @@ class DBHelper {
           'password': userModel.password,
         }));
   }
-//       await http.get(Uri.encodeFull(requestUrl), headers: {"Content-Type": "application/json"});
-//   // print(json.decode(response.body));
-//   print(response.body.toString());
-//   return response.body.toString() == 'registered';
-// }
+
 
   Future<http.Response> getFoodLog(userId, date) async {
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/' + date;
@@ -126,6 +146,13 @@ class DBHelper {
     var requestUrl = baseUrl + 'api/users/foodlog/delete/' + foodLogEntryId.toString();
     http.Response response =
         await http.delete(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> deleteUserGiIssues(userId) async {
+    var requestUrl = baseUrl + 'api/users/'+userId+'/delete/issues/';
+    http.Response response =
+    await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 

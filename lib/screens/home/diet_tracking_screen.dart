@@ -3,6 +3,8 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/widgets/food_log_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:scrolling_day_calendar/scrolling_day_calendar.dart';
 
 
@@ -61,4 +63,5 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
       ),
     );
   }
+
 }

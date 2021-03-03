@@ -13,7 +13,8 @@ const users = const {
 
 class LoginScreen extends StatelessWidget {
   var db = new DBHelper();
-  bool formComplete = false;
+
+  // bool formComplete = true;
 
   Duration get loginTime => Duration(milliseconds: 2000);
 
@@ -29,15 +30,10 @@ class LoginScreen extends StatelessWidget {
         return 'Incorrect password';
       }
       print('Authorization successful.');
-      //auth was successful
-      var response = await db.getFormCompletionStatus(data.name);
-      formComplete = response.toString() == 'true';
 
-      if (formComplete) {
-        print('form was completed');
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', '${data.name}');
-      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', '${data.name}');
+
       return null;
     });
   }
@@ -54,16 +50,16 @@ class LoginScreen extends StatelessWidget {
       print(response.toString());
 
       var response2 = await db.getFormCompletionStatus(data.name);
-      formComplete = response2.toString() == 'true';
+      // formComplete = response2.toString() == 'true';
 
-      if (formComplete) {
-        print('form was completed');
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', '${data.name}');
-      }
+      // print('form complete = ' + formComplete.toString());
+      // if (formComplete) {
+      //   print('form was completed');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', '${data.name}');
+      // }
 
       return null;
-      // return 'Error registering.';
     });
   }
 
@@ -84,9 +80,7 @@ class LoginScreen extends StatelessWidget {
       theme: LoginTheme(
           primaryColor: Colors.white,
           accentColor: Colors.black,
-          cardTheme: CardTheme(
-            color: Colors.blue
-          ),
+          cardTheme: CardTheme(color: Colors.blue),
           // inputTheme: InputDecorationTheme(
           //   // fillColor: Colors.blue
           // ),
@@ -95,14 +89,25 @@ class LoginScreen extends StatelessWidget {
           )),
       onLogin: _authUser,
       onSignup: _registerUser,
-      onSubmitAnimationCompleted: () {
-        if (formComplete) {
-          Navigator.pushReplacementNamed(context, '/home');
-        } else {
-          Navigator.pushReplacementNamed(context, '/welcome');
-        }
+      onSubmitAnimationCompleted: () async {
+        String route = await welcomeScreenComplete();
+        print(route);
+        Navigator.pushReplacementNamed(context, route);
       },
       onRecoverPassword: _recoverPassword,
     );
+  }
+
+  Future<String> welcomeScreenComplete() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var id = prefs.get('email');
+    var response = await db.getFormCompletionStatus(id);
+    bool formComplete = (response.toString() == 'true');
+    print('The welcome screener came back as ' + formComplete.toString());
+    if (formComplete) {
+      return '/home';
+    } else {
+      return '/welcome';
+    }
   }
 }
