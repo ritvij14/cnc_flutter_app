@@ -91,6 +91,7 @@ class LoginScreen extends StatelessWidget {
       onSignup: _registerUser,
       onSubmitAnimationCompleted: () async {
         String route = await welcomeScreenComplete();
+        print(route);
         Navigator.pushReplacementNamed(context, route);
       },
       onRecoverPassword: _recoverPassword,
@@ -102,8 +103,9 @@ class LoginScreen extends StatelessWidget {
     var id = prefs.get('email');
     var response = await db.getFormCompletionStatus(id);
     bool formComplete = (response.toString() == 'true');
+    print('The welcome screener came back as ' + formComplete.toString());
     if (formComplete) {
-      return '/';
+      return '/home';
     } else {
       return '/welcome';
     }
