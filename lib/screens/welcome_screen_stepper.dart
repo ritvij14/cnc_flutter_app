@@ -10,6 +10,8 @@
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -37,205 +39,208 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   List<String> _feet = List<String>.generate(9, (int index) => '${index + 1}');
   List<String> _inches = List<String>.generate(12, (int index) => '${index}');
 
-  String dropDownDiagMonth;
-
   var _dateTime;
   var result;
-
-  Widget _buildDatePicker() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('Please select your birthday:',
-                  style: TextStyle(fontSize: 18)),
-            ),
-          ),
-          SizedBox(height: 5),
-          RaisedButton(
-            // shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.zero,
-            //     side: BorderSide(color:  Theme.of(context).primaryColor)
-            // ),
-            child: Text(
-              result != null ? result : 'SELECT DATE',
-              style: TextStyle(
-                fontSize: 18,
-                color: Theme.of(context).highlightColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            color: Colors.blue,
-            onPressed: () {
-              showDatePicker(
-                  context: context,
-                  initialDate:
-                  _dateTime == null ? DateTime.now() : _dateTime,
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now())
-                  .then((date) {
-                setState(() {
-                  _dateTime = date;
-                  result =
-                  "${_dateTime.month}/${_dateTime.day}/${_dateTime.year}";
-                });
-              });
-            },
-          ),
-        ]);
-  }
-
-  // Widget _buildMonth(String field) {
-  //   return DropdownButtonFormField(
-  //     isExpanded: true,
-  //     decoration: InputDecoration(
-  //       labelText: 'Month',
-  //       border: OutlineInputBorder(),
-  //       hintText: "Month",
-  //     ),
-  //     value: dropDownBirthMonth,
-  //     validator: (value) => value == null ? 'Field Required' : null,
-  //     onChanged: (String Value) {
-  //       setState(() {
-  //         if (field == "birth") {
-  //           dropDownBirthMonth = Value;
-  //           _month = _months.indexOf(Value) + 1;
-  //         } else {
-  //           dropDownDiagMonth = Value;
-  //           _diagMonth = _months.indexOf(Value) + 1;
-  //         }
-  //       });
-  //     },
-  //     items: _months
-  //         .map((month) => DropdownMenuItem(value: month, child: Text("$month")))
-  //         .toList(),
-  //   );
-  // }
-  //
-  // Widget _buildDay() {
-  //   return Container(
-  //       width: 10.0,
-  //       child: DropdownButtonHideUnderline(
-  //           child: ButtonTheme(
-  //               alignedDropdown: true,
-  //               child: DropdownButtonFormField(
-  //                 isExpanded: true,
-  //                 decoration: InputDecoration(
-  //                   labelText: 'Day',
-  //                   border: OutlineInputBorder(),
-  //                   hintText: "Day",
-  //                 ),
-  //                 value: dropDownBirthDay,
-  //                 validator: (value) => value == null ? 'Field Required' : null,
-  //                 onChanged: (String Value) {
-  //                   setState(() {
-  //                     dropDownBirthDay = Value;
-  //                     _day = _days.indexOf(Value) + 1;
-  //                   });
-  //                 },
-  //                 items: _days
-  //                     .map((day) =>
-  //                         DropdownMenuItem(value: day, child: Text("$day")))
-  //                     .toList(),
-  //               ))));
-  // }
-
-  // Widget _buildBirthMonth() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       labelText: 'Month',
-  //       hintText: 'MM',
-  //       border: OutlineInputBorder(),
-  //     ),
-  //     keyboardType: TextInputType.number,
-  //     validator: (String value) {
-  //       int month = int.tryParse(value);
-  //       if (month == null) {
-  //         return "Field Required";
-  //       } else if (month <= 0 || month >= 13) {
-  //         return 'Month must be an integer 1 to 12';
-  //       }
-  //       return null;
-  //     },
-  //     onSaved: (String value) {
-  //       _month = int.tryParse(value);
-  //       print("SAVING MONTH");
-  //     },
-  //   );
-  // }
-
-  // Widget _buildBirthDay() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       labelText: 'Day',
-  //       hintText: 'DD',
-  //       border: OutlineInputBorder(),
-  //     ),
-  //     keyboardType: TextInputType.number,
-  //     validator: (String value) {
-  //       int day = int.tryParse(value);
-  //       if (day == null) {
-  //         return "Field Required";
-  //       } else if (day <= 0) {
-  //         return 'Day must be greater than 0';
-  //       } else if (day > 31) {
-  //         return 'Day cannot be greater than 31';
-  //       } else if (_day == 31) {
-  //         if (_month == 2 ||
-  //             _month == 4 ||
-  //             _month == 6 ||
-  //             _month == 9 ||
-  //             _month == 11) {
-  //           return 'Day cannot be 31 for the given month';
-  //         } else {
-  //           return null;
-  //         }
-  //       } else if (_day == 30) {
-  //         if (_month == 2) {
-  //           return 'Day cannot be 30 for the given month';
-  //         }
-  //       }
-  //       return null;
-  //     },
-  //     onSaved: (String value) {
-  //       _day = int.tryParse(value);
-  //     },
-  //   );
-  // }
-
-  // Widget _buildBirthYear() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       labelText: 'Year',
-  //       hintText: 'YYYY',
-  //       border: OutlineInputBorder(),
-  //       contentPadding:
-  //           new EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
-  //     ),
-  //     keyboardType: TextInputType.number,
-  //     validator: (String value) {
-  //       int year = int.tryParse(value);
-  //       if (year == null) {
-  //         return "Field Required";
-  //       } else if (year <= 0) {
-  //         return 'Year must be greater than 0';
-  //       }
-  //       return null;
-  //     },
-  //     onSaved: (String value) {
-  //       _year = int.tryParse(value);
-  //     },
-  //   );
-  // }
 
   int _heightFeet = 0;
   int _heightInches = 0;
   String dropDownFeet;
   String dropDownInches;
-  Widget heightFeet;
-  Widget heightInches;
+
+  int _weight = 0;
+  String dropDownGender;
+  List<String> _genders = ['Male', 'Female', 'Other', 'Prefer not to say'];
+
+  String dropDownRace;
+  List<String> _races = [
+    'American Indian or Alaska Native',
+    'Asian',
+    'Black or African American',
+    'Native Hawaiian or Other Pacific Islander',
+    'White',
+    'More than one Race',
+    'Unknown',
+    'Prefer not to say',
+  ];
+  String dropDownEthnicities;
+  List<String> _ethnicities = [
+    'Hispanic or Latinx',
+    'Non Hispanic or Latinx',
+    'Unknown',
+    'Prefer not to say',
+  ];
+  List<String> _activity = [
+    'Sedentary',
+    'Lightly Active',
+    'Moderately Active',
+    'Vigorously Active',
+  ];
+  String dropDownActivity;
+
+  Map<String, bool> frequentIssues = {
+    'Abdominal Pain': false,
+    'Appetite Loss': false,
+    'Bloating': false,
+    'Constipation': false,
+    "Diarrhea": false,
+    'Nausea/Vomiting': false,
+    'Stoma Problems': false,
+  };
+
+  String dropDownStage;
+
+  bool _colorectal = false;
+  bool _surgery = false;
+
+  Map<String, bool> treatmentType = {
+    'Surgery': false,
+    'Chemotherapy': false,
+    'Radiation': false,
+    'Other': false,
+    'Uncertain': false,
+  };
+
+  List<String> _cancerStages = [
+    'Stage 0',
+    'Stage 1',
+    'Stage 2',
+    'Stage 3',
+    'Stage 4',
+  ];
+
+  String dropDownDiagMonth;
+  int _diagYear = 0;
+  int _diagMonth = 0;
+  bool _ostomy = false;
+
+  bool userConsent = false;
+  bool userOptIn = true;
+
+
+
+  Widget _buildtemp() {
+    return Row(children: <Widget>[
+      Checkbox(
+          value: userConsent,
+          onChanged: (bool newValue) {
+            setState(() {
+              userConsent = newValue;
+            });
+          }),
+      Expanded(
+          child: Text(
+              "I understand agree to Cancer DietAssist's Terms of Service and Private Policy")),
+      Container(
+        padding: const EdgeInsets.all(0.0),
+        width: 30.0,
+        child: IconButton(
+          icon: Icon(Icons.policy, color: Colors.blue),
+          tooltip: 'Private Policy',
+          onPressed: () {
+            setState(() {
+              openUrl();
+            });
+          },
+        ),
+      )
+    ]);
+  }
+
+  void openUrl() {
+    String url =
+        'https://www.privacypolicies.com/live/1407360e-2832-431e-a2a3-32d08bf7b34a';
+    launch(url);
+  }
+
+  Widget _buildOptIn() {
+    return CheckboxListTile(
+      title: Text("I would like to participate in the research study"),
+      subtitle: Text(
+          "You will be asked to fill out the following forms regarding you and your current health"),
+      value: userOptIn,
+      onChanged: (newValue) {
+        setState(() {
+          userOptIn = newValue;
+        });
+      },
+      controlAffinity: ListTileControlAffinity.leading,
+    );
+  }
+
+  Widget _buildBirthDatePicker() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(child: Text('Your birthday:', style: TextStyle(fontSize: 18))),
+        Expanded(
+            child: Container(
+          child: TextFormField(
+            controller: dateCtl,
+            decoration: InputDecoration(hintText: 'Select Date'),
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Date required';
+              }
+              return null;
+            },
+            onTap: () async {
+              DateTime date = DateTime.now();
+              FocusScope.of(context).requestFocus(new FocusNode());
+              date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now());
+
+              dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
+              _dateTime = dateCtl.text;
+            },
+          ),
+        ))
+      ],
+    );
+  }
+
+  // Widget _buildDatePicker() {
+  //   return Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: <Widget>[
+  //         Align(
+  //           alignment: Alignment.centerLeft,
+  //           child: Container(
+  //             child: Text('Please select your birthday:',
+  //                 style: TextStyle(fontSize: 18)),
+  //           ),
+  //         ),
+  //         SizedBox(height: 5),
+  //         RaisedButton(
+  //           child: Text(
+  //             result != null ? result : 'SELECT DATE',
+  //             style: TextStyle(
+  //               fontSize: 18,
+  //               color: Theme.of(context).highlightColor,
+  //               fontWeight: FontWeight.bold,
+  //             ),
+  //           ),
+  //           color: Colors.blue,
+  //           onPressed: () {
+  //             showDatePicker(
+  //                     context: context,
+  //                     initialDate:
+  //                         _dateTime == null ? DateTime.now() : _dateTime,
+  //                     firstDate: DateTime(1900),
+  //                     lastDate: DateTime.now())
+  //                 .then((date) {
+  //               setState(() {
+  //                 _dateTime = date;
+  //                 result =
+  //                     "${_dateTime.month}/${_dateTime.day}/${_dateTime.year}";
+  //               });
+  //             });
+  //           },
+  //         ),
+  //       ]);
+  // }
 
   Widget _buildHeightFeet() {
     return Container(
@@ -260,7 +265,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   },
                   items: _feet
                       .map((feet) =>
-                      DropdownMenuItem(value: feet, child: Text("$feet")))
+                          DropdownMenuItem(value: feet, child: Text("$feet")))
                       .toList(),
                 ))));
   }
@@ -288,14 +293,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   },
                   items: _inches
                       .map((inch) =>
-                      DropdownMenuItem(value: inch, child: Text("$inch")))
+                          DropdownMenuItem(value: inch, child: Text("$inch")))
                       .toList(),
                 ))));
   }
-
-
-  int _weight = 0;
-  Widget weight;
 
   Widget _buildWeight() {
     return TextFormField(
@@ -320,15 +321,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  String dropDownGender;
-  List<String> _genders = [
-    'Male',
-    'Female',
-    'Other',
-    'Prefer not to say'
-  ];
-  Widget gender;
-
   Widget _buildGender() {
     return DropdownButtonFormField(
       isExpanded: true,
@@ -345,23 +337,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _genders
           .map((gender) =>
-          DropdownMenuItem(value: gender, child: Text("$gender")))
+              DropdownMenuItem(value: gender, child: Text("$gender")))
           .toList(),
     );
   }
-
-  String dropDownRace;
-  List<String> _races = [
-    'American Indian or Alaska Native',
-    'Asian',
-    'Black or African American',
-    'Native Hawaiian or Other Pacific Islander',
-    'White',
-    'More than one Race',
-    'Unknown',
-    'Prefer not to say',
-  ];
-  Widget race;
 
   Widget _buildRace() {
     return DropdownButtonFormField(
@@ -381,15 +360,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  String dropDownEthnicities;
-  List<String> _ethnicities = [
-    'Hispanic or Latinx',
-    'Non-Hispanic or Latinx',
-    'Unknown',
-    'Prefer not to say',
-  ];
-  Widget ethnicity;
-
   Widget _buildEthnicity() {
     return DropdownButtonFormField(
       isExpanded: true,
@@ -406,19 +376,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _ethnicities
           .map((ethnicity) =>
-          DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
+              DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
           .toList(),
     );
   }
-
-  List<String> _activity = [
-    'Sedentary',
-    'Lightly Active',
-    'Moderately Active',
-    'Vigorously Active',
-  ];
-  String dropDownActivity;
-  Widget activity;
 
   Widget _buildActivity() {
     return DropdownButtonFormField(
@@ -435,22 +396,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _activity
           .map((actLevel) =>
-          DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
+              DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
           .toList(),
     );
   }
-
-  Map<String, bool> frequentIssues = {
-    'Abdominal Pain': false,
-    'Appetite Loss': false,
-    'Bloating': false,
-    'Constipation': false,
-    "Diarrhea": false,
-    'Nausea/Vomiting': false,
-    'Stoma Problems': false,
-  };
-
-  Widget GIIssues;
 
   Widget _buildGICheckBoxes() {
     return ListView(
@@ -493,30 +442,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ]));
   }
 
-  String dropDownStage;
-
-
-  bool _colorectal = false;
-  bool _surgery = false;
-
-  Map<String, bool> treatmentType = {
-    'Surgery': false,
-    'Chemotherapy': false,
-    'Radiation': false,
-    'Other': false,
-    'Uncertain': false,
-  };
-
-  List<String> _cancerStages = [
-    'Stage 0',
-    'Stage 1',
-    'Stage 2',
-    'Stage 3',
-    'Stage 4',
-  ];
-
-  Widget cancerHistory;
-
   Widget _buildCancerHistoryYN(String cancer) {
     return Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -542,8 +467,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   onChanged: (value) {
                     setState(() {
                       _colorectal = value;
-                      // Navigator.of(context, rootNavigator: true).pop();
-                      // _buildCancerHistory();
                     });
                   },
                 ),
@@ -558,8 +481,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   onChanged: (value) {
                     setState(() {
                       _colorectal = value;
-                      // Navigator.of(context, rootNavigator: true).pop();
-                      // _buildCancerHistory();
                     });
                   },
                 ),
@@ -584,15 +505,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       },
       items: _cancerStages
           .map((colStage) =>
-          DropdownMenuItem(value: colStage, child: Text("$colStage")))
+              DropdownMenuItem(value: colStage, child: Text("$colStage")))
           .toList(),
     );
   }
-
-  int _diagYear = 0;
-  int _diagMonth = 0;
-  Widget lastDiag;
-
 
   Widget _buildLastDiagMonth() {
     return DropdownButtonFormField(
@@ -645,63 +561,63 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         _colorectal == true ? SizedBox(height: 15) : SizedBox(height: 0),
         _colorectal == true
             ? Container(
-            padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child:
-            Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text(
-                      'If known, what cancer stage were you initially diagnosed?',
-                      style: TextStyle(fontSize: 16)),
+                padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(5),
                 ),
-              ),
-              SizedBox(height: 5),
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Expanded(child: _buildColonrectalDropdown()),
-                    IconButton(
-                      icon: Icon(Icons.help_outline, color: Colors.blue),
-                      tooltip: 'More Information',
-                      onPressed: () {
-                        setState(() {
-                          _cancerStagesAlert();
-                        });
-                      },
+                child:
+                    Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Text(
+                          'If known, what cancer stage were you initially diagnosed?',
+                          style: TextStyle(fontSize: 16)),
                     ),
-                  ]),
-              SizedBox(height: 10),
-            ]))
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Expanded(child: _buildColonrectalDropdown()),
+                        IconButton(
+                          icon: Icon(Icons.help_outline, color: Colors.blue),
+                          tooltip: 'More Information',
+                          onPressed: () {
+                            setState(() {
+                              _cancerStagesAlert();
+                            });
+                          },
+                        ),
+                      ]),
+                  SizedBox(height: 10),
+                ]))
             : SizedBox(height: 0),
         _colorectal == true ? SizedBox(height: 15) : SizedBox(height: 0),
         _colorectal == true
             ? Container(
-            padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child:
-            Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text('Approximate date of diagnosis:',
-                      style: TextStyle(fontSize: 16)),
+                padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(5),
                 ),
-              ),
-              SizedBox(height: 10),
-              _buildLastDiagMonth(),
-              SizedBox(height: 5),
-              _buildLastDiagYear(),
-              SizedBox(height: 10)
-            ]))
+                child:
+                    Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Text('Approximate date of diagnosis:',
+                          style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  _buildLastDiagMonth(),
+                  SizedBox(height: 5),
+                  _buildLastDiagYear(),
+                  SizedBox(height: 10)
+                ]))
             : SizedBox(height: 0),
         _colorectal == true ? SizedBox(height: 10) : SizedBox(height: 0),
         _colorectal == true ? _buildSurgeryDropdown() : SizedBox(height: 0),
@@ -754,8 +670,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           )
         ]));
   }
-
-  bool _ostomy;
 
   Widget _buildOstomyYN() {
     return Container(
@@ -905,7 +819,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('CLOSE'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -933,7 +847,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('CLOSE'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -941,12 +855,71 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ],
         );
       },
-    ).then((val){
-      Navigator.pushReplacementNamed(context, '/home');
+    ).then((val) {
+      Navigator.pushReplacementNamed(context, '/');
+    });
+  }
+
+  _agreementAlert() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text('Form successfully submitted'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'You must read and accept our Terms and Conditions before continuing'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _optOutAlert() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text(),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Since you have opted out of the study, you will be taken to the home screen of the application. If you wish to opt in, you can via the Personal Details button under the PROFILE tab.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    ).then((val) {
+      Navigator.pushReplacementNamed(context, '/');
     });
   }
 
   final List<GlobalKey<FormState>> formKeys = [
+    GlobalKey<FormState>(),
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
@@ -958,8 +931,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool complete = false;
   bool isFirstStep = true;
   bool isLastStep = false;
+
   next() {
-    if (formKeys[currentStep].currentState.validate()) {
+    if (!userConsent) {
+      _agreementAlert();
+    } else if (formKeys[currentStep].currentState.validate() && userOptIn) {
       formKeys[currentStep].currentState.save();
 
       if (currentStep + 1 != steps.length) {
@@ -970,58 +946,68 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       }
       if (complete) {
         submit();
+        _successfulAlert();
       }
+    } else if (!userOptIn) {
+      _optOutAlert();
+      submit();
     }
   }
 
   cancel() {
     if (currentStep > 0) {
-      goTo(currentStep - 1);
+      setStepState(currentStep - 1);
     }
   }
 
   goTo(int step) {
     if (!formKeys[currentStep].currentState.validate()) {
       _emptyFieldsAlert();
-    } else {
-      setState(() => currentStep = step);
+    } else if (userConsent) {
+      setStepState(step);
     }
+  }
 
-    setState((){
+  setStepState(int step) {
+    setState(() {
       currentStep = step;
-      if(currentStep == 0){
+      if (currentStep == 0) {
         isFirstStep = true;
         isLastStep = false;
-      }else if(currentStep + 1 < steps.length){
+      } else if (currentStep + 1 < steps.length) {
         isFirstStep = false;
         isLastStep = false;
-      } else{
+      } else {
         isLastStep = true;
       }
     });
-
   }
 
   var birthDate;
   var lastDiagDate;
 
   submit() {
+    if (!userOptIn) {
+      dropDownRace = "na";
+      dropDownEthnicities = "na";
+      dropDownGender = "na";
+      dropDownActivity = "na";
+    }
+
     birthDate = _dateTime;
     lastDiagDate = new DateTime(_diagYear, _diagMonth, 1);
     int height = (_heightFeet * 12) + _heightInches;
     String checkedTreatmentTypes = "";
 
     for (var key in treatmentType.keys) {
-
-      if (checkedTreatmentTypes  == "") {
+      if (checkedTreatmentTypes == "") {
         checkedTreatmentTypes = treatmentType[key].toString();
       } else {
-        checkedTreatmentTypes  += "," + (treatmentType[key].toString());
+        checkedTreatmentTypes += "," + (treatmentType[key].toString());
       }
     }
 
-    checkedTreatmentTypes +=  "," + (_ostomy.toString());
-
+    checkedTreatmentTypes += "," + (_ostomy.toString());
 
     String gIIssues = "";
     for (var key in frequentIssues.keys) {
@@ -1035,6 +1021,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       }
     }
 
+    // if (gIIssues == "") {
+    //   gIIssues = "na";
+    // }
+    //
+    // if (!_colorectal) {
+    //   dropDownStage = "na";
+    //   checkedTreatmentTypes = "na";
+    // }
 
     DBHelper db = new DBHelper();
 
@@ -1051,9 +1045,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         _colorectal,
         dropDownStage,
         lastDiagDate.toString().split(" ")[0],
-        checkedTreatmentTypes );
-    _successfulAlert();
-    print("is submitting!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        checkedTreatmentTypes);
   }
 
   StepState _getState(int i) {
@@ -1064,31 +1056,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     }
   }
 
-  final TextEditingController _ageMonthController = new TextEditingController();
-  int userAgeMonth = 33;
-  final TextEditingController _ageDayController = new TextEditingController();
-  int userAgeDay = 33;
-  final TextEditingController _ageYearController = new TextEditingController();
-  int userYearMonth = 33;
+  TextEditingController dateCtl = TextEditingController();
   final TextEditingController _heightInchesController =
-  new TextEditingController();
+      new TextEditingController();
   int userInchesHeight = 65;
   final TextEditingController _heightFeetController =
-  new TextEditingController();
+      new TextEditingController();
   int userFeetHeight = 65;
   final TextEditingController _weightController = new TextEditingController();
   int userWeight = 130;
   final TextEditingController _diagYearController = new TextEditingController();
   int userDiagYear = 1;
   final TextEditingController _diagMonthController =
-  new TextEditingController();
+      new TextEditingController();
   int userDiagMonth = 1;
 
   @override
   void initState() {
-    _ageMonthController.text = userAgeMonth.toString();
-    _ageDayController.text = userAgeDay.toString();
-    _ageYearController.text = userYearMonth.toString();
     _heightFeetController.text = userFeetHeight.toString();
     _heightInchesController.text = userInchesHeight.toString();
     _weightController.text = userWeight.toString();
@@ -1099,18 +1083,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // birthDay = _buildBirthDay();
-    // birthMonth = _buildBirthMonth();
-    // birthYear = _buildBirthYear();
-    heightFeet = _buildHeightFeet();
-    heightInches = _buildHeightInches();
-    weight = _buildWeight();
-    race = _buildRace();
-    ethnicity = _buildEthnicity();
-    activity = _buildActivity();
-    GIIssues = _buildGIIssues();
-    cancerHistory = _buildCancerHistory();
-    // cancerTreatment = _buildCancerTreatment();
     return new Scaffold(
       appBar: AppBar(
         title: Text('Welcome!'),
@@ -1120,7 +1092,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: Stepper(
             steps: steps = <Step>[
               Step(
-                title: const Text('Personal Data'),
+                title: const Text('User Agreement'),
                 state: _getState(1),
                 isActive: currentStep >= 0,
                 content: Container(
@@ -1128,7 +1100,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     key: formKeys[0],
                     child: Column(
                       children: <Widget>[
-                        _buildDatePicker(),
+                        // _buildConsentBox(),
+                        _buildtemp(),
+
+                        // _buildOptIn(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Step(
+                title: const Text('Personal Data'),
+                state: _getState(2),
+                isActive: currentStep >= 1,
+                content: Container(
+                  child: Form(
+                    key: formKeys[1],
+                    child: Column(
+                      children: <Widget>[
+                        _buildBirthDatePicker(),
                         SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -1138,39 +1128,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 style: TextStyle(fontSize: 18)),
                           ),
                         ),
-                        // SizedBox(height: 5),
-                        // Row(children: <Widget>[
-                        //   Expanded(
-                        //     child: _buildMonth("birth"),
-                        //   ),
-                        //   Expanded(
-                        //     child: _buildDay(),
-                        //   ),
-                        //   Expanded(
-                        //     child: birthYear,
-                        //   ),
-                        // ]),
-
                         SizedBox(height: 10),
-                        race,
+                        _buildRace(),
                         SizedBox(height: 15),
-                        ethnicity,
+                        _buildEthnicity(),
                         SizedBox(height: 15),
                         _buildGender(),
                         SizedBox(height: 15),
-                        // EthnicityDropdownWidget(),
                       ],
                     ),
                   ),
                 ),
               ),
               Step(
-                state: _getState(2),
-                isActive: currentStep >= 1,
+                state: _getState(3),
+                isActive: currentStep >= 2,
                 title: const Text('Health Information'),
                 content: Container(
                   child: Form(
-                    key: formKeys[1],
+                    key: formKeys[2],
                     child: Column(
                       children: <Widget>[
                         Align(
@@ -1183,15 +1159,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         SizedBox(height: 5),
                         Row(children: <Widget>[
                           Expanded(
-                            child: heightFeet,
+                            child: _buildHeightFeet(),
                           ),
-
-                          //  SizedBox(height: 10),
                           Expanded(
-                            child: heightInches,
+                            child: _buildHeightInches(),
                           )
                         ]),
-                        // HeightFormWidget(),
                         SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -1202,7 +1175,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         SizedBox(height: 5),
                         // WeightFormWidget(),
-                        weight,
+                        _buildWeight(),
                         SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -1213,27 +1186,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                         SizedBox(height: 5),
-                        // ActivityDropdownWidget(),
-                        activity,
+                        _buildActivity(),
                         SizedBox(height: 15),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Step(
-                state: _getState(3),
-                isActive: currentStep >= 2,
-                title: const Text('Frequent Symptoms'),
-                content: Container(
-                  child: Form(
-                    key: formKeys[2],
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 5),
-                        GIIssues,
-                        SizedBox(height: 15),
-                        // GIIssuesCheckboxWidget(),
                       ],
                     ),
                   ),
@@ -1242,38 +1196,37 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Step(
                 state: _getState(4),
                 isActive: currentStep >= 3,
-                title: const Text('Cancer History'),
+                title: const Text('Frequent Symptoms'),
                 content: Container(
                   child: Form(
                     key: formKeys[3],
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 5),
-                        cancerHistory,
+                        _buildGIIssues(),
                         SizedBox(height: 15),
-                        // CancerHistoryWidget(),
                       ],
                     ),
                   ),
                 ),
               ),
-              // Step(
-              //   state: _getState(5),
-              //   isActive: currentStep >= 4,
-              //   title: const Text('Cancer Treatment'),
-              //   content: Container(
-              //     child: Form(
-              //       key: formKeys[4],
-              //       child: Column(
-              //         children: <Widget>[
-              //           SizedBox(height: 5),
-              //           cancerTreatment,
-              //           // CancerTreatmentWidget(),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // )
+              Step(
+                state: _getState(5),
+                isActive: currentStep >= 4,
+                title: const Text('Cancer History'),
+                content: Container(
+                  child: Form(
+                    key: formKeys[4],
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 5),
+                        _buildCancerHistory(),
+                        SizedBox(height: 15),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
             currentStep: currentStep,
             onStepContinue: next,
@@ -1283,32 +1236,35 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
               return Row(
                 children: <Widget>[
-                  isLastStep ?  FlatButton(
-                    onPressed:  onStepContinue,
-                    child: const Text('SUBMIT',
-                        style: TextStyle(color: Colors.white)),
-                    color: Colors.blue,
-                  ) :  FlatButton(
-                    onPressed:  onStepContinue,
-                    child: const Text('CONTINUE',
-                        style: TextStyle(color: Colors.white)),
-                    color: Colors.blue,
-                  ),
+                  isLastStep
+                      ? FlatButton(
+                          onPressed: onStepContinue,
+                          child: const Text('SUBMIT',
+                              style: TextStyle(color: Colors.white)),
+                          color: Colors.blue,
+                        )
+                      : FlatButton(
+                          onPressed: onStepContinue,
+                          child: const Text('CONTINUE',
+                              style: TextStyle(color: Colors.white)),
+                          color: Colors.blue,
+                        ),
                   new Padding(
                     padding: new EdgeInsets.all(10),
                   ),
-                  isFirstStep ? SizedBox(height:0) : FlatButton(
-                    onPressed: onStepCancel,
-                    child: const Text(
-                      'BACK',
-                      style: TextStyle( color: Colors.grey),
-                    ),
-                    // color: Colors.grey,
-                  ),
+                  isFirstStep
+                      ? SizedBox(height: 0)
+                      : FlatButton(
+                          onPressed: onStepCancel,
+                          child: const Text(
+                            'BACK',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          // color: Colors.grey,
+                        ),
                 ],
               );
             },
-
           ),
         ),
       ]),

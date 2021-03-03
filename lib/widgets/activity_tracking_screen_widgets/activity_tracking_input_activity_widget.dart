@@ -5,44 +5,42 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 
-class FitnessTrackingPopupInputActivity extends StatefulWidget {
-  FitnessActivityModel fitnessActivity;
-
-  FitnessTrackingPopupInputActivity(FitnessActivityModel fitnessActivity) {
-    this.fitnessActivity = fitnessActivity;
-  }
+class ActivityTrackingInputScreen extends StatefulWidget {
+  FitnessActivityModel fitnessActivity = new FitnessActivityModel.emptyConstructor();
 
   @override
-  _FitnessTrackingPopupInputActivityState createState() =>
-      _FitnessTrackingPopupInputActivityState();
+  _ActivityTrackingInputScreenState createState() =>
+      _ActivityTrackingInputScreenState();
 }
 
-class _FitnessTrackingPopupInputActivityState
-    extends State<FitnessTrackingPopupInputActivity> {
-  final db = FitnessActivityDBHelper();
+class _ActivityTrackingInputScreenState
+    extends State<ActivityTrackingInputScreen> {
+  final db = ActivityDBHelper();
   final _formKey = GlobalKey<FormState>();
   TextEditingController dateCtl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      elevation: 20,
-      content: Form(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('New Activity'),
+      ),
+      body: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     Text('New Fitness Activity'),
+            //   ],
+            // ),
+            // Divider(
+            //   thickness: 2,
+            // ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('New Fitness Activity'),
-              ],
-            ),
-            Divider(
-              thickness: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text('Activity'),
                 Container(
@@ -72,7 +70,7 @@ class _FitnessTrackingPopupInputActivityState
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text('Intensity'),
                 Container(
@@ -96,7 +94,7 @@ class _FitnessTrackingPopupInputActivityState
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text('Minutes'),
                 Container(
@@ -124,7 +122,7 @@ class _FitnessTrackingPopupInputActivityState
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text('Date'),
                 Container(
@@ -164,14 +162,31 @@ class _FitnessTrackingPopupInputActivityState
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: RaisedButton(
-                child: Text('Submit'),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    db.saveNewActivity(widget.fitnessActivity);
-                    Navigator.pop(context, widget.fitnessActivity);
-                  }
-                },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      child: Text('Submit'),
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          db.saveNewActivity(widget.fitnessActivity);
+                          Navigator.pop(context, widget.fitnessActivity);
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

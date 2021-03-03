@@ -1,10 +1,13 @@
-
+import 'package:cnc_flutter_app/screens/articles_screen.dart';
 import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
 import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';
+import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'home/home_screen.dart';
+
 // import 'ask/ask_page.dart';
 // import 'home_page.dart';
 // import 'profile/profile_page.dart';
@@ -18,23 +21,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'profile_screen.dart';
 
-
-
-
-
 class NavigatorScreen extends StatefulWidget {
   @override
   _NavigatorScreenState createState() => _NavigatorScreenState();
 }
 
 class _NavigatorScreenState extends State<NavigatorScreen> {
-
   int _selectedIndex = 0;
+  // SpeedDialController _controller = SpeedDialController();
+
 
   List<Widget> screens = <Widget>[
     HomeScreen(),
-    HomeScreen(),
-    DietTrackingScreen(),
+    ArticlesScreen(),
     CalendarPage(),
     ProfileScreen(),
   ];
@@ -49,59 +48,109 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
     context.bloc<ThemeBloc>().add(ThemeEvent(appTheme: Preferences.getTheme()));
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Nutrition App'),
-      // ),
       body: getCurrentScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        backgroundColor: Theme
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: SpeedDial(
+      //   icon: Icons.add,
+      //   backgroundColor: Theme
+      //       .of(context)
+      //       .accentColor,
+      //   children: [
+      //     SpeedDialChild(
+      //         child: Icon(Icons.food_bank),
+      //       label: 'Log Food',
+      //       onTap: (){
+      //           showSearch(
+      //               context: context,
+      //               delegate: FoodSearch(DateTime.now().toString()));
+      //           // Navigator.pushNamed(context, '/inputActivity');
+      //       }
+      //     ),
+      //     SpeedDialChild(
+      //         child: Icon(Icons.directions_run),
+      //         label: 'Log Activity',
+      //         onTap: (){
+      //           Navigator.pushNamed(context, '/inputActivity');
+      //         }
+      //     ),
+      //     SpeedDialChild(
+      //         child: Icon(Icons.thermostat_outlined),
+      //         label: 'Log Symptoms',
+      //         onTap: (){
+      //           Navigator.pushNamed(context, '/inputSymptom');
+      //         }
+      //     ),
+      //     SpeedDialChild(
+      //         child: Icon(Icons.question_answer),
+      //         label: 'Log Questions',
+      //         onTap: (){
+      //           Navigator.pushNamed(context, '/inputActivity');
+      //         }
+      //     ),
+      //   ],
+      // ),
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        color: Theme
             .of(context)
             .primaryColor,
-        selectedItemColor: Theme
-            .of(context)
-            .highlightColor,
-        unselectedItemColor: Colors.white.withOpacity(.60),
-        items: [
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home),
-            label: "HOME",
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.question_answer),
-            label: "ASK",
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.food_bank,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home,
+                  color: _selectedIndex == 0 ? Theme
+                      .of(context)
+                      .backgroundColor : Theme
+                      .of(context)
+                      .accentColor),
+              iconSize: 30,
+              onPressed: () {
+                _updateIndex(0);
+              },
             ),
-            label: "DIET",
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.verified,
+            IconButton(
+              icon: Icon(Icons.library_books,
+                  color: _selectedIndex == 1 ? Theme
+                      .of(context)
+                      .backgroundColor : Theme
+                      .of(context)
+                      .accentColor),
+              iconSize: 30,
+              onPressed: () {
+                _updateIndex(1);
+              },
             ),
-            label: "GOALS",
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
+            IconButton(
+              icon: Icon(Icons.verified,
+                  color: _selectedIndex == 2 ? Theme
+                      .of(context)
+                      .backgroundColor : Theme
+                      .of(context)
+                      .accentColor),
+              iconSize: 30,
+              onPressed: () {
+                _updateIndex(2);
+              },
             ),
-            label: "PROFILE",
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+            IconButton(
+              icon: Icon(Icons.person,
+                  color: _selectedIndex == 3 ? Theme
+                      .of(context)
+                      .backgroundColor : Theme
+                      .of(context)
+                      .accentColor),
+              iconSize: 30,
+              onPressed: () {
+                _updateIndex(3);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

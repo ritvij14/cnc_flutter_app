@@ -45,6 +45,14 @@ class Food {
 
   String _commonPortionSizeUnit;
 
+  String _nccFoodGroupCategory;
+
+  String get nccFoodGroupCategory => _nccFoodGroupCategory;
+
+  set nccFoodGroupCategory(String value) {
+    _nccFoodGroupCategory = value;
+  }
+
   int get id => _id;
 
   set id(int value) {

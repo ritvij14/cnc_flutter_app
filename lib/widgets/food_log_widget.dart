@@ -11,6 +11,8 @@ import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fraction/fraction.dart';
+
 
 class FoodLog extends StatefulWidget {
   String selectedDate;
@@ -50,6 +52,21 @@ class _FoodLogState extends State<FoodLog> {
 
   update(context) {
     setState(() {});
+  }
+
+  getPortionAsFraction(double portion) {
+    String servingAsFraction;
+    if (portion <= 1 || portion % 1 == 0) {
+      servingAsFraction = portion.toFraction().toString();
+    } else {
+      servingAsFraction = portion.toMixedFraction().toString();
+    }
+    if(portion == 1) {
+      servingAsFraction += ' serving';
+    } else {
+      servingAsFraction += ' servings';
+    }
+    return servingAsFraction;
   }
 
   getFood() async {
@@ -259,8 +276,10 @@ class _FoodLogState extends State<FoodLog> {
                                     MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(
-                                        foodLogEntries[index].portion.toString() +
-                                            " serving(s)",
+
+                                        getPortionAsFraction(foodLogEntries[index].portion),
+                                        // foodLogEntries[index].portion.toString() +
+                                        //     " serving(s)",
                                         // breakfast[index].serving + " " + breakfast[index].unit,
                                         // "1.0 serving(s) ",
                                         textAlign: TextAlign.left,
