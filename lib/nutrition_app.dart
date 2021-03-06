@@ -3,7 +3,7 @@ import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
 import 'package:cnc_flutter_app/screens/home/home_screen.dart';
 import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';
-import 'package:cnc_flutter_app/screens/home/weight_tracking_screen.dart';
+import 'package:cnc_flutter_app/screens/home/metric_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
 import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/summary_screen.dart';
@@ -11,6 +11,7 @@ import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_bloc.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_state.dart';
 import 'package:cnc_flutter_app/widgets/activity_tracking_screen_widgets/activity_tracking_input_activity_widget.dart';
+import 'package:cnc_flutter_app/widgets/metric_tracking_widgets/metric_tracking_input_metric_widget.dart';
 import 'package:cnc_flutter_app/widgets/symptom_tracking_widgets/symptom_tracking_input_symptoms_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,11 +42,12 @@ class NutritionApp extends StatelessWidget {
                   '/dietTracking': (context) => DietTrackingScreen(),
                   '/fitnessTracking': (context) => ActivityTrackingScreen(),
                   '/symptomTracking': (context) => SymptomTrackingScreen(),
+                  '/metricTracking': (context) => MetricTrackingScreen(),
                   '/goals': (context) => CalendarPage(),
                   '/welcome': (context) => WelcomeScreen(),
                   '/inputActivity': (context) => ActivityTrackingInputScreen(),
                   '/inputSymptom' : (context) => SymptomTrackingInputScreen(),
-                  '/inputMetrics' : (context) => WeightTrackingScreen(),
+                  '/inputMetrics' : (context) => MetricTrackingInputScreen(),
                 });
           },
         ),

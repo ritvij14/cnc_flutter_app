@@ -11,9 +11,9 @@ import 'activity_tracking_input_activity_widget.dart';
 import 'activity_tracking_popup_modify_activity_widget.dart';
 
 class ActivityTrackingBody extends StatefulWidget {
-  List<FitnessActivityModel> fitnessActivityList = [];
+  List<ActivityModel> fitnessActivityList = [];
 
-  ActivityTrackingBody(List<FitnessActivityModel> fitnessActivityList) {
+  ActivityTrackingBody(List<ActivityModel> fitnessActivityList) {
     this.fitnessActivityList = fitnessActivityList;
   }
 
@@ -32,7 +32,7 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
           return ListView.builder(
             itemCount: widget.fitnessActivityList.length,
             itemBuilder: (context, index) {
-              return FitnessTrackingListTile(widget.fitnessActivityList[index]);
+              return ActivityTrackingListTile(widget.fitnessActivityList[index]);
             },
           );
         },
@@ -54,12 +54,12 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
 
   }
 
-  List<FitnessTrackingListTile> buildFitnessTrackingListTileWidgets(
-      List<FitnessActivityModel> fitnessActivityModelList) {
-    List<FitnessTrackingListTile> fitnessTrackingListTileList = [];
-    for (FitnessActivityModel fitnessActivity in widget.fitnessActivityList) {
-      FitnessTrackingListTile fitnessTrackingListTile =
-          new FitnessTrackingListTile(fitnessActivity);
+  List<ActivityTrackingListTile> buildFitnessTrackingListTileWidgets(
+      List<ActivityModel> fitnessActivityModelList) {
+    List<ActivityTrackingListTile> fitnessTrackingListTileList = [];
+    for (ActivityModel fitnessActivity in widget.fitnessActivityList) {
+      ActivityTrackingListTile fitnessTrackingListTile =
+          new ActivityTrackingListTile(fitnessActivity);
       fitnessTrackingListTileList.add(fitnessTrackingListTile);
     }
     return fitnessTrackingListTileList;
@@ -68,8 +68,8 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
   getActivities() async {
     widget.fitnessActivityList.clear();
     var response = await db.getActivities();
-    List<FitnessActivityModel> fa = (json.decode(response.body) as List)
-        .map((data) => FitnessActivityModel.fromJson(data))
+    List<ActivityModel> fa = (json.decode(response.body) as List)
+        .map((data) => ActivityModel.fromJson(data))
         .toList();
     widget.fitnessActivityList = fa;
   }

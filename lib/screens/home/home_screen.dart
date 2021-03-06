@@ -1,11 +1,13 @@
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_diet_chart_widget.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/activity_summary_widget.dart';
-import 'package:cnc_flutter_app/widgets/home_screen_widgets/diet_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/symptom_summary_widget.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/home_screen_widgets/metric_summary_widget.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/diet_tracking_widgets/diet_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/summary_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -57,11 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
               }
           ),
           SpeedDialChild(
-              child: IconButton(
-                  icon: Image.asset('assets/icons/Weight.svg')),
-              label: 'Log Weight',
+              child: Icon(MdiIcons.scale),
+              label: 'Log Metrics',
               onTap: (){
-                Navigator.pushNamed(context, '/inputActivity');
+                Navigator.pushNamed(context, '/inputMetrics');
               }
           ),
         ],
@@ -86,6 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SymptomSummaryWidget(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MetricSummaryWidget(),
               ),
               // Padding(
               //   padding: const EdgeInsets.all(8.0),
