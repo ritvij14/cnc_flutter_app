@@ -1,4 +1,3 @@
-import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_diet_chart_widget.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/activity_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/diet_summary_widget.dart';
