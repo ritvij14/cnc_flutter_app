@@ -34,7 +34,6 @@ class _ActivityTrackingListTileState extends State<ActivityTrackingListTile> {
           DateFormat('MM/dd/yyyy').format(widget.activityModel.dateTime)),
       trailing: Text(widget.activityModel.getCalories().toString() + ' mets'),
       onTap: () async {
-        print(widget.activityModel.intensity);
         await showDialog(
             context: context,
             builder: (BuildContext context) {
