@@ -11,11 +11,10 @@ class DailySummaryWidget extends StatefulWidget {
   @override
   _DailySummaryWidgetState createState() => _DailySummaryWidgetState();
 
-  DailySummaryWidget() {}
 }
 
 class _DailySummaryWidgetState extends State<DailySummaryWidget> {
-  _DailySummaryWidgetState() {}
+
   int dailyCalorieLimit;
   int dailyProteinLimit;
   int dailyCarbohydrateLimit;
@@ -65,10 +64,6 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
     String key = selectedDate.toString().split(" ")[0];
     var response = await db.getFoodLog('1', key);
     var data = json.decode(response.body);
-    // print(data[0]['entryTime'].runtimeType);
-    // var x = TimeOfDay.fromDateTime(data[0]['entryTime']);
-    // print(x);
-    // print(data);
     for (int i = 0; i < data.length; i++) {
       FoodLogEntry foodLogEntry = new FoodLogEntry();
       foodLogEntry.id = data[i]['id'];
