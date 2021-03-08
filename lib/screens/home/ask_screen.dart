@@ -38,7 +38,7 @@ class AskPage extends StatelessWidget {
       onTap: () {
         // Navigate to the PreferencePage
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => UserQuestionsPage(),
+          builder: (context) => UserQuestionsScreen(),
         ));},
       child: Container(
         color: Theme.of(context).accentColor,

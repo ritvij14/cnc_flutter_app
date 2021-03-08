@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(Icons.question_answer),
               label: 'Log Questions',
               onTap: () {
-                Navigator.pushNamed(context, '/inputActivity');
+                Navigator.pushNamed(context, '/questions');
               }),
         ],
       ),
