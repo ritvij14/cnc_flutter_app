@@ -1,3 +1,4 @@
+import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_calorie_widget.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/activity_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/diet_summary_widget.dart';
@@ -12,63 +13,66 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+    (context as Element).visitChildren(rebuild);
+  }
+
   @override
   Widget build(BuildContext context) {
+    rebuildAllChildren(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
       ),
       floatingActionButton: SpeedDial(
         icon: Icons.add,
-        backgroundColor: Theme
-            .of(context)
-            .accentColor,
+        backgroundColor: Theme.of(context).accentColor,
         children: [
           SpeedDialChild(
               child: Icon(Icons.food_bank),
               label: 'Log Food',
-              onTap: (){
+              onTap: () {
                 showSearch(
-                    context: context,
-                    delegate: FoodSearch(DateTime.now().toString()));
+                        context: context,
+                        delegate: FoodSearch(DateTime.now().toString()))
+                    .then((value) => rebuildAllChildren(context));
                 // Navigator.pushNamed(context, '/inputActivity');
-              }
-          ),
+              }),
           SpeedDialChild(
               child: Icon(Icons.directions_run),
               label: 'Log Activity',
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, '/inputActivity');
-              }
-          ),
+              }),
           SpeedDialChild(
               child: Icon(Icons.thermostat_outlined),
               label: 'Log Symptoms',
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, '/inputSymptom');
-              }
-          ),
+              }),
           SpeedDialChild(
               child: Icon(Icons.question_answer),
               label: 'Log Questions',
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, '/inputActivity');
-              }
-          ),
+              }),
         ],
       ),
-
       body: Padding(
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: ListView(
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SummaryWidget(),
+                child: DietSummaryWidget(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: DietSummaryWidget(),
+                child: WeeklyCalorieWidget(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

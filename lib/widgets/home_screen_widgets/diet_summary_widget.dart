@@ -1,15 +1,10 @@
-import 'dart:convert';
-
-import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/daily_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_calorie_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class DietSummaryWidget extends StatefulWidget {
   @override
@@ -17,12 +12,18 @@ class DietSummaryWidget extends StatefulWidget {
 }
 
 class _DietSummaryWidgetState extends State<DietSummaryWidget> {
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
   int _currentIndex = 0;
 
-  List cardList = [
-    DailySummaryWidget(),
-    WeeklyCalorieWidget()
-  ];
+  List cardList = [DailySummaryWidget(), WeeklyCalorieWidget()];
 
   List<Food> foods = [];
   List<FoodLogEntry> foodLogEntries = [];
@@ -37,12 +38,14 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
 
   @override
   Widget build(BuildContext context) {
+    rebuildAllChildren(context);
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, '/dietTracking');
-          },
+          // onTap: () {
+          //   Navigator.pushNamed(context, '/dietTracking')
+          //       .then((value) => rebuildAllChildren(context));
+          // },
           child: CarouselSlider(
             options: CarouselOptions(
               height: 310,
@@ -56,8 +59,8 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
             ),
             items: cardList
                 .map((item) => Container(
-              child: item,
-            ))
+                      child: item,
+                    ))
                 .toList(),
           ),
         ),

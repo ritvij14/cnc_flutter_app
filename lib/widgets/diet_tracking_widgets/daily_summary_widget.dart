@@ -130,6 +130,11 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
     }
     caloriesRemaining = caloriesRemaining.abs();
   }
+  update() {
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -203,6 +208,33 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                           // Text('toggle'),
                           // Text('toggle'),
                         ],
+                      ),
+                      // IconButton(icon: Icon(Icons.add_circle), onPressed: () {
+                      //   Navigator.pushNamed(context, '/dietTracking')
+                      //       .then((value) => update());
+                      //   setState(() {});
+                      // },),
+                      ButtonTheme(
+                        minWidth: 35,
+                        height: 20,
+                        child: RaisedButton(
+                          color: Theme
+                              .of(context)
+                              .buttonColor,
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/dietTracking')
+                                .then((value) => update());
+                            setState(() {});
+                          },
+                          child: Text(
+                            "test",
+                            style: TextStyle(
+                                color: Theme
+                                    .of(context)
+                                    .highlightColor),
+                          ),
+                        ),
                       ),
                     ],
                   ),
