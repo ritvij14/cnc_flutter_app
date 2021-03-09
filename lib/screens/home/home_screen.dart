@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             children: [
               Stack(children: [
+                DietSummaryWidget(),
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -105,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                DietSummaryWidget(),
                 // Padding(
                 //   padding: const EdgeInsets.all(0.0),
                 //   child: DietSummaryWidget(),
