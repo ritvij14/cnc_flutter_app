@@ -33,7 +33,8 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
 
   List<Widget> screens = <Widget>[
     HomeScreen(),
-    ArticlesScreen(),
+    DietTrackingScreen(),
+    // ArticlesScreen(),
     CalendarPage(),
     ProfileScreen(),
   ];
