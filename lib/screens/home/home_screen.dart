@@ -117,15 +117,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: MetricSummaryWidget(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: ActivitySummaryWidget(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SymptomSummaryWidget(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MetricSummaryWidget(),
               ),
               Container(
                 height: 50,
