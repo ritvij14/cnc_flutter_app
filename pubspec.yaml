@@ -84,6 +84,7 @@ flutter:
     - assets/icons/Phone.svg
     - assets/icons/Settings.svg
     - assets/icons/User Icon.svg
+    - assets/icons/Weight.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

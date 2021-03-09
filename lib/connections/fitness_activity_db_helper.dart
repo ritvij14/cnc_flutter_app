@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/db_helper.dart';
+import 'package:cnc_flutter_app/connections/db_helper_base.dart';
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:http/http.dart' as http;
 
-class ActivityDBHelper extends DBHelper {
-  var baseUrl = 'https://10.0.2.2:7777/';
+class ActivityDBHelper extends DBHelperBase {
+  // var baseUrl = 'https://10.0.2.2:7777/';
 
   Future<http.Response> getActivities() async {
     var requestUrl = baseUrl + 'api/fitnessActivity/all';
@@ -15,7 +16,7 @@ class ActivityDBHelper extends DBHelper {
   }
 
   Future<http.Response> saveNewActivity(
-      FitnessActivityModel fitnessActivityModel) async {
+      ActivityModel fitnessActivityModel) async {
     var requestUrl = baseUrl + 'api/fitnessActivity/add/';
     var uriResponse = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},

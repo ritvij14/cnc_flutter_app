@@ -1,11 +1,14 @@
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_calorie_widget.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/test_screen.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/activity_summary_widget.dart';
-import 'package:cnc_flutter_app/widgets/home_screen_widgets/diet_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/symptom_summary_widget.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/home_screen_widgets/metric_summary_widget.dart';
+import 'file:///C:/Workspace/Capstone/cnc_flutter_app/lib/widgets/diet_tracking_widgets/diet_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/summary_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,6 +16,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
   void rebuildAllChildren(BuildContext context) {
     void rebuild(Element el) {
       el.markNeedsBuild();
@@ -37,6 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Log Food',
               onTap: () {
                 showSearch(
+                    context: context,
+                    delegate: FoodSearch(DateTime.now().toString()));
+              }),
                         context: context,
                         delegate: FoodSearch(DateTime.now().toString()))
                     .then((value) => rebuildAllChildren(context));
@@ -57,6 +72,21 @@ class _HomeScreenState extends State<HomeScreen> {
           SpeedDialChild(
               child: Icon(Icons.question_answer),
               label: 'Log Questions',
+              onTap: () {
+                Navigator.pushNamed(context, '/inputActivity');
+              }),
+          SpeedDialChild(
+              child: Icon(MdiIcons.scale),
+              label: 'Log Metrics',
+              onTap: () {
+                Navigator.pushNamed(context, '/inputMetrics');
+              }),
+          SpeedDialChild(
+              child: Icon(MdiIcons.abTesting),
+              label: 'Test',
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TestScreen()));
+              }),
               onTap: () {
                 Navigator.pushNamed(context, '/questions');
               }),
@@ -82,15 +112,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: SymptomSummaryWidget(),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: RaisedButton(
-              //     child: Text('Goals'),
-              //     onPressed: () {
-              //       Navigator.pushNamed(context, '/goals');
-              //     },
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MetricSummaryWidget(),
+              ),
+              Container(
+                height: 50,
+              ),
             ],
           )),
     );
