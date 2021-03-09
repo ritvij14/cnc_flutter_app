@@ -856,7 +856,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         );
       },
     ).then((val) {
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/home');
     });
   }
 
@@ -914,7 +914,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         );
       },
     ).then((val) {
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/home');
     });
   }
 

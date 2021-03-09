@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
-import 'package:cnc_flutter_app/widgets/home_screen_widgets/diet_summary_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -146,7 +145,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(0),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,28 +218,28 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                       //       .then((value) => update());
                       //   setState(() {});
                       // },),
-                      ButtonTheme(
-                        minWidth: 35,
-                        height: 20,
-                        child: RaisedButton(
-                          color: Theme
-                              .of(context)
-                              .buttonColor,
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/dietTracking')
-                                .then((value) => update());
-                            setState(() {});
-                          },
-                          child: Text(
-                            "test",
-                            style: TextStyle(
-                                color: Theme
-                                    .of(context)
-                                    .highlightColor),
-                          ),
-                        ),
-                      ),
+                      // ButtonTheme(
+                      //   minWidth: 35,
+                      //   height: 20,
+                      //   child: RaisedButton(
+                      //     color: Theme
+                      //         .of(context)
+                      //         .buttonColor,
+                      //     padding: EdgeInsets.all(0),
+                      //     onPressed: () {
+                      //       Navigator.pushNamed(context, '/dietTracking')
+                      //           .then((value) => update());
+                      //       setState(() {});
+                      //     },
+                      //     child: Text(
+                      //       "test",
+                      //       style: TextStyle(
+                      //           color: Theme
+                      //               .of(context)
+                      //               .highlightColor),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   Padding(padding: EdgeInsets.all(2)),
@@ -404,28 +403,28 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                           // Text('toggle'),
                         ],
                       ),
-                      ButtonTheme(
-                        minWidth: 35,
-                        height: 20,
-                        child: RaisedButton(
-                          color: Theme
-                              .of(context)
-                              .buttonColor,
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/dietTracking')
-                                .then((value) => update());
-                            setState(() {});
-                          },
-                          child: Text(
-                            "test",
-                            style: TextStyle(
-                                color: Theme
-                                    .of(context)
-                                    .highlightColor),
-                          ),
-                        ),
-                      ),
+                      // ButtonTheme(
+                      //   minWidth: 35,
+                      //   height: 20,
+                      //   child: RaisedButton(
+                      //     color: Theme
+                      //         .of(context)
+                      //         .buttonColor,
+                      //     padding: EdgeInsets.all(0),
+                      //     onPressed: () {
+                      //       Navigator.pushNamed(context, '/dietTracking')
+                      //           .then((value) => update());
+                      //       setState(() {});
+                      //     },
+                      //     child: Text(
+                      //       "test",
+                      //       style: TextStyle(
+                      //           color: Theme
+                      //               .of(context)
+                      //               .highlightColor),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   Padding(padding: EdgeInsets.all(2)),
