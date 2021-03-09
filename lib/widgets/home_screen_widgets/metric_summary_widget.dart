@@ -217,11 +217,11 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           getTitles: (value) {
             switch (value.toInt()) {
               case 2:
-                return '1';
+                return '2/12';
               case 5:
-                return '23';
+                return '2/22';
               case 8:
-                return '3';
+                return '3/5';
             }
             return '';
           },
@@ -237,11 +237,11 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           getTitles: (value) {
             switch (value.toInt()) {
               case 1:
-                return '10k';
+                return '150';
               case 3:
-                return '30k';
+                return '175';
               case 5:
-                return '50k';
+                return '200';
             }
             return '';
           },
