@@ -12,7 +12,7 @@ class WeeklyGoals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WeeklyGoalsPage(title: 'Choose Weekly Goals'),
+      body: WeeklyGoalsPage(title: 'Chosen Weekly Goals'),
     );
   }
 }
@@ -39,104 +39,40 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
       ),
       body: FutureBuilder(
         builder: (context, projectSnap) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Check out Your Weekly Goals',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  color: Colors.blue[800],
-                  child: Text(
-                    weeklyGoalsModelList[0].goalDescription,
-                    // 'Incorporate 3 fruits into a fruit smoothie into your day (1 day)',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text(
-                    'Here are some combinations to try:\n'
-                    '-Starfruit and strawberries\n'
-                    '-Avocado and papaya\n'
-                    '-Cucumber, kale and pear\n'
-                    '-Mango, cherry and dragonfruit',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  color: Colors.blue[800],
-                  child: Text(
-                    'Prepare two different non-starchy vegetables for 2 meals (5 days)',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text(
-                    'Examples of non-starchy vegetables are: '
-                    '-Artichoke\n'
-                    '-Broccoli\n'
-                    '-Beans\n'
-                    '-Brussels Sprouts',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  color: Colors.blue[800],
-                  child: Text(
-                    'Make and eat a salad that you’ve never made before (2 days)',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text(
-                    'Try using vegetables such as:\n'
-                    '-Kale\n'
-                    '-Arugula\n'
-                    '-Cabbage\n',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+          return
+                ListView.builder(
+                  itemCount: weeklyGoalsModelList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(15.0),
+                          color: Colors.blue[800],
+                          child: Text(
+                            weeklyGoalsModelList[index].goalDescription,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text(
+                            weeklyGoalsModelList[index].helpInfo,
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+          },
         future: getGoals(),
       ),
     );
@@ -154,6 +90,11 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
           wGDecode[i]['goalDescription'],
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
+    }
+
+    //fix this later
+    for (int i = 0; i < (wGDecode.length/2); i++) {
+      weeklyGoalsModelList.removeAt(i*2);
     }
 
     print(weeklyGoalsModelList);

@@ -32,7 +32,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
 
   SlidableController slidableController;
   List<_GoalItem> items = List.generate(
-    2,
+    10,
         (i) => _GoalItem(
       i,
       _getTitle(i),
@@ -169,11 +169,14 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   }
 
   static String _getTitle(int index) {
-    if(index < 5) {
+    if(index < 3) {
       return 'Fruits';
     }
+    if(index > 4 && index < 8) {
+      return 'Grains';
+    }
     else {
-      return 'Vegetable';
+      return 'Vegetables';
     }
   }
 
