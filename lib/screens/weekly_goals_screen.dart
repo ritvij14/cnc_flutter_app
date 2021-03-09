@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
+import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:flutter/material.dart';
+
 
 void main() => runApp(WeeklyGoals());
 
@@ -14,8 +19,7 @@ class WeeklyGoals extends StatelessWidget {
 
 class WeeklyGoalsPage extends StatefulWidget {
   WeeklyGoalsPage({Key key, this.title}) : super(key: key);
-
-  final String title;
+    final String title;
 
   @override
   _WeeklyGoalsPageState createState() => _WeeklyGoalsPageState();
@@ -23,9 +27,12 @@ class WeeklyGoalsPage extends StatefulWidget {
 
 class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
   List<String> goals;
+  var db = new WeeklyDBHelper();
+
 
   @override
   Widget build(BuildContext context) {
+    getGoals();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -128,4 +135,15 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
       ),
     );
   }
+
+  getGoals() async{
+    var db = new WeeklyDBHelper();
+    var response = await db.getWeeklyGoals();
+    var wGDecode = json.decode(response.body);
+
+    print(wGDecode);
+
+    var wG = WeeklyGoalsModel.fromJson(response);
+  }
+
 }

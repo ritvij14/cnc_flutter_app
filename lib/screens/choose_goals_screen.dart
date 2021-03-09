@@ -1,9 +1,10 @@
+import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 // void main() => runApp(GoalCalendar());
 
-void main() => runApp(ChooseWeeklyGoals());
+//void main() => runApp(ChooseWeeklyGoals());
 
 class ChooseWeeklyGoals extends StatelessWidget {
   @override
@@ -25,11 +26,13 @@ class ChooseGoalsPage extends StatefulWidget {
 }
 
 class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
+  var db = new WeeklyDBHelper();
+
   List<String> goals;
 
   SlidableController slidableController;
   List<_GoalItem> items = List.generate(
-    10,
+    2,
         (i) => _GoalItem(
       i,
       _getTitle(i),
@@ -136,17 +139,32 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   }
 
   static Color _getAvatarColor(int index) {
-    switch (index % 4) {
-      case 0:
-        return Colors.blue;
-      case 1:
-        return Colors.deepPurple[300];
-      case 2:
-        return Colors.deepPurple;
-      case 3:
-        return Colors.pink[300];
-      default:
-        return null;
+    if(_getTitle(index) == "Fruits") {
+      return Colors.orange;
+    }
+    else if(_getTitle(index) == "Vegetables") {
+      return Colors.green;
+    }
+    else if(_getTitle(index) == "Grains") {
+      return Colors.brown;
+    }
+    else if(_getTitle(index) == "Protein") {
+      return Colors.red;
+    }
+    else if(_getTitle(index) == "Dairy") {
+      return Colors.yellow;
+    }
+    else if(_getTitle(index) == "Snacks") {
+      return Colors.purple;
+    }
+    else if(_getTitle(index) == "Beverages") {
+      return Colors.blue;
+    }
+    else if(_getTitle(index) == "Physical Activity") {
+      return Colors.grey;
+    }
+    else {
+      return Colors.black;
     }
   }
 
@@ -238,7 +256,6 @@ class VerticalListItem extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: item.color,
-            child: Text('${item.index+1}'),
             foregroundColor: Colors.white,
           ),
           title: Text(item.title),
