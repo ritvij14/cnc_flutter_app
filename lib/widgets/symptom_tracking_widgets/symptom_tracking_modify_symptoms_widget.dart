@@ -20,6 +20,7 @@ class SymptomTrackingModifyScreen extends StatefulWidget {
 class _SymptomTrackingModifyScreenState extends State<SymptomTrackingModifyScreen> {
   final db = SymptomDBHelper();
   TextEditingController dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
+  // var otherController = TextEditingController(text: widget.symptomModel.other);
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +136,8 @@ class _SymptomTrackingModifyScreenState extends State<SymptomTrackingModifyScree
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
+            child: TextFormField(
+              initialValue: widget.symptomModel.other,
                 maxLength: 256,
                 maxLengthEnforced: true,
                 onChanged: (value){
@@ -178,5 +180,9 @@ class _SymptomTrackingModifyScreenState extends State<SymptomTrackingModifyScree
         ],
       ),
     );
+  }
+
+  String getOtherText() {
+    return widget.symptomModel.other;
   }
 }

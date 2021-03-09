@@ -47,7 +47,9 @@ class _SymptomTrackingListTileState extends State<SymptomTrackingListTile> {
                   SymptomTrackingModifyScreen(widget.symptomModel)),
 
         ).then((value){
-          widget.symptomModel = value;
+          if (value != null) {
+            widget.symptomModel = value;
+          }
           refresh();
         });
       },

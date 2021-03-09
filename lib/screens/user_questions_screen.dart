@@ -23,8 +23,7 @@ class _UserQuestionsPage extends State<UserQuestionsPage> {
 
   _showDialog() async {
     await showDialog<String>(
-      context: context,
-      child: new AlertDialog(
+      builder: (context) => new AlertDialog(
         contentPadding: const EdgeInsets.all(16.0),
         content: new Row(
           children: <Widget>[
@@ -51,7 +50,7 @@ class _UserQuestionsPage extends State<UserQuestionsPage> {
                 Navigator.of(context, rootNavigator: true).pop();;
               })
         ],
-      ),
+      ), context: context,
     );
   }
 }
