@@ -15,5 +15,10 @@ class WeeklyGoalsModel {
     return WeeklyGoalsModel((json['type'] as String).capitalize(), (json['goal_description'] as String),
         (json['help_info'] as String));
   }
+
+  @override
+  String toString() {
+    return 'WeeklyGoalsModel{type: $type, goalDescription: $goalDescription, helpInfo: $helpInfo}';
+  }
 }
 final List<WeeklyGoalsModel> weeklyGoalsModelList = [];

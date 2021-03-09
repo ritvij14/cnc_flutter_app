@@ -14,44 +14,44 @@ class _UserQuestionsPage extends State<UserQuestionsPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: _showDialog,
+            // onPressed: _showDialog,
           ),
         ],
       ),
     );
   }
 
-  _showDialog() async {
-    await showDialog<String>(
-      context: context,
-      child: new AlertDialog(
-        contentPadding: const EdgeInsets.all(16.0),
-        content: new Row(
-          children: <Widget>[
-            new Expanded(
-              child: new TextField(
-                autofocus: true,
-                decoration: new InputDecoration(
-                  // labelText: 'Type your question here:',
-                    hintText: 'Type your question here.'
-                ),
-              ),
-            )
-          ],
-        ),
-        actions: <Widget>[
-          new FlatButton(
-              child: const Text('CANCEL'),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              }),
-          new FlatButton(
-              child: const Text('SAVE'),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();;
-              })
-        ],
-      ),
-    );
-  }
+  // _showDialog() async {
+  //   await showDialog<String>(
+  //     context: context,
+  //     child: new AlertDialog(
+  //       contentPadding: const EdgeInsets.all(16.0),
+  //       content: new Row(
+  //         children: <Widget>[
+  //           new Expanded(
+  //             child: new TextField(
+  //               autofocus: true,
+  //               decoration: new InputDecoration(
+  //                 // labelText: 'Type your question here:',
+  //                   hintText: 'Type your question here.'
+  //               ),
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //       actions: <Widget>[
+  //         new FlatButton(
+  //             child: const Text('CANCEL'),
+  //             onPressed: () {
+  //               Navigator.of(context, rootNavigator: true).pop();
+  //             }),
+  //         new FlatButton(
+  //             child: const Text('SAVE'),
+  //             onPressed: () {
+  //               Navigator.of(context, rootNavigator: true).pop();;
+  //             })
+  //       ],
+  //     ),
+  //   );
+  // }
 }
