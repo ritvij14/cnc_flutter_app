@@ -6,7 +6,7 @@ import 'activity_tracking_popup_modify_activity_widget.dart';
 class ActivityTrackingListTile extends StatefulWidget {
   ActivityModel activityModel;
 
-  ActivityTrackingListTile(ActivityModel activity) {
+  ActivityTrackingListTile(ActivityModel activityModel) {
     this.activityModel = activityModel;
   }
 

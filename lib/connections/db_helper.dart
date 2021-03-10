@@ -134,6 +134,8 @@ class DBHelper{
           'email': userModel.email,
           'password': userModel.password,
         }));
+    print("this is the response body");
+    print(uriResponse.body);
   }
 
 

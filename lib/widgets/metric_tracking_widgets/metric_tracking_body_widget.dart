@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/metric_db_helper.dart';
-import 'package:cnc_flutter_app/connections/symptom_db_helper.dart';
 import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:cnc_flutter_app/widgets/metric_tracking_widgets/metric_tracking_list_tile_widget.dart';
 import 'package:flutter/material.dart';

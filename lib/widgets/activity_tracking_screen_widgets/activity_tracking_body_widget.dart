@@ -1,20 +1,15 @@
 import 'dart:convert';
-
-import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
-
 import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
 import 'package:flutter/material.dart';
-
 import 'activity_tracking_list_tile_widget.dart';
-import 'activity_tracking_input_activity_widget.dart';
-import 'activity_tracking_popup_modify_activity_widget.dart';
+
 
 class ActivityTrackingBody extends StatefulWidget {
-  List<ActivityModel> fitnessActivityList = [];
+  List<ActivityModel> activityModelList = [];
 
   ActivityTrackingBody(List<ActivityModel> fitnessActivityList) {
-    this.fitnessActivityList = fitnessActivityList;
+    this.activityModelList = fitnessActivityList;
   }
 
   @override
@@ -30,26 +25,14 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
       body: FutureBuilder(
         builder: (context, projectSnap) {
           return ListView.builder(
-            itemCount: widget.fitnessActivityList.length,
+            itemCount: widget.activityModelList.length,
             itemBuilder: (context, index) {
-              return ActivityTrackingListTile(widget.fitnessActivityList[index]);
+              return ActivityTrackingListTile(widget.activityModelList[index]);
             },
           );
         },
         future: getActivities(),
-
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Theme.of(context).accentColor,
-      //   child: Icon(Icons.add),
-      //   onPressed: () {
-      //     showDialog(
-      //         context: context,
-      //         builder: (BuildContext context) {
-      //           return ActivityTrackingInputScreen();
-      //         }).then((val) => update());
-      //   },
-      // ),
     );
 
   }
@@ -57,7 +40,7 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
   List<ActivityTrackingListTile> buildFitnessTrackingListTileWidgets(
       List<ActivityModel> fitnessActivityModelList) {
     List<ActivityTrackingListTile> fitnessTrackingListTileList = [];
-    for (ActivityModel fitnessActivity in widget.fitnessActivityList) {
+    for (ActivityModel fitnessActivity in widget.activityModelList) {
       ActivityTrackingListTile fitnessTrackingListTile =
           new ActivityTrackingListTile(fitnessActivity);
       fitnessTrackingListTileList.add(fitnessTrackingListTile);
@@ -66,12 +49,12 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
   }
 
   getActivities() async {
-    widget.fitnessActivityList.clear();
+    widget.activityModelList.clear();
     var response = await db.getActivities();
     List<ActivityModel> fa = (json.decode(response.body) as List)
         .map((data) => ActivityModel.fromJson(data))
         .toList();
-    widget.fitnessActivityList = fa;
+    widget.activityModelList = fa;
   }
 
   void update() {
