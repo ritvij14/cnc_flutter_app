@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FitnessTrackingPopupModifyActivity extends StatefulWidget {
-  FitnessActivityModel fitnessActivity;
+  ActivityModel fitnessActivity;
 
-  FitnessTrackingPopupModifyActivity(FitnessActivityModel fitnessActivity) {
+  FitnessTrackingPopupModifyActivity(ActivityModel fitnessActivity) {
     this.fitnessActivity = fitnessActivity;
   }
 

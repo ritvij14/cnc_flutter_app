@@ -1,7 +1,6 @@
-
 import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 
-class FitnessActivityModel {
+class ActivityModel {
   String type;
   int minutes;
   int intensity;
@@ -9,7 +8,7 @@ class FitnessActivityModel {
   DateTime dateTime;
 
   //intensity can be a scale, 1-5
-  FitnessActivityModel(String type, int minutes, int intensity, DateTime dateTime) {
+  ActivityModel(String type, int minutes, int intensity, DateTime dateTime) {
     this.type = type;
     this.minutes = minutes;
     this.intensity = intensity;
@@ -17,7 +16,7 @@ class FitnessActivityModel {
     this.dateTime = dateTime;
   }
 
-  FitnessActivityModel.emptyConstructor() {
+  ActivityModel.emptyConstructor() {
     this.minutes = 0;
     this.dateTime = new DateTime.now();
   }
@@ -30,9 +29,9 @@ class FitnessActivityModel {
     return minutes * intensity;
   }
 
-  factory FitnessActivityModel.fromJson(dynamic json) {
-    return FitnessActivityModel((json['type'] as String).capitalize(), int.parse((json['minutes'] as String)),
+  factory ActivityModel.fromJson(dynamic json) {
+    return ActivityModel((json['type'] as String).capitalize(), int.parse((json['minutes'] as String)),
         int.parse(json['intensity'] as String), DateTime.parse(json['dateTime'] as String));
   }
 }
-final List<FitnessActivityModel> fitnessActivityModelList = [];
+final List<ActivityModel> fitnessActivityModelList = [];

@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 
-class SymptomTrackingInputScreen extends StatefulWidget {
-  SymptomModel symptomModel = new SymptomModel.emptyConstructor();
+
+class SymptomTrackingModifyScreen extends StatefulWidget {
+
+  SymptomModel symptomModel;
+
+  SymptomTrackingModifyScreen(SymptomModel symptomModel){
+    this.symptomModel = symptomModel;
+  }
 
   @override
-  _SymptomTrackingInputScreenState createState() =>
-      _SymptomTrackingInputScreenState();
+  _SymptomTrackingModifyScreenState createState() => _SymptomTrackingModifyScreenState();
 }
 
-class _SymptomTrackingInputScreenState
-    extends State<SymptomTrackingInputScreen> {
-
+class _SymptomTrackingModifyScreenState extends State<SymptomTrackingModifyScreen> {
   final db = SymptomDBHelper();
   TextEditingController dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
-
-  // var _dateController = new TextEditingController(text: DateTime.now().toString());
+  // var otherController = TextEditingController(text: widget.symptomModel.other);
 
   @override
   Widget build(BuildContext context) {
@@ -134,17 +136,18 @@ class _SymptomTrackingInputScreenState
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              maxLength: 256,
-              maxLengthEnforced: true,
-              onChanged: (value){
-                widget.symptomModel.other = value;
-              }
-              ,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Type any other symptoms here.'
-              )
+            child: TextFormField(
+              initialValue: widget.symptomModel.other,
+                maxLength: 256,
+                maxLengthEnforced: true,
+                onChanged: (value){
+                  widget.symptomModel.other = value;
+                }
+                ,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Type any other symptoms here.'
+                )
             ),
           ),
           Padding(
@@ -164,10 +167,10 @@ class _SymptomTrackingInputScreenState
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
-                    child: Text('Submit'),
+                    child: Text('Update'),
                     onPressed: () {
-                      db.saveNewSymptom(widget.symptomModel);
-                      Navigator.pop(context);
+                      db.updateExistingSymptom(widget.symptomModel);
+                      Navigator.pop(context, widget.symptomModel);
                     },
                   ),
                 ),
@@ -177,5 +180,9 @@ class _SymptomTrackingInputScreenState
         ],
       ),
     );
+  }
+
+  String getOtherText() {
+    return widget.symptomModel.other;
   }
 }

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
+import 'package:cnc_flutter_app/screens/daily_nutrition_breakdown_screen.dart';
 
 // import 'package:cnc_flutter_app/screens/food_screen.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fraction/fraction.dart';
-
 
 class FoodLog extends StatefulWidget {
   String selectedDate;
@@ -61,7 +61,7 @@ class _FoodLogState extends State<FoodLog> {
     } else {
       servingAsFraction = portion.toMixedFraction().toString();
     }
-    if(portion == 1) {
+    if (portion == 1) {
       servingAsFraction += ' serving';
     } else {
       servingAsFraction += ' servings';
@@ -206,6 +206,130 @@ class _FoodLogState extends State<FoodLog> {
     }
   }
 
+  showInfoDialog(BuildContext context, Food food, portion) {
+    // set up the buttons
+    Widget closeButton = FlatButton(
+      child: Text("Close"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text(food.description),
+      content: SingleChildScrollView(
+        child: Container(
+          width: 100,
+          child: ListBody(
+            children: <Widget>[
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Calories ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    (food.kcal * portion).toStringAsFixed(2),
+                    // style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Carbohydrates ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    (food.carbohydratesInGrams * portion).toStringAsFixed(2) +
+                        'g',
+                    // style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                color: Colors.grey.withOpacity(0.3),
+                child: ListTile(
+                  title: Text(
+                    'Protein ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    (food.proteinInGrams * portion).toStringAsFixed(2) +
+                        'g',
+                    // style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Ink(
+                child: ListTile(
+                  title: Text(
+                    'Fat ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  trailing: Text(
+                    (food.fatInGrams * portion).toStringAsFixed(2) +
+                        'g',
+                    // style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        closeButton,
+      ],
+    );
+
+    // AlertDialog alert = AlertDialog(
+    //   title: Text(food.description),
+    //   content: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Container(
+    //           width: 100,
+    //           // height: 80,
+    //           child: ListTile(
+    //             title: Text(
+    //               'Protein ',
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold,
+    //                   fontStyle: FontStyle.italic),
+    //             ),
+    //             trailing: Text(
+    //               (food.proteinInGrams * portion).toStringAsFixed(2) +
+    //                   'g',
+    //               style: TextStyle(fontWeight: FontWeight.bold),
+    //             ),
+    //           ),
+    //         ),
+    //     ],
+    //   ),
+    //   actions: [
+    //     closeButton,
+    //   ],
+    // );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -224,6 +348,55 @@ class _FoodLogState extends State<FoodLog> {
                     fontSize: 16,
                     fontFamily: "OpenSans"),
               ),
+              ButtonTheme(
+                height: 20,
+                child: OutlineButton(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).buttonColor,
+                      style: BorderStyle.solid,
+                      width: 2),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(
+                      new MaterialPageRoute(
+                          builder: (_) =>
+                              DailyNutritionBreakdown(foodLogEntries)),
+                    );
+                  },
+                  child: Text("Nutrient Breakdown",
+                      style: TextStyle(color: Theme.of(context).buttonColor)),
+                ),
+              ),
+              // FlatButton(
+              //   // textColor: Colors.white,
+              //   onPressed: () {
+              //     Navigator.of(context)
+              //         .push(
+              //       new MaterialPageRoute(
+              //           builder: (_) =>
+              //               DailyNutritionBreakdown(foodLogEntries)),
+              //     );
+              //   },
+              //   child: Text("Nutrient Breakdown"),
+              //   shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+              // ),
+              // InkWell(
+              //   onTap: () {
+              //     Navigator.of(context)
+              //         .push(
+              //       new MaterialPageRoute(
+              //           builder: (_) =>
+              //               DailyNutritionBreakdown(foodLogEntries)),
+              //     );
+              //   },
+              //   child: Text(
+              //     "Nutrient Breakdown",
+              //     style: TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 16,
+              //         fontFamily: "OpenSans"),
+              //   ),
+              // ),
               IconButton(
                   icon: Icon(Icons.add_circle),
                   onPressed: () {
@@ -244,141 +417,160 @@ class _FoodLogState extends State<FoodLog> {
               itemCount: foodLogEntries.length,
               itemBuilder: (context, index) {
                 return Card(
-                      color: Theme.of(context).primaryColor,
-                      child: InkWell(
-                        onTap: () {
-                          showAlertDialog(context, foodLogEntries[index].id,
-                              'update', foodLogEntries[index].portion);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
+                  color: Theme.of(context).primaryColor,
+                  child: InkWell(
+                    onTap: () {
+                      showInfoDialog(context, foodLogEntries[index].food,
+                          foodLogEntries[index].portion);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    foodLogEntries[index].food.description,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Theme.of(context).highlightColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "OpenSans"),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-
-                                        getPortionAsFraction(foodLogEntries[index].portion),
-                                        // foodLogEntries[index].portion.toString() +
-                                        //     " serving(s)",
-                                        // breakfast[index].serving + " " + breakfast[index].unit,
-                                        // "1.0 serving(s) ",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontFamily: "OpenSans",
-                                            fontSize: 12,
-                                            color:
-                                            Theme.of(context).highlightColor),
-                                      ),
-                                      Container(
-                                        width:
-                                        MediaQuery.of(context).size.width / 3,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              (foodLogEntries[index]
-                                                  .food
-                                                  .carbohydratesInGrams *
-                                                  foodLogEntries[index]
-                                                      .portion)
-                                                  .toStringAsFixed(2) +
-                                                  "C",
-                                              style: TextStyle(
-                                                  fontFamily: "OpenSans",
-                                                  fontSize: 12,
-                                                color: Theme.of(context).highlightColor,
-                                              ),
-                                            ),
-                                            Text(
-                                              (foodLogEntries[index]
-                                                  .food
-                                                  .proteinInGrams *
-                                                  foodLogEntries[index]
-                                                      .portion)
-                                                  .toStringAsFixed(2) +
-                                                  "P",
-                                              style: TextStyle(
-                                                  fontFamily: "OpenSans",
-                                                  fontSize: 12,
-                                                color: Theme.of(context).highlightColor,),
-
-                                            ),
-                                            Text(
-                                              (foodLogEntries[index]
-                                                  .food
-                                                  .fatInGrams *
-                                                  foodLogEntries[index]
-                                                      .portion)
-                                                  .toStringAsFixed(2) +
-                                                  "F",
-                                              style: TextStyle(
-                                                  fontFamily: "OpenSans",
-                                                  fontSize: 12,
-                                                color: Theme.of(context).highlightColor,),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                showAlertDialog(
-                                                    context,
-                                                    foodLogEntries[index].id,
-                                                    "delete",
-                                                    0);
-                                                // deleteEntry(foodLogEntries[index].id);
-                                              },
-                                              child: Icon(
-                                                Icons.delete,
-                                                size: 20,
-                                                color: Theme.of(context).highlightColor,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  // child: Text(
-                                  //   // breakfast[index].serving + " " + breakfast[index].unit,
-                                  //   "1.0 serving(s) ",
-                                  //   textAlign: TextAlign.left,
-                                  //   style: TextStyle(
-                                  //       fontFamily: "OpenSans", fontSize: 10),
-                                  // ),
-                                ),
+                              Text(
+                                foodLogEntries[index].food.description,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Theme.of(context).highlightColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "OpenSans"),
                               ),
                             ],
                           ),
-                        ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Container(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    getPortionAsFraction(
+                                        foodLogEntries[index].portion),
+                                    // foodLogEntries[index].portion.toString() +
+                                    //     " serving(s)",
+                                    // breakfast[index].serving + " " + breakfast[index].unit,
+                                    // "1.0 serving(s) ",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontFamily: "OpenSans",
+                                        fontSize: 12,
+                                        color:
+                                            Theme.of(context).highlightColor),
+                                  ),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        //       Text(
+                                        //         (foodLogEntries[index]
+                                        //             .food
+                                        //             .carbohydratesInGrams *
+                                        //             foodLogEntries[index]
+                                        //                 .portion)
+                                        //             .toStringAsFixed(2) +
+                                        //             "C",
+                                        //         style: TextStyle(
+                                        //             fontFamily: "OpenSans",
+                                        //             fontSize: 12,
+                                        //           color: Theme.of(context).highlightColor,
+                                        //         ),
+                                        //       ),
+                                        //       Text(
+                                        //         (foodLogEntries[index]
+                                        //             .food
+                                        //             .proteinInGrams *
+                                        //             foodLogEntries[index]
+                                        //                 .portion)
+                                        //             .toStringAsFixed(2) +
+                                        //             "P",
+                                        //         style: TextStyle(
+                                        //             fontFamily: "OpenSans",
+                                        //             fontSize: 12,
+                                        //           color: Theme.of(context).highlightColor,),
+                                        //
+                                        //       ),
+                                        //       Text(
+                                        //         (foodLogEntries[index]
+                                        //             .food
+                                        //             .fatInGrams *
+                                        //             foodLogEntries[index]
+                                        //                 .portion)
+                                        //             .toStringAsFixed(2) +
+                                        //             "F",
+                                        //         style: TextStyle(
+                                        //             fontFamily: "OpenSans",
+                                        //             fontSize: 12,
+                                        //           color: Theme.of(context).highlightColor,),
+                                        //       ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showAlertDialog(
+                                                context,
+                                                foodLogEntries[index].id,
+                                                'update',
+                                                foodLogEntries[index].portion);
+                                          },
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: 20,
+                                            color: Theme.of(context)
+                                                .highlightColor,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 2, right: 2),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showAlertDialog(
+                                                context,
+                                                foodLogEntries[index].id,
+                                                "delete",
+                                                0);
+                                            // deleteEntry(foodLogEntries[index].id);
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            size: 20,
+                                            color: Theme.of(context)
+                                                .highlightColor,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                              // child: Text(
+                              //   // breakfast[index].serving + " " + breakfast[index].unit,
+                              //   "1.0 serving(s) ",
+                              //   textAlign: TextAlign.left,
+                              //   style: TextStyle(
+                              //       fontFamily: "OpenSans", fontSize: 10),
+                              // ),
+                            ),
+                          ),
+                        ],
                       ),
-                      elevation: 0,
-                    );
-
-
+                    ),
+                  ),
+                  elevation: 0,
+                );
               },
             );
           },
           future: getFood(),
         ),
+
       ]),
     );
   }
