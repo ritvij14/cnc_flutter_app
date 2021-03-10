@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 
 class ActivityTrackingInputScreen extends StatefulWidget {
-  FitnessActivityModel fitnessActivity = new FitnessActivityModel.emptyConstructor();
+  ActivityModel fitnessActivity = new ActivityModel.emptyConstructor();
 
   @override
   _ActivityTrackingInputScreenState createState() =>

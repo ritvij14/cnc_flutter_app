@@ -9,7 +9,7 @@ import 'package:share/share.dart';
 import '../choose_goals_screen.dart';
 import '../weekly_goals_screen.dart';
 
-// void main() => runApp(GoalCalendar());
+void main() => runApp(GoalCalendar());
 
 class GoalCalendar extends StatelessWidget {
   @override
@@ -157,45 +157,50 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               calendarController: _controller,
             ),
+
+
+
+
             Container(
-              padding: EdgeInsets.all(15.0),
+              padding: EdgeInsets.only(left: 15, right: 15),
               color: Theme.of(context).primaryColor,
               alignment: Alignment.bottomLeft,
-              child: Text(
-                'Weekly Goals',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
 
-          Container(
-            alignment: Alignment.center,
-            child: ElevatedButton(
-              child: Text('Choose Weekly Goals'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>
-                    ChooseWeeklyGoals()),
-                );
-              },
-            ),
-          ),
-
-            Container(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                child: Text('Weekly Goal View'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>
-                        WeeklyGoals()),
-                  );
-                },
+              child: Column(
+                children: <Widget>[
+                  ExpansionTile(
+                    title: Text(
+                      "Weekly Goals",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    children: <Widget>[
+                      ElevatedButton(
+                        child: Text('Choose Weekly Goals'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                ChooseWeeklyGoals()),
+                          );
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text('Weekly Goal View'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                WeeklyGoals()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
 
@@ -205,27 +210,52 @@ class _CalendarPageState extends State<CalendarPage> {
                 ? _buildGetWeeklyCompleted()
                 : SizedBox(height: 0),
 
-            Container(
-              padding: EdgeInsets.all(15.0),
+            //Container(
+            //  padding: EdgeInsets.all(15.0),
+            //  color: Theme.of(context).primaryColor,
+            //  alignment: Alignment.bottomLeft,
+            //  child: Text(
+            //    'Personal Goals',
+            //    style: TextStyle(
+            //      fontWeight: FontWeight.bold,
+            //      fontSize: 18.0,
+            //      color: Colors.white,
+            //    ),
+            //  ),
+            //),
+
+            RaisedButton(
+              onPressed: _showAddDialog,
               color: Theme.of(context).primaryColor,
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                'Personal Goals',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0,
-                  color: Colors.white,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Personal Goals',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Icon(
+                      Icons.add,
+                      color: Colors.black54,
+                    )
+                  ],
                 ),
               ),
             ),
 
-            Container(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                child: Text('Add a Personal Goal'),
-                onPressed: _showAddDialog,
-              ),
-            ),
+            //Container(
+            //  alignment: Alignment.center,
+            //  child: ElevatedButton(
+            //    child: Text('Add a Personal Goal'),
+            //    onPressed: _showAddDialog,
+            //  ),
+            //),
 
             _events[_controller.selectedDay] != null
                 ? _buildListView()
