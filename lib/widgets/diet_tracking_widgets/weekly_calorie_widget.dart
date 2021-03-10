@@ -107,7 +107,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                 //       fontSize: 16),
                 // ),
                 Text(
-                  'Calorie totals past 7 days ',
+                  'Calorie totals last 7 days ',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -139,6 +139,8 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                 height: 150,
                 child: LineChart(
                   LineChartData(
+                    clipData: FlClipData.all(),
+                    maxY: 3000,
                     lineTouchData: LineTouchData(
                         getTouchedSpotIndicator:
                             (LineChartBarData barData, List<int> spotIndexes) {
