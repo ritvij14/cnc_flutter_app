@@ -232,7 +232,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.kcal * portion).toStringAsFixed(2),
+                    (food.kcal * portion).round().toString(),
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -247,7 +247,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.carbohydratesInGrams * portion).toStringAsFixed(2) +
+                    (food.carbohydratesInGrams * portion).round().toString() +
                         'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -263,7 +263,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.proteinInGrams * portion).toStringAsFixed(2) +
+                    (food.proteinInGrams * portion).round().toString() +
                         'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -278,7 +278,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.fatInGrams * portion).toStringAsFixed(2) +
+                    (food.fatInGrams * portion).round().toString() +
                         'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),

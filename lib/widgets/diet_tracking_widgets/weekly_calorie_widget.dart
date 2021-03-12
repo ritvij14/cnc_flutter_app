@@ -21,7 +21,6 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
   List<double> yValues = [0, 0, 0, 0, 0, 0, 0];
 
   getFood() async {
-
     var db = new DBHelper();
     DateTime selectedDate;
     for (int i = 6; i >= 0; i--) {
@@ -142,85 +141,88 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                     clipData: FlClipData.all(),
                     maxY: 3000,
                     lineTouchData: LineTouchData(
-                        getTouchedSpotIndicator:
-                            (LineChartBarData barData, List<int> spotIndexes) {
-                          return spotIndexes.map((spotIndex) {
-                            final FlSpot spot = barData.spots[spotIndex];
-                            // if (spot.x == 0 || spot.x == 6) {
-                            //   return null;
-                            // }
-                            return TouchedSpotIndicatorData(
-                              FlLine(color: Colors.blue, strokeWidth: 4),
-                              FlDotData(
-                                getDotPainter: (spot, percent, barData, index) {
+                      getTouchedSpotIndicator:
+                          (LineChartBarData barData, List<int> spotIndexes) {
+                        return spotIndexes.map((spotIndex) {
+                          final FlSpot spot = barData.spots[spotIndex];
+                          // if (spot.x == 0 || spot.x == 6) {
+                          //   return null;
+                          // }
+                          return TouchedSpotIndicatorData(
+                            FlLine(color: Colors.blue, strokeWidth: 4),
+                            FlDotData(
+                              getDotPainter: (spot, percent, barData, index) {
+                                return FlDotCirclePainter(
+                                    radius: 8,
+                                    color: Colors.white,
+                                    strokeWidth: 5,
+                                    strokeColor: Colors.deepOrange);
+                                if (index % 2 == 0) {
                                   return FlDotCirclePainter(
                                       radius: 8,
                                       color: Colors.white,
                                       strokeWidth: 5,
                                       strokeColor: Colors.deepOrange);
-                                  if (index % 2 == 0) {
-                                    return FlDotCirclePainter(
-                                        radius: 8,
-                                        color: Colors.white,
-                                        strokeWidth: 5,
-                                        strokeColor: Colors.deepOrange);
-                                  } else {
-                                    return FlDotSquarePainter(
-                                      size: 16,
-                                      color: Colors.white,
-                                      strokeWidth: 5,
-                                      strokeColor: Colors.deepOrange,
-                                    );
-                                  }
-                                },
-                              ),
-                            );
-                          }).toList();
-                        },
-                        touchTooltipData: LineTouchTooltipData(
-                            tooltipBgColor: Colors.blueAccent,
-                            fitInsideHorizontally: true,
-                            fitInsideVertically: true,
-                            getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
-                              return touchedBarSpots.map((barSpot) {
-                                final flSpot = barSpot;
-                                // if (flSpot.x == 0 || flSpot.x == 6) {
-                                //   return null;
-                                // }
+                                } else {
+                                  return FlDotSquarePainter(
+                                    size: 16,
+                                    color: Colors.white,
+                                    strokeWidth: 5,
+                                    strokeColor: Colors.deepOrange,
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        }).toList();
+                      },
+                      touchTooltipData: LineTouchTooltipData(
+                          tooltipBgColor: Colors.blueAccent,
+                          fitInsideHorizontally: true,
+                          fitInsideVertically: true,
+                          getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                            return touchedBarSpots.map((barSpot) {
+                              final flSpot = barSpot;
+                              // if (flSpot.x == 0 || flSpot.x == 6) {
+                              //   return null;
+                              // }
 
-                                return LineTooltipItem(
-                                  '${weekDays[flSpot.x.toInt()]} \n${flSpot.y} calories',
-                                  const TextStyle(color: Colors.white),
-                                );
-                              }).toList();
-                            }),
-                        // touchCallback: (LineTouchResponse lineTouch) {
-                        //   if (lineTouch.lineBarSpots.length == 1 &&
-                        //       lineTouch.touchInput is! FlLongPressEnd &&
-                        //       lineTouch.touchInput is! FlPanEnd) {
-                        //     final value = lineTouch.lineBarSpots[0].x;
-                        //
-                        //     // if (value == 0 || value == 6) {
-                        //       // setState(() {
-                        //       //   touchedValue = -1;
-                        //       // });
-                        //       // return null;
-                        //     // }
-                        //
-                        //     // setState(() {
-                        //     //   touchedValue = value;
-                        //     // });
-                        //   // } else {
-                        //     // setState(() {
-                        //     //   touchedValue = -1;
-                        //     // });
-                        //   }
-                        // }
-                        ),
+                              return LineTooltipItem(
+                                '${weekDays[flSpot.x.toInt()]} \n${flSpot.y.round()} calories',
+                                const TextStyle(color: Colors.white),
+                              );
+                            }).toList();
+                          }),
+                      // touchCallback: (LineTouchResponse lineTouch) {
+                      //   if (lineTouch.lineBarSpots.length == 1 &&
+                      //       lineTouch.touchInput is! FlLongPressEnd &&
+                      //       lineTouch.touchInput is! FlPanEnd) {
+                      //     final value = lineTouch.lineBarSpots[0].x;
+                      //
+                      //     // if (value == 0 || value == 6) {
+                      //       // setState(() {
+                      //       //   touchedValue = -1;
+                      //       // });
+                      //       // return null;
+                      //     // }
+                      //
+                      //     // setState(() {
+                      //     //   touchedValue = value;
+                      //     // });
+                      //   // } else {
+                      //     // setState(() {
+                      //     //   touchedValue = -1;
+                      //     // });
+                      //   }
+                      // }
+                    ),
                     extraLinesData: ExtraLinesData(horizontalLines: [
                       HorizontalLine(
-                        label: HorizontalLineLabel(show: true),
-
+                        label: HorizontalLineLabel(
+                            show: true,
+                            // style: TextStyle(),
+                            labelResolver: (line) =>
+                                '${dailyCalorieLimit.round()}'),
                         y: dailyCalorieLimit,
                         color: Colors.green.withOpacity(0.8),
                         strokeWidth: 3,
@@ -289,8 +291,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                             checkToShowDot: (spot, barData) {
                               return true;
                               return spot.x != 0 && spot.x != 6;
-                            }
-                            ),
+                            }),
                       ),
                     ],
                     minY: 0,
