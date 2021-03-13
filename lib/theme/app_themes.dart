@@ -5,51 +5,55 @@ import 'package:flutter/material.dart';
 
 class AppThemes {
   static final appThemeData = {
-  AppTheme.Default: ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.green[700],
-    cardColor: Colors.green[800],
-    accentColor: Colors.green[400],
-    highlightColor: Colors.white,
-    shadowColor: Colors.black,
-    buttonColor: Colors.green[700],
-  ),
-  AppTheme.DarkMode: ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: Colors.black,
-    cardColor: Colors.black,
-    accentColor: Colors.grey[900],
-    highlightColor: Colors.white,
-    shadowColor: Colors.black,
-    buttonColor: Colors.teal,
-  ),
-  AppTheme.PeriwinkleLight: ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.indigo[300],
-    cardColor: Colors.indigo[400],
-    accentColor: Colors.indigo[200],
-    highlightColor: Colors.white,
-    shadowColor: Colors.black,
-    buttonColor: Colors.indigo[300],
-  ),
-  AppTheme.PinkLight: ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.red[300],
-    cardColor: Colors.red[400],
-    accentColor: Colors.red[200],
-    highlightColor: Colors.white,
-    shadowColor: Colors.black,
-    buttonColor: Colors.red[300],
-  ),
-  AppTheme.TealLight: ThemeData(
+    AppTheme.Default: ThemeData(
       brightness: Brightness.light,
-      primaryColor: Colors.teal,
-      cardColor: Colors.teal[600],
-      accentColor: Colors.teal[300],
+      primaryColor: Colors.green[700],
+      cardColor: Colors.green[800],
+      accentColor: Colors.green[400],
       highlightColor: Colors.white,
       shadowColor: Colors.black,
-      buttonColor: Colors.teal),
-};
+      buttonColor: Colors.green[700],
+      dividerColor: Colors.transparent,
+    ),
+    AppTheme.DarkMode: ThemeData(
+      brightness: Brightness.dark,
+      primaryColor: Colors.black,
+      cardColor: Colors.black,
+      accentColor: Colors.grey[900],
+      highlightColor: Colors.white,
+      shadowColor: Colors.black,
+      buttonColor: Colors.teal,
+      dividerColor: Colors.transparent,
+    ),
+    AppTheme.PeriwinkleLight: ThemeData(
+      brightness: Brightness.light,
+      primaryColor: Colors.indigo[300],
+      cardColor: Colors.indigo[400],
+      accentColor: Colors.indigo[200],
+      highlightColor: Colors.white,
+      shadowColor: Colors.black,
+      buttonColor: Colors.indigo[300],
+      dividerColor: Colors.transparent,
+    ),
+    AppTheme.PinkLight: ThemeData(
+      brightness: Brightness.light,
+      primaryColor: Colors.red[300],
+      cardColor: Colors.red[400],
+      accentColor: Colors.red[200],
+      highlightColor: Colors.white,
+      shadowColor: Colors.black,
+      buttonColor: Colors.red[300],
+      dividerColor: Colors.transparent,
+    ),
+    AppTheme.TealLight: ThemeData(
+        brightness: Brightness.light,
+        primaryColor: Colors.teal,
+        cardColor: Colors.teal[600],
+        accentColor: Colors.teal[300],
+        highlightColor: Colors.white,
+        shadowColor: Colors.black,
+        buttonColor: Colors.teal),
+  };
 }
 
 enum AppTheme {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/db_helper_base.dart';
-import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
+import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:http/http.dart' as http;
 
 class ActivityDBHelper extends DBHelperBase {

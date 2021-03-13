@@ -22,6 +22,7 @@ class SymptomDBHelper extends DBHelper {
           'other': symptomModel.other,
           'dateTime': symptomModel.dateTime.toIso8601String(),
         }));
+    return uriResponse;
   }
 
   Future<http.Response> getSymptoms() async {

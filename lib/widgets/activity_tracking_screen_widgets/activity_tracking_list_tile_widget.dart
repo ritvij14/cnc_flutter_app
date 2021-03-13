@@ -1,4 +1,4 @@
-import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
+import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'activity_tracking_popup_modify_activity_widget.dart';

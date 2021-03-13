@@ -1,5 +1,5 @@
 import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
-import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
+import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';

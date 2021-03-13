@@ -1,10 +1,6 @@
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/diet_summary_widget.dart';
-import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_calorie_widget.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
-import 'package:cnc_flutter_app/widgets/home_screen_widgets/activity_summary_widget.dart';
-import 'package:cnc_flutter_app/widgets/home_screen_widgets/metric_summary_widget.dart';
-import 'package:cnc_flutter_app/widgets/home_screen_widgets/symptom_summary_widget.dart';
-import 'package:cnc_flutter_app/widgets/summary_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -30,8 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () {
+              Navigator.pushNamed(context, '/profile');
+            },
+          )
+        ],
       ),
       floatingActionButton: SpeedDial(
+
         icon: Icons.add,
         backgroundColor: Theme.of(context).accentColor,
         children: [
@@ -82,54 +87,90 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: ListView(
             children: [
-              Stack(children: [
-                DietSummaryWidget(),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: ButtonTheme(
-                    minWidth: 70,
-                    height: 20,
-                    child: RaisedButton(
-                      color: Theme.of(context).buttonColor,
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/dietTracking')
-                            .then((value) => rebuildAllChildren(context));
-                        setState(() {});
-                      },
-                      child: Text(
-                        "Food Log",
-                        style:
-                            TextStyle(color: Theme.of(context).highlightColor),
-                      ),
-                    ),
+              DietSummaryWidget(),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: ExpansionTile(
+                    title: Text('Daily Diet Summary'),
+                    subtitle: Text('4 items totaling 1000 calories.'),
+                    children: <Widget>[
+                      Text('Food 1'),
+                      Text('Food 2'),
+                      Text('Food 3'),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/dietTracking');
+                          },
+                          child: Text("Full Summary")),
+                    ],
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.all(0.0),
-                //   child: DietSummaryWidget(),
-                // ),
-              ]),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: WeeklyCalorieWidget(),
+              ),
+              Card(
+                child: ExpansionTile(
+                  title: Text('Daily Activity Summary'),
+                  subtitle: Text('2 activities totaling 125 mets.'),
+                  children: <Widget>[
+                    Text('Activity 1'),
+                    Text('Activity 2'),
+                    Text('Activity 3'),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/fitnessTracking');
+                        },
+                        child: Text("Full Summary")),
+                  ],
+                ),
+              ),
+              Card(
+                child: ExpansionTile(
+                  title: Text('Daily Weight Summary'),
+                  subtitle: Text('No weight added today!'),
+                  children: <Widget>[
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/metricTracking');
+                        },
+                        child: Text("Full Summary")),
+                  ],
+                ),
+              ),
+              Card(
+                child: ExpansionTile(
+                  title: Text('Daily Symptom Summary'),
+                  subtitle: Text('No symptoms added today!'),
+                  children: <Widget>[
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/symptomTracking');
+                        },
+                        child: Text("Full Summary")),
+                  ],
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MetricSummaryWidget(),
+                padding: EdgeInsets.fromLTRB(0,60, 0, 0),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ActivitySummaryWidget(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SymptomSummaryWidget(),
-              ),
-              Container(
-                height: 50,
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: WeeklyCalorieWidget(),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: MetricSummaryWidget(),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: ActivitySummaryWidget(),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: SymptomSummaryWidget(),
+              // ),
+              // Container(
+              //   height: 50,
+              // ),
             ],
           )),
     );
