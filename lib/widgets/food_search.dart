@@ -64,7 +64,6 @@ class FoodSearch extends SearchDelegate<String> {
     var db = new DBHelper();
     var response = await db.getUserFrequentFoods(1);
     var data = json.decode(response.body);
-    print(data);
     for (int i = 0; i < data.length; i++) {
       Food food = new Food();
       food.id = data[i]['id'];

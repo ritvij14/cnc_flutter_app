@@ -6,6 +6,7 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/screens/daily_nutrition_breakdown_screen.dart';
+import 'package:cnc_flutter_app/screens/edit_food_entry_screen.dart';
 
 // import 'package:cnc_flutter_app/screens/food_screen.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
@@ -84,12 +85,11 @@ class _FoodLogState extends State<FoodLog> {
       foodLogEntry.entryTime = data[i]['entryTime'];
       foodLogEntry.date = data[i]['date'];
       foodLogEntry.portion = data[i]['portion'];
-      // print(data[i]);
-      // print(data[i]['entryTime']);
       Food food = new Food();
       String description = data[i]['food']['description'].toString();
       description = description.replaceAll('"', "");
       food.description = description;
+
       food.kcal = data[i]['food']['kcal'];
       food.proteinInGrams = data[i]['food']['proteinInGrams'];
       food.carbohydratesInGrams = data[i]['food']['carbohydratesInGrams'];
@@ -510,13 +510,22 @@ class _FoodLogState extends State<FoodLog> {
                                         //           color: Theme.of(context).highlightColor,),
                                         //       ),
                                         GestureDetector(
+
                                           onTap: () {
-                                            showAlertDialog(
-                                                context,
-                                                foodLogEntries[index].id,
-                                                'update',
-                                                foodLogEntries[index].portion);
+                                            Navigator.of(context)
+                                                .push(
+                                              new MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      EditFoodLogEntryScreen(foodLogEntries[index].food, foodLogEntries[index].date, foodLogEntries[index].entryTime, foodLogEntries[index].portion, foodLogEntries[index].id)),
+                                            ).then((value) => update(context));
                                           },
+                                          // onTap: () {
+                                          //   showAlertDialog(
+                                          //       context,
+                                          //       foodLogEntries[index].id,
+                                          //       'update',
+                                          //       foodLogEntries[index].portion);
+                                          // },
                                           child: Icon(
                                             Icons.edit,
                                             size: 20,

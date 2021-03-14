@@ -8,20 +8,27 @@ import 'package:flutter/services.dart';
 import 'package:fraction/fraction.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 
-class FoodPage extends StatefulWidget {
+class EditFoodLogEntryScreen extends StatefulWidget {
   Food selection;
   String selectedDate;
+  String entryTime;
+  double portion;
+  num id;
 
-  FoodPage(Food selection, String selectedDate) {
+  EditFoodLogEntryScreen(Food selection, String selectedDate, String entryTime, double portion, num id) {
     this.selection = selection;
+
     this.selectedDate = selectedDate;
+    this.entryTime = entryTime;
+    this.portion = portion;
+    this.id = id;
   }
 
   @override
-  FoodProfile createState() => FoodProfile(selection, selectedDate);
+  _EditFoodLogEntry createState() => _EditFoodLogEntry(selection, selectedDate, entryTime, portion, id);
 }
 
-class FoodProfile extends State<FoodPage> {
+class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
   Food currentFood;
   String selectedDate;
 
@@ -29,11 +36,13 @@ class FoodProfile extends State<FoodPage> {
   bool showCarbs = false;
   bool showFraction = true;
   bool switched = false;
+  String entryTimeAsString;
+  double portion;
+  num id;
 
   DateTime entryTime = DateTime.now();
 
   // DateTime entryTime = new DateTime(1, 1, 1, 13, 29);
-  double portion = 1;
   double actualPortion = 1;
   String servingAsFraction = '1';
   String actualServingAsFraction;
@@ -47,9 +56,14 @@ class FoodProfile extends State<FoodPage> {
 
   var dropdownOptions = new Map();
 
-  FoodProfile(Food selection, String selectedDate) {
+  _EditFoodLogEntry(Food selection, String selectedDate, String entryTimeAsString, double portion, num id) {
     currentFood = selection;
     this.selectedDate = selectedDate;
+    this.entryTimeAsString = entryTimeAsString;
+    this.portion = portion;
+    this.id = id;
+
+    entryTime = DateTime.parse(entryTimeAsString);
 
     if (portion <= 1 || portion % 1 == 0) {
       servingAsFraction = portion.toFraction().toString();
@@ -274,14 +288,15 @@ class FoodProfile extends State<FoodPage> {
         }).showModal(this.context); //_scaffoldKey.currentState);
   }
 
-  saveNewEntry() async {
+  updateEntry() async {
     var db = new DBHelper();
     var time = entryTime.toString().substring(0, 19);
+    print(entryTime);
     time = time.split(" ")[1];
     var dateTime = selectedDate + " " + time;
     print(dateTime);
-    var response = await db.saveNewFoodLogEntry(
-        dateTime, selectedDate, 1, currentFood.id, portion);
+    var response = await db.updateFoodLogEntry(this.id,
+        entryTime.toString(), portion);
   }
 
   _pickTime() async {
@@ -321,7 +336,6 @@ class FoodProfile extends State<FoodPage> {
         dateCtl.text = hour + ':' + minute + ' ' + tod;
         entryTime = new DateTime(
             entryTime.year, entryTime.month, entryTime.day, t.hour, t.minute);
-        print('Time of Day in food = ' + t.toString());
       });
   }
 
@@ -345,6 +359,9 @@ class FoodProfile extends State<FoodPage> {
       }
       portionCtl.text = actualServingAsFraction;
     }
+
+
+
     if (currentFood.commonPortionSizeAmount > 1) {
       var x = currentFood.commonPortionSizeAmount.toMixedFraction();
       x.reduce();
@@ -355,9 +372,10 @@ class FoodProfile extends State<FoodPage> {
       servingSizeAsFraction = x.toString();
     }
 
+
     return Scaffold(
         appBar: AppBar(
-          title: Text('Log new food'),
+          title: Text('Update Entry'),
         ),
         body: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -378,18 +396,6 @@ class FoodProfile extends State<FoodPage> {
                 ],
               ),
             ),
-
-            // Expanded(
-            //   child: Text(currentFood.description, style: TextStyle(
-            //       fontWeight: FontWeight.bold, fontSize: 30),),
-              // child: Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     Text(currentFood.description, style: TextStyle(
-              //         fontWeight: FontWeight.bold, fontSize: 30),),
-              //   ],
-              // ),
-            // ),
 
             Row(
               children: <Widget>[
@@ -580,17 +586,7 @@ class FoodProfile extends State<FoodPage> {
                                     ),
                                   ],
                                 )
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                //
-                                //   children: [Text("test 2"),
-                                //     Text("test 2"),
-                                //
-                                //   ],
-                                // ),
-                                // Text("test 2"),
-                                // Text("test 2"),
-                                // Text("test 2"),
+
 
                               ],
                             ),
@@ -604,252 +600,6 @@ class FoodProfile extends State<FoodPage> {
               ],
             ),
 
-            // Ink(
-            //   child: ListTile(
-            //     onTap: () {
-            //       showFat = !showFat;
-            //       setState(() {});
-            //     },
-            //     title: Text(
-            //       'Fat ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     subtitle: Text(
-            //       'Tap to hide additional information ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Wrap(
-            //       spacing: 12, // space between two icons
-            //       children: <Widget>[
-            //         Text(
-            //           (currentFood.fatInGrams * portion).round().toString() +
-            //               'g',
-            //           style: TextStyle(fontWeight: FontWeight.bold),
-            //         ), // icon-1
-            //         Icon(Icons.arrow_drop_down_circle), // icon-2
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // if (showFat) ...[
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Saturated fatty acids  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.saturatedFattyAcidsInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Polyunsaturated fatty acids  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.polyunsaturatedFattyAcidsInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Monounsaturated fatty acids  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.monounsaturatedFattyAcidsInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            // ],
-            // Ink(
-            //   child: ListTile(
-            //     onTap: () {
-            //       showCarbs = !showCarbs;
-            //       setState(() {});
-            //     },
-            //     title: Text(
-            //       'Carbohydrates ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     subtitle: Text(
-            //       'Tap to hide additional information ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Wrap(
-            //       spacing: 12, // space between two icons
-            //       children: <Widget>[
-            //         Text(
-            //           (currentFood.carbohydratesInGrams * portion)
-            //                   .round()
-            //                   .toString() +
-            //               'g',
-            //           style: TextStyle(fontWeight: FontWeight.bold),
-            //         ), // icon-1
-            //         Icon(Icons.arrow_drop_down_circle), // icon-2
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // if (showCarbs) ...[
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Insoluble Fiber  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.insolubleFiberInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Soluble Fiber  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.solubleFiberInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Sugars  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.sugarInGrams * portion).round().toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            // ],
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Protein ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.proteinInGrams * portion).round().toString() +
-            //           'g',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Alcohol ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.alcoholInGrams * portion).round().toString() +
-            //           'g',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Calcium ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.calciumInMilligrams * portion)
-            //               .round()
-            //               .toString() +
-            //           'mg',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Sodium ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.sodiumInMilligrams * portion)
-            //               .round()
-            //               .toString() +
-            //           'mg',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Vitamin D ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.vitaminDInMicrograms * portion)
-            //               .round()
-            //               .toString() +
-            //           'mcg',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
             if (showFraction) ...[
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -932,7 +682,6 @@ class FoodProfile extends State<FoodPage> {
                       ),
                       Text(
                         servingSizeAsFraction +
-                            // currentFood.commonPortionSizeAmount.round().toString() +
                             " " +
                             currentFood.commonPortionSizeUnit,
                         style: TextStyle(
@@ -1012,7 +761,6 @@ class FoodProfile extends State<FoodPage> {
                                   actualPortion = portion;
                                 }
 
-                                print(actualPortion);
                               } else {
                                 portion = 1;
                                 actualPortion = portion;
@@ -1076,28 +824,14 @@ class FoodProfile extends State<FoodPage> {
                   buttonColor: Theme.of(context).primaryColor,
                   child: RaisedButton(
                     // padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Text('Save entry'),
+                    child: Text('Update Entry'),
                     onPressed: () {
-                      saveNewEntry();
+                      updateEntry();
                       Navigator.pop(context, null);
                     },
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.all(15.0),
-                //   child: ButtonTheme(
-                //     minWidth: double.infinity,
-                //     buttonColor: Theme.of(context).primaryColor,
-                //     child: RaisedButton(
-                //       // padding: EdgeInsets.symmetric(vertical: 20),
-                //       child: Text('Save entry'),
-                //       onPressed: () {
-                //         saveNewEntry();
-                //         Navigator.pop(context, null);
-                //       },
-                //     ),
-                //   ),
-                // ),
+
               ],
             ),
           ]),

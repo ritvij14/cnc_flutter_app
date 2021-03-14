@@ -95,6 +95,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
           mainAxisSize: MainAxisSize.min,
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 50)),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
@@ -329,28 +330,28 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                     titlesData: FlTitlesData(
                       show: true,
                       leftTitles: SideTitles(
-                        showTitles: false,
+                        showTitles: true,
                         reservedSize: 30,
-                        getTitles: (value) {
-                          switch (value.toInt()) {
-                            case 0:
-                              return '';
-                            case 1:
-                              return '1k calories';
-                            case 2:
-                              return '2k calories';
-                            case 3:
-                              return '3k calories';
-                          }
-
-                          return '';
-                        },
+                        // getTitles: (value) {
+                        //   switch (value.toInt()) {
+                        //     case 0:
+                        //       return '';
+                        //     case 1:
+                        //       return '1k calories';
+                        //     case 2:
+                        //       return '2k calories';
+                        //     case 3:
+                        //       return '3k calories';
+                        //   }
+                        //
+                        //   return '';
+                        // },
                         getTextStyles: (value) =>
                             const TextStyle(color: Colors.black, fontSize: 10),
                       ),
                       bottomTitles: SideTitles(
                         margin: 12,
-                        rotateAngle: 45,
+                        rotateAngle: 70,
                         showTitles: true,
                         getTitles: (value) {
                           return weekDays[value.toInt()];

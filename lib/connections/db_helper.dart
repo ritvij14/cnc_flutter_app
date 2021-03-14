@@ -180,6 +180,8 @@ class DBHelper{
         }));
   }
 
+
+
   Future<http.Response> updateFoodLogEntry(id, entryTime, portion) async {
     var requestUrl = baseUrl + 'api/users/foodlog/update/';
     var uriResponse = await http.post(requestUrl,
