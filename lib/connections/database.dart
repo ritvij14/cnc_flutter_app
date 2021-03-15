@@ -60,14 +60,22 @@ class DBProvider {
         ]);
     print(id);
     print(newUserQuestion.question);
+    getAllUserQuestions(1);
     return raw;
   }
 
-  updateUserQuestion(UserQuestion newUserQuestion) async {
+  updateUserQuestion(UserQuestion updatedUserQuestion) async {
     final db = await database;
-    var res = await db.update("user_questions", newUserQuestion.toMap(),
-        where: "id = ?", whereArgs: [newUserQuestion.id]);
-    return res;
+    print("in update: " + updatedUserQuestion.id.toString());
+    print(updatedUserQuestion.question);
+    await db.rawUpdate('''
+    UPDATE user_questions 
+    SET question = ?, question_notes = ? 
+    WHERE id = ?
+    ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.id]);
+    // var res = await db.update("user_questions", updatedUserQuestion.toMap(),
+    //     where: "id = ?", whereArgs: [updatedUserQuestion.id]);
+    // return res;
   }
 
   // getUserQuestion(int user_id) async {
@@ -79,6 +87,7 @@ class DBProvider {
   Future<List> getAllUserQuestions(int user_id) async {
     final db = await database;
     var questions = await db.rawQuery(    'SELECT * FROM user_questions WHERE user_id = ?', [user_id]);
+   print("in get all users: "+ questions.length.toString());
     return questions;
   }
 

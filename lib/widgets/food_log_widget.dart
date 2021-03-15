@@ -130,13 +130,17 @@ class _FoodLogState extends State<FoodLog> {
   showAlertDialog(BuildContext context, foodLogEntryId, action, portion) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("CANCEL",
+        style: TextStyle(color: Colors.grey),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget deleteButton = FlatButton(
-      child: Text("Delete"),
+      child: Text("DELETE",
+          style: TextStyle(color: Colors.white)),
+      color: Colors.blue,
       onPressed: () {
         deleteEntry(foodLogEntryId);
         Navigator.of(context).pop();
@@ -144,7 +148,9 @@ class _FoodLogState extends State<FoodLog> {
     );
 
     Widget updateButton = FlatButton(
-      child: Text("Update"),
+      child: Text("UPDATE",
+          style: TextStyle(color: Colors.white)),
+      color: Colors.blue,
       onPressed: () {
         updateEntry(foodLogEntryId);
         Navigator.of(context).pop();
@@ -154,11 +160,11 @@ class _FoodLogState extends State<FoodLog> {
     if (action == "delete") {
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
-        title: Text("Delete Entry"),
-        content: Text("Are you sure?"),
+        title: Text("Are you sure you would like to delete this entry?"),
+        content: Text(foodLogEntryId + " with a portion size of " + portion),
         actions: [
-          cancelButton,
           deleteButton,
+          cancelButton,
         ],
       );
       // show the dialog
@@ -201,8 +207,8 @@ class _FoodLogState extends State<FoodLog> {
           ],
         ),
         actions: [
-          cancelButton,
           updateButton,
+          cancelButton,
         ],
       );
       // show the dialog
@@ -551,9 +557,9 @@ class _FoodLogState extends State<FoodLog> {
                                           onTap: () {
                                             showAlertDialog(
                                                 context,
-                                                foodLogEntries[index].id,
+                                                foodLogEntries[index].food.description,
                                                 "delete",
-                                                0);
+                                                foodLogEntries[index].portion);
                                             // deleteEntry(foodLogEntries[index].id);
                                           },
                                           child: Icon(
