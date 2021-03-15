@@ -412,25 +412,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                       children: <Widget>[
 
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    (currentFood.kcal * portion).round().toString(),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 60),
-                                  ),
-                                  Text(
-                                    'Calories',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                            ),
+
                             // Padding(padding: EdgeInsets.all(3)),
                             Column(
                               children: [
@@ -438,9 +422,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
 
                                   horizontalMargin: 0,
                                   headingRowHeight: 0,
-                                  dataRowHeight: 20,
+                                  dataRowHeight: 25,
                                   dividerThickness: 0,
-                                  columnSpacing: 80,
+                                  // columnSpacing: MediaQuery.of(context).size.width/ 3,
 
                                   columns: <DataColumn>[
                                     DataColumn(
@@ -458,6 +442,12 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
 
                                   ],
                                   rows: <DataRow>[
+                                    DataRow(
+                                      cells: <DataCell>[
+                                        DataCell(Text('Calories', style: TextStyle(fontWeight: FontWeight.bold))),
+                                        DataCell(Text((currentFood.kcal * portion).round().toString(), style: TextStyle(fontWeight: FontWeight.bold))),
+                                      ],
+                                    ),
                                     DataRow(
                                       cells: <DataCell>[
                                         DataCell(Text('Total Fat', style: TextStyle(fontWeight: FontWeight.bold),)),
@@ -510,7 +500,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                     ],
                                     DataRow(
                                       cells: <DataCell>[
-                                        DataCell(Text('Total Carbs', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                        DataCell(Text('Total Carbs                       ', style: TextStyle(fontWeight: FontWeight.bold),)),
                                         DataCell(Row(
                                           children: [
                                             Text(
@@ -592,6 +582,25 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                             ),
                           ],
                         ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left: 10),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         (currentFood.kcal * portion).round().toString() + 'calories',
+                        //         style: TextStyle(
+                        //             fontWeight: FontWeight.bold, fontSize: 25),
+                        //       ),
+                        //       Padding(padding: EdgeInsets.all(10)),
+                        //       // Text(
+                        //       //   'Calories',
+                        //       //   style: TextStyle(
+                        //       //       fontWeight: FontWeight.bold, fontSize: 20),
+                        //       // ),
+                        //     ],
+                        //   ),
+                        // ),
                         // Text("SOME HASH KEY HERE"),
                       ],
                     ),

@@ -55,6 +55,15 @@ class _FoodLogState extends State<FoodLog> {
     setState(() {});
   }
 
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
   getPortionAsFraction(double portion) {
     String servingAsFraction;
     if (portion <= 1 || portion % 1 == 0) {
@@ -333,21 +342,21 @@ class _FoodLogState extends State<FoodLog> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.symmetric(vertical: 0),
       // child: Padding:
       child: Column(children: [
         Container(
           padding: EdgeInsets.only(left: 5, right: 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "Meals",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: "OpenSans"),
-              ),
+              // Text(
+              //   "Meals",
+              //   style: TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 16,
+              //       fontFamily: "OpenSans"),
+              // ),
               ButtonTheme(
                 height: 20,
                 child: OutlineButton(
@@ -397,14 +406,14 @@ class _FoodLogState extends State<FoodLog> {
               //         fontFamily: "OpenSans"),
               //   ),
               // ),
-              IconButton(
-                  icon: Icon(Icons.add_circle),
-                  onPressed: () {
-                    showSearch(
-                            context: context,
-                            delegate: FoodSearch(selectedDate))
-                        .then((value) => update(context));
-                  }),
+              // IconButton(
+              //     icon: Icon(Icons.add_circle),
+              //     onPressed: () {
+              //       showSearch(
+              //               context: context,
+              //               delegate: FoodSearch(selectedDate))
+              //           .then((value) => update(context));
+              //     }),
             ],
           ),
         ),
@@ -518,6 +527,7 @@ class _FoodLogState extends State<FoodLog> {
                                                   builder: (_) =>
                                                       EditFoodLogEntryScreen(foodLogEntries[index].food, foodLogEntries[index].date, foodLogEntries[index].entryTime, foodLogEntries[index].portion, foodLogEntries[index].id)),
                                             ).then((value) => update(context));
+                                            // ).then((value) => rebuildAllChildren(context));
                                           },
                                           // onTap: () {
                                           //   showAlertDialog(

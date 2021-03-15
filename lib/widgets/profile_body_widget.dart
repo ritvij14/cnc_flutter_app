@@ -1,5 +1,6 @@
 import 'package:cnc_flutter_app/screens/details_screen_strepper.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
+import 'package:cnc_flutter_app/screens/profile/notification_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/profile/account_screen.dart';
@@ -37,7 +38,12 @@ class ProfileBody extends StatelessWidget {
           ProfileMenu(
             text: "Notifications",
             icon: "assets/icons/Bell.svg",
-            press: () {},
+            press: () {
+              // Navigate to the DetailsScreen
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NotificationSettings(),
+              ));
+            },
           ),
           ProfileMenu(
               text: "Settings",
