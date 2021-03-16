@@ -158,10 +158,10 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                           ),
                         ),
                         SizedBox(height: 20),
-                         Row(
-                             mainAxisSize: MainAxisSize.min,
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: <Widget>[
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            // mainAxisSize: MainAxisSize.min,
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
                               isUpdate
                                   ? FlatButton(
                                       child: const Text('UPDATE',

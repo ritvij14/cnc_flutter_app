@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fraction/fraction.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 
 class EditFoodLogEntryScreen extends StatefulWidget {
   Food selection;
@@ -33,6 +34,9 @@ class EditFoodLogEntryScreen extends StatefulWidget {
 class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
   Food currentFood;
   String selectedDate;
+  String title;
+  String subtitle = '';
+  double titleBottomPadding = 20;
 
   bool showFat = false;
   bool showCarbs = false;
@@ -112,6 +116,19 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
     } else {
       initialSecondSelection = 0;
     }
+
+    if (currentFood.description.contains(',')) {
+      title = currentFood.description.split(',')[0];
+      title = title.capitalizeFirstofEach;
+      int firstCommaIndex = currentFood.description.indexOf(',');
+      subtitle = currentFood.description
+          .substring(firstCommaIndex + 2, currentFood.description.length);
+      subtitle = subtitle.capitalizeFirstofEach;
+      titleBottomPadding = 0;
+    } else {
+      title = currentFood.description;
+      title = title.capitalizeFirstofEach;
+    }
   }
 
   var pickerData = '''
@@ -133,91 +150,6 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
         "1/4",
         "1/2",
         "3/4"
-    ]
-]
-    ''';
-
-  var data = '''
-[
-    [
-         "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12"
-    ],
-    [
-       "00",
-        "01",
-        "02",
-        "03",
-        "04",
-        "05",
-        "06",
-        "07",
-        "08",
-        "09",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "19",
-        "20",
-        "21",
-        "22",
-        "23",
-        "24",
-        "25",
-        "26",
-        "27",
-        "28",
-        "29",
-        "30",
-        "31",
-        "32",
-        "33",
-        "34",
-        "35",
-        "36",
-        "37",
-        "38",
-        "39",
-        "40",
-        "41",
-        "42",
-        "43",
-        "44",
-        "45",
-        "46",
-        "47",
-        "48",
-        "49",
-        "50",
-        "51",
-        "52",
-        "53",
-        "54",
-        "55",
-        "56",
-        "57",
-        "58",
-        "59"
-    ],
-    [
-        "AM",
-        "PM"
     ]
 ]
     ''';
@@ -297,18 +229,18 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
     time = time.split(" ")[1];
     var dateTime = selectedDate + " " + time;
     var response =
-    await db.updateFoodLogEntry(this.id, entryTime.toString(), portion);
+        await db.updateFoodLogEntry(this.id, entryTime.toString(), portion);
   }
 
   _pickTime() async {
     TimeOfDay t = await showTimePicker(
         context: context,
         initialTime:
-        new TimeOfDay(hour: entryTime.hour, minute: entryTime.minute),
+            new TimeOfDay(hour: entryTime.hour, minute: entryTime.minute),
         initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Time of Meal'
-      // cancelText: 'testing'
-    );
+        // cancelText: 'testing'
+        );
 
     if (t != null)
       setState(() {
@@ -347,6 +279,46 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
     Icon(Icons.keyboard_arrow_down);
   }
 
+  void closePage() {
+    Navigator.of(context).pop();
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text(
+        "CANCEL",
+        style: TextStyle(color: Colors.grey),
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget confirmButton = FlatButton(
+      child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
+      color: Colors.blue,
+      onPressed: () {
+        Navigator.of(context).pop();
+        closePage();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Are you sure you want to cancel this update?"),
+      actions: [
+        cancelButton,
+        confirmButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String servingSizeAsFraction;
@@ -373,10 +345,16 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Entry'),
+        leading: IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            showAlertDialog(context);
+          },
+        ),
+        title: Text('Edit Entry'),
       ),
       body: Container(
-          height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height,
         child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -384,247 +362,302 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
               //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
 
               Padding(
-                padding: const EdgeInsets.only(top: 15, bottom: 20),
-                child: Text(currentFood.description,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                padding: EdgeInsets.only(
+                    top: 15, bottom: titleBottomPadding, left: 10, right: 10),
+                child: Text(
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  textAlign: TextAlign.center,
+                ),
               ),
+
+              if (subtitle != '') ...[
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 0, bottom: 20, left: 10, right: 10),
+                  child: Text(
+                    subtitle,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
               Expanded(
-                child:
-                    DataTable(
-                      horizontalMargin: 0,
-                      headingRowHeight: 0,
-                      dataRowHeight: 25,
-                      dividerThickness: 0,
-                      dataTextStyle: TextStyle(fontSize: 20, color: Colors.black),
-                      // columnSpacing: MediaQuery.of(context).size.width/ 3,
+                child: Container(
+                  height: 200,
+                  child: ListView(
+                    children: [
+                      Theme(
+                        data: Theme.of(context)
+                            .copyWith(dividerColor: Colors.grey),
+                        child: DataTable(
+                          horizontalMargin:
+                              MediaQuery.of(context).size.width / 12,
+                          headingRowHeight: 0,
+                          dataRowHeight: 30,
+                          dividerThickness: 0,
+                          dataTextStyle:
+                              TextStyle(fontSize: 20, color: Colors.black),
+                          // columnSpacing: MediaQuery.of(context).size.width/ 3,
 
-                      columns: <DataColumn>[
-                        DataColumn(
-                          label: Text(
-                            '',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            '',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                      ],
-                      rows: <DataRow>[
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text('Calories',
-                                style: TextStyle(fontWeight: FontWeight.bold))),
-                            DataCell(Text((currentFood.kcal * portion).round().toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold))),
-                          ],
-                        ),
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(
-                              'Total Fat',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                            DataCell(
-                              Row(
-                                children: [
-                                  Text(
-                                    (currentFood.fatInGrams * portion).round().toString() +
-                                        'g',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  if (showFat) ...[
-                                    GestureDetector(
-                                        onTap: () {
-                                          showFat = !showFat;
-                                          setState(() {});
-                                        },
-                                        child: Icon(Icons.keyboard_arrow_up))
-                                  ],
-                                  if (!showFat) ...[
-                                    GestureDetector(
-                                        onTap: () {
-                                          showFat = !showFat;
-                                          setState(() {});
-                                        },
-                                        child: Icon(Icons.keyboard_arrow_down))
-                                  ],
-                                ],
+                          columns: <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                '',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                '',
+                                style: TextStyle(fontStyle: FontStyle.italic),
                               ),
                             ),
                           ],
-                        ),
-                        if (showFat) ...[
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('  Saturated Fats')),
-                              DataCell(Text(
-                                  (currentFood.saturatedFattyAcidsInGrams * portion)
-                                      .round()
-                                      .toString() +
-                                      'g')),
-                            ],
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('  Polyunsaturated Fats')),
-                              DataCell(Text(
-                                  (currentFood.polyunsaturatedFattyAcidsInGrams * portion)
-                                      .round()
-                                      .toString() +
-                                      'g')),
-                            ],
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('  Monounsaturated Fats')),
-                              DataCell(Text(
-                                  (currentFood.monounsaturatedFattyAcidsInGrams * portion)
-                                      .round()
-                                      .toString() +
-                                      'g')),
-                            ],
-                          ),
-                        ],
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(
-                              'Total Carbs                       ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                            DataCell(
-                              Row(
-                                children: [
-                                  Text(
-                                    (currentFood.fatInGrams * portion).round().toString() +
-                                        'g',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                          rows: <DataRow>[
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text('Calories',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
+                                DataCell(Text(
+                                    (currentFood.kcal * portion)
+                                        .round()
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
+                              ],
+                            ),
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                  'Total Fat',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                DataCell(
+                                  Row(
+                                    children: [
+                                      Text(
+                                        (currentFood.fatInGrams * portion)
+                                                .round()
+                                                .toString() +
+                                            'g',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      if (showFat) ...[
+                                        GestureDetector(
+                                            onTap: () {
+                                              showFat = !showFat;
+                                              setState(() {});
+                                            },
+                                            child:
+                                                Icon(Icons.keyboard_arrow_up))
+                                      ],
+                                      if (!showFat) ...[
+                                        GestureDetector(
+                                            onTap: () {
+                                              showFat = !showFat;
+                                              setState(() {});
+                                            },
+                                            child:
+                                                Icon(Icons.keyboard_arrow_down))
+                                      ],
+                                    ],
                                   ),
-                                  if (showCarbs) ...[
-                                    GestureDetector(
-                                        onTap: () {
-                                          showCarbs = !showCarbs;
-                                          setState(() {});
-                                        },
-                                        child: Icon(Icons.keyboard_arrow_up))
-                                  ],
-                                  if (!showCarbs) ...[
-                                    GestureDetector(
-                                        onTap: () {
-                                          showCarbs = !showCarbs;
-                                          setState(() {});
-                                        },
-                                        child: Icon(Icons.keyboard_arrow_down))
-                                  ],
+                                ),
+                              ],
+                            ),
+                            if (showFat) ...[
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text('  Saturated Fats')),
+                                  DataCell(Text(
+                                      (currentFood.saturatedFattyAcidsInGrams *
+                                                  portion)
+                                              .round()
+                                              .toString() +
+                                          'g')),
                                 ],
                               ),
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text('  Polyunsaturated Fats')),
+                                  DataCell(Text(
+                                      (currentFood.polyunsaturatedFattyAcidsInGrams *
+                                                  portion)
+                                              .round()
+                                              .toString() +
+                                          'g')),
+                                ],
+                              ),
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text('  Monounsaturated Fats')),
+                                  DataCell(Text(
+                                      (currentFood.monounsaturatedFattyAcidsInGrams *
+                                                  portion)
+                                              .round()
+                                              .toString() +
+                                          'g')),
+                                ],
+                              ),
+                            ],
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                  'Total Carbs                       ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                DataCell(
+                                  Row(
+                                    children: [
+                                      Text(
+                                        (currentFood.fatInGrams * portion)
+                                                .round()
+                                                .toString() +
+                                            'g',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      if (showCarbs) ...[
+                                        GestureDetector(
+                                            onTap: () {
+                                              showCarbs = !showCarbs;
+                                              setState(() {});
+                                            },
+                                            child:
+                                                Icon(Icons.keyboard_arrow_up))
+                                      ],
+                                      if (!showCarbs) ...[
+                                        GestureDetector(
+                                            onTap: () {
+                                              showCarbs = !showCarbs;
+                                              setState(() {});
+                                            },
+                                            child:
+                                                Icon(Icons.keyboard_arrow_down))
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (showCarbs) ...[
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text('  Insoluble Fiber')),
+                                  DataCell(Text(
+                                      (currentFood.insolubleFiberInGrams *
+                                                  portion)
+                                              .round()
+                                              .toString() +
+                                          'g')),
+                                ],
+                              ),
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text('  Soluble Fiber')),
+                                  DataCell(Text(
+                                      (currentFood.solubleFiberInGrams *
+                                                  portion)
+                                              .round()
+                                              .toString() +
+                                          'g')),
+                                ],
+                              ),
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text('  Sugars')),
+                                  DataCell(Text(
+                                      (currentFood.sugarInGrams * portion)
+                                              .round()
+                                              .toString() +
+                                          'g')),
+                                ],
+                              ),
+                            ],
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                  'Protein',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                DataCell(Text(
+                                  (currentFood.proteinInGrams * portion)
+                                          .round()
+                                          .toString() +
+                                      'g',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                              ],
+                            ),
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                  'Alcohol',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                DataCell(Text(
+                                  (currentFood.alcoholInGrams * portion)
+                                          .round()
+                                          .toString() +
+                                      'g',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                              ],
+                            ),
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                  'Calcium',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                DataCell(Text(
+                                  (currentFood.calciumInMilligrams * portion)
+                                          .round()
+                                          .toString() +
+                                      'mg',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                              ],
+                            ),
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                  'Sodium',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                DataCell(Text(
+                                  (currentFood.sodiumInMilligrams * portion)
+                                          .round()
+                                          .toString() +
+                                      'mg',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                              ],
+                            ),
+                            DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(
+                                  'Vitamin D',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                DataCell(Text(
+                                  (currentFood.vitaminDInMicrograms * portion)
+                                          .round()
+                                          .toString() +
+                                      'mcg',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                              ],
                             ),
                           ],
                         ),
-                        if (showCarbs) ...[
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('  Insoluble Fiber')),
-                              DataCell(Text((currentFood.insolubleFiberInGrams * portion)
-                                  .round()
-                                  .toString() +
-                                  'g')),
-                            ],
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('  Soluble Fiber')),
-                              DataCell(Text((currentFood.solubleFiberInGrams * portion)
-                                  .round()
-                                  .toString() +
-                                  'g')),
-                            ],
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('  Sugars')),
-                              DataCell(Text(
-                                  (currentFood.sugarInGrams * portion).round().toString() +
-                                      'g')),
-                            ],
-                          ),
-                        ],
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(
-                              'Protein',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                            DataCell(Text(
-                              (currentFood.proteinInGrams * portion).round().toString() +
-                                  'g',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                          ],
-                        ),
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(
-                              'Alcohol',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                            DataCell(Text(
-                              (currentFood.alcoholInGrams * portion).round().toString() +
-                                  'g',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                          ],
-                        ),
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(
-                              'Calcium',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                            DataCell(Text(
-                              (currentFood.calciumInMilligrams * portion)
-                                  .round()
-                                  .toString() +
-                                  'mg',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                          ],
-                        ),
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(
-                              'Sodium',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                            DataCell(Text(
-                              (currentFood.sodiumInMilligrams * portion)
-                                  .round()
-                                  .toString() +
-                                  'mg',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                          ],
-                        ),
-                        DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(
-                              'Vitamin D',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                            DataCell(Text(
-                              (currentFood.vitaminDInMicrograms * portion)
-                                  .round()
-                                  .toString() +
-                                  'mcg',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                          ],
-                        ),
-                      ],
-                    ),
-
+                      ),
+                    ],
+                  ),
+                ),
               ),
               Container(
                 color: Theme.of(context).canvasColor,
@@ -636,32 +669,32 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           children: <Widget>[
                             Expanded(
                                 child: RaisedButton(
-                                  onPressed: () {
-                                    showFraction = true;
-                                    switched = true;
-                                    setState(() {});
-                                  },
-                                  child: Text(
-                                    "Fractions",
-                                    style: TextStyle(
-                                        color: Theme.of(context).highlightColor),
-                                  ),
-                                )),
+                              onPressed: () {
+                                showFraction = true;
+                                switched = true;
+                                setState(() {});
+                              },
+                              child: Text(
+                                "Fractions",
+                                style: TextStyle(
+                                    color: Theme.of(context).highlightColor),
+                              ),
+                            )),
                             Expanded(
                                 child: OutlineButton(
-                                  borderSide: BorderSide(
-                                      color: Theme.of(context).buttonColor,
-                                      style: BorderStyle.solid,
-                                      width: 2),
-                                  onPressed: () {
-                                    showFraction = false;
-                                    switched = true;
-                                    setState(() {});
-                                  },
-                                  child: Text("Decimal",
-                                      style: TextStyle(
-                                          color: Theme.of(context).buttonColor)),
-                                )),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).buttonColor,
+                                  style: BorderStyle.solid,
+                                  width: 2),
+                              onPressed: () {
+                                showFraction = false;
+                                switched = true;
+                                setState(() {});
+                              },
+                              child: Text("Decimal",
+                                  style: TextStyle(
+                                      color: Theme.of(context).buttonColor)),
+                            )),
                           ]),
                     ],
                     if (!showFraction) ...[
@@ -670,32 +703,32 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           children: <Widget>[
                             Expanded(
                                 child: OutlineButton(
-                                  borderSide: BorderSide(
-                                      color: Theme.of(context).buttonColor,
-                                      style: BorderStyle.solid,
-                                      width: 2),
-                                  onPressed: () {
-                                    showFraction = true;
-                                    switched = true;
-                                    setState(() {});
-                                  },
-                                  child: Text("Fraction",
-                                      style: TextStyle(
-                                          color: Theme.of(context).buttonColor)),
-                                )),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).buttonColor,
+                                  style: BorderStyle.solid,
+                                  width: 2),
+                              onPressed: () {
+                                showFraction = true;
+                                switched = true;
+                                setState(() {});
+                              },
+                              child: Text("Fraction",
+                                  style: TextStyle(
+                                      color: Theme.of(context).buttonColor)),
+                            )),
                             Expanded(
                                 child: RaisedButton(
-                                  onPressed: () {
-                                    showFraction = false;
-                                    switched = true;
-                                    setState(() {});
-                                  },
-                                  child: Text(
-                                    "Decimal",
-                                    style: TextStyle(
-                                        color: Theme.of(context).highlightColor),
-                                  ),
-                                )),
+                              onPressed: () {
+                                showFraction = false;
+                                switched = true;
+                                setState(() {});
+                              },
+                              child: Text(
+                                "Decimal",
+                                style: TextStyle(
+                                    color: Theme.of(context).highlightColor),
+                              ),
+                            )),
                           ]),
                     ],
                     Container(
@@ -731,6 +764,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 GestureDetector(
                                   onTap: () => showPickerModal(context),
                                   child: Container(
+                                    color: Colors.grey[300],
                                     width: 175,
                                     child: TextFormField(
                                       enabled: false,
@@ -741,7 +775,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                       controller: portionCtl,
                                       decoration: InputDecoration(
                                         contentPadding:
-                                        EdgeInsets.only(bottom: 3, top: 5),
+                                            EdgeInsets.only(bottom: 3, top: 5),
                                         hintText: "# of servings",
                                         isDense: true,
                                       ),
@@ -752,6 +786,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                               ],
                               if (!showFraction) ...[
                                 Container(
+                                  color: Colors.grey[300],
                                   width: 175,
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
@@ -760,7 +795,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                       // height: 2.0,
                                       // color: Colors.black
                                     ),
-                                    initialValue: actualPortion.toStringAsFixed(2),
+                                    initialValue:
+                                        actualPortion.toStringAsFixed(2),
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(4),
                                       FilteringTextInputFormatter.deny(
@@ -768,12 +804,13 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'^\d+\.?\d{0,2}'))
                                     ],
-                                    keyboardType: TextInputType.numberWithOptions(
-                                        decimal: true),
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
                                     // keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       contentPadding:
-                                      EdgeInsets.only(bottom: 3, top: 5),
+                                          EdgeInsets.only(bottom: 3, top: 5),
                                       hintText: "# of servings",
                                       isDense: true,
                                       // border: InputBorder.none
@@ -783,9 +820,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                         if (double.parse(text) > 10) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
-                                              backgroundColor: Colors.red,
-                                              content: Text(
-                                                  'Value cannot be greater than 10')));
+                                                  backgroundColor: Colors.red,
+                                                  content: Text(
+                                                      'Value cannot be greater than 10')));
                                           // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Value cannot be greater than 10')));
                                           // portion = 1;
                                           // actualPortion = portion;
@@ -793,6 +830,17 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                         } else {
                                           portion = double.parse(text);
                                           actualPortion = portion;
+                                          initialFirstSelection =
+                                              portion.floor();
+                                          if (portion % 1 < 0.25) {
+                                            initialSecondSelection = 0;
+                                          } else if (portion % 1 < 0.5) {
+                                            initialSecondSelection = 1;
+                                          } else if (portion % 1 < 0.75) {
+                                            initialSecondSelection = 2;
+                                          } else {
+                                            initialSecondSelection = 3;
+                                          }
                                         }
                                       } else {
                                         portion = 1;
@@ -813,6 +861,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                               GestureDetector(
                                 onTap: _pickTime,
                                 child: Container(
+                                  color: Colors.grey[300],
                                   width: 175,
                                   child: TextFormField(
                                     enabled: false,
@@ -823,7 +872,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                     controller: dateCtl,
                                     decoration: InputDecoration(
                                       contentPadding:
-                                      EdgeInsets.only(bottom: 3, top: 5),
+                                          EdgeInsets.only(bottom: 3, top: 5),
                                       hintText: "Enter time",
                                       isDense: true,
                                     ),
@@ -836,38 +885,43 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ButtonTheme(
-                          minWidth: 90,
-                          buttonColor: Theme.of(context).primaryColor,
-                          child: RaisedButton(
+                    Padding(padding: EdgeInsets.only(bottom: 10)),
+                    Padding(
+                      padding: EdgeInsets.only(right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FlatButton(
                             // padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Text('Cancel'),
+                            child: Text('CANCEL',
+                                style: TextStyle(color: Colors.grey)),
                             onPressed: () {
                               Navigator.pop(context, null);
                             },
                           ),
-                        ),
-                        ButtonTheme(
-                          minWidth: 90,
-                          buttonColor: Theme.of(context).primaryColor,
-                          child: RaisedButton(
+                          FlatButton(
+                            color: Colors.blue,
                             // padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Text('Update Entry'),
+                            child: Text(
+                              'UPDATE ENTRY',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             onPressed: () {
                               updateEntry();
                               Navigator.pop(context, null);
                             },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.height / 25))
                   ],
                 ),
               ),
-
             ]),
       ),
     );
