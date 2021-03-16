@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/dietTracking');
+                                Navigator.pushNamed(context, '/dietTracking').then((value) => rebuildAllChildren(context));
                               },
                               child: Text("Full Summary")),
                         ],
