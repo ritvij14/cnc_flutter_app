@@ -108,7 +108,6 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     onPressed: () {
                       db.saveNewMetric(widget.metricModel);
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/metricTracking');
                     },
                   ),
                 ),

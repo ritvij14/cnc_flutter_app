@@ -3,6 +3,7 @@ import 'package:cnc_flutter_app/widgets/food_search.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+// import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: SpeedDial(
-
         icon: Icons.add,
         backgroundColor: Theme.of(context).accentColor,
         children: [
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(MdiIcons.scale),
               label: 'Log Metrics',
               onTap: () {
-                Navigator.pushNamed(context, '/inputMetrics');
+                Navigator.pushNamed(context, '/inputMetric');
               }),
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
@@ -91,18 +91,28 @@ class _HomeScreenState extends State<HomeScreen> {
               Card(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: ExpansionTile(
-                    title: Text('Daily Diet Summary'),
-                    subtitle: Text('4 items totaling 1000 calories.'),
-                    children: <Widget>[
-                      Text('Food 1'),
-                      Text('Food 2'),
-                      Text('Food 3'),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/dietTracking');
-                          },
-                          child: Text("Full Summary")),
+                  child: Column(
+                    children: [
+                      Text("Diet Summary",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),),
+                      ExpansionTile(
+                        title: Text('Daily Diet Summary'),
+                        subtitle: Text('4 items totaling 1000 calories.'),
+                        children: <Widget>[
+                          Text('Food 1'),
+                          Text('Food 2'),
+                          Text('Food 3'),
+                          Text('Food 4'),
+
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/dietTracking');
+                              },
+                              child: Text("Full Summary")),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -114,7 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Text('Activity 1'),
                     Text('Activity 2'),
-                    Text('Activity 3'),
                     TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/fitnessTracking');

@@ -167,9 +167,7 @@ class _SymptomTrackingInputScreenState
                     child: Text('Submit'),
                     onPressed: () {
                       var x = db.saveNewSymptom(widget.symptomModel);
-                      print(x.runtimeType);
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/symptomTracking');
+                      Navigator.pop(context,'');
                     },
                   ),
                 ),

@@ -26,4 +26,17 @@ class ActivityDBHelper extends DBHelperBase {
           'dateTime': fitnessActivityModel.dateTime.toIso8601String(),
         }));
   }
+  Future<http.Response> updateExistingActivity(
+      ActivityModel activityModel) async {
+    var requestUrl = baseUrl + 'api/fitnessActivity/update/';
+    var uriResponse = await http.put(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'id': activityModel.id,
+          'type': activityModel.type,
+          'intensity': activityModel.intensity.toString(),
+          'minutes': activityModel.minutes.toString(),
+          'dateTime': activityModel.dateTime.toIso8601String(),
+        }));
+  }
 }

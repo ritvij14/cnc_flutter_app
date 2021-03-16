@@ -59,6 +59,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
+              tooltip: "Home",
               icon: Icon(Icons.home,
                   color: _selectedIndex == 0 ? Theme
                       .of(context)
@@ -71,6 +72,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               },
             ),
             IconButton(
+              tooltip: "Content",
               icon: Icon(Icons.library_books,
                   color: _selectedIndex == 1 ? Theme
                       .of(context)
@@ -83,6 +85,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               },
             ),
             IconButton(
+              tooltip: "Communication",
               icon: Icon(Icons.chat,
                   color: _selectedIndex == 2 ? Theme
                       .of(context)
@@ -95,6 +98,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               },
             ),
             IconButton(
+              tooltip: "Goals",
               icon: Icon(Icons.verified,
                   color: _selectedIndex == 3 ? Theme
                       .of(context)
