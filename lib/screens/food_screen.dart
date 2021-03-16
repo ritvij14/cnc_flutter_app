@@ -289,7 +289,7 @@ class FoodProfile extends State<FoodPage> {
         context: context,
         initialTime:
             new TimeOfDay(hour: entryTime.hour, minute: entryTime.minute),
-        initialEntryMode: TimePickerEntryMode.input,
+        initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Time of Meal'
         // cancelText: 'testing'
 
@@ -356,751 +356,501 @@ class FoodProfile extends State<FoodPage> {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Log new food'),
-        ),
-        body: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  // The long text inside this column overflows. Remove the row and column above this comment and the text wraps.
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Text(currentFood.description, style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30)),
+      appBar: AppBar(
+        title: Text('New Entry'),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Text(currentFood.description,
+              //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 15, bottom: 20),
+                child: Text(currentFood.description,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+              ),
+              Expanded(
+                child:
+                DataTable(
+                  horizontalMargin: 0,
+                  headingRowHeight: 0,
+                  dataRowHeight: 25,
+                  dividerThickness: 0,
+                  dataTextStyle: TextStyle(fontSize: 20, color: Colors.black),
+                  // columnSpacing: MediaQuery.of(context).size.width/ 3,
+
+                  columns: <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        '',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        '',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                  rows: <DataRow>[
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('Calories',
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                        DataCell(Text((currentFood.kcal * portion).round().toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold))),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Expanded(
-            //   child: Text(currentFood.description, style: TextStyle(
-            //       fontWeight: FontWeight.bold, fontSize: 30),),
-              // child: Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     Text(currentFood.description, style: TextStyle(
-              //         fontWeight: FontWeight.bold, fontSize: 30),),
-              //   ],
-              // ),
-            // ),
-
-            Row(
-              children: <Widget>[
-                // Container(
-                //   width: MediaQuery.of(context).size.width / 6,
-                //   height: MediaQuery.of(context).size.width / 6,
-                // ),
-                Expanded( // add this
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0), // give some padding
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min, // set it to min
-                      children: <Widget>[
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    (currentFood.kcal * portion).round().toString(),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 60),
-                                  ),
-                                  Text(
-                                    'Calories',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                ],
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          'Total Fat',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        DataCell(
+                          Row(
+                            children: [
+                              Text(
+                                (currentFood.fatInGrams * portion).round().toString() +
+                                    'g',
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            // Padding(padding: EdgeInsets.all(3)),
-                            Column(
-                              children: [
-                                DataTable(
-
-                                  horizontalMargin: 0,
-                                  headingRowHeight: 0,
-                                  dataRowHeight: 20,
-                                  dividerThickness: 0,
-                                  columnSpacing: 80,
-
-                                  columns: <DataColumn>[
-                                    DataColumn(
-                                      label: Text(
-                                        '',
-                                        style: TextStyle(fontStyle: FontStyle.italic),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        '',
-                                        style: TextStyle(fontStyle: FontStyle.italic),
-                                      ),
-                                    ),
-
-                                  ],
-                                  rows: <DataRow>[
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('Total Fat', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                        DataCell(Row(
-                                          children: [
-                                            Text(
-                                              (currentFood.fatInGrams * portion).round().toString() +
-                                                  'g',
-                                              style: TextStyle(fontWeight: FontWeight.bold),
-                                            ),
-
-                                            if(showFat)... [
-                                              GestureDetector(
-                                                  onTap: () {
-                                                    showFat = !showFat;
-                                                    setState(() {});
-                                                  },
-                                                  child: Icon(Icons.keyboard_arrow_up))
-                                            ],
-                                            if(!showFat)... [
-                                              GestureDetector(
-                                                  onTap: () {
-                                                    showFat = !showFat;
-                                                    setState(() {});
-                                                  },
-                                                  child: Icon(Icons.keyboard_arrow_down))
-                                            ],
-                                          ],
-                                        ),),
-                                      ],
-                                    ),
-                                    if(showFat) ... [
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('  Saturated Fats')),
-                                          DataCell(Text((currentFood.saturatedFattyAcidsInGrams * portion).round().toString() + 'g')),
-                                        ],
-                                      ),
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('  Polyunsaturated Fats')),
-                                          DataCell(Text((currentFood.polyunsaturatedFattyAcidsInGrams * portion).round().toString() + 'g')),
-                                        ],
-                                      ),DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('  Monounsaturated Fats')),
-                                          DataCell(Text((currentFood.monounsaturatedFattyAcidsInGrams * portion).round().toString() + 'g')),
-                                        ],
-                                      ),
-                                    ],
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('Total Carbs', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                        DataCell(Row(
-                                          children: [
-                                            Text(
-                                              (currentFood.fatInGrams * portion).round().toString() +
-                                                  'g',
-                                              style: TextStyle(fontWeight: FontWeight.bold),
-                                            ),
-
-                                            if(showCarbs)... [
-                                              GestureDetector(
-                                                  onTap: () {
-                                                    showCarbs = !showCarbs;
-                                                    setState(() {});
-                                                  },
-                                                  child: Icon(Icons.keyboard_arrow_up))
-                                            ],
-                                            if(!showCarbs)... [
-                                              GestureDetector(
-                                                  onTap: () {
-                                                    showCarbs = !showCarbs;
-                                                    setState(() {});
-                                                  },
-                                                  child: Icon(Icons.keyboard_arrow_down))
-                                            ],
-                                          ],
-                                        ),),
-                                      ],
-                                    ),
-                                    if(showCarbs) ... [
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('  Insoluble Fiber')),
-                                          DataCell(Text((currentFood.insolubleFiberInGrams * portion).round().toString() + 'g')),
-                                        ],
-                                      ),
-                                      DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('  Soluble Fiber')),
-                                          DataCell(Text((currentFood.solubleFiberInGrams * portion).round().toString() + 'g')),
-                                        ],
-                                      ),DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text('  Sugars')),
-                                          DataCell(Text((currentFood.sugarInGrams * portion).round().toString() + 'g')),
-                                        ],
-                                      ),
-                                    ],
-                                    DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('Protein', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                        DataCell(Text((currentFood.proteinInGrams * portion).round().toString() + 'g', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                      ],
-                                    ),DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('Alcohol', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                        DataCell(Text((currentFood.alcoholInGrams * portion).round().toString() + 'g', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                      ],
-                                    ),DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('Calcium', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                        DataCell(Text((currentFood.calciumInMilligrams * portion).round().toString() + 'mg', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                      ],
-                                    ),DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('Sodium', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                        DataCell(Text((currentFood.sodiumInMilligrams * portion).round().toString() + 'mg', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                      ],
-                                    ),DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('Vitamin D', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                        DataCell(Text((currentFood.vitaminDInMicrograms * portion).round().toString() + 'mcg', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                //
-                                //   children: [Text("test 2"),
-                                //     Text("test 2"),
-                                //
-                                //   ],
-                                // ),
-                                // Text("test 2"),
-                                // Text("test 2"),
-                                // Text("test 2"),
-
+                              if (showFat) ...[
+                                GestureDetector(
+                                    onTap: () {
+                                      showFat = !showFat;
+                                      setState(() {});
+                                    },
+                                    child: Icon(Icons.keyboard_arrow_up))
                               ],
+                              if (!showFat) ...[
+                                GestureDetector(
+                                    onTap: () {
+                                      showFat = !showFat;
+                                      setState(() {});
+                                    },
+                                    child: Icon(Icons.keyboard_arrow_down))
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (showFat) ...[
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('  Saturated Fats')),
+                          DataCell(Text(
+                              (currentFood.saturatedFattyAcidsInGrams * portion)
+                                  .round()
+                                  .toString() +
+                                  'g')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('  Polyunsaturated Fats')),
+                          DataCell(Text(
+                              (currentFood.polyunsaturatedFattyAcidsInGrams * portion)
+                                  .round()
+                                  .toString() +
+                                  'g')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('  Monounsaturated Fats')),
+                          DataCell(Text(
+                              (currentFood.monounsaturatedFattyAcidsInGrams * portion)
+                                  .round()
+                                  .toString() +
+                                  'g')),
+                        ],
+                      ),
+                    ],
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          'Total Carbs                       ',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        DataCell(
+                          Row(
+                            children: [
+                              Text(
+                                (currentFood.fatInGrams * portion).round().toString() +
+                                    'g',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              if (showCarbs) ...[
+                                GestureDetector(
+                                    onTap: () {
+                                      showCarbs = !showCarbs;
+                                      setState(() {});
+                                    },
+                                    child: Icon(Icons.keyboard_arrow_up))
+                              ],
+                              if (!showCarbs) ...[
+                                GestureDetector(
+                                    onTap: () {
+                                      showCarbs = !showCarbs;
+                                      setState(() {});
+                                    },
+                                    child: Icon(Icons.keyboard_arrow_down))
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (showCarbs) ...[
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('  Insoluble Fiber')),
+                          DataCell(Text((currentFood.insolubleFiberInGrams * portion)
+                              .round()
+                              .toString() +
+                              'g')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('  Soluble Fiber')),
+                          DataCell(Text((currentFood.solubleFiberInGrams * portion)
+                              .round()
+                              .toString() +
+                              'g')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('  Sugars')),
+                          DataCell(Text(
+                              (currentFood.sugarInGrams * portion).round().toString() +
+                                  'g')),
+                        ],
+                      ),
+                    ],
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          'Protein',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        DataCell(Text(
+                          (currentFood.proteinInGrams * portion).round().toString() +
+                              'g',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          'Alcohol',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        DataCell(Text(
+                          (currentFood.alcoholInGrams * portion).round().toString() +
+                              'g',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          'Calcium',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        DataCell(Text(
+                          (currentFood.calciumInMilligrams * portion)
+                              .round()
+                              .toString() +
+                              'mg',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          'Sodium',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        DataCell(Text(
+                          (currentFood.sodiumInMilligrams * portion)
+                              .round()
+                              .toString() +
+                              'mg',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(
+                          'Vitamin D',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        DataCell(Text(
+                          (currentFood.vitaminDInMicrograms * portion)
+                              .round()
+                              .toString() +
+                              'mcg',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                      ],
+                    ),
+                  ],
+                ),
+
+              ),
+              Column(
+                children: [
+                  if (showFraction) ...[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                              child: RaisedButton(
+                                onPressed: () {
+                                  showFraction = true;
+                                  switched = true;
+                                  setState(() {});
+                                },
+                                child: Text(
+                                  "Fractions",
+                                  style: TextStyle(
+                                      color: Theme.of(context).highlightColor),
+                                ),
+                              )),
+                          Expanded(
+                              child: OutlineButton(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).buttonColor,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                onPressed: () {
+                                  showFraction = false;
+                                  switched = true;
+                                  setState(() {});
+                                },
+                                child: Text("Decimal",
+                                    style: TextStyle(
+                                        color: Theme.of(context).buttonColor)),
+                              )),
+                        ]),
+                  ],
+                  if (!showFraction) ...[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                              child: OutlineButton(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).buttonColor,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                onPressed: () {
+                                  showFraction = true;
+                                  switched = true;
+                                  setState(() {});
+                                },
+                                child: Text("Fraction",
+                                    style: TextStyle(
+                                        color: Theme.of(context).buttonColor)),
+                              )),
+                          Expanded(
+                              child: RaisedButton(
+                                onPressed: () {
+                                  showFraction = false;
+                                  switched = true;
+                                  setState(() {});
+                                },
+                                child: Text(
+                                  "Decimal",
+                                  style: TextStyle(
+                                      color: Theme.of(context).highlightColor),
+                                ),
+                              )),
+                        ]),
+                  ],
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              'Serving Size',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 22),
+                            ),
+                            Text(
+                              servingSizeAsFraction +
+                                  " " +
+                                  currentFood.commonPortionSizeUnit,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 22),
                             ),
                           ],
                         ),
-                        // Text("SOME HASH KEY HERE"),
+                        Column(
+                          children: [
+                            Text(
+                              'Number of Servings',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (showFraction) ...[
+                              GestureDetector(
+                                onTap: () => showPickerModal(context),
+                                child: Container(
+                                  width: 175,
+                                  child: TextFormField(
+                                    enabled: false,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                    ),
+                                    controller: portionCtl,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                      EdgeInsets.only(bottom: 3, top: 5),
+                                      hintText: "# of servings",
+                                      isDense: true,
+                                    ),
+                                    onChanged: (text) {},
+                                  ),
+                                ),
+                              ),
+                            ],
+                            if (!showFraction) ...[
+                              Container(
+                                width: 175,
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    // height: 2.0,
+                                    // color: Colors.black
+                                  ),
+                                  initialValue: actualPortion.toStringAsFixed(2),
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(4),
+                                    FilteringTextInputFormatter.deny(
+                                        new RegExp('[ -]')),
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d+\.?\d{0,2}'))
+                                  ],
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      decimal: true),
+                                  // keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                    EdgeInsets.only(bottom: 3, top: 5),
+                                    hintText: "# of servings",
+                                    isDense: true,
+                                    // border: InputBorder.none
+                                  ),
+                                  onChanged: (text) {
+                                    if (text.isNotEmpty) {
+                                      if (double.parse(text) > 10) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                                'Value cannot be greater than 10')));
+                                        // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Value cannot be greater than 10')));
+                                        // portion = 1;
+                                        // actualPortion = portion;
+                                        //snack bar portion cannot be greater than 10
+                                      } else {
+                                        portion = double.parse(text);
+                                        actualPortion = portion;
+                                      }
+                                    } else {
+                                      portion = 1;
+                                      actualPortion = portion;
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ],
+                            SizedBox(height: 8),
+                            Text(
+                              'Time eaten',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: _pickTime,
+                              child: Container(
+                                width: 175,
+                                child: TextFormField(
+                                  enabled: false,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                  ),
+                                  controller: dateCtl,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                    EdgeInsets.only(bottom: 3, top: 5),
+                                    hintText: "Enter time",
+                                    isDense: true,
+                                  ),
+                                  onChanged: (text) {},
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-
-            // Ink(
-            //   child: ListTile(
-            //     onTap: () {
-            //       showFat = !showFat;
-            //       setState(() {});
-            //     },
-            //     title: Text(
-            //       'Fat ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     subtitle: Text(
-            //       'Tap to hide additional information ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Wrap(
-            //       spacing: 12, // space between two icons
-            //       children: <Widget>[
-            //         Text(
-            //           (currentFood.fatInGrams * portion).round().toString() +
-            //               'g',
-            //           style: TextStyle(fontWeight: FontWeight.bold),
-            //         ), // icon-1
-            //         Icon(Icons.arrow_drop_down_circle), // icon-2
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // if (showFat) ...[
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Saturated fatty acids  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.saturatedFattyAcidsInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Polyunsaturated fatty acids  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.polyunsaturatedFattyAcidsInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Monounsaturated fatty acids  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.monounsaturatedFattyAcidsInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            // ],
-            // Ink(
-            //   child: ListTile(
-            //     onTap: () {
-            //       showCarbs = !showCarbs;
-            //       setState(() {});
-            //     },
-            //     title: Text(
-            //       'Carbohydrates ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     subtitle: Text(
-            //       'Tap to hide additional information ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Wrap(
-            //       spacing: 12, // space between two icons
-            //       children: <Widget>[
-            //         Text(
-            //           (currentFood.carbohydratesInGrams * portion)
-            //                   .round()
-            //                   .toString() +
-            //               'g',
-            //           style: TextStyle(fontWeight: FontWeight.bold),
-            //         ), // icon-1
-            //         Icon(Icons.arrow_drop_down_circle), // icon-2
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // if (showCarbs) ...[
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Insoluble Fiber  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.insolubleFiberInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Soluble Fiber  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.solubleFiberInGrams * portion)
-            //                 .round()
-            //                 .toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            //   Ink(
-            //     color: Colors.grey.withOpacity(0.3),
-            //     child: ListTile(
-            //       title: Text(
-            //         'Sugars  ',
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontStyle: FontStyle.italic),
-            //       ),
-            //       trailing: Text(
-            //         (currentFood.sugarInGrams * portion).round().toString() +
-            //             'g',
-            //         style: TextStyle(fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            // ],
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Protein ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.proteinInGrams * portion).round().toString() +
-            //           'g',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Alcohol ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.alcoholInGrams * portion).round().toString() +
-            //           'g',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Calcium ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.calciumInMilligrams * portion)
-            //               .round()
-            //               .toString() +
-            //           'mg',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Sodium ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.sodiumInMilligrams * portion)
-            //               .round()
-            //               .toString() +
-            //           'mg',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            // Ink(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Vitamin D ',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-            //     ),
-            //     trailing: Text(
-            //       (currentFood.vitaminDInMicrograms * portion)
-            //               .round()
-            //               .toString() +
-            //           'mcg',
-            //       style: TextStyle(fontWeight: FontWeight.bold),
-            //     ),
-            //   ),
-            // ),
-            if (showFraction) ...[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                        child: RaisedButton(
-                      onPressed: () {
-                        showFraction = true;
-                        switched = true;
-                        setState(() {});
-                      },
-                      child: Text(
-                        "Fractions",
-                        style:
-                            TextStyle(color: Theme.of(context).highlightColor),
-                      ),
-                    )),
-                    Expanded(
-                        child: OutlineButton(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).buttonColor,
-                          style: BorderStyle.solid,
-                          width: 2),
-                      onPressed: () {
-                        showFraction = false;
-                        switched = true;
-                        setState(() {});
-                      },
-                      child: Text("Decimal",
-                          style:
-                              TextStyle(color: Theme.of(context).buttonColor)),
-                    )),
-                  ]),
-            ],
-            if (!showFraction) ...[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                        child: OutlineButton(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).buttonColor,
-                          style: BorderStyle.solid,
-                          width: 2),
-                      onPressed: () {
-                        showFraction = true;
-                        switched = true;
-                        setState(() {});
-                      },
-                      child: Text("Fraction",
-                          style:
-                              TextStyle(color: Theme.of(context).buttonColor)),
-                    )),
-                    Expanded(
-                        child: RaisedButton(
-                      onPressed: () {
-                        showFraction = false;
-                        switched = true;
-                        setState(() {});
-                      },
-                      child: Text(
-                        "Decimal",
-                        style:
-                            TextStyle(color: Theme.of(context).highlightColor),
-                      ),
-                    )),
-                  ]),
-            ],
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(
-                        'Serving Size',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22),
-                      ),
-                      Text(
-                        servingSizeAsFraction +
-                            // currentFood.commonPortionSizeAmount.round().toString() +
-                            " " +
-                            currentFood.commonPortionSizeUnit,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        'Number of Servings',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                      ButtonTheme(
+                        minWidth: 90,
+                        buttonColor: Theme.of(context).primaryColor,
+                        child: RaisedButton(
+                          // padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Text('Cancel'),
+                          onPressed: () {
+                            Navigator.pop(context, null);
+                          },
                         ),
                       ),
-                      if (showFraction) ...[
-                        GestureDetector(
-                          onTap: () => showPickerModal(context),
-                          child: Container(
-                            width: 175,
-                            child: TextFormField(
-                              enabled: false,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20.0,
-                              ),
-                              controller: portionCtl,
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.only(bottom: 3, top: 5),
-                                hintText: "# of servings",
-                                isDense: true,
-                              ),
-                              onChanged: (text) {},
-                            ),
-                          ),
-                        ),
-                      ],
-                      if (!showFraction) ...[
-                        Container(
-                          width: 175,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              // height: 2.0,
-                              // color: Colors.black
-                            ),
-                            initialValue: actualPortion.toStringAsFixed(2),
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(4),
-                              FilteringTextInputFormatter.deny(
-                                  new RegExp('[ -]')),
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d{0,2}'))
-                            ],
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
-                            // keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(bottom: 3, top: 5),
-                              hintText: "# of servings",
-                              isDense: true,
-                              // border: InputBorder.none
-                            ),
-                            onChanged: (text) {
-                              if (text.isNotEmpty) {
-                                if (double.parse(text) > 10) {
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,content: Text('Value cannot be greater than 10')));
-                                  // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Value cannot be greater than 10')));
-                                  // portion = 1;
-                                  // actualPortion = portion;
-                                  //snack bar portion cannot be greater than 10
-                                } else {
-                                  portion = double.parse(text);
-                                  actualPortion = portion;
-                                }
-
-                                print(actualPortion);
-                              } else {
-                                portion = 1;
-                                actualPortion = portion;
-                              }
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                      SizedBox(height: 8),
-                      Text(
-                        'Time eaten',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                      ButtonTheme(
+                        minWidth: 90,
+                        buttonColor: Theme.of(context).primaryColor,
+                        child: RaisedButton(
+                          // padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Text('Save Entry'),
+                          onPressed: () {
+                            saveNewEntry();
+                            Navigator.pop(context, null);
+                          },
                         ),
                       ),
-                      GestureDetector(
-                        onTap: _pickTime,
-                        child: Container(
-                          width: 175,
-                          child: TextFormField(
-                            enabled: false,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                            ),
-                            controller: dateCtl,
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(bottom: 3, top: 5),
-                              hintText: "Enter time",
-                              isDense: true,
-                            ),
-                            onChanged: (text) {},
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
 
-                ButtonTheme(
-                  minWidth: 90,
-                  buttonColor: Theme.of(context).primaryColor,
-                  child: RaisedButton(
-                    // padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.pop(context, null);
-                    },
-                  ),
-                ),
-
-                ButtonTheme(
-                  minWidth: 90,
-                  buttonColor: Theme.of(context).primaryColor,
-                  child: RaisedButton(
-                    // padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Text('Save entry'),
-                    onPressed: () {
-                      saveNewEntry();
-                      Navigator.pop(context, null);
-                    },
-                  ),
-                ),
-                // Padding(
-                //   padding: EdgeInsets.all(15.0),
-                //   child: ButtonTheme(
-                //     minWidth: double.infinity,
-                //     buttonColor: Theme.of(context).primaryColor,
-                //     child: RaisedButton(
-                //       // padding: EdgeInsets.symmetric(vertical: 20),
-                //       child: Text('Save entry'),
-                //       onPressed: () {
-                //         saveNewEntry();
-                //         Navigator.pop(context, null);
-                //       },
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          ]),
-        ));
+            ]),
+      ),
+    );
   }
 }

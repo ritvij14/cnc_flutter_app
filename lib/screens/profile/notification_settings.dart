@@ -1,9 +1,7 @@
-import 'package:cnc_flutter_app/widgets/account_body_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 class NotificationSettings extends StatefulWidget {
   @override
@@ -30,15 +28,12 @@ class _NotificationSettings extends State<NotificationSettings> {
     'Friday',
     'Saturday',
   ];
-  String hour = '';
-  String minute = '';
-  String tod = '';
 
   @override
   void initState() {
     super.initState();
-    var androidInitialize = new AndroidInitializationSettings('ic_launcher');
-    // var androidInitialize = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    // var androidInitialize = new AndroidInitializationSettings('ic_launcher');
+    var androidInitialize = new AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOSInitialize = new IOSInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -48,72 +43,7 @@ class _NotificationSettings extends State<NotificationSettings> {
     localNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     localNotificationsPlugin.initialize(initializationSettings);
     tz.initializeTimeZones();
-
-    if (dailyTime.hour == 12) {
-      hour = dailyTime.hour.toString();
-      tod = 'PM';
-    } else if (dailyTime.hour > 12) {
-      hour = (dailyTime.hour - 12).toString();
-      tod = 'PM';
-    } else {
-      hour = dailyTime.hour.toString();
-      if (dailyTime.hour == 0) {
-        hour = '12';
-      }
-      tod = 'AM';
-    }
-    if (dailyTime.minute < 10) {
-      minute = '0' + dailyTime.minute.toString();
-    } else {
-      minute = dailyTime.minute.toString();
-    }
     initSharedPreferences();
-  }
-
-  void setDailyText() {
-    if (dailyTime.hour == 12) {
-      hour = dailyTime.hour.toString();
-      tod = 'PM';
-    } else if (dailyTime.hour > 12) {
-      hour = (dailyTime.hour - 12).toString();
-      tod = 'PM';
-    } else {
-      hour = dailyTime.hour.toString();
-      if (dailyTime.hour == 0) {
-        hour = '12';
-      }
-      tod = 'AM';
-    }
-    if (dailyTime.minute < 10) {
-      minute = '0' + dailyTime.minute.toString();
-    } else {
-      minute = dailyTime.minute.toString();
-    }
-
-    dailyTimeCtl.text = hour + ':' + minute + ' ' + tod;
-  }
-
-  void setWeeklyText() {
-    if (weeklyTime.hour == 12) {
-      hour = weeklyTime.hour.toString();
-      tod = 'PM';
-    } else if (weeklyTime.hour > 12) {
-      hour = (weeklyTime.hour - 12).toString();
-      tod = 'PM';
-    } else {
-      hour = weeklyTime.hour.toString();
-      if (weeklyTime.hour == 0) {
-        hour = '12';
-      }
-      tod = 'AM';
-    }
-    if (weeklyTime.minute < 10) {
-      minute = '0' + weeklyTime.minute.toString();
-    } else {
-      minute = weeklyTime.minute.toString();
-    }
-
-    weeklyTimeCtl.text = hour + ':' + minute + ' ' + tod;
   }
 
   void initSharedPreferences() async {
@@ -123,7 +53,6 @@ class _NotificationSettings extends State<NotificationSettings> {
     if (storedDaily != null) {
       enableNotifications = true;
       enableDailyNotifications = true;
-      print(storedDaily);
       String storedHour = storedDaily.split(':')[0];
       String storedMinute = storedDaily.split(':')[1];
       dailyTime = new DateTime(dailyTime.year, dailyTime.month, dailyTime.day,
@@ -133,11 +62,9 @@ class _NotificationSettings extends State<NotificationSettings> {
     if (storedWeekly != null) {
       enableNotifications = true;
       enableWeeklyNotifications = true;
-      print(storedWeekly);
       String storedDay = sharedPreferences.get('weeklyDay');
       String storedHour = storedWeekly.split(':')[0];
       String storedMinute = storedWeekly.split(':')[1];
-      print(storedDay);
       dropDownDay = storedDay;
       weeklyTime = new DateTime(
           weeklyTime.year,
@@ -151,43 +78,61 @@ class _NotificationSettings extends State<NotificationSettings> {
     setState(() {});
   }
 
+  void setDailyText() {
+    String hour;
+    String minute;
+    String tod;
+    hour = dailyTime.hour == 0
+        ? '12'
+        : dailyTime.hour <= 12
+            ? dailyTime.hour.toString()
+            : (dailyTime.hour - 12).toString();
+    tod = dailyTime.hour < 12 ? 'AM' : 'PM';
+    minute = dailyTime.minute.toString().padLeft(2, '0');
+
+    dailyTimeCtl.text = hour + ':' + minute + ' ' + tod;
+  }
+
+  void setWeeklyText() {
+    String hour;
+    String minute;
+    String tod;
+    hour = weeklyTime.hour == 0
+        ? '12'
+        : weeklyTime.hour <= 12
+            ? weeklyTime.hour.toString()
+            : (weeklyTime.hour - 12).toString();
+    tod = weeklyTime.hour < 12 ? 'AM' : 'PM';
+    minute = weeklyTime.minute.toString().padLeft(2, '0');
+
+    weeklyTimeCtl.text = hour + ':' + minute + ' ' + tod;
+  }
+
   _pickDailyTime() async {
     TimeOfDay t = await showTimePicker(
         context: context,
         initialTime:
             new TimeOfDay(hour: dailyTime.hour, minute: dailyTime.minute),
-        initialEntryMode: TimePickerEntryMode.input,
-        helpText: 'Time of Meal'
-        // cancelText: 'testing'
+        initialEntryMode: TimePickerEntryMode.dial,
+        helpText: 'Notification Time'
         );
-    if (t != null)
+    if (t != null) {
       setState(() {
-        String hour = '';
-        String minute = '';
-        String tod = '';
-        if (t.hour == 12) {
-          hour = t.hour.toString();
-          tod = 'PM';
-        } else if (t.hour > 12) {
-          hour = (t.hour - 12).toString();
-          tod = 'PM';
-        } else {
-          hour = t.hour.toString();
-          if (t.hour == 0) {
-            hour = '12';
-          }
-          tod = 'AM';
-        }
-        if (t.minute < 10) {
-          minute = '0' + t.minute.toString();
-        } else {
-          minute = t.minute.toString();
-        }
-
-        dailyTimeCtl.text = hour + ':' + minute + ' ' + tod;
+        var hour = t.hour == 0
+            ? 12
+            : t.hour <= 12
+                ? t.hour
+                : t.hour - 12;
+        var tod = t.hour < 12 ? 'AM' : 'PM';
+        dailyTimeCtl.text = hour.toString() +
+            ':' +
+            t.minute.toString().padLeft(2, '0') +
+            ' ' +
+            tod;
         dailyTime = new DateTime(
             dailyTime.year, dailyTime.month, dailyTime.day, t.hour, t.minute);
       });
+    }
   }
 
   _pickWeeklyTime() async {
@@ -195,46 +140,45 @@ class _NotificationSettings extends State<NotificationSettings> {
         context: context,
         initialTime:
             new TimeOfDay(hour: weeklyTime.hour, minute: weeklyTime.minute),
-        initialEntryMode: TimePickerEntryMode.input,
-        helpText: 'Time of Meal');
-    if (t != null)
+        initialEntryMode: TimePickerEntryMode.dial,
+        helpText: 'Notification Time');
+    if (t != null) {
       setState(() {
-        String hour = '';
-        String minute = '';
-        String tod = '';
-        if (t.hour == 12) {
-          hour = t.hour.toString();
-          tod = 'PM';
-        } else if (t.hour > 12) {
-          hour = (t.hour - 12).toString();
-          tod = 'PM';
-        } else {
-          hour = t.hour.toString();
-          if (t.hour == 0) {
-            hour = '12';
-          }
-          tod = 'AM';
-        }
-        if (t.minute < 10) {
-          minute = '0' + t.minute.toString();
-        } else {
-          minute = t.minute.toString();
-        }
-
-        weeklyTimeCtl.text = hour + ':' + minute + ' ' + tod;
+        var hour = t.hour == 0
+            ? 12
+            : t.hour <= 12
+                ? t.hour
+                : t.hour - 12;
+        var tod = t.hour < 12 ? 'AM' : 'PM';
+        weeklyTimeCtl.text = hour.toString() +
+            ':' +
+            t.minute.toString().padLeft(2, '0') +
+            ' ' +
+            tod;
         weeklyTime = new DateTime(weeklyTime.year, weeklyTime.month,
             weeklyTime.day, t.hour, t.minute);
       });
+    }
   }
 
   void scheduleDailyNotifications() async {
     var time = Time(dailyTime.hour, dailyTime.minute, 0);
-    var body =
-        'Scheduled for ' + time.hour.toString() + ':' + time.minute.toString();
+    var hour = dailyTime.hour == 0
+        ? 12
+        : dailyTime.hour <= 12
+            ? dailyTime.hour
+            : dailyTime.hour - 12;
+    var tod = dailyTime.hour < 12 ? 'AM' : 'PM';
+    var body = 'Scheduled for ' +
+        hour.toString() +
+        ':' +
+        time.minute.toString().padLeft(2, '0') +
+        ' ' +
+        tod;
 
     var androidDetails = new AndroidNotificationDetails(
-        "channelId", "channelName", "channelDescription",
-        importance: Importance.high);
+        "dailyChannelId", "dailyChannelName", "dailyChannelDescription",
+        importance: Importance.max);
     var iOSDetails = new IOSNotificationDetails();
     var generalNotificationDetails =
         new NotificationDetails(android: androidDetails, iOS: iOSDetails);
@@ -248,16 +192,24 @@ class _NotificationSettings extends State<NotificationSettings> {
 
   void scheduleWeeklyNotification() async {
     var time = Time(weeklyTime.hour, weeklyTime.minute, 0);
+    var hour = weeklyTime.hour == 0
+        ? 12
+        : weeklyTime.hour <= 12
+            ? weeklyTime.hour
+            : weeklyTime.hour - 12;
     var day = Day(_days.indexOf(dropDownDay) + 1);
+    var tod = weeklyTime.hour < 12 ? 'AM' : 'PM';
     var body = 'Scheduled for ' +
         _days[day.value - 1] +
-        ' ' +
-        time.hour.toString() +
+        ' at ' +
+        hour.toString() +
         ':' +
-        time.minute.toString();
+        time.minute.toString().padLeft(2, '0') +
+        ' ' +
+        tod;
 
     var androidDetails = new AndroidNotificationDetails(
-        "channelId", "channelName", "channelDescription",
+        "weeklyChannelId", "weeklyChannelName", "weeklyChannelDescription",
         importance: Importance.high);
     var iOSDetails = new IOSNotificationDetails();
     var generalNotificationDetails =
@@ -290,156 +242,247 @@ class _NotificationSettings extends State<NotificationSettings> {
     await localNotificationsPlugin.cancelAll();
   }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      // barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Settings saved!'),
+          // content: SingleChildScrollView(
+          //   child: ListBody(
+          //     children: <Widget>[
+          //       Text('This is a demo alert dialog.'),
+          //       Text('Would you like to approve of this message?'),
+          //     ],
+          //   ),
+          // ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Track Symptoms'),
+        title: Text(
+          'Notification Settings',
+        ),
       ),
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        children: [
-          SwitchListTile(
-            title: Text('Enable Notifications'),
-            value: enableNotifications,
-            onChanged: (bool value) {
-              setState(() {
-                enableNotifications = !enableNotifications;
-                if (!enableNotifications) {
-                  enableDailyNotifications = false;
-                  enableWeeklyNotifications = false;
-                }
-              });
-            },
-          ),
-          if (enableNotifications) ...[
-            SwitchListTile(
-              title: Text('Daily'),
-              value: enableDailyNotifications,
-              onChanged: (bool value) {
-                setState(() {
-                  enableDailyNotifications = !enableDailyNotifications;
-                });
-              },
-            ),
-            if (enableDailyNotifications) ...[
-              GestureDetector(
-                onTap: _pickDailyTime,
-                child: Container(
-                  width: 175,
-                  child: TextFormField(
-                    enabled: false,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20.0,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Container(
+              child: Expanded(
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      title: Text('Enable Notifications',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text('Receive reminders about tracking'),
+                      value: enableNotifications,
+                      onChanged: (bool value) {
+                        setState(() {
+                          enableNotifications = !enableNotifications;
+                          if (!enableNotifications) {
+                            enableDailyNotifications = false;
+                            enableWeeklyNotifications = false;
+                          }
+                        });
+                      },
                     ),
-                    controller: dailyTimeCtl,
-                    decoration: InputDecoration(
-                      // border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(bottom: 3, top: 5),
-                      hintText: "Enter time",
-                      isDense: true,
+                    Divider(
+                      thickness: 5,
                     ),
-                    onChanged: (text) {},
-                  ),
+                    if (enableNotifications) ...[
+                      SwitchListTile(
+                        title: Text('Daily',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text(
+                            'Receive a daily reminder at a specified time'),
+                        value: enableDailyNotifications,
+                        onChanged: (bool value) {
+                          setState(() {
+                            enableDailyNotifications =
+                                !enableDailyNotifications;
+                          });
+                        },
+                      ),
+                      if (enableDailyNotifications) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: _pickDailyTime,
+                              child: Container(
+                                width: 175,
+                                child: TextFormField(
+                                  enabled: false,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                  ),
+                                  controller: dailyTimeCtl,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding:
+                                        EdgeInsets.only(bottom: 0, top: 5),
+                                    hintText: "Enter time",
+                                    isDense: true,
+                                  ),
+                                  onChanged: (text) {},
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: _pickDailyTime,
+                              child: Icon(
+                                Icons.edit,
+                                size: 20,
+                                // color: Theme.of(context)
+                                //     .highlightColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      Divider(
+                        thickness: 5,
+                      ),
+                      SwitchListTile(
+                        title: Text('Weekly',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text(
+                            'Receive a weekly reminder on a specified day'),
+                        value: enableWeeklyNotifications,
+                        onChanged: (bool value) {
+                          setState(() {
+                            enableWeeklyNotifications =
+                                !enableWeeklyNotifications;
+                          });
+                        },
+                      ),
+                      Padding(padding: EdgeInsets.all(5)),
+                      if (enableWeeklyNotifications) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: DropdownButtonFormField(
+                                // isExpanded: true,
+                                decoration: InputDecoration(
+                                    labelText: 'Day',
+                                    border: OutlineInputBorder(),
+                                    hintText: "Day"),
+                                value: dropDownDay,
+                                validator: (value) =>
+                                    value == null ? 'Field Required' : null,
+                                onChanged: (String Value) {
+                                  setState(() {
+                                    dropDownDay = Value;
+                                  });
+                                },
+                                items: _days
+                                    .map((day) => DropdownMenuItem(
+                                        value: day, child: Text("$day")))
+                                    .toList(),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: _pickWeeklyTime,
+                                  child: Container(
+                                    width: 175,
+                                    child: TextFormField(
+                                      enabled: false,
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                      ),
+                                      controller: weeklyTimeCtl,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        contentPadding:
+                                            EdgeInsets.only(bottom: 0, top: 5),
+                                        hintText: "Enter time",
+                                        isDense: true,
+                                      ),
+                                      onChanged: (text) {},
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: _pickWeeklyTime,
+                                  child: Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                    // color: Theme.of(context)
+                                    //     .highlightColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Padding(padding: EdgeInsets.all(5)),
+                      ],
+                    ],
+                    if (enableNotifications) ...[
+                      Divider(
+                        thickness: 5,
+                      ),
+                    ],
+                  ],
                 ),
               ),
-            ],
-            SwitchListTile(
-              title: Text('Weekly'),
-              value: enableWeeklyNotifications,
-              onChanged: (bool value) {
-                setState(() {
-                  enableWeeklyNotifications = !enableWeeklyNotifications;
-                });
-              },
             ),
-            if (enableWeeklyNotifications) ...[
-              DropdownButtonFormField(
-                isExpanded: true,
-                decoration: InputDecoration(
-                    labelText: 'Day',
-                    border: OutlineInputBorder(),
-                    hintText: "Day"),
-                value: dropDownDay,
-                validator: (value) => value == null ? 'Field Required' : null,
-                onChanged: (String Value) {
-                  setState(() {
-                    dropDownDay = Value;
-                  });
-                },
-                items: _days
-                    .map((day) =>
-                        DropdownMenuItem(value: day, child: Text("$day")))
-                    .toList(),
-              ),
-              GestureDetector(
-                onTap: _pickWeeklyTime,
-                child: Container(
-                  width: 175,
-                  child: TextFormField(
-                    enabled: false,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
-                    controller: weeklyTimeCtl,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(bottom: 3, top: 5),
-                      hintText: "Enter time",
-                      isDense: true,
-                    ),
-                    onChanged: (text) {},
-                  ),
-                ),
-              ),
-            ],
-          ],
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                RaisedButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    child: Text('Save'),
-                    onPressed: () {
-                      if (enableNotifications) {
-                        if (enableDailyNotifications) {
-                          scheduleDailyNotifications();
-                        } else {
-                          clearDailyNotifications();
-                        }
-                        if (enableWeeklyNotifications) {
-                          scheduleWeeklyNotification();
-                        } else {
-                          clearWeeklyNotifications();
-                        }
+                RaisedButton(
+                  child: Text('Save'),
+                  onPressed: () {
+                    if (enableNotifications) {
+                      if (enableDailyNotifications) {
+                        scheduleDailyNotifications();
                       } else {
-                        clearAllNotifications();
+                        clearDailyNotifications();
                       }
-
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.blue,
-                          content: Text('Saved')));
-                      // Navigator.pop(context);
-                    },
-                  ),
+                      if (enableWeeklyNotifications) {
+                        scheduleWeeklyNotification();
+                      } else {
+                        clearWeeklyNotifications();
+                      }
+                    } else {
+                      clearAllNotifications();
+                    }
+                    _showMyDialog();
+                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(milliseconds: 500),
+                    //     backgroundColor: Colors.blue, content: Text('Saved')));
+                  },
                 ),
               ],
             ),
-          ),
-        ],
+            Padding(padding: EdgeInsets.all(50))
+          ],
+        ),
       ),
     );
   }

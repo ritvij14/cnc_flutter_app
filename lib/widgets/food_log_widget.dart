@@ -48,7 +48,8 @@ class _FoodLogState extends State<FoodLog> {
     var time = entryTime.toString().substring(0, 19);
     var response =
         await db.updateFoodLogEntry(foodLogEntryId, time, tempPortion);
-    setState(() {});
+    rebuildAllChildren(context);
+    // rebuildAllChildren(() {});
   }
 
   update(context) {
@@ -77,6 +78,17 @@ class _FoodLogState extends State<FoodLog> {
       servingAsFraction += ' servings';
     }
     return servingAsFraction;
+  }
+
+  getMealTime(String c) {
+    var time = DateTime.parse(c);
+    var hour = time.hour == 0
+        ? 12
+        : time.hour <= 12
+        ? time.hour
+        : time.hour - 12;
+    var tod = time.hour < 12 ? 'AM' : 'PM';
+    return hour.toString() + ':'+time.minute.toString().padLeft(2, '0') + ' '+ tod;
   }
 
   getFood() async {
@@ -127,7 +139,7 @@ class _FoodLogState extends State<FoodLog> {
     }
   }
 
-  showAlertDialog(BuildContext context, foodLogEntryId, action, portion) {
+  showAlertDialog(BuildContext context, foodLogEntryId, description, action, portion) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("CANCEL",
@@ -161,7 +173,7 @@ class _FoodLogState extends State<FoodLog> {
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
         title: Text("Are you sure you would like to delete this entry?"),
-        content: Text(foodLogEntryId + " with a portion size of " + portion),
+        content: Text(description + " with a portion size of " + portion.toString()),
         actions: [
           deleteButton,
           cancelButton,
@@ -465,7 +477,7 @@ class _FoodLogState extends State<FoodLog> {
                                 children: <Widget>[
                                   Text(
                                     getPortionAsFraction(
-                                        foodLogEntries[index].portion),
+                                        foodLogEntries[index].portion) + ' at ' + getMealTime(foodLogEntries[index].entryTime),
                                     // foodLogEntries[index].portion.toString() +
                                     //     " serving(s)",
                                     // breakfast[index].serving + " " + breakfast[index].unit,
@@ -557,6 +569,7 @@ class _FoodLogState extends State<FoodLog> {
                                           onTap: () {
                                             showAlertDialog(
                                                 context,
+                                                foodLogEntries[index].id,
                                                 foodLogEntries[index].food.description,
                                                 "delete",
                                                 foodLogEntries[index].portion);
