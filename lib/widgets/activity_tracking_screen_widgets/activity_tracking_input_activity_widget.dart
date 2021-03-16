@@ -78,8 +78,12 @@ class _ActivityTrackingInputScreenState
                       widget.fitnessActivity.type = value.type;
                       widget.fitnessActivity.intensity = value.intensity;
                     }),
-                    validator: (value) =>
-                        value == null ? 'Activity required' : null,
+                    validator: (value) {
+                      if (widget.fitnessActivity.type == null) {
+                        return 'Activity required';
+                      }
+                      return null;
+                    },
                     items: fitnessActivityMasterList
                         .map<DropdownMenuItem<ActivityModel>>(
                             (ActivityModel value) {
@@ -216,9 +220,10 @@ class _ActivityTrackingInputScreenState
                     padding: const EdgeInsets.all(8.0),
                     child: RaisedButton(
                       child: Text('Submit'),
-                      onPressed: () {
+                      onPressed: () async {
+                        print(widget.fitnessActivity.type);
                         if (_formKey.currentState.validate()) {
-                          var x = db.saveNewActivity(widget.fitnessActivity);
+                          var x = await db.saveNewActivity(widget.fitnessActivity);
                           Navigator.pop(context, '');
                         }
                       },
