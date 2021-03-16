@@ -7,12 +7,12 @@ class AppThemes {
   static final appThemeData = {
     AppTheme.Default: ThemeData(
       brightness: Brightness.light,
-      primaryColor: Colors.green[700],
-      cardColor: Colors.green[800],
-      accentColor: Colors.green[400],
+      primaryColor: Colors.blue[700],
+      cardColor: Colors.blue[800],
+      accentColor: Colors.blue[400],
       highlightColor: Colors.white,
       shadowColor: Colors.black,
-      buttonColor: Colors.green[700],
+      buttonColor: Colors.blue[700],
       dividerColor: Colors.transparent,
     ),
     AppTheme.DarkMode: ThemeData(

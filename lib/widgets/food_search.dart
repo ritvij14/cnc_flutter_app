@@ -258,6 +258,7 @@ class FoodSearch extends SearchDelegate<String> {
                     ),
                   ),
                   Divider(
+                    color: Colors.grey[600],
                     height: 0,
                     thickness: 1,
                   )
@@ -320,6 +321,7 @@ class FoodSearch extends SearchDelegate<String> {
                   ),
                 ),
                 Divider(
+                  color: Colors.grey[600],
                   height: 0,
                   thickness: 1,
                 )

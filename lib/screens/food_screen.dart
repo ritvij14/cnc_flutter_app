@@ -610,108 +610,192 @@ class FoodProfile extends State<FoodPage> {
                 ),
 
               ),
-              Column(
-                children: [
-                  if (showFraction) ...[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                              child: RaisedButton(
-                                onPressed: () {
-                                  showFraction = true;
-                                  switched = true;
-                                  setState(() {});
-                                },
-                                child: Text(
-                                  "Fractions",
-                                  style: TextStyle(
-                                      color: Theme.of(context).highlightColor),
-                                ),
-                              )),
-                          Expanded(
-                              child: OutlineButton(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).buttonColor,
-                                    style: BorderStyle.solid,
-                                    width: 2),
-                                onPressed: () {
-                                  showFraction = false;
-                                  switched = true;
-                                  setState(() {});
-                                },
-                                child: Text("Decimal",
+              Container(
+                color: Theme.of(context).canvasColor,
+                child: Column(
+                  children: [
+                    if (showFraction) ...[
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    showFraction = true;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    "Fractions",
                                     style: TextStyle(
-                                        color: Theme.of(context).buttonColor)),
-                              )),
-                        ]),
-                  ],
-                  if (!showFraction) ...[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                              child: OutlineButton(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).buttonColor,
-                                    style: BorderStyle.solid,
-                                    width: 2),
-                                onPressed: () {
-                                  showFraction = true;
-                                  switched = true;
-                                  setState(() {});
-                                },
-                                child: Text("Fraction",
+                                        color: Theme.of(context).highlightColor),
+                                  ),
+                                )),
+                            Expanded(
+                                child: OutlineButton(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).buttonColor,
+                                      style: BorderStyle.solid,
+                                      width: 2),
+                                  onPressed: () {
+                                    showFraction = false;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text("Decimal",
+                                      style: TextStyle(
+                                          color: Theme.of(context).buttonColor)),
+                                )),
+                          ]),
+                    ],
+                    if (!showFraction) ...[
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                                child: OutlineButton(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).buttonColor,
+                                      style: BorderStyle.solid,
+                                      width: 2),
+                                  onPressed: () {
+                                    showFraction = true;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text("Fraction",
+                                      style: TextStyle(
+                                          color: Theme.of(context).buttonColor)),
+                                )),
+                            Expanded(
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    showFraction = false;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    "Decimal",
                                     style: TextStyle(
-                                        color: Theme.of(context).buttonColor)),
-                              )),
-                          Expanded(
-                              child: RaisedButton(
-                                onPressed: () {
-                                  showFraction = false;
-                                  switched = true;
-                                  setState(() {});
-                                },
-                                child: Text(
-                                  "Decimal",
-                                  style: TextStyle(
-                                      color: Theme.of(context).highlightColor),
-                                ),
-                              )),
-                        ]),
-                  ],
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Serving Size',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22),
-                            ),
-                            Text(
-                              servingSizeAsFraction +
-                                  " " +
-                                  currentFood.commonPortionSizeUnit,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'Number of Servings',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).highlightColor),
+                                  ),
+                                )),
+                          ]),
+                    ],
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                'Serving Size',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22),
                               ),
-                            ),
-                            if (showFraction) ...[
+                              Text(
+                                servingSizeAsFraction +
+                                    " " +
+                                    currentFood.commonPortionSizeUnit,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                'Number of Servings',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (showFraction) ...[
+                                GestureDetector(
+                                  onTap: () => showPickerModal(context),
+                                  child: Container(
+                                    width: 175,
+                                    child: TextFormField(
+                                      enabled: false,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                      ),
+                                      controller: portionCtl,
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                        EdgeInsets.only(bottom: 3, top: 5),
+                                        hintText: "# of servings",
+                                        isDense: true,
+                                      ),
+                                      onChanged: (text) {},
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              if (!showFraction) ...[
+                                Container(
+                                  width: 175,
+                                  child: TextFormField(
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      // height: 2.0,
+                                      // color: Colors.black
+                                    ),
+                                    initialValue: actualPortion.toStringAsFixed(2),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(4),
+                                      FilteringTextInputFormatter.deny(
+                                          new RegExp('[ -]')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+\.?\d{0,2}'))
+                                    ],
+                                    keyboardType: TextInputType.numberWithOptions(
+                                        decimal: true),
+                                    // keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                      EdgeInsets.only(bottom: 3, top: 5),
+                                      hintText: "# of servings",
+                                      isDense: true,
+                                      // border: InputBorder.none
+                                    ),
+                                    onChanged: (text) {
+                                      if (text.isNotEmpty) {
+                                        if (double.parse(text) > 10) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                  'Value cannot be greater than 10')));
+                                          // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Value cannot be greater than 10')));
+                                          // portion = 1;
+                                          // actualPortion = portion;
+                                          //snack bar portion cannot be greater than 10
+                                        } else {
+                                          portion = double.parse(text);
+                                          actualPortion = portion;
+                                        }
+                                      } else {
+                                        portion = 1;
+                                        actualPortion = portion;
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ],
+                              SizedBox(height: 8),
+                              Text(
+                                'Time eaten',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               GestureDetector(
-                                onTap: () => showPickerModal(context),
+                                onTap: _pickTime,
                                 child: Container(
                                   width: 175,
                                   child: TextFormField(
@@ -720,133 +804,52 @@ class FoodProfile extends State<FoodPage> {
                                     style: TextStyle(
                                       fontSize: 20.0,
                                     ),
-                                    controller: portionCtl,
+                                    controller: dateCtl,
                                     decoration: InputDecoration(
                                       contentPadding:
                                       EdgeInsets.only(bottom: 3, top: 5),
-                                      hintText: "# of servings",
+                                      hintText: "Enter time",
                                       isDense: true,
                                     ),
                                     onChanged: (text) {},
                                   ),
                                 ),
-                              ),
+                              )
                             ],
-                            if (!showFraction) ...[
-                              Container(
-                                width: 175,
-                                child: TextFormField(
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    // height: 2.0,
-                                    // color: Colors.black
-                                  ),
-                                  initialValue: actualPortion.toStringAsFixed(2),
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(4),
-                                    FilteringTextInputFormatter.deny(
-                                        new RegExp('[ -]')),
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'^\d+\.?\d{0,2}'))
-                                  ],
-                                  keyboardType: TextInputType.numberWithOptions(
-                                      decimal: true),
-                                  // keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                    EdgeInsets.only(bottom: 3, top: 5),
-                                    hintText: "# of servings",
-                                    isDense: true,
-                                    // border: InputBorder.none
-                                  ),
-                                  onChanged: (text) {
-                                    if (text.isNotEmpty) {
-                                      if (double.parse(text) > 10) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                            backgroundColor: Colors.red,
-                                            content: Text(
-                                                'Value cannot be greater than 10')));
-                                        // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Value cannot be greater than 10')));
-                                        // portion = 1;
-                                        // actualPortion = portion;
-                                        //snack bar portion cannot be greater than 10
-                                      } else {
-                                        portion = double.parse(text);
-                                        actualPortion = portion;
-                                      }
-                                    } else {
-                                      portion = 1;
-                                      actualPortion = portion;
-                                    }
-                                    setState(() {});
-                                  },
-                                ),
-                              ),
-                            ],
-                            SizedBox(height: 8),
-                            Text(
-                              'Time eaten',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: _pickTime,
-                              child: Container(
-                                width: 175,
-                                child: TextFormField(
-                                  enabled: false,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                  ),
-                                  controller: dateCtl,
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                    EdgeInsets.only(bottom: 3, top: 5),
-                                    hintText: "Enter time",
-                                    isDense: true,
-                                  ),
-                                  onChanged: (text) {},
-                                ),
-                              ),
-                            )
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ButtonTheme(
+                          minWidth: 90,
+                          buttonColor: Theme.of(context).primaryColor,
+                          child: RaisedButton(
+                            // padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.pop(context, null);
+                            },
+                          ),
+                        ),
+                        ButtonTheme(
+                          minWidth: 90,
+                          buttonColor: Theme.of(context).primaryColor,
+                          child: RaisedButton(
+                            // padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Text('Save Entry'),
+                            onPressed: () {
+                              saveNewEntry();
+                              Navigator.pop(context, null);
+                            },
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ButtonTheme(
-                        minWidth: 90,
-                        buttonColor: Theme.of(context).primaryColor,
-                        child: RaisedButton(
-                          // padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.pop(context, null);
-                          },
-                        ),
-                      ),
-                      ButtonTheme(
-                        minWidth: 90,
-                        buttonColor: Theme.of(context).primaryColor,
-                        child: RaisedButton(
-                          // padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Text('Save Entry'),
-                          onPressed: () {
-                            saveNewEntry();
-                            Navigator.pop(context, null);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
 
             ]),

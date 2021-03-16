@@ -71,8 +71,7 @@ class _ActivityTrackingInputScreenState
                   child: DropdownButtonFormField<ActivityModel>(
                     isExpanded: true,
                     // value: widget.fitnessActivity,
-                    value: fitnessActivityMasterList[0],
-
+                    // value: fitnessActivityMasterList[0],
                     hint: Text('select'),
                     onChanged: (value) => setState(() {
                       widget.fitnessActivity.type = value.type;

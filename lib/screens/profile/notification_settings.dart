@@ -33,7 +33,8 @@ class _NotificationSettings extends State<NotificationSettings> {
   void initState() {
     super.initState();
     // var androidInitialize = new AndroidInitializationSettings('ic_launcher');
-    var androidInitialize = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var androidInitialize =
+        new AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOSInitialize = new IOSInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -114,8 +115,7 @@ class _NotificationSettings extends State<NotificationSettings> {
         initialTime:
             new TimeOfDay(hour: dailyTime.hour, minute: dailyTime.minute),
         initialEntryMode: TimePickerEntryMode.dial,
-        helpText: 'Notification Time'
-        );
+        helpText: 'Notification Time');
     if (t != null) {
       setState(() {
         var hour = t.hour == 0
@@ -302,7 +302,8 @@ class _NotificationSettings extends State<NotificationSettings> {
                       },
                     ),
                     Divider(
-                      thickness: 5,
+                      color: Colors.grey[600],
+                      thickness: 0,
                     ),
                     if (enableNotifications) ...[
                       SwitchListTile(
@@ -357,7 +358,8 @@ class _NotificationSettings extends State<NotificationSettings> {
                         ),
                       ],
                       Divider(
-                        thickness: 5,
+                        color: Colors.grey[600],
+                        thickness: 0,
                       ),
                       SwitchListTile(
                         title: Text('Weekly',
@@ -377,6 +379,9 @@ class _NotificationSettings extends State<NotificationSettings> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top: 0, left: 15, right: 0)),
                             Expanded(
                               child: DropdownButtonFormField(
                                 // isExpanded: true,
@@ -440,7 +445,8 @@ class _NotificationSettings extends State<NotificationSettings> {
                     ],
                     if (enableNotifications) ...[
                       Divider(
-                        thickness: 5,
+                        color: Colors.grey[600],
+                        thickness: 0,
                       ),
                     ],
                   ],
