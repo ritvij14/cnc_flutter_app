@@ -166,8 +166,8 @@ class _SymptomTrackingInputScreenState
                   child: RaisedButton(
                     child: Text('Submit'),
                     onPressed: () {
-                      db.saveNewSymptom(widget.symptomModel);
-                      Navigator.pop(context);
+                      var x = db.saveNewSymptom(widget.symptomModel);
+                      Navigator.pop(context,'');
                     },
                   ),
                 ),

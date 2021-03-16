@@ -24,6 +24,7 @@ class _SymptomTrackingModifyScreenState extends State<SymptomTrackingModifyScree
 
   @override
   Widget build(BuildContext context) {
+    dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(widget.symptomModel.dateTime));
     return Scaffold(
       appBar: AppBar(
         title: Text('Track Symptoms'),

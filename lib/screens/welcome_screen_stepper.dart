@@ -11,6 +11,7 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -986,7 +987,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   var birthDate;
   var lastDiagDate;
 
-  submit() {
+  submit() async {
     if (!userOptIn) {
       dropDownRace = "na";
       dropDownEthnicities = "na";
@@ -1020,7 +1021,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         }
       }
     }
-
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
     // if (gIIssues == "") {
     //   gIIssues = "na";
     // }
@@ -1033,7 +1035,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     DBHelper db = new DBHelper();
 
     db.saveFormInfo(
-        "1",
+        id,
         birthDate.toString().split(" ")[0],
         dropDownRace.replaceAll(" ", "-"),
         dropDownEthnicities.replaceAll(" ", "-"),

@@ -38,7 +38,6 @@ class _SymptomTrackingBodyState extends State<SymptomTrackingBody> {
     var response = await db.getSymptoms();
     print(response.body);
     List<SymptomModel> newSymptomModelList = (json.decode(response.body) as List).map((data) => SymptomModel.fromJson(data)).toList();
-    print('here');
     symptomModelList = newSymptomModelList;
   }
 }
