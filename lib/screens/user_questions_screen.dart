@@ -122,6 +122,7 @@ class _UserQuestionsScreen extends State<UserQuestionsScreen> {
                                       children: <Widget>[
                                           SizedBox(height: 10),
                                           Divider(
+                                            color: Colors.grey[600],
                                             height: 0,
                                             thickness: 1,
                                           ),
