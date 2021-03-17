@@ -2,6 +2,7 @@
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/widgets/food_log_widget.dart';
+import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -14,6 +15,20 @@ class DietTrackingScreen extends StatefulWidget {
 }
 
 class _DietTrackingScreenState extends State<DietTrackingScreen> {
+  update(BuildContext context) {
+    setState(() {
+
+    });
+  }
+
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
   var db = new DBHelper();
   List<Food> foodList = [];
 
@@ -32,7 +47,22 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Diet Tracking"),
-      ),
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    showSearch(
+                        context: context,
+                        delegate: FoodSearch(key))
+                        .then((value) => rebuildAllChildren(context));
+                  },
+                  child: Icon(
+                    Icons.add,
+                    // size: 26.0,
+                  ),
+                )),
+          ]),
       body: ScrollingDayCalendar(
         startDate: startDate,
         endDate: endDate,

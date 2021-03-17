@@ -83,7 +83,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    kcal.toStringAsFixed(2),
+                    kcal.round().toString(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -110,7 +110,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        fatInGrams.toStringAsFixed(2) + 'g',
+                        fatInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
@@ -128,7 +128,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    saturatedFattyAcidsInGrams.toStringAsFixed(2) + 'g',
+                    saturatedFattyAcidsInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -143,7 +143,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    polyunsaturatedFattyAcidsInGrams.toStringAsFixed(2) + 'g',
+                    polyunsaturatedFattyAcidsInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -158,7 +158,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    monounsaturatedFattyAcidsInGrams.toStringAsFixed(2) + 'g',
+                    monounsaturatedFattyAcidsInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -185,7 +185,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        carbohydratesInGrams.toStringAsFixed(2) + 'g',
+                        carbohydratesInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
@@ -203,7 +203,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    insolubleFiberInGrams.toStringAsFixed(2) + 'g',
+                    insolubleFiberInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -218,7 +218,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    solubleFiberInGrams.toStringAsFixed(2) + 'g',
+                    solubleFiberInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -233,7 +233,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    sugarInGrams.toStringAsFixed(2) + 'g',
+                    sugarInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -247,7 +247,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    proteinInGrams.toStringAsFixed(2) + 'g',
+                    proteinInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -261,7 +261,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    alcoholInGrams.toStringAsFixed(2) + 'g',
+                    alcoholInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -275,7 +275,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    calciumInMilligrams.toStringAsFixed(2) + 'mg',
+                    calciumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -289,7 +289,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    sodiumInMilligrams.toStringAsFixed(2) + 'mg',
+                    sodiumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -303,7 +303,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    vitaminDInMicrograms.toStringAsFixed(2) + 'mcg',
+                    vitaminDInMicrograms.round().toString() + 'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -327,7 +327,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    kcal.toStringAsFixed(2),
+                    kcal.round().toString(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -354,7 +354,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        fatInGrams.toStringAsFixed(2) + 'g',
+                        fatInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
@@ -372,7 +372,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    saturatedFattyAcidsInGrams.toStringAsFixed(2) + 'g',
+                    saturatedFattyAcidsInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -387,7 +387,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    polyunsaturatedFattyAcidsInGrams.toStringAsFixed(2) + 'g',
+                    polyunsaturatedFattyAcidsInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -402,7 +402,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    monounsaturatedFattyAcidsInGrams.toStringAsFixed(2) + 'g',
+                    monounsaturatedFattyAcidsInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -429,7 +429,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        carbohydratesInGrams.toStringAsFixed(2) + 'g',
+                        carbohydratesInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
@@ -446,7 +446,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    proteinInGrams.toStringAsFixed(2) + 'g',
+                    proteinInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -460,7 +460,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    alcoholInGrams.toStringAsFixed(2) + 'g',
+                    alcoholInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -474,7 +474,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    calciumInMilligrams.toStringAsFixed(2) + 'mg',
+                    calciumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -488,7 +488,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    sodiumInMilligrams.toStringAsFixed(2) + 'mg',
+                    sodiumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -502,7 +502,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    vitaminDInMicrograms.toStringAsFixed(2) + 'mcg',
+                    vitaminDInMicrograms.round().toString() + 'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -526,7 +526,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    kcal.toStringAsFixed(2),
+                    kcal.round().toString(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -553,7 +553,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        fatInGrams.toStringAsFixed(2) + 'g',
+                        fatInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
@@ -583,7 +583,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        carbohydratesInGrams.toStringAsFixed(2) + 'g',
+                        carbohydratesInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle), // icon-2
@@ -601,7 +601,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    insolubleFiberInGrams.toStringAsFixed(2) + 'g',
+                    insolubleFiberInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -616,7 +616,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    solubleFiberInGrams.toStringAsFixed(2) + 'g',
+                    solubleFiberInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -631,7 +631,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    sugarInGrams.toStringAsFixed(2) + 'g',
+                    sugarInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -645,7 +645,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    proteinInGrams.toStringAsFixed(2) + 'g',
+                    proteinInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -659,7 +659,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    alcoholInGrams.toStringAsFixed(2) + 'g',
+                    alcoholInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -673,7 +673,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    calciumInMilligrams.toStringAsFixed(2) + 'mg',
+                    calciumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -687,7 +687,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    sodiumInMilligrams.toStringAsFixed(2) + 'mg',
+                    sodiumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -701,7 +701,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    vitaminDInMicrograms.toStringAsFixed(2) + 'mcg',
+                    vitaminDInMicrograms.round().toString() + 'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -730,7 +730,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                   //   style: TextStyle(fontWeight: FontWeight.bold),
                   // ),
                   trailing: Text(
-                    kcal.toStringAsFixed(2),
+                    kcal.round().toString(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -757,7 +757,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        fatInGrams.toStringAsFixed(2) + 'g',
+                        fatInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
@@ -787,7 +787,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                     spacing: 12, // space between two icons
                     children: <Widget>[
                       Text(
-                        carbohydratesInGrams.toStringAsFixed(2) + 'g',
+                        carbohydratesInGrams.round().toString() + 'g',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ), // icon-1
                       Icon(Icons.arrow_drop_down_circle_outlined), // icon-2
@@ -804,7 +804,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    proteinInGrams.toStringAsFixed(2) + 'g',
+                    proteinInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -818,7 +818,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    alcoholInGrams.toStringAsFixed(2) + 'g',
+                    alcoholInGrams.round().toString() + 'g',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -832,7 +832,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    calciumInMilligrams.toStringAsFixed(2) + 'mg',
+                    calciumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -846,7 +846,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    sodiumInMilligrams.toStringAsFixed(2) + 'mg',
+                    sodiumInMilligrams.round().toString() + 'mg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -860,7 +860,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    vitaminDInMicrograms.toStringAsFixed(2) + 'mcg',
+                    vitaminDInMicrograms.round().toString() + 'mcg',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),

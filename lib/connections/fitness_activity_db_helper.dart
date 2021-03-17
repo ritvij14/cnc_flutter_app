@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/db_helper_base.dart';
-import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
+import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:http/http.dart' as http;
 
 class ActivityDBHelper extends DBHelperBase {
@@ -24,6 +24,19 @@ class ActivityDBHelper extends DBHelperBase {
           'intensity': fitnessActivityModel.intensity.toString(),
           'minutes': fitnessActivityModel.minutes.toString(),
           'dateTime': fitnessActivityModel.dateTime.toIso8601String(),
+        }));
+  }
+  Future<http.Response> updateExistingActivity(
+      ActivityModel activityModel) async {
+    var requestUrl = baseUrl + 'api/fitnessActivity/update/';
+    var uriResponse = await http.put(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'id': activityModel.id,
+          'type': activityModel.type,
+          'intensity': activityModel.intensity.toString(),
+          'minutes': activityModel.minutes.toString(),
+          'dateTime': activityModel.dateTime.toIso8601String(),
         }));
   }
 }

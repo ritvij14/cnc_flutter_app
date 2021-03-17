@@ -11,6 +11,7 @@ class FoodSearch extends SearchDelegate<String> {
 
   // var recentSearchList = [];
   List<Food> foodList = [];
+  List<Food> frequentFoodList = [];
   Food selection;
   String selectedDate;
 
@@ -19,6 +20,7 @@ class FoodSearch extends SearchDelegate<String> {
   }
 
   Future<bool> getFood() async {
+    await getFrequentFood();
     foodList.clear();
     // recentSearchList.clear();
     var db = new DBHelper();
@@ -57,8 +59,47 @@ class FoodSearch extends SearchDelegate<String> {
     return true;
   }
 
+  Future<bool> getFrequentFood() async {
+    frequentFoodList.clear();
+    var db = new DBHelper();
+    var response = await db.getUserFrequentFoods(1);
+    var data = json.decode(response.body);
+    for (int i = 0; i < data.length; i++) {
+      Food food = new Food();
+      food.id = data[i]['id'];
+      food.keylist = data[i]['keyList'];
+      food.description = data[i]['description'];
+      food.description = food.description.replaceAll('"', '');
+      food.kcal = data[i]['kcal'];
+      food.proteinInGrams = data[i]['proteinInGrams'];
+      food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
+      food.fatInGrams = data[i]['fatInGrams'];
+      food.alcoholInGrams = data[i]['alcoholInGrams'];
+      food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
+      food.polyunsaturatedFattyAcidsInGrams =
+      data[i]['polyunsaturatedFattyAcidsInGrams'];
+      food.monounsaturatedFattyAcidsInGrams =
+      data[i]['monounsaturatedFattyAcidsInGrams'];
+      food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
+      food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
+      food.sugarInGrams = data[i]['sugarInGrams'];
+      food.calciumInMilligrams = data[i]['calciumInMilligrams'];
+      food.sodiumInMilligrams = data[i]['sodiumInMilligrams'];
+      food.vitaminDInMicrograms = data[i]['vitaminDInMicrograms'];
+      food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
+      food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
+      food.commonPortionSizeDescription =
+      data[i]['commonPortionSizeDescription'];
+      food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
+      food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
+      frequentFoodList.add(food);
+    }
+    return true;
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
+    // getFrequentFood();
     //what actions will occur
     return [
       IconButton(
@@ -171,6 +212,7 @@ class FoodSearch extends SearchDelegate<String> {
     //   recentSearchList.add(query);
     //   recentSearchList = new List.from(recentSearchList.reversed);
     // }
+
     return FutureBuilder(
         builder: (context, projectSnap) {
           return ListView.builder(
@@ -206,7 +248,8 @@ class FoodSearch extends SearchDelegate<String> {
                                   builder: (_) =>
                                       FoodPage(foodList[index], selectedDate)),
                             )
-                            .then((val) => {getFood()});
+                            .then((val) => {});
+                        // close(context, null)
                       },
                       title: Text(
                         foodList[index].description,
@@ -215,6 +258,7 @@ class FoodSearch extends SearchDelegate<String> {
                     ),
                   ),
                   Divider(
+                    color: Colors.grey[600],
                     height: 0,
                     thickness: 1,
                   )
@@ -228,11 +272,16 @@ class FoodSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // final searchResults = query.isEmpty ? recentSearchList : foodList;
+    var searchResults;
+    if(query.isNotEmpty) {
+      searchResults = foodList;
+    } else {
+      searchResults = frequentFoodList;
+    }
     return FutureBuilder(
       builder: (context, projectSnap) {
         return ListView.builder(
-          itemCount: foodList.length,
+          itemCount: searchResults.length,
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -248,12 +297,12 @@ class FoodSearch extends SearchDelegate<String> {
                           width: 15,
                           height: double.infinity,
                           child: Text(''),
-                          color: getColor(foodList[index].nccFoodGroupCategory),
+                          color: getColor(searchResults[index].nccFoodGroupCategory),
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 5, right: 5),
                         ),
-                        getIcon(foodList[index].nccFoodGroupCategory),
+                        getIcon(searchResults[index].nccFoodGroupCategory),
                       ],
                     ),
                     onTap: () {
@@ -261,17 +310,18 @@ class FoodSearch extends SearchDelegate<String> {
                           .push(
                             new MaterialPageRoute(
                                 builder: (_) =>
-                                    FoodPage(foodList[index], selectedDate)),
+                                    FoodPage(searchResults[index], selectedDate)),
                           )
-                          .then((val) => {getFood()});
+                          .then((val) => {});
                     },
                     title: Text(
-                      foodList[index].description,
+                      searchResults[index].description,
                       textAlign: TextAlign.left,
                     ),
                   ),
                 ),
                 Divider(
+                  color: Colors.grey[600],
                   height: 0,
                   thickness: 1,
                 )

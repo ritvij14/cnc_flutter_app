@@ -2,7 +2,7 @@ import 'food_model.dart';
 
 class FoodLogEntry {
   int _id;
-  var _entryTime;
+  String _entryTime;
   var _date;
   double _portion;
   Food _food;
@@ -19,6 +19,11 @@ class FoodLogEntry {
 
   set food(Food value) {
     _food = value;
+  }
+
+  @override
+  String toString() {
+    return 'FoodLogEntry{_entryTime: $_entryTime, _date: $_date, _portion: $_portion, _food: $_food}';
   }
 
   double get portion => _portion;

@@ -25,19 +25,19 @@ class LoginScreen extends StatelessWidget {
       if (await db.isEmailValid(data.name) == false) {
         return 'Username does not exist';
       }
-      //password doesn't match username in db
-      if (await db.login(data.name, data.password) == false) {
+      var response = await db.login(data.name, data.password);
+      if (response == "invalid") {
         return 'Incorrect password';
       }
-      print('Authorization successful.');
+      saveUserIDtoPref(response);
 
+      //TODO remove store email code.
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('email', '${data.name}');
 
       return null;
     });
   }
-
 
   Future<String> _registerUser(LoginData data) {
     print('Name: ${data.name}, Password: ${data.password}');
@@ -46,20 +46,11 @@ class LoginScreen extends StatelessWidget {
       if (await db.isEmailValid(data.name) == true) {
         return 'Username is already taken.';
       }
+      //create new user, save to db, then save to shared pref
       UserModel userModel = new UserModel(data.name, data.password);
-      var response = db.registerNewUser(userModel);
-      print(response.toString());
-
-      var response2 = await db.getFormCompletionStatus(data.name);
-      // formComplete = response2.toString() == 'true';
-
-      // print('form complete = ' + formComplete.toString());
-      // if (formComplete) {
-      //   print('form was completed');
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email', '${data.name}');
-      // }
-
+      var response = await db.registerNewUser(userModel);
+      String currentUserID = response.body;
+      saveUserIDtoPref(currentUserID);
       return null;
     });
   }
@@ -101,7 +92,7 @@ class LoginScreen extends StatelessWidget {
 
   Future<String> welcomeScreenComplete() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var id = prefs.get('email');
+    var id = prefs.get('id');
     var response = await db.getFormCompletionStatus(id);
     bool formComplete = (response.toString() == 'true');
     print('The welcome screener came back as ' + formComplete.toString());
@@ -110,5 +101,10 @@ class LoginScreen extends StatelessWidget {
     } else {
       return '/welcome';
     }
+  }
+
+  saveUserIDtoPref(String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('id', id);
   }
 }

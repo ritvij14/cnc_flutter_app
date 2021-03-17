@@ -1,16 +1,12 @@
 import 'dart:convert';
 import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
-import 'package:cnc_flutter_app/models/fitness_activity_model.dart';
+import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'activity_tracking_list_tile_widget.dart';
 
 
 class ActivityTrackingBody extends StatefulWidget {
   List<ActivityModel> activityModelList = [];
-
-  ActivityTrackingBody(List<ActivityModel> fitnessActivityList) {
-    this.activityModelList = fitnessActivityList;
-  }
 
   @override
   _ActivityTrackingBodyState createState() => _ActivityTrackingBodyState();
@@ -37,16 +33,16 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
 
   }
 
-  List<ActivityTrackingListTile> buildFitnessTrackingListTileWidgets(
-      List<ActivityModel> fitnessActivityModelList) {
-    List<ActivityTrackingListTile> fitnessTrackingListTileList = [];
-    for (ActivityModel fitnessActivity in widget.activityModelList) {
-      ActivityTrackingListTile fitnessTrackingListTile =
-          new ActivityTrackingListTile(fitnessActivity);
-      fitnessTrackingListTileList.add(fitnessTrackingListTile);
-    }
-    return fitnessTrackingListTileList;
-  }
+  // List<ActivityTrackingListTile> buildFitnessTrackingListTileWidgets(
+  //     List<ActivityModel> fitnessActivityModelList) {
+  //   List<ActivityTrackingListTile> fitnessTrackingListTileList = [];
+  //   for (ActivityModel fitnessActivity in widget.activityModelList) {
+  //     ActivityTrackingListTile fitnessTrackingListTile =
+  //         new ActivityTrackingListTile(fitnessActivity);
+  //     fitnessTrackingListTileList.add(fitnessTrackingListTile);
+  //   }
+  //   return fitnessTrackingListTileList;
+  // }
 
   getActivities() async {
     widget.activityModelList.clear();

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
+import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -26,20 +29,9 @@ class ChooseGoalsPage extends StatefulWidget {
 }
 
 class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
+  List<String> goals = [];
+  List<WeeklyGoalsModel> weeklyGoalsModelList = [];
   var db = new WeeklyDBHelper();
-
-  List<String> goals;
-
-  SlidableController slidableController;
-  List<_GoalItem> items = List.generate(
-    10,
-        (i) => _GoalItem(
-      i,
-      _getTitle(i),
-      _getSubtitle(i),
-      _getAvatarColor(i),
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -47,238 +39,355 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: OrientationBuilder(
-          builder: (context, orientation) => _buildList(
-              context,
-              orientation == Orientation.portrait
-                  ? Axis.vertical
-                  : Axis.horizontal),
-        ),
+      body: FutureBuilder(
+        builder: (context, projectSnap) {
+          return _buildGoalView();
+        },
+        future: getGoals(),
       ),
     );
   }
 
-  Widget _buildList(BuildContext context, Axis direction) {
-    return ListView.builder(
-      scrollDirection: direction,
-      itemBuilder: (context, index) {
-        final Axis slidableDirection =
-        direction == Axis.horizontal ? Axis.vertical : Axis.horizontal;
+  Widget _buildGoalView() {
+    return SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                color: Colors.black,
+                child: ExpansionTile(
+                  title: Text(
+                    "Chosen Goals",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  children: <Widget>[
 
-        return _getSlidableWithLists(context, index, slidableDirection);
+                    Container(
+                        color: Colors.white,
+                        height: 150,
+                        child: ListView.builder(
+                            itemCount: goals.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                child: Text((index+1).toString() + ". " + goals[index],
+                                    style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              );
+                            }))
+                  ],
+                ),
+              ),
+          Container(
+            color: _getColor("Fruit"),
+            child: ExpansionTile(
+              title: Text(
+                "Fruit Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
 
-      },
-      itemCount: items.length,
-    );
-  }
-
-  Widget _getSlidableWithLists(
-      BuildContext context, int index, Axis direction) {
-    final _GoalItem item = items[index];
-    //final int t = index;
-    return Slidable(
-      key: Key(item.title),
-      controller: slidableController,
-      direction: direction,
-      actionPane: _getActionPane(item.index),
-      actionExtentRatio: 0.25,
-      child: direction == Axis.horizontal
-          ? VerticalListItem(items[index])
-          : HorizontalListItem(items[index]),
-      actions: <Widget>[
-        IconSlideAction(
-          caption: 'Add',
-          color: Colors.green,
-          icon: Icons.add,
-          onTap: () {
-            _addGoal(items[index].subtitle);
-            print(goals);
-            _showSnackBar(context, 'Added Goal to Weekly Goals');
-          }
-        ),
-      ],
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Add',
-          color: Colors.green,
-          icon: Icons.add,
-          onTap: () {
-            _addGoal(items[index].subtitle);
-            print(goals);
-            _showSnackBar(context, 'Added Goal to Weekly Goals');
-          }
-        ),
-      ],
-    );
-  }
-
-  _addGoal(String goal) {
-    if (goals == null) {
-      goals = [];
-      goals.add(goal);
-    }
-    else {
-      goals.add(goal);
-    }
-  }
-
-  static Widget _getActionPane(int index) {
-    switch (index % 4) {
-      case 0:
-        return SlidableBehindActionPane();
-      case 1:
-        return SlidableStrechActionPane();
-      case 2:
-        return SlidableScrollActionPane();
-      case 3:
-        return SlidableDrawerActionPane();
-      default:
-        return null;
-    }
-  }
-
-  static Color _getAvatarColor(int index) {
-    if(_getTitle(index) == "Fruits") {
-      return Colors.orange;
-    }
-    else if(_getTitle(index) == "Vegetables") {
-      return Colors.green;
-    }
-    else if(_getTitle(index) == "Grains") {
-      return Colors.brown;
-    }
-    else if(_getTitle(index) == "Protein") {
-      return Colors.red;
-    }
-    else if(_getTitle(index) == "Dairy") {
-      return Colors.yellow;
-    }
-    else if(_getTitle(index) == "Snacks") {
-      return Colors.purple;
-    }
-    else if(_getTitle(index) == "Beverages") {
-      return Colors.blue;
-    }
-    else if(_getTitle(index) == "Physical Activity") {
-      return Colors.grey;
-    }
-    else {
-      return Colors.black;
-    }
-  }
-
-  static String _getTitle(int index) {
-    if(index < 3) {
-      return 'Fruits';
-    }
-    if(index > 4 && index < 8) {
-      return 'Grains';
-    }
-    else {
-      return 'Vegetables';
-    }
-  }
-
-  static String _getSubtitle(int index) {
-    switch (index % 10) {
-      case 0:
-        return 'Incorporate 3 fruits into a fruit smoothie into your day (1 day)';
-      case 1:
-        return 'Have 1 serving of fresh fruit in the middle of the day (2 days)';
-      case 2:
-        return 'Add 2 servings of fresh fruit during your day (2 days)';
-      case 3:
-        return 'Add 1 serving of berries into your day (3 days) ';
-      case 4:
-        return 'Eat 1 serving of fresh fruit (5 days)';
-      case 5:
-        return 'Have 2 servings of non-starchy vegetables into your meals (2 days)';
-      case 6:
-        return 'Make and eat a salad that you’ve never made before (such as kale, arugula, cabbage) (2 days)';
-      case 7:
-        return 'Include 2 dark green vegetables for 2 meals (2 days)';
-      case 8:
-        return 'Eat an orange or yellow vegetable at least once daily (2 days)';
-      case 9:
-        return 'Prepare two different non-starchy vegetables for 2 meals (5 days)';
-      default:
-        return null;
-    }
+                Container(
+                    color: _getColor("Fruit"),
+                    height: 150,
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type == "Fruit") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          ),
+          Container(
+            color: _getColor("Vegetable"),
+            child: ExpansionTile(
+              title: Text(
+                "Vegetable Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+                Container(
+                    height: 150,
+                    color: _getColor("Vegetable"),
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type == "Vegetable") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          ),
+          Container(
+            color: _getColor("Grain"),
+            child: ExpansionTile(
+              title: Text(
+                "Grain Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+                Container(
+                    height: 150,
+                    color: _getColor("Grain"),
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type == "Grain") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          ),
+          Container(
+            color: _getColor("Protein"),
+            child: ExpansionTile(
+              title: Text(
+                "Protein Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+                Container(
+                    height: 150,
+                    color: _getColor("Protein"),
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type == "Protein") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          ),
+          Container(
+            color: _getColor("Dairy"),
+            child: ExpansionTile(
+              title: Text(
+                "Dairy Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+                Container(
+                    height: 150,
+                    color: _getColor("Dairy"),
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type == "Dairy") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          ),
+          Container(
+            color: _getColor("Snack"),
+            child: ExpansionTile(
+              title: Text(
+                "Snack Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+                Container(
+                    height: 150,
+                    color: _getColor("Snack"),
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type == "Snack") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          ),
+          Container(
+            color: _getColor("Beverage"),
+            child: ExpansionTile(
+              title: Text(
+                "Beverage Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+                Container(
+                    height: 150,
+                    color: _getColor("Beverage"),
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type == "Beverage") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          ),
+          Container(
+            color: _getColor("Physical Activity"),
+            child: ExpansionTile(
+              title: Text(
+                "Physical Activity Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+                Container(
+                    height: 150,
+                    color: _getColor("Physical Activity"),
+                    child: ListView.builder(
+                        itemCount: weeklyGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklyGoalsModelList[index].type ==
+                              "Physical Activity") {
+                            return _buildSlideView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
+              ],
+            ),
+          )
+        ]));
   }
 
   void _showSnackBar(BuildContext context, String text) {
     Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
-}
 
-class HorizontalListItem extends StatelessWidget {
-  HorizontalListItem(this.item);
-  final _GoalItem item;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      width: 160.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Expanded(
-            child: CircleAvatar(
-              backgroundColor: item.color,
-              child: Text('${item.index+1}'),
-              foregroundColor: Colors.white,
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Text(
-                item.subtitle,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  _addGoal(String goal) {
+    setState(() {
+      if (goals == null) {
+        goals = [];
+        goals.add(goal);
+      } else {
+        goals.add(goal);
+      }
+    });
   }
-}
 
-class VerticalListItem extends StatelessWidget {
-  VerticalListItem(this.item);
-  final _GoalItem item;
+  Color _getColor(String index) {
+    if (index == "Fruit") {
+      return Colors.red;
+    } else if (index == "Vegetable") {
+      return Colors.green;
+    } else if (index == "Grain") {
+      return Colors.orange[300];
+    } else if (index == "Protein") {
+      return Colors.deepPurple[300];
+    } else if (index == "Dairy") {
+      return Colors.blue[600];
+    } else if (index == "Snack") {
+      return Colors.pink[300];
+    } else if (index == "Beverage") {
+      return Colors.teal[400];
+    } else if (index == "Physical Activity") {
+      return Colors.grey;
+    } else {
+      return Colors.black;
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () =>
-      Slidable.of(context)?.renderingMode == SlidableRenderingMode.none
-          ? Slidable.of(context)?.open()
-          : Slidable.of(context)?.close(),
+  Widget _buildEmpty() {
+    return Container(color: Colors.white // This is optional
+        );
+  }
+
+  Widget _buildSlideView(int index) {
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
       child: Container(
         color: Colors.white,
         child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: item.color,
-            foregroundColor: Colors.white,
-          ),
-          title: Text(item.title),
-          subtitle: Text(item.subtitle),
+          title: Text(weeklyGoalsModelList[index].type),
+          subtitle: Text(weeklyGoalsModelList[index].goalDescription),
         ),
       ),
+      actions: <Widget>[
+        IconSlideAction(
+            caption: 'Add',
+            color: Colors.green,
+            icon: Icons.add,
+            onTap: () {
+              //_addGoal(items[index].subtitle);
+              _addGoal(weeklyGoalsModelList[index].goalDescription);
+              print(goals);
+              _showSnackBar(context, 'Added Goal to Weekly Goals');
+            }),
+      ],
+      secondaryActions: <Widget>[
+        IconSlideAction(
+            caption: 'Add',
+            color: Colors.green,
+            icon: Icons.add,
+            onTap: () {
+              _addGoal(weeklyGoalsModelList[index].goalDescription);
+              print(goals);
+              _showSnackBar(context, 'Added Goal to Weekly Goals');
+            }),
+      ],
     );
   }
-}
 
-class _GoalItem {
-  _GoalItem(
-      this.index,
-      this.title,
-      this.subtitle,
-      this.color,
-      );
+  getGoals() async {
+    weeklyGoalsModelList.clear();
+    var db = new WeeklyDBHelper();
+    var response = await db.getWeeklyGoals();
+    var wGDecode = json.decode(response.body);
 
-  int index;
-  String title;
-  String subtitle;
-  Color color;
+    for (int i = 0; i < wGDecode.length; i++) {
+      WeeklyGoalsModel weeklyGoalsModel = new WeeklyGoalsModel(
+          wGDecode[i]['type'],
+          wGDecode[i]['goalDescription'],
+          wGDecode[i]['help_info']);
+      weeklyGoalsModelList.add(weeklyGoalsModel);
+      print(wGDecode[i]['type']);
+    }
+    print(wGDecode.length);
+  }
 }

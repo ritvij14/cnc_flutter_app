@@ -16,20 +16,21 @@ class DBHelper{
     return isValid;
   }
 
-  //'valid' or 'invalid'
-  Future<bool> login(String email, String password) async {
+  //user id as a string or 'invalid'
+  Future<String> login(String email, String password) async {
     var requestUrl =
         baseUrl + 'api/users/login/' + email + '/' + password + '/';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
-    return response.body.toString() == 'valid';
+    return response.body.toString();
   }
 
-  Future<bool> getFormCompletionStatus(String email) async {
+  Future<bool> getFormCompletionStatus(String id) async {
     var requestUrl =
-        baseUrl + 'api/users/formstatus/' + email;
+        baseUrl + 'api/users/formstatus/' + id;
     http.Response response =
     await http.get(Uri.encodeFull(requestUrl), headers: {});
+
     return response.body.toString() == 'true';
   }
 
@@ -44,6 +45,13 @@ class DBHelper{
     var requestUrl = baseUrl + 'api/food/' + query + '/';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> getUserFrequentFoods(userId) async {
+    var requestUrl = baseUrl + 'api/users/' + userId.toString() + '/foodlog/frequent';
+    http.Response response =
+    await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 
@@ -134,8 +142,7 @@ class DBHelper{
           'email': userModel.email,
           'password': userModel.password,
         }));
-    print("this is the response body");
-    print(uriResponse.body);
+    return uriResponse;
   }
 
 
@@ -172,6 +179,8 @@ class DBHelper{
           'portion': portion,
         }));
   }
+
+
 
   Future<http.Response> updateFoodLogEntry(id, entryTime, portion) async {
     var requestUrl = baseUrl + 'api/users/foodlog/update/';
