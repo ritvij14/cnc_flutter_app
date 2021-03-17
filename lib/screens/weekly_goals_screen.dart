@@ -32,32 +32,31 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
 
   @override
   Widget build(BuildContext context) {
-    getGoals();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: FutureBuilder(
         builder: (context, projectSnap) {
-          return
-                ListView.builder(
-                  itemCount: weeklyGoalsModelList.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(15.0),
-                          color: Colors.blue[800],
-                          child: Text(
-                            weeklyGoalsModelList[index].goalDescription,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                              color: Colors.white,
-                            ),
-                          ),
+          return ListView.builder(
+            itemCount: weeklyGoalsModelList.length,
+            itemBuilder: (context, index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(top: 15.0, bottom:  15.0),
+                    color: _getColor(weeklyGoalsModelList[index].type),
+                    child: ExpansionTile(
+                      title: Text(
+                        weeklyGoalsModelList[index].goalDescription,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.white,
                         ),
+                      ),
+                      children: <Widget>[
                         Container(
                           padding: EdgeInsets.all(15.0),
                           child: Text(
@@ -69,10 +68,13 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
                           ),
                         ),
                       ],
-                    );
-                  },
-                );
-          },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
         future: getGoals(),
       ),
     );
@@ -90,13 +92,30 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
           wGDecode[i]['goalDescription'],
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
+      print(wGDecode[i]['type']);
     }
+    print(wGDecode.length);
+  }
 
-    //fix this later
-    for (int i = 0; i < (wGDecode.length/2); i++) {
-      weeklyGoalsModelList.removeAt(i*2);
+  Color _getColor(String index) {
+    if (index == "Fruit") {
+      return Colors.red;
+    } else if (index == "Vegetable") {
+      return Colors.green;
+    } else if (index == "Grain") {
+      return Colors.orange[300];
+    } else if (index == "Protein") {
+      return Colors.deepPurple[300];
+    } else if (index == "Dairy") {
+      return Colors.blue[600];
+    } else if (index == "Snack") {
+      return Colors.pink[300];
+    } else if (index == "Beverage") {
+      return Colors.teal[400];
+    } else if (index == "Physical Activity") {
+      return Colors.grey;
+    } else {
+      return Colors.black;
     }
-
-    print(weeklyGoalsModelList);
   }
 }

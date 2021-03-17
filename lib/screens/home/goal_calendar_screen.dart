@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
+import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -47,6 +49,10 @@ class _CalendarPageState extends State<CalendarPage> {
   int totalWeeklyGoalsCompleted;
   int totalPersonalGoalsCompleted;
 
+  List<String> goals;
+  List<WeeklyGoalsModel> weeklyGoalsModelList = [];
+  var db = new WeeklyDBHelper();
+
   @override
   void initState() {
     super.initState();
@@ -61,14 +67,10 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedEvents2 = [];
     initPrefs();
 
-    _events2[_controller2.selectedDay] = [
-    ];
-    _events2[_controller2.selectedDay]
-        .add("Goal 1");
-    _events2[_controller2.selectedDay]
-        .add("Goal 2");
-    _events2[_controller2.selectedDay]
-        .add("Goal 3");
+    _events2[_controller2.selectedDay] = [];
+    _events2[_controller2.selectedDay].add("Goal 1");
+    _events2[_controller2.selectedDay].add("Goal 2");
+    _events2[_controller2.selectedDay].add("Goal 3");
   }
 
   initPrefs() async {
@@ -79,7 +81,6 @@ class _CalendarPageState extends State<CalendarPage> {
       _events = Map<DateTime, List<dynamic>>.from(
           decodeMap(json.decode(prefs.getString("events") ?? "{}")));
     });
-
   }
 
   Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
@@ -113,7 +114,7 @@ class _CalendarPageState extends State<CalendarPage> {
               initialCalendarFormat: CalendarFormat.week,
               calendarStyle: CalendarStyle(
                   canEventMarkersOverflow: true,
-                  todayColor:  Theme.of(context).accentColor,
+                  todayColor: Theme.of(context).accentColor,
                   selectedColor: Theme.of(context).primaryColor,
                   todayStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -122,7 +123,7 @@ class _CalendarPageState extends State<CalendarPage> {
               headerStyle: HeaderStyle(
                 centerHeaderTitle: true,
                 formatButtonDecoration: BoxDecoration(
-                  color: Colors.pinkAccent,
+                  color: Theme.of(context).accentColor,
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 formatButtonTextStyle: TextStyle(color: Colors.white),
@@ -158,14 +159,10 @@ class _CalendarPageState extends State<CalendarPage> {
               calendarController: _controller,
             ),
 
-
-
-
             Container(
               padding: EdgeInsets.only(left: 15, right: 15),
               color: Theme.of(context).primaryColor,
               alignment: Alignment.bottomLeft,
-
               child: Column(
                 children: <Widget>[
                   ExpansionTile(
@@ -174,30 +171,42 @@ class _CalendarPageState extends State<CalendarPage> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                     children: <Widget>[
-                      ElevatedButton(
-                        child: Text('Choose Weekly Goals'),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
-                                ChooseWeeklyGoals()),
-                          );
-                        },
-                      ),
-                      ElevatedButton(
-                        child: Text('Weekly Goal View'),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
-                                WeeklyGoals()),
-                          );
-                        },
-                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            ElevatedButton(
+                              child: Text('Choose Weekly Goals'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context).accentColor, // background
+                                onPrimary: Colors.white, // foreground
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChooseWeeklyGoals()),
+                                );
+                              },
+                            ),
+                            ElevatedButton(
+                              child: Text('Weekly Goal View'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context).accentColor, // background
+                                onPrimary: Colors.white, // foreground
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => WeeklyGoals()),
+                                );
+                              },
+                            ),
+                          ]),
                     ],
                   ),
                 ],
@@ -274,7 +283,8 @@ class _CalendarPageState extends State<CalendarPage> {
     return Container(
       padding: EdgeInsets.all(15.0),
       child: Text(
-        'Total Weekly Goals Completed: ' + prefs.getInt("weekly goal total").toString(),
+        'Total Weekly Goals Completed: ' +
+            prefs.getInt("weekly goal total").toString(),
         style: TextStyle(
           fontSize: 16.0,
           color: Theme.of(context).primaryColor,
@@ -287,7 +297,8 @@ class _CalendarPageState extends State<CalendarPage> {
     return Container(
       padding: EdgeInsets.all(15.0),
       child: Text(
-        'Total Personal Goals Completed: ' + prefs.getInt("personal goal total").toString(),
+        'Total Personal Goals Completed: ' +
+            prefs.getInt("personal goal total").toString(),
         style: TextStyle(
           fontSize: 16.0,
           color: Theme.of(context).primaryColor,
@@ -301,7 +312,6 @@ class _CalendarPageState extends State<CalendarPage> {
         shrinkWrap: true,
         itemCount: _events[_controller.selectedDay].length,
         itemBuilder: (context, index) {
-
           return Slidable(
             actionPane: SlidableDrawerActionPane(),
             child: Container(
@@ -316,17 +326,18 @@ class _CalendarPageState extends State<CalendarPage> {
                 color: Colors.green,
                 icon: Icons.check,
                 onTap: () {
-
-                  if (totalPersonalGoalsCompleted == null){
+                  if (totalPersonalGoalsCompleted == null) {
                     totalPersonalGoalsCompleted = 1;
                     prefs.setInt("goal total", totalPersonalGoalsCompleted);
                   } else {
-                    totalPersonalGoalsCompleted = (totalPersonalGoalsCompleted + 1);
+                    totalPersonalGoalsCompleted =
+                        (totalPersonalGoalsCompleted + 1);
                     prefs.setInt("goal total", totalPersonalGoalsCompleted);
                   }
 
                   _events[_controller.selectedDay].removeAt(index);
-                  prefs.setInt("personal goal total", totalPersonalGoalsCompleted);
+                  prefs.setInt(
+                      "personal goal total", totalPersonalGoalsCompleted);
                   _eventController.clear();
                   setState(() {
                     if (_events[_controller.selectedDay] != null) {
@@ -347,13 +358,16 @@ class _CalendarPageState extends State<CalendarPage> {
                   }),
             ],
             secondaryActions: <Widget>[
-              IconSlideAction( caption: 'Share',
-              color: Colors.indigo,
-              icon: Icons.share,
-              onTap: () {
-                Share.share(_events[_controller.selectedDay][index].toString(),
-                    subject: 'Check out my new goal on the Enact diet tracking app!');
-              }),
+              IconSlideAction(
+                  caption: 'Share',
+                  color: Colors.indigo,
+                  icon: Icons.share,
+                  onTap: () {
+                    Share.share(
+                        _events[_controller.selectedDay][index].toString(),
+                        subject:
+                            'Check out my new goal on the Enact diet tracking app!');
+                  }),
               IconSlideAction(
                   caption: 'Delete',
                   color: Colors.red,
@@ -379,13 +393,13 @@ class _CalendarPageState extends State<CalendarPage> {
         shrinkWrap: true,
         itemCount: _events2[_controller2.selectedDay].length,
         itemBuilder: (context, index) {
-
           return Slidable(
             actionPane: SlidableDrawerActionPane(),
             child: Container(
               color: Colors.white,
               child: ListTile(
-                title: Text(_events2[_controller2.selectedDay][index].toString()),
+                title:
+                    Text(_events2[_controller2.selectedDay][index].toString()),
               ),
             ),
             actions: <Widget>[
@@ -394,17 +408,20 @@ class _CalendarPageState extends State<CalendarPage> {
                   color: Colors.green,
                   icon: Icons.check,
                   onTap: () {
-
-                    if (totalWeeklyGoalsCompleted == null){
+                    if (totalWeeklyGoalsCompleted == null) {
                       totalWeeklyGoalsCompleted = 1;
-                      prefs.setInt("weekly goal total", totalWeeklyGoalsCompleted);
+                      prefs.setInt(
+                          "weekly goal total", totalWeeklyGoalsCompleted);
                     } else {
-                      totalWeeklyGoalsCompleted = (totalWeeklyGoalsCompleted + 1);
-                      prefs.setInt("weekly goal total", totalWeeklyGoalsCompleted);
+                      totalWeeklyGoalsCompleted =
+                          (totalWeeklyGoalsCompleted + 1);
+                      prefs.setInt(
+                          "weekly goal total", totalWeeklyGoalsCompleted);
                     }
 
                     _events2[_controller2.selectedDay].removeAt(index);
-                    prefs.setInt("weekly goal total", totalWeeklyGoalsCompleted);
+                    prefs.setInt(
+                        "weekly goal total", totalWeeklyGoalsCompleted);
                     _eventController2.clear();
                     setState(() {
                       if (_events2[_controller2.selectedDay] != null) {
@@ -424,12 +441,15 @@ class _CalendarPageState extends State<CalendarPage> {
                   }),
             ],
             secondaryActions: <Widget>[
-              IconSlideAction( caption: 'Share',
+              IconSlideAction(
+                  caption: 'Share',
                   color: Colors.indigo,
                   icon: Icons.share,
                   onTap: () {
-                    Share.share(_events2[_controller2.selectedDay][index].toString(),
-                        subject: 'Check out my new goal on the Enact diet tracking app!');
+                    Share.share(
+                        _events2[_controller2.selectedDay][index].toString(),
+                        subject:
+                            'Check out my new goal on the Enact diet tracking app!');
                   }),
               IconSlideAction(
                   caption: 'Delete',
@@ -490,6 +510,21 @@ class _CalendarPageState extends State<CalendarPage> {
       }
     });
   }
+
+  getGoals() async {
+    weeklyGoalsModelList.clear();
+    var db = new WeeklyDBHelper();
+    var response = await db.getWeeklyGoals();
+    var wGDecode = json.decode(response.body);
+
+    for (int i = 0; i < wGDecode.length; i++) {
+      WeeklyGoalsModel weeklyGoalsModel = new WeeklyGoalsModel(
+          wGDecode[i]['type'],
+          wGDecode[i]['goalDescription'],
+          wGDecode[i]['help_info']);
+      weeklyGoalsModelList.add(weeklyGoalsModel);
+      print(wGDecode[i]['type']);
+    }
+    print(wGDecode.length);
+  }
 }
-
-

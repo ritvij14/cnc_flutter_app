@@ -280,7 +280,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                           lineWidth: 5.0,
                           percent: proteinPercent,
                           center: new Text(
-                              (proteinPercent * 100).toStringAsFixed(1) + '%'),
+                              (proteinPercent * 100).round().toString() + '%'),
                           footer: Text("Protein"),
                           progressColor: Colors.red,
                         ),
@@ -292,7 +292,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                           lineWidth: 5.0,
                           percent: carbohydratePercent,
                           center: new Text(
-                              (carbohydratePercent * 100).toStringAsFixed(1) +
+                              (carbohydratePercent * 100).round().toString() +
                                   '%'),
                           footer: Text("Carbs"),
                           progressColor: Colors.orange,
@@ -306,7 +306,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                           percent: fatPercent,
                           footer: Text("Fat"),
                           center: new Text(
-                              (fatPercent * 100).toStringAsFixed(1) + '%'),
+                              (fatPercent * 100).round().toString() + '%'),
                           progressColor: Colors.yellow,
                         ),
                       ],

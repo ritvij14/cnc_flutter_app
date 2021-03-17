@@ -9,20 +9,29 @@ import 'package:fraction/fraction.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 
-class FoodPage extends StatefulWidget {
+class EditFoodLogEntryScreen extends StatefulWidget {
   Food selection;
   String selectedDate;
+  String entryTime;
+  double portion;
+  num id;
 
-  FoodPage(Food selection, String selectedDate) {
+  EditFoodLogEntryScreen(Food selection, String selectedDate, String entryTime,
+      double portion, num id) {
     this.selection = selection;
+
     this.selectedDate = selectedDate;
+    this.entryTime = entryTime;
+    this.portion = portion;
+    this.id = id;
   }
 
   @override
-  FoodProfile createState() => FoodProfile(selection, selectedDate);
+  _EditFoodLogEntry createState() =>
+      _EditFoodLogEntry(selection, selectedDate, entryTime, portion, id);
 }
 
-class FoodProfile extends State<FoodPage> {
+class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
   Food currentFood;
   String selectedDate;
   String title;
@@ -33,10 +42,13 @@ class FoodProfile extends State<FoodPage> {
   bool showCarbs = false;
   bool showFraction = true;
   bool switched = false;
+  String entryTimeAsString;
+  double portion;
+  num id;
 
   DateTime entryTime = DateTime.now();
 
-  double portion = 1;
+  // DateTime entryTime = new DateTime(1, 1, 1, 13, 29);
   double actualPortion = 1;
   String servingAsFraction = '1';
   String actualServingAsFraction;
@@ -50,9 +62,15 @@ class FoodProfile extends State<FoodPage> {
 
   var dropdownOptions = new Map();
 
-  FoodProfile(Food selection, String selectedDate) {
+  _EditFoodLogEntry(Food selection, String selectedDate,
+      String entryTimeAsString, double portion, num id) {
     currentFood = selection;
     this.selectedDate = selectedDate;
+    this.entryTimeAsString = entryTimeAsString;
+    this.portion = portion;
+    this.id = id;
+
+    entryTime = DateTime.parse(entryTimeAsString);
 
     if (portion <= 1 || portion % 1 == 0) {
       servingAsFraction = portion.toFraction().toString();
@@ -205,14 +223,13 @@ class FoodProfile extends State<FoodPage> {
         }).showModal(this.context); //_scaffoldKey.currentState);
   }
 
-  saveNewEntry() async {
+  updateEntry() async {
     var db = new DBHelper();
     var time = entryTime.toString().substring(0, 19);
     time = time.split(" ")[1];
     var dateTime = selectedDate + " " + time;
-    print(dateTime);
-    var response = await db.saveNewFoodLogEntry(
-        dateTime, selectedDate, 1, currentFood.id, portion);
+    var response =
+        await db.updateFoodLogEntry(this.id, entryTime.toString(), portion);
   }
 
   _pickTime() async {
@@ -223,8 +240,8 @@ class FoodProfile extends State<FoodPage> {
         initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Time of Meal'
         // cancelText: 'testing'
-
         );
+
     if (t != null)
       setState(() {
         String hour = '';
@@ -252,7 +269,6 @@ class FoodProfile extends State<FoodPage> {
         dateCtl.text = hour + ':' + minute + ' ' + tod;
         entryTime = new DateTime(
             entryTime.year, entryTime.month, entryTime.day, t.hour, t.minute);
-        print('Time of Day in food = ' + t.toString());
       });
   }
 
@@ -289,7 +305,7 @@ class FoodProfile extends State<FoodPage> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Are you sure you want to cancel this entry?"),
+      title: Text("Are you sure you want to cancel this update?"),
       actions: [
         cancelButton,
         confirmButton,
@@ -316,6 +332,7 @@ class FoodProfile extends State<FoodPage> {
       }
       portionCtl.text = actualServingAsFraction;
     }
+
     if (currentFood.commonPortionSizeAmount > 1) {
       var x = currentFood.commonPortionSizeAmount.toMixedFraction();
       x.reduce();
@@ -334,7 +351,7 @@ class FoodProfile extends State<FoodPage> {
             showAlertDialog(context);
           },
         ),
-        title: Text('New Entry'),
+        title: Text('Edit Entry'),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -806,20 +823,23 @@ class FoodProfile extends State<FoodPage> {
                                                   backgroundColor: Colors.red,
                                                   content: Text(
                                                       'Value cannot be greater than 10')));
+                                          // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Value cannot be greater than 10')));
+                                          // portion = 1;
+                                          // actualPortion = portion;
+                                          //snack bar portion cannot be greater than 10
                                         } else {
                                           portion = double.parse(text);
                                           actualPortion = portion;
                                           initialFirstSelection =
                                               portion.floor();
-                                          double remainder = portion % 1;
-                                          if (remainder >= 0.625) {
-                                            initialSecondSelection = 3;
-                                          } else if (remainder >= 0.375) {
-                                            initialSecondSelection = 2;
-                                          } else if (remainder >= 0.125) {
-                                            initialSecondSelection = 1;
-                                          } else {
+                                          if (portion % 1 < 0.25) {
                                             initialSecondSelection = 0;
+                                          } else if (portion % 1 < 0.5) {
+                                            initialSecondSelection = 1;
+                                          } else if (portion % 1 < 0.75) {
+                                            initialSecondSelection = 2;
+                                          } else {
+                                            initialSecondSelection = 3;
                                           }
                                         }
                                       } else {
@@ -883,13 +903,13 @@ class FoodProfile extends State<FoodPage> {
                             color: Colors.blue,
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
-                              'SAVE ENTRY',
+                              'UPDATE ENTRY',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             onPressed: () {
-                              saveNewEntry();
+                              updateEntry();
                               Navigator.pop(context, null);
                             },
                           ),

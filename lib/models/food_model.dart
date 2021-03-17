@@ -192,4 +192,9 @@ class Food {
   set baseId(int value) {
     _baseId = value;
   }
+
+  @override
+  String toString() {
+    return 'Food{_id: $_id, _baseId: $_baseId, _keylist: $_keylist, _description: $_description, _kcal: $_kcal, _proteinInGrams: $_proteinInGrams, _fatInGrams: $_fatInGrams, _carbohydratesInGrams: $_carbohydratesInGrams, _fiberInGrams: $_fiberInGrams, _solubleFiberInGrams: $_solubleFiberInGrams, _insolubleFiberInGrams: $_insolubleFiberInGrams, _calciumInMilligrams: $_calciumInMilligrams, _sodiumInMilligrams: $_sodiumInMilligrams, _saturatedFattyAcidsInGrams: $_saturatedFattyAcidsInGrams, _polyunsaturatedFattyAcidsInGrams: $_polyunsaturatedFattyAcidsInGrams, _monounsaturatedFattyAcidsInGrams: $_monounsaturatedFattyAcidsInGrams, _sugarInGrams: $_sugarInGrams, _alcoholInGrams: $_alcoholInGrams, _vitaminDInMicrograms: $_vitaminDInMicrograms, _commonPortionSizeAmount: $_commonPortionSizeAmount, _commonPortionSizeGramWeight: $_commonPortionSizeGramWeight, _commonPortionSizeDescription: $_commonPortionSizeDescription, _commonPortionSizeUnit: $_commonPortionSizeUnit, _nccFoodGroupCategory: $_nccFoodGroupCategory}';
+  }
 }

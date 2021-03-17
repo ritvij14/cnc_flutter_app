@@ -6,6 +6,7 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/screens/daily_nutrition_breakdown_screen.dart';
+import 'package:cnc_flutter_app/screens/edit_food_entry_screen.dart';
 
 // import 'package:cnc_flutter_app/screens/food_screen.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
@@ -47,11 +48,21 @@ class _FoodLogState extends State<FoodLog> {
     var time = entryTime.toString().substring(0, 19);
     var response =
         await db.updateFoodLogEntry(foodLogEntryId, time, tempPortion);
-    setState(() {});
+    rebuildAllChildren(context);
+    // rebuildAllChildren(() {});
   }
 
   update(context) {
     setState(() {});
+  }
+
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
   }
 
   getPortionAsFraction(double portion) {
@@ -69,6 +80,17 @@ class _FoodLogState extends State<FoodLog> {
     return servingAsFraction;
   }
 
+  getMealTime(String c) {
+    var time = DateTime.parse(c);
+    var hour = time.hour == 0
+        ? 12
+        : time.hour <= 12
+        ? time.hour
+        : time.hour - 12;
+    var tod = time.hour < 12 ? 'AM' : 'PM';
+    return hour.toString() + ':'+time.minute.toString().padLeft(2, '0') + ' '+ tod;
+  }
+
   getFood() async {
     foodLogEntries.clear();
     var db = new DBHelper();
@@ -84,12 +106,11 @@ class _FoodLogState extends State<FoodLog> {
       foodLogEntry.entryTime = data[i]['entryTime'];
       foodLogEntry.date = data[i]['date'];
       foodLogEntry.portion = data[i]['portion'];
-      // print(data[i]);
-      // print(data[i]['entryTime']);
       Food food = new Food();
       String description = data[i]['food']['description'].toString();
       description = description.replaceAll('"', "");
       food.description = description;
+
       food.kcal = data[i]['food']['kcal'];
       food.proteinInGrams = data[i]['food']['proteinInGrams'];
       food.carbohydratesInGrams = data[i]['food']['carbohydratesInGrams'];
@@ -118,16 +139,20 @@ class _FoodLogState extends State<FoodLog> {
     }
   }
 
-  showAlertDialog(BuildContext context, foodLogEntryId, action, portion) {
+  showAlertDialog(BuildContext context, foodLogEntryId, description, action, portion) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("CANCEL",
+        style: TextStyle(color: Colors.grey),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget deleteButton = FlatButton(
-      child: Text("Delete"),
+      child: Text("DELETE",
+          style: TextStyle(color: Colors.white)),
+      color: Colors.blue,
       onPressed: () {
         deleteEntry(foodLogEntryId);
         Navigator.of(context).pop();
@@ -135,7 +160,9 @@ class _FoodLogState extends State<FoodLog> {
     );
 
     Widget updateButton = FlatButton(
-      child: Text("Update"),
+      child: Text("UPDATE",
+          style: TextStyle(color: Colors.white)),
+      color: Colors.blue,
       onPressed: () {
         updateEntry(foodLogEntryId);
         Navigator.of(context).pop();
@@ -145,11 +172,11 @@ class _FoodLogState extends State<FoodLog> {
     if (action == "delete") {
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
-        title: Text("Delete Entry"),
-        content: Text("Are you sure?"),
+        title: Text("Are you sure you would like to delete this entry?"),
+        content: Text(description + " with a portion size of " + portion.toString()),
         actions: [
-          cancelButton,
           deleteButton,
+          cancelButton,
         ],
       );
       // show the dialog
@@ -192,8 +219,8 @@ class _FoodLogState extends State<FoodLog> {
           ],
         ),
         actions: [
-          cancelButton,
           updateButton,
+          cancelButton,
         ],
       );
       // show the dialog
@@ -232,7 +259,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.kcal * portion).toStringAsFixed(2),
+                    (food.kcal * portion).round().toString(),
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -247,7 +274,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.carbohydratesInGrams * portion).toStringAsFixed(2) +
+                    (food.carbohydratesInGrams * portion).round().toString() +
                         'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -263,7 +290,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.proteinInGrams * portion).toStringAsFixed(2) +
+                    (food.proteinInGrams * portion).round().toString() +
                         'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -278,7 +305,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.fatInGrams * portion).toStringAsFixed(2) +
+                    (food.fatInGrams * portion).round().toString() +
                         'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -333,21 +360,21 @@ class _FoodLogState extends State<FoodLog> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.symmetric(vertical: 0),
       // child: Padding:
       child: Column(children: [
         Container(
           padding: EdgeInsets.only(left: 5, right: 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "Meals",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: "OpenSans"),
-              ),
+              // Text(
+              //   "Meals",
+              //   style: TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 16,
+              //       fontFamily: "OpenSans"),
+              // ),
               ButtonTheme(
                 height: 20,
                 child: OutlineButton(
@@ -397,14 +424,14 @@ class _FoodLogState extends State<FoodLog> {
               //         fontFamily: "OpenSans"),
               //   ),
               // ),
-              IconButton(
-                  icon: Icon(Icons.add_circle),
-                  onPressed: () {
-                    showSearch(
-                            context: context,
-                            delegate: FoodSearch(selectedDate))
-                        .then((value) => update(context));
-                  }),
+              // IconButton(
+              //     icon: Icon(Icons.add_circle),
+              //     onPressed: () {
+              //       showSearch(
+              //               context: context,
+              //               delegate: FoodSearch(selectedDate))
+              //           .then((value) => update(context));
+              //     }),
             ],
           ),
         ),
@@ -450,7 +477,7 @@ class _FoodLogState extends State<FoodLog> {
                                 children: <Widget>[
                                   Text(
                                     getPortionAsFraction(
-                                        foodLogEntries[index].portion),
+                                        foodLogEntries[index].portion) + ' at ' + getMealTime(foodLogEntries[index].entryTime),
                                     // foodLogEntries[index].portion.toString() +
                                     //     " serving(s)",
                                     // breakfast[index].serving + " " + breakfast[index].unit,
@@ -510,13 +537,23 @@ class _FoodLogState extends State<FoodLog> {
                                         //           color: Theme.of(context).highlightColor,),
                                         //       ),
                                         GestureDetector(
+
                                           onTap: () {
-                                            showAlertDialog(
-                                                context,
-                                                foodLogEntries[index].id,
-                                                'update',
-                                                foodLogEntries[index].portion);
+                                            Navigator.of(context)
+                                                .push(
+                                              new MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      EditFoodLogEntryScreen(foodLogEntries[index].food, foodLogEntries[index].date, foodLogEntries[index].entryTime, foodLogEntries[index].portion, foodLogEntries[index].id)),
+                                            ).then((value) => update(context));
+                                            // ).then((value) => rebuildAllChildren(context));
                                           },
+                                          // onTap: () {
+                                          //   showAlertDialog(
+                                          //       context,
+                                          //       foodLogEntries[index].id,
+                                          //       'update',
+                                          //       foodLogEntries[index].portion);
+                                          // },
                                           child: Icon(
                                             Icons.edit,
                                             size: 20,
@@ -533,8 +570,9 @@ class _FoodLogState extends State<FoodLog> {
                                             showAlertDialog(
                                                 context,
                                                 foodLogEntries[index].id,
+                                                foodLogEntries[index].food.description,
                                                 "delete",
-                                                0);
+                                                foodLogEntries[index].portion);
                                             // deleteEntry(foodLogEntries[index].id);
                                           },
                                           child: Icon(

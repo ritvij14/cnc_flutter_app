@@ -1,10 +1,7 @@
 import 'package:cnc_flutter_app/screens/articles_screen.dart';
-import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
+import 'package:cnc_flutter_app/screens/communication_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
-import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';
-import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'home/home_screen.dart';
 
@@ -33,10 +30,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
 
   List<Widget> screens = <Widget>[
     HomeScreen(),
-    DietTrackingScreen(),
-    // ArticlesScreen(),
+    ArticlesScreen(),
+    CommunicationsScreen(),
     CalendarPage(),
-    ProfileScreen(),
   ];
 
   @override
@@ -63,6 +59,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
+              tooltip: "Home",
               icon: Icon(Icons.home,
                   color: _selectedIndex == 0 ? Theme
                       .of(context)
@@ -75,6 +72,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               },
             ),
             IconButton(
+              tooltip: "Content",
               icon: Icon(Icons.library_books,
                   color: _selectedIndex == 1 ? Theme
                       .of(context)
@@ -87,7 +85,8 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.verified,
+              tooltip: "Communication",
+              icon: Icon(Icons.chat,
                   color: _selectedIndex == 2 ? Theme
                       .of(context)
                       .backgroundColor : Theme
@@ -99,7 +98,8 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.person,
+              tooltip: "Goals",
+              icon: Icon(Icons.verified,
                   color: _selectedIndex == 3 ? Theme
                       .of(context)
                       .backgroundColor : Theme
