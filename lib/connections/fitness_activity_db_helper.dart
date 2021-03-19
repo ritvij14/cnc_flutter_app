@@ -14,6 +14,13 @@ class ActivityDBHelper extends DBHelperBase {
     return response;
   }
 
+  Future<http.Response> getActivityOptions() async {
+    var requestUrl = baseUrl + 'api/activityOptions/all';
+    http.Response response =
+    await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
   Future<http.Response> saveNewActivity(
       ActivityModel fitnessActivityModel) async {
     var requestUrl = baseUrl + 'api/fitnessActivity/add/';

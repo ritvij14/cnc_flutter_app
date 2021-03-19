@@ -62,7 +62,7 @@ class FoodSearch extends SearchDelegate<String> {
   Future<bool> getFrequentFood() async {
     frequentFoodList.clear();
     var db = new DBHelper();
-    var response = await db.getUserFrequentFoods(1);
+    var response = await db.getUserFrequentFoods();
     var data = json.decode(response.body);
     for (int i = 0; i < data.length; i++) {
       Food food = new Food();

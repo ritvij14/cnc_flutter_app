@@ -1,3 +1,4 @@
+import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/connections/metric_db_helper.dart';
 import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class MetricTrackingInputScreen extends StatefulWidget {
 class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
 
   final db = MetricDBHelper();
+  final dbHelper = DBHelper();
   TextEditingController dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
 
   @override
@@ -107,6 +109,7 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     child: Text('Submit'),
                     onPressed: () {
                       db.saveNewMetric(widget.metricModel);
+                      dbHelper.updateWeight(widget.metricModel);
                       Navigator.pop(context);
                     },
                   ),

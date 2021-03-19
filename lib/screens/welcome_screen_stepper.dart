@@ -1035,7 +1035,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     DBHelper db = new DBHelper();
 
     db.saveFormInfo(
-        id,
         birthDate.toString().split(" ")[0],
         dropDownRace.replaceAll(" ", "-"),
         dropDownEthnicities.replaceAll(" ", "-"),
