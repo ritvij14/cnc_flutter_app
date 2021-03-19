@@ -23,7 +23,8 @@ class _ActivityTrackingModifyActivityState
     extends State<ActivityTrackingModifyActivity> {
   final db = ActivityDBHelper();
   final _formKey = GlobalKey<FormState>();
-  List<String> activitiesList = getActivityStringList();
+  // List<String> activitiesList = getActivityStringList();
+  List<String> activitiesList = [];
 
   TextEditingController dateCtl = TextEditingController();
   List<ActivityModel> activityOptions = [];
@@ -38,6 +39,7 @@ class _ActivityTrackingModifyActivityState
         if(data[i]['isVisible']) {
           ActivityModel temp = ActivityModel.activityOptions(data[i]['type'], data[i]['intensity']);
           activityOptions.add(temp);
+          activitiesList.add(data[i]['type']);
         }
       }
     }
@@ -76,31 +78,43 @@ class _ActivityTrackingModifyActivityState
                     // ),
                     Container(
                       width: 200,
-                      child: DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        // value: widget.fitnessActivity,
-                        value: widget.activityModel.type,
-                        hint: Text('select'),
-                        onChanged: (value) =>
-                            setState(() {
-                              widget.activityModel.type = value;
-                              int index = fitnessActivityMasterList.indexWhere((element) => element.type == value);
-                              widget.activityModel.intensity = fitnessActivityMasterList[index].intensity;
-                              print(widget.activityModel.type);
-                            }
-                            ),
-                        validator: (value) =>
-                        value == null ? 'Activity required' : null,
-                        items: activitiesList.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
+                      child: Text(widget.activityModel.type),
                     ),
                   ],
                 ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //     Text('Activity'),
+                //     // Container(
+                //     // ),
+                //     Container(
+                //       width: 200,
+                //       child: DropdownButtonFormField<String>(
+                //         isExpanded: true,
+                //         // value: widget.fitnessActivity,
+                //         // value: widget.activityModel.type,
+                //         hint: Text('select'),
+                //         onChanged: (value) =>
+                //             setState(() {
+                //               widget.activityModel.type = value;
+                //               int index = fitnessActivityMasterList.indexWhere((element) => element.type == value);
+                //               widget.activityModel.intensity = fitnessActivityMasterList[index].intensity;
+                //               print(widget.activityModel.type);
+                //             }
+                //             ),
+                //         validator: (value) =>
+                //         value == null ? 'Activity required' : null,
+                //         items: activitiesList.map<DropdownMenuItem<String>>((String value) {
+                //           return DropdownMenuItem<String>(
+                //             value: value,
+                //             child: Text(value),
+                //           );
+                //         }).toList(),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 //   children: [
