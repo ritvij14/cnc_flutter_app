@@ -49,7 +49,7 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
           // },
           child: CarouselSlider(
             options: CarouselOptions(
-              height: 310,
+              height: 350,
               enableInfiniteScroll: false,
               viewportFraction: 1.0,
               onPageChanged: (index, reason) {

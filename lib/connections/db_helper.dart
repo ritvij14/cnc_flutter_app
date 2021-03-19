@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:cnc_flutter_app/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -60,6 +61,35 @@ class DBHelper{
     http.Response response =
     await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
+  }
+
+  Future<http.Response> saveRatios(
+      String userId,
+      int fatPercent,
+      int proteinPercent,
+      int carbohydratePercent,) async {
+    var requestUrl = baseUrl +
+        'api/users/profile/ratios/';
+    var response = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'userId': userId,
+          'fatPercent': fatPercent,
+          'proteinPercent': proteinPercent,
+          'carbohydratePercent': carbohydratePercent,
+        }));
+    return response;
+  }
+
+  Future<http.Response> updateWeight(
+      MetricModel metricModel, userId) async {
+    var requestUrl = baseUrl + 'api/users/$userId/update/weight/';
+    var uriResponse = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'weight': metricModel.weight.toString(),
+          'dateTime': metricModel.dateTime.toIso8601String(),
+        }));
   }
 
   Future<http.Response> saveFormInfo(

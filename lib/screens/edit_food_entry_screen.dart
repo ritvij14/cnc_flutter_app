@@ -42,6 +42,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
   bool showCarbs = false;
   bool showFraction = true;
   bool switched = false;
+  bool wasChanged = false;
   String entryTimeAsString;
   double portion;
   num id;
@@ -219,6 +220,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
             actualServingAsFraction = portion.toMixedFraction().toString();
           }
           portionCtl.text = actualServingAsFraction;
+          wasChanged = true;
           setState(() {});
         }).showModal(this.context); //_scaffoldKey.currentState);
   }
@@ -227,20 +229,18 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
     var db = new DBHelper();
     var time = entryTime.toString().substring(0, 19);
     time = time.split(" ")[1];
-    var dateTime = selectedDate + " " + time;
-    var response =
-        await db.updateFoodLogEntry(this.id, entryTime.toString(), portion);
+    await db.updateFoodLogEntry(this.id, entryTime.toString(), portion);
   }
 
   _pickTime() async {
     TimeOfDay t = await showTimePicker(
         context: context,
         initialTime:
-            new TimeOfDay(hour: entryTime.hour, minute: entryTime.minute),
+        new TimeOfDay(hour: entryTime.hour, minute: entryTime.minute),
         initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Time of Meal'
-        // cancelText: 'testing'
-        );
+      // cancelText: 'testing'
+    );
 
     if (t != null)
       setState(() {
@@ -348,7 +348,11 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
         leading: IconButton(
           icon: Icon(Icons.clear),
           onPressed: () {
-            showAlertDialog(context);
+            if(wasChanged) {
+              showAlertDialog(context);
+            } else {
+              Navigator.of(context).pop();
+            }
           },
         ),
         title: Text('Edit Entry'),
@@ -356,7 +360,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // Text(currentFood.description,
               //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
@@ -392,12 +396,12 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                             .copyWith(dividerColor: Colors.grey),
                         child: DataTable(
                           horizontalMargin:
-                              MediaQuery.of(context).size.width / 12,
+                          MediaQuery.of(context).size.width / 12,
                           headingRowHeight: 0,
                           dataRowHeight: 30,
                           dividerThickness: 0,
                           dataTextStyle:
-                              TextStyle(fontSize: 20, color: Colors.black),
+                          TextStyle(fontSize: 20, color: Colors.black),
                           // columnSpacing: MediaQuery.of(context).size.width/ 3,
 
                           columns: <DataColumn>[
@@ -439,8 +443,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                     children: [
                                       Text(
                                         (currentFood.fatInGrams * portion)
-                                                .round()
-                                                .toString() +
+                                            .round()
+                                            .toString() +
                                             'g',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
@@ -452,7 +456,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                               setState(() {});
                                             },
                                             child:
-                                                Icon(Icons.keyboard_arrow_up))
+                                            Icon(Icons.keyboard_arrow_up))
                                       ],
                                       if (!showFat) ...[
                                         GestureDetector(
@@ -461,7 +465,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                               setState(() {});
                                             },
                                             child:
-                                                Icon(Icons.keyboard_arrow_down))
+                                            Icon(Icons.keyboard_arrow_down))
                                       ],
                                     ],
                                   ),
@@ -474,9 +478,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   DataCell(Text('  Saturated Fats')),
                                   DataCell(Text(
                                       (currentFood.saturatedFattyAcidsInGrams *
-                                                  portion)
-                                              .round()
-                                              .toString() +
+                                          portion)
+                                          .round()
+                                          .toString() +
                                           'g')),
                                 ],
                               ),
@@ -485,9 +489,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   DataCell(Text('  Polyunsaturated Fats')),
                                   DataCell(Text(
                                       (currentFood.polyunsaturatedFattyAcidsInGrams *
-                                                  portion)
-                                              .round()
-                                              .toString() +
+                                          portion)
+                                          .round()
+                                          .toString() +
                                           'g')),
                                 ],
                               ),
@@ -496,9 +500,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   DataCell(Text('  Monounsaturated Fats')),
                                   DataCell(Text(
                                       (currentFood.monounsaturatedFattyAcidsInGrams *
-                                                  portion)
-                                              .round()
-                                              .toString() +
+                                          portion)
+                                          .round()
+                                          .toString() +
                                           'g')),
                                 ],
                               ),
@@ -514,8 +518,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                     children: [
                                       Text(
                                         (currentFood.fatInGrams * portion)
-                                                .round()
-                                                .toString() +
+                                            .round()
+                                            .toString() +
                                             'g',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
@@ -527,7 +531,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                               setState(() {});
                                             },
                                             child:
-                                                Icon(Icons.keyboard_arrow_up))
+                                            Icon(Icons.keyboard_arrow_up))
                                       ],
                                       if (!showCarbs) ...[
                                         GestureDetector(
@@ -536,7 +540,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                               setState(() {});
                                             },
                                             child:
-                                                Icon(Icons.keyboard_arrow_down))
+                                            Icon(Icons.keyboard_arrow_down))
                                       ],
                                     ],
                                   ),
@@ -549,9 +553,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   DataCell(Text('  Insoluble Fiber')),
                                   DataCell(Text(
                                       (currentFood.insolubleFiberInGrams *
-                                                  portion)
-                                              .round()
-                                              .toString() +
+                                          portion)
+                                          .round()
+                                          .toString() +
                                           'g')),
                                 ],
                               ),
@@ -560,9 +564,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   DataCell(Text('  Soluble Fiber')),
                                   DataCell(Text(
                                       (currentFood.solubleFiberInGrams *
-                                                  portion)
-                                              .round()
-                                              .toString() +
+                                          portion)
+                                          .round()
+                                          .toString() +
                                           'g')),
                                 ],
                               ),
@@ -571,8 +575,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   DataCell(Text('  Sugars')),
                                   DataCell(Text(
                                       (currentFood.sugarInGrams * portion)
-                                              .round()
-                                              .toString() +
+                                          .round()
+                                          .toString() +
                                           'g')),
                                 ],
                               ),
@@ -585,8 +589,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 )),
                                 DataCell(Text(
                                   (currentFood.proteinInGrams * portion)
-                                          .round()
-                                          .toString() +
+                                      .round()
+                                      .toString() +
                                       'g',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
@@ -600,8 +604,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 )),
                                 DataCell(Text(
                                   (currentFood.alcoholInGrams * portion)
-                                          .round()
-                                          .toString() +
+                                      .round()
+                                      .toString() +
                                       'g',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
@@ -615,8 +619,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 )),
                                 DataCell(Text(
                                   (currentFood.calciumInMilligrams * portion)
-                                          .round()
-                                          .toString() +
+                                      .round()
+                                      .toString() +
                                       'mg',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
@@ -630,8 +634,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 )),
                                 DataCell(Text(
                                   (currentFood.sodiumInMilligrams * portion)
-                                          .round()
-                                          .toString() +
+                                      .round()
+                                      .toString() +
                                       'mg',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
@@ -645,8 +649,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 )),
                                 DataCell(Text(
                                   (currentFood.vitaminDInMicrograms * portion)
-                                          .round()
-                                          .toString() +
+                                      .round()
+                                      .toString() +
                                       'mcg',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
@@ -669,32 +673,32 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           children: <Widget>[
                             Expanded(
                                 child: RaisedButton(
-                              onPressed: () {
-                                showFraction = true;
-                                switched = true;
-                                setState(() {});
-                              },
-                              child: Text(
-                                "Fractions",
-                                style: TextStyle(
-                                    color: Theme.of(context).highlightColor),
-                              ),
-                            )),
+                                  onPressed: () {
+                                    showFraction = true;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    "Fractions",
+                                    style: TextStyle(
+                                        color: Theme.of(context).highlightColor),
+                                  ),
+                                )),
                             Expanded(
                                 child: OutlineButton(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
-                              onPressed: () {
-                                showFraction = false;
-                                switched = true;
-                                setState(() {});
-                              },
-                              child: Text("Decimal",
-                                  style: TextStyle(
-                                      color: Theme.of(context).buttonColor)),
-                            )),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).buttonColor,
+                                      style: BorderStyle.solid,
+                                      width: 2),
+                                  onPressed: () {
+                                    showFraction = false;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text("Decimal",
+                                      style: TextStyle(
+                                          color: Theme.of(context).buttonColor)),
+                                )),
                           ]),
                     ],
                     if (!showFraction) ...[
@@ -703,32 +707,32 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           children: <Widget>[
                             Expanded(
                                 child: OutlineButton(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
-                              onPressed: () {
-                                showFraction = true;
-                                switched = true;
-                                setState(() {});
-                              },
-                              child: Text("Fraction",
-                                  style: TextStyle(
-                                      color: Theme.of(context).buttonColor)),
-                            )),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).buttonColor,
+                                      style: BorderStyle.solid,
+                                      width: 2),
+                                  onPressed: () {
+                                    showFraction = true;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text("Fraction",
+                                      style: TextStyle(
+                                          color: Theme.of(context).buttonColor)),
+                                )),
                             Expanded(
                                 child: RaisedButton(
-                              onPressed: () {
-                                showFraction = false;
-                                switched = true;
-                                setState(() {});
-                              },
-                              child: Text(
-                                "Decimal",
-                                style: TextStyle(
-                                    color: Theme.of(context).highlightColor),
-                              ),
-                            )),
+                                  onPressed: () {
+                                    showFraction = false;
+                                    switched = true;
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    "Decimal",
+                                    style: TextStyle(
+                                        color: Theme.of(context).highlightColor),
+                                  ),
+                                )),
                           ]),
                     ],
                     Container(
@@ -775,7 +779,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                       controller: portionCtl,
                                       decoration: InputDecoration(
                                         contentPadding:
-                                            EdgeInsets.only(bottom: 3, top: 5),
+                                        EdgeInsets.only(bottom: 3, top: 5),
                                         hintText: "# of servings",
                                         isDense: true,
                                       ),
@@ -796,7 +800,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                       // color: Colors.black
                                     ),
                                     initialValue:
-                                        actualPortion.toStringAsFixed(2),
+                                    actualPortion.toStringAsFixed(2),
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(4),
                                       FilteringTextInputFormatter.deny(
@@ -805,12 +809,12 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                           RegExp(r'^\d+\.?\d{0,2}'))
                                     ],
                                     keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
+                                    TextInputType.numberWithOptions(
+                                        decimal: true),
                                     // keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       contentPadding:
-                                          EdgeInsets.only(bottom: 3, top: 5),
+                                      EdgeInsets.only(bottom: 3, top: 5),
                                       hintText: "# of servings",
                                       isDense: true,
                                       // border: InputBorder.none
@@ -820,9 +824,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                         if (double.parse(text) > 10) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
-                                                  backgroundColor: Colors.red,
-                                                  content: Text(
-                                                      'Value cannot be greater than 10')));
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                  'Value cannot be greater than 10')));
                                           // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Value cannot be greater than 10')));
                                           // portion = 1;
                                           // actualPortion = portion;
@@ -841,6 +845,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                           } else {
                                             initialSecondSelection = 3;
                                           }
+                                          wasChanged = true;
                                         }
                                       } else {
                                         portion = 1;
@@ -872,7 +877,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                     controller: dateCtl,
                                     decoration: InputDecoration(
                                       contentPadding:
-                                          EdgeInsets.only(bottom: 3, top: 5),
+                                      EdgeInsets.only(bottom: 3, top: 5),
                                       hintText: "Enter time",
                                       isDense: true,
                                     ),
@@ -896,23 +901,44 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                             child: Text('CANCEL',
                                 style: TextStyle(color: Colors.grey)),
                             onPressed: () {
-                              Navigator.pop(context, null);
+                              if(wasChanged) {
+                                showAlertDialog(context);
+                              } else {
+                                Navigator.pop(context, null);
+                              }
                             },
                           ),
-                          FlatButton(
-                            color: Colors.blue,
-                            // padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Text(
-                              'UPDATE ENTRY',
-                              style: TextStyle(
-                                color: Colors.white,
+                          if(wasChanged) ... [
+                            FlatButton(
+                              color: Colors.blue,
+                              // padding: EdgeInsets.symmetric(vertical: 20),
+                              child: Text(
+                                'UPDATE ENTRY',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
+                              onPressed: () {
+                                updateEntry();
+                                Navigator.pop(context, null);
+                              },
                             ),
-                            onPressed: () {
-                              updateEntry();
-                              Navigator.pop(context, null);
-                            },
-                          ),
+                          ],
+
+                          if(!wasChanged) ... [
+                            FlatButton(
+                                color: Colors.blue,
+                                // padding: EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  'UPDATE ENTRY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: null
+                            ),
+                          ],
+
                         ],
                       ),
                     ),

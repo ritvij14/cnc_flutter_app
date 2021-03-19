@@ -29,7 +29,8 @@ class _UserQuestionsScreen extends State<UserQuestionsScreen> {
     }
   }
 
-  update(context) {
+  update(context) async{
+    await getQuestions();
     setState(() {});
   }
 

@@ -52,7 +52,8 @@ class _FoodLogState extends State<FoodLog> {
     // rebuildAllChildren(() {});
   }
 
-  update(context) {
+  update(context) async {
+    await getFood();
     setState(() {});
   }
 
