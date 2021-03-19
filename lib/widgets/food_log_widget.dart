@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fraction/fraction.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodLog extends StatefulWidget {
   String selectedDate;
@@ -32,6 +33,7 @@ class _FoodLogState extends State<FoodLog> {
   String selectedDate;
   DateTime entryTime = DateTime.now();
   double tempPortion;
+  String userId = '';
 
   _FoodLogState(String key) {
     this.selectedDate = key;
@@ -93,9 +95,11 @@ class _FoodLogState extends State<FoodLog> {
   }
 
   getFood() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.get('id');
     foodLogEntries.clear();
     var db = new DBHelper();
-    var response = await db.getFoodLog('1', selectedDate);
+    var response = await db.getFoodLog(selectedDate);
     var data = json.decode(response.body);
     // print(data[0]['entryTime'].runtimeType);
     // var x = TimeOfDay.fromDateTime(data[0]['entryTime']);

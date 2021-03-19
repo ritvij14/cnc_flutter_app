@@ -46,7 +46,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
 
   getFood() async {
     var db = new DBHelper();
-    var x = await db.getUserInfo('1');
+    var x = await db.getUserInfo();
     var userData = json.decode(x.body);
 
     if(userData['weight'] <= 174) {
@@ -78,7 +78,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
     dailyFoodLogEntryList.clear();
     DateTime selectedDate = DateTime.now();
     String key = selectedDate.toString().split(" ")[0];
-    var response = await db.getFoodLog('1', key);
+    var response = await db.getFoodLog(key);
     var data = json.decode(response.body);
     for (int i = 0; i < data.length; i++) {
       FoodLogEntry foodLogEntry = new FoodLogEntry();

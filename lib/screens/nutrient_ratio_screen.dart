@@ -119,7 +119,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
 
     if (a && b && c) {
       var db = new DBHelper();
-      await db.saveRatios('1', fatPercent, proteinPercent, carbohydratePercent);
+      await db.saveRatios(fatPercent, proteinPercent, carbohydratePercent);
     }
   }
 

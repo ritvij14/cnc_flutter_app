@@ -93,7 +93,7 @@ class LoginScreen extends StatelessWidget {
   Future<String> welcomeScreenComplete() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var id = prefs.get('id');
-    var response = await db.getFormCompletionStatus(id);
+    var response = await db.getFormCompletionStatus();
     bool formComplete = (response.toString() == 'true');
     print('The welcome screener came back as ' + formComplete.toString());
     if (formComplete) {

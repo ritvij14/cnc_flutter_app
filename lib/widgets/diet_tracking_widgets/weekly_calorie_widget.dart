@@ -27,7 +27,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
       foodLogEntries.clear();
       selectedDate = DateTime.now().subtract(Duration(days: i));
       String key = selectedDate.toString().split(" ")[0];
-      var response = await db.getFoodLog('1', key);
+      var response = await db.getFoodLog(key);
       var data = json.decode(response.body);
       double kcal = 0;
       map.putIfAbsent(key, () => kcal);
@@ -84,7 +84,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
       yValues.add(v);
     }
 
-    var x = await db.getUserInfo('1');
+    var x = await db.getUserInfo();
     var userData = json.decode(x.body);
 
     if(userData['weight'] <= 174) {

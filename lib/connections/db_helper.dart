@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:cnc_flutter_app/models/user_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'db_helper_base.dart';
 
@@ -26,9 +27,11 @@ class DBHelper{
     return response.body.toString();
   }
 
-  Future<bool> getFormCompletionStatus(String id) async {
+  Future<bool> getFormCompletionStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl =
-        baseUrl + 'api/users/formstatus/' + id;
+        baseUrl + 'api/users/formstatus/' + userId;
     http.Response response =
     await http.get(Uri.encodeFull(requestUrl), headers: {});
 
@@ -49,14 +52,18 @@ class DBHelper{
     return response;
   }
 
-  Future<http.Response> getUserFrequentFoods(userId) async {
-    var requestUrl = baseUrl + 'api/users/' + userId.toString() + '/foodlog/frequent';
+  Future<http.Response> getUserFrequentFoods() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
+    var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/frequent';
     http.Response response =
     await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 
-  Future<http.Response> getUserInfo(userId) async {
+  Future<http.Response> getUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/get';
     http.Response response =
     await http.get(Uri.encodeFull(requestUrl), headers: {});
@@ -64,10 +71,11 @@ class DBHelper{
   }
 
   Future<http.Response> saveRatios(
-      String userId,
       int fatPercent,
       int proteinPercent,
       int carbohydratePercent,) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl +
         'api/users/profile/ratios/';
     var response = await http.post(requestUrl,
@@ -82,7 +90,9 @@ class DBHelper{
   }
 
   Future<http.Response> updateWeight(
-      MetricModel metricModel, userId) async {
+      MetricModel metricModel) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/$userId/update/weight/';
     var uriResponse = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
@@ -93,7 +103,6 @@ class DBHelper{
   }
 
   Future<http.Response> saveFormInfo(
-      String userId,
       String birthDate,
       String race,
       String ethnicity,
@@ -106,6 +115,8 @@ class DBHelper{
       String colorectalStage,
       String lastDiagDate,
       String cancerTreatment) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl +
         'api/users/form/save/';
     var response = await http.post(requestUrl,
@@ -129,7 +140,6 @@ class DBHelper{
   }
 
   Future<http.Response> updateFormInfo(
-      String userId,
       String birthDate,
       String race,
       String ethnicity,
@@ -138,6 +148,8 @@ class DBHelper{
       String weight,
       String activityLevel,
   ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl +
         'api/users/form/update/';
     var response = await http.post(requestUrl,
@@ -176,7 +188,9 @@ class DBHelper{
   }
 
 
-  Future<http.Response> getFoodLog(userId, date) async {
+  Future<http.Response> getFoodLog(date) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/' + date;
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
@@ -190,14 +204,18 @@ class DBHelper{
     return response;
   }
 
-  Future<http.Response> deleteUserGiIssues(userId) async {
+  Future<http.Response> deleteUserGiIssues() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/'+userId+'/delete/issues/';
     http.Response response =
     await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 
-  Future<http.Response> saveNewFoodLogEntry(entryTime, date, userId, foodId, portion) async {
+  Future<http.Response> saveNewFoodLogEntry(entryTime, date, foodId, portion) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/foodlog/save/';
     var uriResponse = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},

@@ -109,7 +109,7 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     child: Text('Submit'),
                     onPressed: () {
                       db.saveNewMetric(widget.metricModel);
-                      dbHelper.updateWeight(widget.metricModel, '1');
+                      dbHelper.updateWeight(widget.metricModel);
                       Navigator.pop(context);
                     },
                   ),

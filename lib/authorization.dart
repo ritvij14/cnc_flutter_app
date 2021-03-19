@@ -23,7 +23,7 @@ class Authorization {
     if(id == null){
       return false;
     }
-    var response = await db.getFormCompletionStatus(id);
+    var response = await db.getFormCompletionStatus();
 
     bool formComplete = (response.toString() == 'true');
 
