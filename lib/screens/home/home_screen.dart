@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(MdiIcons.scale),
               label: 'Log Metrics',
               onTap: () {
-                Navigator.pushNamed(context, '/inputMetric');
+                Navigator.pushNamed(context, '/inputMetric').then((value) => rebuildAllChildren(context));
               }),
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
