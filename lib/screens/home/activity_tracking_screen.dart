@@ -5,6 +5,7 @@ import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:cnc_flutter_app/widgets/activity_tracking_screen_widgets/activity_tracking_input_activity_widget.dart';
 import 'package:cnc_flutter_app/widgets/activity_tracking_screen_widgets/activity_tracking_list_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityTrackingScreen extends StatefulWidget {
   List<ActivityModel> activityModelList = [];
@@ -59,7 +60,9 @@ class _ActivityTrackingScreenState extends State<ActivityTrackingScreen> {
 
   getActivities() async {
     widget.activityModelList.clear();
-    var response = await db.getActivities();
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
+    var response = await db.getActivities(int.parse(id));
     List<ActivityModel> fa = (json.decode(response.body) as List)
         .map((data) => ActivityModel.fromJson(data))
         .toList();

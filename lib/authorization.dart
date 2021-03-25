@@ -1,10 +1,22 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'connections/db_helper.dart';
+import 'models/user_model.dart';
 
 class Authorization {
 
+  // Authorization._privateConstructor();
+  //
+  // static final Authorization _instance = Authorization._privateConstructor();
+  //
+  // factory Authorization() {
+  //   return _instance;
+  // }
+
   var db = new DBHelper();
+
+  UserModel user;
+
 
   Future<bool> isLogged() async {
     var sharedPref = await SharedPreferences.getInstance();
@@ -33,5 +45,11 @@ class Authorization {
     } else {
       return false;
     }
+  }
+
+  Future<UserModel> getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String id = prefs.get('id');
+
   }
 }

@@ -4,6 +4,7 @@ import 'package:cnc_flutter_app/connections/symptom_db_helper.dart';
 import 'package:cnc_flutter_app/models/symptom_model.dart';
 import 'package:cnc_flutter_app/widgets/symptom_tracking_widgets/symptom_tracking_list_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SymptomTrackingBody extends StatefulWidget {
@@ -29,15 +30,24 @@ class _SymptomTrackingBodyState extends State<SymptomTrackingBody> {
             },
           );
         },
-        future: getSymptoms(),
+        future: test(),
       ),
     );
   }
 
   getSymptoms() async {
-    var response = await db.getSymptoms();
-    print(response.body);
+    print('inside get symptoms method');
+    symptomModelList.clear();
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
+    var response = await db.getSymptoms(int.parse(id));
     List<SymptomModel> newSymptomModelList = (json.decode(response.body) as List).map((data) => SymptomModel.fromJson(data)).toList();
     symptomModelList = newSymptomModelList;
   }
+
+  test() {
+    print('here');
+  }
+
+
 }

@@ -7,10 +7,25 @@ import 'package:http/http.dart' as http;
 
 class MetricDBHelper extends DBHelperBase{
 
-  Future<http.Response> getMetrics() async {
+  Future<http.Response> getAllMetrics() async {
     var requestUrl = baseUrl + 'api/metric/all';
     http.Response response =
     await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> getMetrics(int userId) async {
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/metric/all/user', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
     return response;
   }
 
@@ -22,6 +37,7 @@ class MetricDBHelper extends DBHelperBase{
         body: json.encode({
           'weight': metricModel.weight.toString(),
           'dateTime': metricModel.dateTime.toIso8601String(),
+          'userId': metricModel.userId.toString(),
         }));
   }
 }

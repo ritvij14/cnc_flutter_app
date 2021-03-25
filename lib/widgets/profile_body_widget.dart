@@ -60,7 +60,11 @@ class ProfileBody extends StatelessWidget {
             press: () async {
               var prefs = await SharedPreferences.getInstance();
               prefs?.clear();
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) =>
+                      false);
             },
           ),
         ],

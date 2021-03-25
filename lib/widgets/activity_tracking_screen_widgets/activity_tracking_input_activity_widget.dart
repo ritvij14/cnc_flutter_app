@@ -3,6 +3,7 @@ import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityTrackingInputScreen extends StatefulWidget {
   ActivityModel fitnessActivity = new ActivityModel.emptyConstructor();
@@ -220,10 +221,12 @@ class _ActivityTrackingInputScreenState
                     child: RaisedButton(
                       child: Text('Submit'),
                       onPressed: () async {
-                        print(widget.fitnessActivity.type);
                         if (_formKey.currentState.validate()) {
+                          var sharedPref = await SharedPreferences.getInstance();
+                          String id = sharedPref.getString('id');
+                          widget.fitnessActivity.userId = int.parse(id);
                           var x = await db.saveNewActivity(widget.fitnessActivity);
-                          Navigator.pop(context, '');
+                          Navigator.pop(context, 'Saved Activity');
                         }
                       },
                     ),

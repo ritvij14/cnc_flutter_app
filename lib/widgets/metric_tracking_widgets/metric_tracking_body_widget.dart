@@ -4,6 +4,7 @@ import 'package:cnc_flutter_app/connections/metric_db_helper.dart';
 import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:cnc_flutter_app/widgets/metric_tracking_widgets/metric_tracking_list_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MetricTrackingBody extends StatefulWidget {
   @override
@@ -33,8 +34,10 @@ class _MetricTrackingBodyState extends State<MetricTrackingBody> {
   }
 
   getMetrics() async {
-    var response = await db.getMetrics();
-    print(response.body);
+    metricModelList.clear();
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
+    var response = await db.getMetrics(int.parse(id));
     List<MetricModel> newMetricModelList =
         (json.decode(response.body) as List)
             .map((data) => MetricModel.fromJson(data))

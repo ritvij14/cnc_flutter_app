@@ -3,6 +3,7 @@ import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MetricTrackingInputScreen extends StatefulWidget {
@@ -105,9 +106,12 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
                     child: Text('Submit'),
-                    onPressed: () {
-                      db.saveNewMetric(widget.metricModel);
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      var sharedPref = await SharedPreferences.getInstance();
+                      String id = sharedPref.getString('id');
+                      widget.metricModel.userId = int.parse(id);
+                      var x = db.saveNewMetric(widget.metricModel);
+                      Navigator.pop(context, 'Saved Weight');
                     },
                   ),
                 ),

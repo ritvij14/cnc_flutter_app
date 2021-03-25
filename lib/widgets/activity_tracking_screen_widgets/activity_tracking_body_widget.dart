@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
 import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'activity_tracking_list_tile_widget.dart';
 
 
@@ -45,8 +46,10 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
   // }
 
   getActivities() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
     widget.activityModelList.clear();
-    var response = await db.getActivities();
+    var response = await db.getActivities(int.parse(id));
     List<ActivityModel> fa = (json.decode(response.body) as List)
         .map((data) => ActivityModel.fromJson(data))
         .toList();
