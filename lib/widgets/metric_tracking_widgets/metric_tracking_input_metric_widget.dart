@@ -4,20 +4,21 @@ import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MetricTrackingInputScreen extends StatefulWidget {
   MetricModel metricModel = new MetricModel.emptyConstructor();
 
   @override
-  _MetricTrackingInputScreenState createState() => _MetricTrackingInputScreenState();
+  _MetricTrackingInputScreenState createState() =>
+      _MetricTrackingInputScreenState();
 }
 
 class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
-
   final db = MetricDBHelper();
   final dbHelper = DBHelper();
-  TextEditingController dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
+  TextEditingController dateCtl = TextEditingController(
+      text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +32,10 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('Date',
-                style: TextStyle(
-                    fontSize: 16
-                ),),
+              Text(
+                'Date',
+                style: TextStyle(fontSize: 16),
+              ),
               Container(
                 width: 200,
                 child: TextFormField(
@@ -47,13 +48,12 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     date = await showDatePicker(
                       context: context,
                       initialDate: widget.metricModel.dateTime,
-                      firstDate: DateTime(now.year, now.month, now.day -1),
+                      firstDate: DateTime(now.year, now.month, now.day - 1),
                       lastDate: DateTime.now(),
                     );
                     dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
                     widget.metricModel.dateTime = date;
                   },
-
                 ),
               ),
             ],
@@ -61,10 +61,10 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('Weight',
-                style: TextStyle(
-                    fontSize: 16
-                ),),
+              Text(
+                'Weight',
+                style: TextStyle(fontSize: 16),
+              ),
               Container(
                 width: 200,
                 child: TextFormField(
@@ -107,13 +107,10 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
                     child: Text('Submit'),
-                    onPressed: () {
-                      db.saveNewMetric(widget.metricModel);
-                      dbHelper.updateWeight(widget.metricModel);
-                      Navigator.pop(context);
                     onPressed: () async {
                       var sharedPref = await SharedPreferences.getInstance();
                       String id = sharedPref.getString('id');
+                      dbHelper.updateWeight(widget.metricModel);
                       widget.metricModel.userId = int.parse(id);
                       var x = db.saveNewMetric(widget.metricModel);
                       Navigator.pop(context, 'Saved Weight');
@@ -124,7 +121,6 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
             ),
           ),
         ],
-
       ),
     );
   }

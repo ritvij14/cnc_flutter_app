@@ -46,7 +46,7 @@ class DBHelper{
   }
 
   Future<http.Response> searchFood(String query) async {
-    var requestUrl = baseUrl + 'api/food/' + query ;
+    var requestUrl = baseUrl + 'api/food/search/' + query ;
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
