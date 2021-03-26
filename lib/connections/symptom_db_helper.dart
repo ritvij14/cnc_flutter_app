@@ -21,14 +21,33 @@ class SymptomDBHelper extends DBHelper {
           'vomiting': symptomModel.vomiting,
           'other': symptomModel.other,
           'dateTime': symptomModel.dateTime.toIso8601String(),
+          'userId': symptomModel.userId.toString(),
+
         }));
     return uriResponse;
   }
 
-  Future<http.Response> getSymptoms() async {
+  Future<http.Response> getAllSymptoms() async {
+    print('here');
     var requestUrl = baseUrl + 'api/symptom/all';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> getSymptoms(int userId) async {
+    print('inside symptom db helper get symptoms by user id');
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/symptom/all/user', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
     return response;
   }
 

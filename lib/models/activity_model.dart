@@ -7,6 +7,7 @@ class ActivityModel {
   int mets;
   double metsPerHour;
   int id;
+  int userId;
   DateTime dateTime;
 
   //intensity can be a scale, 1-3; 1 = light, 2 = moderate, 3 = vigorous

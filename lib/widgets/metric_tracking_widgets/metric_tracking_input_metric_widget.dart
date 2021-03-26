@@ -111,6 +111,12 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                       db.saveNewMetric(widget.metricModel);
                       dbHelper.updateWeight(widget.metricModel);
                       Navigator.pop(context);
+                    onPressed: () async {
+                      var sharedPref = await SharedPreferences.getInstance();
+                      String id = sharedPref.getString('id');
+                      widget.metricModel.userId = int.parse(id);
+                      var x = db.saveNewMetric(widget.metricModel);
+                      Navigator.pop(context, 'Saved Weight');
                     },
                   ),
                 ),

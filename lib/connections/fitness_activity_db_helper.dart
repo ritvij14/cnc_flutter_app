@@ -7,10 +7,27 @@ import 'package:http/http.dart' as http;
 class ActivityDBHelper extends DBHelperBase {
   var baseUrl = 'https://10.0.2.2:7777/';
 
-  Future<http.Response> getActivities() async {
+  //TODO get all activities method shouldn't exist in actual app.
+  Future<http.Response> getAllActivities() async {
     var requestUrl = baseUrl + 'api/fitnessActivity/all';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
+    return response;
+  }
+
+  Future<http.Response> getActivities(int userId) async {
+    var requestUrl = baseUrl + 'api/fitnessActivity/all/user';
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+    var uri =
+        Uri.https('10.0.2.2:7777', '/api/fitnessActivity/all/user', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
     return response;
   }
 
@@ -31,8 +48,10 @@ class ActivityDBHelper extends DBHelperBase {
           'intensity': fitnessActivityModel.intensity.toString(),
           'minutes': fitnessActivityModel.minutes.toString(),
           'dateTime': fitnessActivityModel.dateTime.toIso8601String(),
+          'userId': fitnessActivityModel.userId.toString(),
         }));
   }
+
   Future<http.Response> updateExistingActivity(
       ActivityModel activityModel) async {
     var requestUrl = baseUrl + 'api/fitnessActivity/update/';

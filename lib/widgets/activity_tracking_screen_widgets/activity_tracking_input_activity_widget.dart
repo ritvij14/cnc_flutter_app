@@ -5,6 +5,7 @@ import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityTrackingInputScreen extends StatefulWidget {
   ActivityModel fitnessActivity = new ActivityModel.emptyConstructor();
@@ -158,105 +159,104 @@ class _ActivityTrackingInputScreenState
                   ],
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text('Minutes'),
-                    Container(
-                      width: 200,
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Minutes required';
-                          }
-                          return null;
-                        },
-                        initialValue: '',
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        ],
-                        decoration: InputDecoration(
-                          hintText: "enter",
-                        ),
-                        onChanged: (text) {
-                          widget.fitnessActivity.minutes = int.parse(text);
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text('Date'),
-                    Container(
-                      width: 200,
-                      child: TextFormField(
-                        controller: dateCtl,
-                        decoration: InputDecoration(hintText: 'select'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Date required';
-                          }
-                          return null;
-                        },
-                        // initialValue: '',
-                        onTap: () async {
-                          DateTime date = DateTime.now();
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          date = await showDatePicker(
-                              context: context,
-                              initialDate: widget.fitnessActivity.dateTime,
-                              firstDate: DateTime(2020),
-                              lastDate: DateTime.now());
-                          // dateCtl.text = date.toIso8601String();
-                          dateCtl.text = DateFormat('yyyy-MM-dd').format(date);
-                          // dateCtl.text = date.toString();
-                          widget.fitnessActivity.dateTime = date;
-                        },
-                        // onChanged: (text){
-                        //   // widget.fitnessActivity.dateTime = DateTime.parse(text);
-                        // },
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          child: Text('Submit'),
-                          onPressed: () async {
-                            print(widget.fitnessActivity.type);
-                            if (_formKey.currentState.validate()) {
-                              var x = await db.saveNewActivity(widget.fitnessActivity);
-                              Navigator.pop(context, '');
-                            }
-                          },
-                        ),
-                      ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text('Minutes'),
+                Container(
+                  width: 200,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Minutes required';
+                      }
+                      return null;
+                    },
+                    initialValue: '',
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                     ],
+                    decoration: InputDecoration(
+                      hintText: "enter",
+                    ),
+                    onChanged: (text) {
+                      widget.fitnessActivity.minutes = int.parse(text);
+                    },
                   ),
-                ),
+                )
               ],
             ),
-          );
-        },
-        future: getActivityOptions(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text('Date'),
+                Container(
+                  width: 200,
+                  child: TextFormField(
+                    controller: dateCtl,
+                    decoration: InputDecoration(hintText: 'select'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Date required';
+                      }
+                      return null;
+                    },
+                    // initialValue: '',
+                    onTap: () async {
+                      DateTime date = DateTime.now();
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      date = await showDatePicker(
+                          context: context,
+                          initialDate: widget.fitnessActivity.dateTime,
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime.now());
+                      // dateCtl.text = date.toIso8601String();
+                      dateCtl.text = DateFormat('yyyy-MM-dd').format(date);
+                      // dateCtl.text = date.toString();
+                      widget.fitnessActivity.dateTime = date;
+                    },
+                    // onChanged: (text){
+                    //   // widget.fitnessActivity.dateTime = DateTime.parse(text);
+                    // },
+                  ),
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      child: Text('Submit'),
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          var sharedPref = await SharedPreferences.getInstance();
+                          String id = sharedPref.getString('id');
+                          widget.fitnessActivity.userId = int.parse(id);
+                          var x = await db.saveNewActivity(widget.fitnessActivity);
+                          Navigator.pop(context, 'Saved Activity');
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

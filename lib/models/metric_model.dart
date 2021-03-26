@@ -3,6 +3,8 @@ import 'dart:core';
 class MetricModel{
   int weight;
   DateTime dateTime = DateTime.now();
+  int userId;
+
 
   MetricModel(int weight, DateTime dateTime){
     this.weight = weight;
