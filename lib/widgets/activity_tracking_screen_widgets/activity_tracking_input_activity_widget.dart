@@ -44,7 +44,7 @@ class _ActivityTrackingInputScreenState
         appBar: AppBar(
           title: Text('New Activity'),
         ),
-        body: FutureBuilder(builder: (context, projectSnap) {
+        body: FutureBuilder(future: getActivityOptions(), builder: (context, projectSnap) {
           return Form(
             key: _formKey,
             child: Column(
