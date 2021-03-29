@@ -9,7 +9,7 @@ import 'package:cnc_flutter_app/screens/login_screen.dart';
 import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/screens/profile_screen.dart';
 import 'package:cnc_flutter_app/screens/summary_screen.dart';
-import 'package:cnc_flutter_app/screens/user_questions_screen.dart';
+import 'package:cnc_flutter_app/screens/user_questions_screen2.dart';
 import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_bloc.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_state.dart';
@@ -39,7 +39,8 @@ class NutritionApp extends StatelessWidget {
                 theme: themeState.themeData,
                 routes: {
                   // '/': (context) => NavigatorScreen(),
-                  '/login': (context) => LoginScreen(),
+                  // '/login': (context) => LoginScreen(),
+                  '/login': (context) => UserQuestionsScreen(),
                   '/home': (context) => NavigatorScreen(),
                   '/summary': (context) => SummaryScreen(),
                   '/dietTracking': (context) => DietTrackingScreen(),

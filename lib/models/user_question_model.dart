@@ -15,16 +15,16 @@ class UserQuestion {
   int user_id;
   String question;
   String question_notes;
-  // DateTime date_created;
-  //  DateTime date_updated;
+  String date_created;
+   String date_updated;
   UserQuestion({
 
     this.id,
     this.user_id,
     this.question,
     this.question_notes,
-    // this.date_created,
-    // this.date_updated
+    this.date_created,
+    this.date_updated
   });
 
   factory UserQuestion.fromMap(Map<String, dynamic> json) => new UserQuestion(
@@ -32,8 +32,8 @@ class UserQuestion {
     user_id: json["user_id"],
     question: json["question"],
     question_notes: json["question_notes"],
-    // date_created: json["date_created"],
-    // date_updated: json["date_updated"],
+    date_created: json["date_created"],
+    date_updated: json["date_updated"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -41,7 +41,7 @@ class UserQuestion {
     "user_id": user_id,
     "question": question,
     "question_notes": question_notes,
-    // "date_created": date_created,
-    // "date_updated": date_updated,
+    "date_created": date_created,
+    "date_updated": date_updated,
   };
 }
