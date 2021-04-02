@@ -65,4 +65,22 @@ class ActivityDBHelper extends DBHelperBase {
           'dateTime': activityModel.dateTime.toIso8601String(),
         }));
   }
+  Future<http.Response> getWeekActivityList(int numberOfDays, int intensity, int userId) async {
+    var requestUrl = baseUrl + 'api/fitnessActivity/week/user/';
+    var queryParameters = {
+      'numberOfDays': numberOfDays.toString(),
+      'intensity': intensity.toString(),
+      'userId': userId.toString(),
+    };
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/fitnessActivity/week/user/', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+    return response;
+  }
+
+
 }
