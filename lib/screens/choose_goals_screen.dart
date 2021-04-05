@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
+import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
+import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -31,7 +33,10 @@ class ChooseGoalsPage extends StatefulWidget {
 class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   List<String> goals = [];
   List<WeeklyGoalsModel> weeklyGoalsModelList = [];
+  List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
+
   var db = new WeeklyDBHelper();
+  final db2 = WeeklySavedDBHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -64,27 +69,23 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                         fontWeight: FontWeight.bold),
                   ),
                   children: <Widget>[
-
                     Container(
-                        color: Colors.white,
+                        color: Colors.black,
                         height: 150,
                         child: ListView.builder(
-                            itemCount: goals.length,
+                            itemCount: weeklySavedGoalsModelList.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                child: Text((index+1).toString() + ". " + goals[index],
-                                    style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              );
+                              if (weeklySavedGoalsModelList[index].type != null) {
+                                return _buildListView(index);
+                              } else {
+                                return _buildEmpty();
+                              }
                             }))
                   ],
                 ),
               ),
           Container(
-            color: _getColor("Fruit"),
+            color: _getColor("Fruits"),
             child: ExpansionTile(
               title: Text(
                 "Fruit Goals",
@@ -96,12 +97,12 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               children: <Widget>[
 
                 Container(
-                    color: _getColor("Fruit"),
+                    color: _getColor("Fruits"),
                     height: 150,
                     child: ListView.builder(
                         itemCount: weeklyGoalsModelList.length,
                         itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Fruit") {
+                          if (weeklyGoalsModelList[index].type == "Fruits") {
                             return _buildSlideView(index);
                           } else {
                             return _buildEmpty();
@@ -111,7 +112,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
             ),
           ),
           Container(
-            color: _getColor("Vegetable"),
+            color: _getColor("Vegetables"),
             child: ExpansionTile(
               title: Text(
                 "Vegetable Goals",
@@ -123,11 +124,11 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               children: <Widget>[
                 Container(
                     height: 150,
-                    color: _getColor("Vegetable"),
+                    color: _getColor("Vegetables"),
                     child: ListView.builder(
                         itemCount: weeklyGoalsModelList.length,
                         itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Vegetable") {
+                          if (weeklyGoalsModelList[index].type == "Vegetables") {
                             return _buildSlideView(index);
                           } else {
                             return _buildEmpty();
@@ -137,7 +138,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
             ),
           ),
           Container(
-            color: _getColor("Grain"),
+            color: _getColor("Grains"),
             child: ExpansionTile(
               title: Text(
                 "Grain Goals",
@@ -149,11 +150,11 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               children: <Widget>[
                 Container(
                     height: 150,
-                    color: _getColor("Grain"),
+                    color: _getColor("Grains"),
                     child: ListView.builder(
                         itemCount: weeklyGoalsModelList.length,
                         itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Grain") {
+                          if (weeklyGoalsModelList[index].type == "Grains") {
                             return _buildSlideView(index);
                           } else {
                             return _buildEmpty();
@@ -215,7 +216,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
             ),
           ),
           Container(
-            color: _getColor("Snack"),
+            color: _getColor("Snacks and Condiments"),
             child: ExpansionTile(
               title: Text(
                 "Snack Goals",
@@ -227,11 +228,11 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               children: <Widget>[
                 Container(
                     height: 150,
-                    color: _getColor("Snack"),
+                    color: _getColor("Snacks and Condiments"),
                     child: ListView.builder(
                         itemCount: weeklyGoalsModelList.length,
                         itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Snack") {
+                          if (weeklyGoalsModelList[index].type == "Snacks and Condiments") {
                             return _buildSlideView(index);
                           } else {
                             return _buildEmpty();
@@ -312,17 +313,17 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   }
 
   Color _getColor(String index) {
-    if (index == "Fruit") {
+    if (index == "Fruits") {
       return Colors.red;
-    } else if (index == "Vegetable") {
+    } else if (index == "Vegetables") {
       return Colors.green;
-    } else if (index == "Grain") {
+    } else if (index == "Grains") {
       return Colors.orange[300];
     } else if (index == "Protein") {
       return Colors.deepPurple[300];
     } else if (index == "Dairy") {
       return Colors.blue[600];
-    } else if (index == "Snack") {
+    } else if (index == "Snacks and Condiments") {
       return Colors.pink[300];
     } else if (index == "Beverage") {
       return Colors.teal[400];
@@ -336,6 +337,16 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   Widget _buildEmpty() {
     return Container(color: Colors.white // This is optional
         );
+  }
+
+  Widget _buildListView(int index) {
+    int i = index+1;
+    return
+        Container(
+          height: 50,
+          color: Colors.white,
+          child: Center(child: Text(i.toString() + ". " + weeklySavedGoalsModelList[index].goalDescription)));
+
   }
 
   Widget _buildSlideView(int index) {
@@ -358,6 +369,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               _addGoal(weeklyGoalsModelList[index].goalDescription);
               print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
+              addSavedGoals(index);
             }),
       ],
       secondaryActions: <Widget>[
@@ -369,6 +381,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               _addGoal(weeklyGoalsModelList[index].goalDescription);
               print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
+              addSavedGoals(index);
             }),
       ],
     );
@@ -387,7 +400,52 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
       print(wGDecode[i]['type']);
+      print(wGDecode[i]['goalDescription']);
+      print(wGDecode[i]['help_info']);
     }
     print(wGDecode.length);
+
+    weeklySavedGoalsModelList.clear();
+    var db2 = new WeeklySavedDBHelper();
+    var response2 = await db2.getWeeklySavedGoals();
+    var wGDecode2 = json.decode(response2.body);
+
+    for (int i = 0; i < wGDecode.length; i++) {
+      WeeklySavedGoalsModel weeklySavedGoalsModel = new WeeklySavedGoalsModel(
+          wGDecode2[i]['id'],
+          wGDecode2[i]['type'],
+          wGDecode2[i]['goalDescription'],
+          wGDecode2[i]['help_info'],
+          wGDecode2[i]['user_id']);
+      weeklySavedGoalsModelList..add(weeklySavedGoalsModel);
+      print(wGDecode2[i]['type']);
+      print(wGDecode2[i]['goalDescription']);
+      print(wGDecode2[i]['help_info']);
+    }
+    print(wGDecode2.length);
   }
+
+  addSavedGoals(int index) async {
+    int i = 1 ;
+    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
+        1,
+        weeklyGoalsModelList[index].type,
+        weeklyGoalsModelList[index].goalDescription,
+        weeklyGoalsModelList[index].helpInfo,
+        1);
+    db2.saveWeeklySavedGoal(m);
+  }
+
+  deleteGoal(int index) async {
+    int i = 1 ;
+    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
+        1,
+        weeklyGoalsModelList[index].type,
+        weeklyGoalsModelList[index].goalDescription,
+        weeklyGoalsModelList[index].helpInfo,
+        1);
+    db2.deleteByGoalDescription();
+  }
+
+
 }

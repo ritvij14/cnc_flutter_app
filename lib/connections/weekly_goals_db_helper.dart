@@ -22,7 +22,7 @@ class WeeklyDBHelper extends DBHelper {
         body: json.encode({
           'type': weeklyGoalsModel.type,
           'goalDescription': weeklyGoalsModel.goalDescription,
-          'helpInfo': weeklyGoalsModel.helpInfo,
+          'help_info': weeklyGoalsModel.helpInfo,
         }));
   }
 
