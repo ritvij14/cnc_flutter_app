@@ -223,7 +223,10 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
 
-            _buildWeeklyView(),
+
+            weeklySavedGoalsModelList.length > 0
+                ? _buildWeeklyView()
+                : SizedBox(height: 0),
 
             totalWeeklyGoalsCompleted != null
                 ? _buildGetWeeklyCompleted()
@@ -561,7 +564,7 @@ class _CalendarPageState extends State<CalendarPage> {
   addSavedGoals(int index) async {
     int i = 1;
     WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        1,
+        weeklySavedGoalsModelList.length+1,
         weeklyGoalsModelList[index].type,
         weeklyGoalsModelList[index].goalDescription,
         weeklyGoalsModelList[index].helpInfo,

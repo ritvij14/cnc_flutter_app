@@ -167,7 +167,7 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
   addSavedGoals(int index) async {
     int i = 1;
     WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        1,
+        weeklySavedGoalsModelList.length+1,
         weeklyGoalsModelList[index].type,
         weeklyGoalsModelList[index].goalDescription,
         weeklyGoalsModelList[index].helpInfo,
