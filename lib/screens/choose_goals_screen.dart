@@ -13,7 +13,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ChooseWeeklyGoals extends StatelessWidget {
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChooseGoalsPage(title: 'Choose Weekly Goals'),

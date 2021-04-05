@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
+import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
+import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -11,24 +13,20 @@ import 'package:share/share.dart';
 import '../choose_goals_screen.dart';
 import '../weekly_goals_screen.dart';
 
-void main() => runApp(GoalCalendar());
-
 class GoalCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //return CalendarPage();
-    return MaterialApp(
-      title: 'Goal Calendar',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: Colors.blue[800],
-      ),
-      home: CalendarPage(),
+    return Scaffold(
+      body: ChooseGoalsPage(title: 'Choose Weekly Goals'),
     );
   }
 }
 
 class CalendarPage extends StatefulWidget {
+  CalendarPage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -51,7 +49,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
   List<String> goals;
   List<WeeklyGoalsModel> weeklyGoalsModelList = [];
+  List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
   var db = new WeeklyDBHelper();
+  final db2 = WeeklySavedDBHelper();
 
   @override
   void initState() {
@@ -103,9 +103,19 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Personal Goal Calendar'),
+        title: Text('Choose Weekly Goals'),
       ),
-      body: SingleChildScrollView(
+      body: FutureBuilder(
+        builder: (context, projectSnap) {
+          return buildGoalCalendarView();
+        },
+        future: getGoals(),
+      ),
+    );
+  }
+
+  Widget buildGoalCalendarView() {
+    return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -275,8 +285,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 : SizedBox(height: 0),
           ],
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildGetWeeklyCompleted() {
@@ -391,7 +400,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _buildWeeklyView() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: _events2[_controller2.selectedDay].length,
+        itemCount: weeklySavedGoalsModelList.length,
         itemBuilder: (context, index) {
           return Slidable(
             actionPane: SlidableDrawerActionPane(),
@@ -399,7 +408,7 @@ class _CalendarPageState extends State<CalendarPage> {
               color: Colors.white,
               child: ListTile(
                 title:
-                    Text(_events2[_controller2.selectedDay][index].toString()),
+                    Text(weeklySavedGoalsModelList[index].goalDescription),
               ),
             ),
             actions: <Widget>[
@@ -524,7 +533,39 @@ class _CalendarPageState extends State<CalendarPage> {
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
       print(wGDecode[i]['type']);
+      print(wGDecode[i]['goalDescription']);
+      print(wGDecode[i]['help_info']);
     }
     print(wGDecode.length);
+
+    weeklySavedGoalsModelList.clear();
+    var db2 = new WeeklySavedDBHelper();
+    var response2 = await db2.getWeeklySavedGoals();
+    var wGDecode2 = json.decode(response2.body);
+
+    for (int i = 0; i < wGDecode.length; i++) {
+      WeeklySavedGoalsModel weeklySavedGoalsModel = new WeeklySavedGoalsModel(
+          wGDecode2[i]['id'],
+          wGDecode2[i]['type'],
+          wGDecode2[i]['goalDescription'],
+          wGDecode2[i]['help_info'],
+          wGDecode2[i]['user_id']);
+      weeklySavedGoalsModelList..add(weeklySavedGoalsModel);
+      print(wGDecode2[i]['type']);
+      print(wGDecode2[i]['goalDescription']);
+      print(wGDecode2[i]['help_info']);
+    }
+    print(wGDecode2.length);
+  }
+
+  addSavedGoals(int index) async {
+    int i = 1;
+    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
+        1,
+        weeklyGoalsModelList[index].type,
+        weeklyGoalsModelList[index].goalDescription,
+        weeklyGoalsModelList[index].helpInfo,
+        1);
+    db2.saveWeeklySavedGoal(m);
   }
 }

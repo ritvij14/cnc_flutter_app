@@ -29,7 +29,7 @@ class WeeklyGoalsPage extends StatefulWidget {
 
 class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
   List<String> goals;
-  List<WeeklyGoalsModel> weeklyGoalsModelList = [];
+  List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
 
   var db = new WeeklyDBHelper();
   final db2 = WeeklySavedDBHelper();
@@ -50,42 +50,46 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
   }
 
   Widget buildGoalView() {
+    if(weeklySavedGoalsModelList.length >0){
     return ListView.builder(
-      itemCount: weeklyGoalsModelList.length,
+      itemCount: weeklySavedGoalsModelList.length,
       itemBuilder: (context, index) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-              color: _getColor(weeklyGoalsModelList[index].type),
-              child: ExpansionTile(
-                title: Text(
-                  weeklyGoalsModelList[index].goalDescription,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      weeklyGoalsModelList[index].helpInfo,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                      ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                color: _getColor(weeklySavedGoalsModelList[index].type),
+                child: ExpansionTile(
+                  title: Text(
+                    weeklySavedGoalsModelList[index].goalDescription,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Colors.white,
                     ),
                   ),
-                ],
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        weeklySavedGoalsModelList[index].helpInfo,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
+            ],
+          );
       },
-    );
+    );}
+    else{
+      return _buildText();
+    }
   }
 
   Color _getColor(String index) {
@@ -110,6 +114,25 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
     }
   }
 
+  Widget _buildEmpty() {
+    return Container(color: Colors.white // This is optional
+        );
+  }
+
+  Widget _buildText() {
+    return Container(
+        height: 200,
+        color: Colors.white,
+        child:  Center(child: Text(
+          "There are no weekly goals chosen currently",
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold),),
+        ),
+    );
+  }
+
   getGoals() async {
     weeklyGoalsModelList.clear();
     var db = new WeeklyDBHelper();
@@ -122,11 +145,7 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
           wGDecode[i]['goalDescription'],
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
-      print(wGDecode[i]['type']);
-      print(wGDecode[i]['goalDescription']);
-      print(wGDecode[i]['help_info']);
     }
-    print(wGDecode.length);
 
     weeklySavedGoalsModelList.clear();
     var db2 = new WeeklySavedDBHelper();
@@ -141,9 +160,6 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
           wGDecode2[i]['help_info'],
           wGDecode2[i]['user_id']);
       weeklySavedGoalsModelList..add(weeklySavedGoalsModel);
-      print(wGDecode2[i]['type']);
-      print(wGDecode2[i]['goalDescription']);
-      print(wGDecode2[i]['help_info']);
     }
     print(wGDecode2.length);
   }
