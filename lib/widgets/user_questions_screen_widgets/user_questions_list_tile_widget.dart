@@ -23,7 +23,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
 
   deleteQuestion(userQuestionID) async {
     await DBProvider.db.deleteUserQuestion(userQuestionID);
-    await refresh();
+   refresh();
   }
 
   @override
@@ -60,7 +60,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
       trailing: GestureDetector(
         onTap: () {
           _deleteDialog(widget.userQuestion.question, widget.userQuestion.id);
-          refresh();
+          // refresh();
         },
         child: Icon(
           Icons.delete,
@@ -94,7 +94,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
                     ),
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).pop();
-                      refresh();
+                      // refresh();
                     }),
                 new FlatButton(
                     child: const Text('DELETE',
@@ -103,7 +103,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
                     onPressed: () {
                       deleteQuestion(userQuestionID);
                       Navigator.of(context, rootNavigator: true).pop();
-                      refresh();
+                      // refresh();
                     })
               ],
             ));
