@@ -50,44 +50,48 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
   }
 
   Widget buildGoalView() {
-    if(weeklySavedGoalsModelList.length >0){
-    return ListView.builder(
-      itemCount: weeklySavedGoalsModelList.length,
-      itemBuilder: (context, index) {
+    if (weeklySavedGoalsModelList.length > 0) {
+      return ListView.builder(
+        itemCount: weeklySavedGoalsModelList.length,
+        itemBuilder: (context, index) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                color: _getColor(weeklySavedGoalsModelList[index].type),
-                child: ExpansionTile(
-                  title: Text(
-                    weeklySavedGoalsModelList[index].goalDescription,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(15.0),
-                      child: Text(
-                        weeklySavedGoalsModelList[index].helpInfo,
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                        ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 0),
+                  color: _getColor(weeklySavedGoalsModelList[index].type),
+                  child: Container(
+                    padding: EdgeInsets.all(15.0),
+                    color: Colors.white,
+                    child: Text(
+                      weeklySavedGoalsModelList[index].goalDescription,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                        color: Colors.black,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          );
-      },
-    );}
-    else{
+                Container(
+                  padding: EdgeInsets.only(top: 0, bottom: 15.0),
+                  color: _getColor(weeklySavedGoalsModelList[index].type),
+                  child: Container(
+                    padding: EdgeInsets.all(15.0),
+                    color: Colors.white,
+                    child: Text(
+                      weeklySavedGoalsModelList[index].helpInfo,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                )
+              ]);
+        },
+      );
+    } else {
       return _buildText();
     }
   }
@@ -121,15 +125,15 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
 
   Widget _buildText() {
     return Container(
-        height: 200,
-        color: Colors.white,
-        child:  Center(child: Text(
+      height: 200,
+      color: Colors.white,
+      child: Center(
+        child: Text(
           "There are no weekly goals chosen currently",
           style: TextStyle(
-              color: Colors.black,
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold),),
+              color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
+      ),
     );
   }
 
@@ -159,19 +163,8 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
           wGDecode2[i]['user_id']);
-      weeklySavedGoalsModelList..add(weeklySavedGoalsModel);
+      weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
     print(wGDecode2.length);
-  }
-
-  addSavedGoals(int index) async {
-    int i = 1;
-    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        weeklySavedGoalsModelList.length+1,
-        weeklyGoalsModelList[index].type,
-        weeklyGoalsModelList[index].goalDescription,
-        weeklyGoalsModelList[index].helpInfo,
-        1);
-    db2.saveWeeklySavedGoal(m);
   }
 }

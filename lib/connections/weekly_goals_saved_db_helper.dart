@@ -28,11 +28,12 @@ class WeeklySavedDBHelper extends DBHelper {
         }));
   }
 
-  Future<http.Response> deleteByGoalDescription() async {
-    var requestUrl = baseUrl + '/api/weekly_goals_saved/delete/';
+  Future<http.Response> deleteWeeklyGoalsSavedByID(int id) async {
+    var requestUrl = baseUrl + '/api/weekly_goals_saved/delete/$id';
     http.Response response =
     await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
+
 
 }

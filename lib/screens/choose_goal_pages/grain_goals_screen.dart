@@ -210,51 +210,46 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
           wGDecode[i]['goalDescription'],
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
-      print(wGDecode[i]['type']);
-      print(wGDecode[i]['goalDescription']);
-      print(wGDecode[i]['help_info']);
     }
-    print(wGDecode.length);
 
     weeklySavedGoalsModelList.clear();
     var db2 = new WeeklySavedDBHelper();
     var response2 = await db2.getWeeklySavedGoals();
     var wGDecode2 = json.decode(response2.body);
 
-    for (int i = 0; i < wGDecode.length; i++) {
+    for (int i = 0; i < wGDecode2.length; i++) {
       WeeklySavedGoalsModel weeklySavedGoalsModel = new WeeklySavedGoalsModel(
           wGDecode2[i]['id'],
           wGDecode2[i]['type'],
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
           wGDecode2[i]['user_id']);
-      weeklySavedGoalsModelList..add(weeklySavedGoalsModel);
-      print(wGDecode2[i]['type']);
-      print(wGDecode2[i]['goalDescription']);
-      print(wGDecode2[i]['help_info']);
+      weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
-    print(wGDecode2.length);
   }
 
   addSavedGoals(int index) async {
     int i = 1;
+    int x = 0;
+    if (weeklySavedGoalsModelList.length > 0){
+      print(1);
+      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
+      print(x);
+    }
+    else{
+      print(2);
+      x = 1;
+
+    }
+    weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(x,weeklyGoalsModelList[index].type,weeklyGoalsModelList[index].goalDescription, weeklyGoalsModelList[index].helpInfo,1));
     WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        weeklySavedGoalsModelList.length + 1,
+        x,
         weeklyGoalsModelList[index].type,
         weeklyGoalsModelList[index].goalDescription,
         weeklyGoalsModelList[index].helpInfo,
         1);
     db2.saveWeeklySavedGoal(m);
+
   }
 
-  deleteGoal(int index) async {
-    int i = 1;
-    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        weeklySavedGoalsModelList.length + 1,
-        weeklyGoalsModelList[index].type,
-        weeklyGoalsModelList[index].goalDescription,
-        weeklyGoalsModelList[index].helpInfo,
-        1);
-    db2.deleteByGoalDescription();
-  }
 }

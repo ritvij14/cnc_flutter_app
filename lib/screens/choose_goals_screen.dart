@@ -44,7 +44,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
 
   var db = new WeeklyDBHelper();
-  final db2 = WeeklySavedDBHelper();
+  var db2 = new WeeklySavedDBHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -380,13 +380,11 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   }
 
   Widget _buildListView(int index) {
-    int i = index+1;
-    return
-        Container(
-          height: 50,
-          color: Colors.white,
-          child: Center(child: Text(i.toString() + ". " + weeklySavedGoalsModelList[index].goalDescription)));
-
+    int i = index + 1;
+    return Container(
+        padding: EdgeInsets.all(15.0),
+        color: Colors.white,
+        child: Text(i.toString() + ". " + weeklySavedGoalsModelList[index].goalDescription));
   }
 
   Widget _buildSlideView(int index) {
@@ -429,9 +427,11 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
 
   getGoals() async {
     weeklyGoalsModelList.clear();
-    var db = new WeeklyDBHelper();
+    weeklySavedGoalsModelList.clear();
     var response = await db.getWeeklyGoals();
     var wGDecode = json.decode(response.body);
+    var response2 = await db2.getWeeklySavedGoals();
+    var wGDecode2 = json.decode(response2.body);
 
     for (int i = 0; i < wGDecode.length; i++) {
       WeeklyGoalsModel weeklyGoalsModel = new WeeklyGoalsModel(
@@ -439,16 +439,8 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
           wGDecode[i]['goalDescription'],
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
-      print(wGDecode[i]['type']);
-      print(wGDecode[i]['goalDescription']);
-      print(wGDecode[i]['help_info']);
     }
     print(wGDecode.length);
-
-    weeklySavedGoalsModelList.clear();
-    var db2 = new WeeklySavedDBHelper();
-    var response2 = await db2.getWeeklySavedGoals();
-    var wGDecode2 = json.decode(response2.body);
 
     for (int i = 0; i < wGDecode.length; i++) {
       WeeklySavedGoalsModel weeklySavedGoalsModel = new WeeklySavedGoalsModel(
@@ -457,35 +449,27 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
           wGDecode2[i]['user_id']);
-      weeklySavedGoalsModelList..add(weeklySavedGoalsModel);
-      print(wGDecode2[i]['type']);
-      print(wGDecode2[i]['goalDescription']);
-      print(wGDecode2[i]['help_info']);
+      weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
-    print(wGDecode2.length);
   }
 
   addSavedGoals(int index) async {
-    int i = 1 ;
+    int i = 1;
+    int x = 0;
+    if (weeklySavedGoalsModelList.length > 0){
+      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
+    }
+    else{
+      x = 1;
+    }
+    weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(x,weeklyGoalsModelList[index].type,weeklyGoalsModelList[index].goalDescription, weeklyGoalsModelList[index].helpInfo,1));
     WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        weeklySavedGoalsModelList.length+1,
+        x,
         weeklyGoalsModelList[index].type,
         weeklyGoalsModelList[index].goalDescription,
         weeklyGoalsModelList[index].helpInfo,
         1);
     db2.saveWeeklySavedGoal(m);
+
   }
-
-  deleteGoal(int index) async {
-    int i = 1 ;
-    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        weeklySavedGoalsModelList.length+1,
-        weeklyGoalsModelList[index].type,
-        weeklyGoalsModelList[index].goalDescription,
-        weeklyGoalsModelList[index].helpInfo,
-        1);
-    db2.deleteByGoalDescription();
-  }
-
-
 }
