@@ -458,17 +458,17 @@ class _FoodLogState extends State<FoodLog> {
         // ),
         FutureBuilder(
           builder: (context, projectSnap) {
-            return ListView.separated(
+            return ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) {
-                return Divider(
-                  color: Colors.grey[600],
-                  height: 0,
-                  thickness: 1,
-                );
-              },
+              // separatorBuilder: (context, index) {
+              //   return Divider(
+              //     color: Colors.white,
+              //     height: 0,
+              //     thickness: 0,
+              //   );
+              // },
               itemCount: foodLogEntries.length,
               itemBuilder: (context, index) {
                 return ListTile(

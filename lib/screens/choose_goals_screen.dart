@@ -63,278 +63,290 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
 
   Widget _buildGoalView() {
     return SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                color:  Theme.of(context).primaryColor,
-                child: ExpansionTile(
-                  title: Text(
-                    "Chosen Goals",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  children: <Widget>[
-                    Container(
-                        color: Theme.of(context).primaryColor,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: weeklySavedGoalsModelList.length,
-                            itemBuilder: (context, index) {
-                              if (weeklySavedGoalsModelList[index].type != null) {
-                                return _buildListView(index);
-                              } else {
-                                return _buildEmpty();
-                              }
-                            }))
-                  ],
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            color:  Theme.of(context).primaryColor,
+            child: ExpansionTile(
+              title: Text(
+                "Chosen Goals",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
               ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Fruit Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Fruits"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseFruitGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Vegetable Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Vegetables"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseVegetableGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Grain Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Grains"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseGrainGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Protein Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Protein"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseProteinGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Dairy Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Dairy"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseDairyGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Snack Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Snacks and Condiments"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseSnackGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Beverage Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Beverage"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseBeverageGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Physical Activity Goals",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        child: Text('Choose Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: _getColor("Physical Activity"), // background
-                          onPrimary: Colors.white, // foreground
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChooseActivityGoals()),
-                          );
-                        },
-                      ),
-                    ]),
-              ),
+              children: <Widget>[
+                Container(
+                    color: Theme.of(context).primaryColor,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: weeklySavedGoalsModelList.length,
+                        itemBuilder: (context, index) {
+                          if (weeklySavedGoalsModelList[index].type != null) {
+                            return _buildListView(index);
+                          } else {
+                            return _buildEmpty();
+                          }
+                        }))
               ],
             ),
-          );
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Fruit Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Fruits"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseFruitGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Vegetable Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Vegetables"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseVegetableGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Grain Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Grains"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseGrainGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Protein Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Protein"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseProteinGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Dairy Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Dairy"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseDairyGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Snack Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Snacks and Condiments"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseSnackGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Beverage Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Beverage"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseBeverageGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+          Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Physical Activity Goals",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Goal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getColor("Physical Activity"), // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(
+                          new MaterialPageRoute(
+                            builder: (_) =>
+                                ChooseActivityGoals(),
+                          )).then((value) => update(context));
+                    },
+                  ),
+                ]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  update(context) {
+    setState(() {});
   }
 
   void _showSnackBar(BuildContext context, String text) {
@@ -376,7 +388,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
 
   Widget _buildEmpty() {
     return Container(color: Colors.white // This is optional
-        );
+    );
   }
 
   Widget _buildListView(int index) {
