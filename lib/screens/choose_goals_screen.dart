@@ -1,16 +1,26 @@
 import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
+import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
+import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
+import 'package:cnc_flutter_app/screens/choose_goal_pages/activity_goals_screen.dart';
+import 'package:cnc_flutter_app/screens/choose_goal_pages/dairy_goals_screen.dart';
+import 'package:cnc_flutter_app/screens/choose_goal_pages/grain_goals_screen.dart';
+import 'package:cnc_flutter_app/screens/choose_goal_pages/snack_goals_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import 'choose_goal_pages/beverage_goals_screen.dart';
+import 'choose_goal_pages/fruit_goals_screen.dart';
+import 'choose_goal_pages/protein_goals_screen.dart';
+import 'choose_goal_pages/vegetable_goals_screen.dart';
 
 // void main() => runApp(GoalCalendar());
 
 //void main() => runApp(ChooseWeeklyGoals());
 
 class ChooseWeeklyGoals extends StatelessWidget {
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +41,10 @@ class ChooseGoalsPage extends StatefulWidget {
 class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   List<String> goals = [];
   List<WeeklyGoalsModel> weeklyGoalsModelList = [];
+  List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
+
   var db = new WeeklyDBHelper();
+  var db2 = new WeeklySavedDBHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +67,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                color: Colors.black,
+                color:  Theme.of(context).primaryColor,
                 child: ExpansionTile(
                   title: Text(
                     "Chosen Goals",
@@ -64,236 +77,264 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                         fontWeight: FontWeight.bold),
                   ),
                   children: <Widget>[
-
                     Container(
-                        color: Colors.white,
-                        height: 150,
+                        color: Theme.of(context).primaryColor,
                         child: ListView.builder(
-                            itemCount: goals.length,
+                            shrinkWrap: true,
+                            itemCount: weeklySavedGoalsModelList.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                child: Text((index+1).toString() + ". " + goals[index],
-                                    style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              );
+                              if (weeklySavedGoalsModelList[index].type != null) {
+                                return _buildListView(index);
+                              } else {
+                                return _buildEmpty();
+                              }
                             }))
                   ],
                 ),
               ),
-          Container(
-            color: _getColor("Fruit"),
-            child: ExpansionTile(
-              title: Text(
-                "Fruit Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Fruit Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Fruits"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseFruitGoals()),
+                          );
+                        },
+                      ),
+                    ]),
               ),
-              children: <Widget>[
-
-                Container(
-                    color: _getColor("Fruit"),
-                    height: 150,
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Fruit") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Vegetable Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Vegetables"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseVegetableGoals()),
+                          );
+                        },
+                      ),
+                    ]),
+              ),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Grain Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Grains"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseGrainGoals()),
+                          );
+                        },
+                      ),
+                    ]),
+              ),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Protein Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Protein"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseProteinGoals()),
+                          );
+                        },
+                      ),
+                    ]),
+              ),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Dairy Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Dairy"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseDairyGoals()),
+                          );
+                        },
+                      ),
+                    ]),
+              ),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Snack Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Snacks and Condiments"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseSnackGoals()),
+                          );
+                        },
+                      ),
+                    ]),
+              ),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Beverage Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Beverage"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseBeverageGoals()),
+                          );
+                        },
+                      ),
+                    ]),
+              ),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          "Physical Activity Goals",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text('Choose Goal'),
+                        style: ElevatedButton.styleFrom(
+                          primary: _getColor("Physical Activity"), // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChooseActivityGoals()),
+                          );
+                        },
+                      ),
+                    ]),
+              ),
               ],
             ),
-          ),
-          Container(
-            color: _getColor("Vegetable"),
-            child: ExpansionTile(
-              title: Text(
-                "Vegetable Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              children: <Widget>[
-                Container(
-                    height: 150,
-                    color: _getColor("Vegetable"),
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Vegetable") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
-              ],
-            ),
-          ),
-          Container(
-            color: _getColor("Grain"),
-            child: ExpansionTile(
-              title: Text(
-                "Grain Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              children: <Widget>[
-                Container(
-                    height: 150,
-                    color: _getColor("Grain"),
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Grain") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
-              ],
-            ),
-          ),
-          Container(
-            color: _getColor("Protein"),
-            child: ExpansionTile(
-              title: Text(
-                "Protein Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              children: <Widget>[
-                Container(
-                    height: 150,
-                    color: _getColor("Protein"),
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Protein") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
-              ],
-            ),
-          ),
-          Container(
-            color: _getColor("Dairy"),
-            child: ExpansionTile(
-              title: Text(
-                "Dairy Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              children: <Widget>[
-                Container(
-                    height: 150,
-                    color: _getColor("Dairy"),
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Dairy") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
-              ],
-            ),
-          ),
-          Container(
-            color: _getColor("Snack"),
-            child: ExpansionTile(
-              title: Text(
-                "Snack Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              children: <Widget>[
-                Container(
-                    height: 150,
-                    color: _getColor("Snack"),
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Snack") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
-              ],
-            ),
-          ),
-          Container(
-            color: _getColor("Beverage"),
-            child: ExpansionTile(
-              title: Text(
-                "Beverage Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              children: <Widget>[
-                Container(
-                    height: 150,
-                    color: _getColor("Beverage"),
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type == "Beverage") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
-              ],
-            ),
-          ),
-          Container(
-            color: _getColor("Physical Activity"),
-            child: ExpansionTile(
-              title: Text(
-                "Physical Activity Goals",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              children: <Widget>[
-                Container(
-                    height: 150,
-                    color: _getColor("Physical Activity"),
-                    child: ListView.builder(
-                        itemCount: weeklyGoalsModelList.length,
-                        itemBuilder: (context, index) {
-                          if (weeklyGoalsModelList[index].type ==
-                              "Physical Activity") {
-                            return _buildSlideView(index);
-                          } else {
-                            return _buildEmpty();
-                          }
-                        }))
-              ],
-            ),
-          )
-        ]));
+          );
   }
 
   void _showSnackBar(BuildContext context, String text) {
@@ -312,17 +353,17 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   }
 
   Color _getColor(String index) {
-    if (index == "Fruit") {
+    if (index == "Fruits") {
       return Colors.red;
-    } else if (index == "Vegetable") {
+    } else if (index == "Vegetables") {
       return Colors.green;
-    } else if (index == "Grain") {
+    } else if (index == "Grains") {
       return Colors.orange[300];
     } else if (index == "Protein") {
       return Colors.deepPurple[300];
     } else if (index == "Dairy") {
       return Colors.blue[600];
-    } else if (index == "Snack") {
+    } else if (index == "Snacks and Condiments") {
       return Colors.pink[300];
     } else if (index == "Beverage") {
       return Colors.teal[400];
@@ -336,6 +377,14 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   Widget _buildEmpty() {
     return Container(color: Colors.white // This is optional
         );
+  }
+
+  Widget _buildListView(int index) {
+    int i = index + 1;
+    return Container(
+        padding: EdgeInsets.all(15.0),
+        color: Colors.white,
+        child: Text(i.toString() + ". " + weeklySavedGoalsModelList[index].goalDescription));
   }
 
   Widget _buildSlideView(int index) {
@@ -358,6 +407,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               _addGoal(weeklyGoalsModelList[index].goalDescription);
               print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
+              addSavedGoals(index);
             }),
       ],
       secondaryActions: <Widget>[
@@ -369,6 +419,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
               _addGoal(weeklyGoalsModelList[index].goalDescription);
               print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
+              addSavedGoals(index);
             }),
       ],
     );
@@ -376,9 +427,11 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
 
   getGoals() async {
     weeklyGoalsModelList.clear();
-    var db = new WeeklyDBHelper();
+    weeklySavedGoalsModelList.clear();
     var response = await db.getWeeklyGoals();
     var wGDecode = json.decode(response.body);
+    var response2 = await db2.getWeeklySavedGoals();
+    var wGDecode2 = json.decode(response2.body);
 
     for (int i = 0; i < wGDecode.length; i++) {
       WeeklyGoalsModel weeklyGoalsModel = new WeeklyGoalsModel(
@@ -386,8 +439,37 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
           wGDecode[i]['goalDescription'],
           wGDecode[i]['help_info']);
       weeklyGoalsModelList.add(weeklyGoalsModel);
-      print(wGDecode[i]['type']);
     }
     print(wGDecode.length);
+
+    for (int i = 0; i < wGDecode.length; i++) {
+      WeeklySavedGoalsModel weeklySavedGoalsModel = new WeeklySavedGoalsModel(
+          wGDecode2[i]['id'],
+          wGDecode2[i]['type'],
+          wGDecode2[i]['goalDescription'],
+          wGDecode2[i]['help_info'],
+          wGDecode2[i]['user_id']);
+      weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
+    }
+  }
+
+  addSavedGoals(int index) async {
+    int i = 1;
+    int x = 0;
+    if (weeklySavedGoalsModelList.length > 0){
+      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
+    }
+    else{
+      x = 1;
+    }
+    weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(x,weeklyGoalsModelList[index].type,weeklyGoalsModelList[index].goalDescription, weeklyGoalsModelList[index].helpInfo,1));
+    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
+        x,
+        weeklyGoalsModelList[index].type,
+        weeklyGoalsModelList[index].goalDescription,
+        weeklyGoalsModelList[index].helpInfo,
+        1);
+    db2.saveWeeklySavedGoal(m);
+
   }
 }
