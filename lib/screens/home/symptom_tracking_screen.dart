@@ -5,6 +5,7 @@ import 'package:cnc_flutter_app/models/symptom_model.dart';
 import 'package:cnc_flutter_app/widgets/symptom_tracking_widgets/symptom_tracking_input_symptoms_widget.dart';
 import 'package:cnc_flutter_app/widgets/symptom_tracking_widgets/symptom_tracking_list_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SymptomTrackingScreen extends StatefulWidget {
   List<SymptomModel> symptomModelList = [];
@@ -49,9 +50,9 @@ class _SymptomTrackingScreenState extends State<SymptomTrackingScreen> {
   }
   getSymptoms() async {
     widget.symptomModelList.clear();
-
-    var response = await db.getSymptoms();
-    print(response.body);
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
+    var response = await db.getSymptoms(int.parse(id));
     List<SymptomModel> newSymptomModelList = (json.decode(response.body) as List).map((data) => SymptomModel.fromJson(data)).toList();
     widget.symptomModelList = newSymptomModelList;
   }

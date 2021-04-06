@@ -31,9 +31,9 @@ class DBProvider {
               "id INTEGER PRIMARY KEY,"
               "user_id INTEGER,"
               "question TEXT,"
-              "question_notes TEXT)"
-            // "created_date INTEGER,"
-            // "updated_date INTEGER"
+              "question_notes TEXT,"
+            "date_created TEXT,"
+            "date_updated TEXT)"
           );
         });
   }
@@ -48,19 +48,20 @@ class DBProvider {
     }
     //insert to the table using the new id
     var raw = await db.rawInsert(
-        "INSERT Into user_questions (id,user_id,question,question_notes)"
-            " VALUES (?,?,?,?)",
+        "INSERT Into user_questions (id,user_id,question,question_notes, date_created, date_updated)"
+            " VALUES (?,?,?,?,?,?)",
         [
           id,
           newUserQuestion.user_id,
           newUserQuestion.question,
-          newUserQuestion.question_notes
-          // newUserQuestion.date_created,
-          // newUserQuestion.date_updated
+          newUserQuestion.question_notes,
+          newUserQuestion.date_created,
+          newUserQuestion.date_updated
         ]);
     print(id);
     print(newUserQuestion.question);
     getAllUserQuestions(1);
+    print("IN DB ADDING THE QUESTION STRING DATETIME:   "+newUserQuestion.date_created);
     return raw;
   }
 
@@ -70,9 +71,9 @@ class DBProvider {
     print(updatedUserQuestion.question);
     await db.rawUpdate('''
     UPDATE user_questions 
-    SET question = ?, question_notes = ? 
+    SET question = ?, question_notes = ? , date_updated = ?
     WHERE id = ?
-    ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.id]);
+    ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.date_updated, updatedUserQuestion.id]);
     // var res = await db.update("user_questions", updatedUserQuestion.toMap(),
     //     where: "id = ?", whereArgs: [updatedUserQuestion.id]);
     // return res;

@@ -34,6 +34,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
 
   int ratioTotal = 100;
   bool wasChanged = false;
+  bool valid = false;
 
   final carbohydrateKey = GlobalKey<FormState>();
   final proteinKey = GlobalKey<FormState>();
@@ -120,6 +121,8 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
     if (a && b && c) {
       var db = new DBHelper();
       await db.saveRatios(fatPercent, proteinPercent, carbohydratePercent);
+      Navigator.pop(context, null);
+      valid = true;
     }
   }
 
@@ -301,19 +304,20 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        FlatButton(
+                          // padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Text('CANCEL',
+                              style: TextStyle(color: Colors.grey)),
+                          onPressed: () {
+                            if (wasChanged) {
+                              showAlertDialog(context);
+                            } else {
+                              Navigator.pop(context, null);
+                            }
+                          },
+                        ),
                         if (wasChanged) ...[
-                          FlatButton(
-                            // padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Text('CANCEL',
-                                style: TextStyle(color: Colors.grey)),
-                            onPressed: () {
-                              if (wasChanged) {
-                                showAlertDialog(context);
-                              } else {
-                                Navigator.pop(context, null);
-                              }
-                            },
-                          ),
+
                           FlatButton(
                             color: Colors.blue,
                             // padding: EdgeInsets.symmetric(vertical: 20),
@@ -325,13 +329,15 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                             ),
                             onPressed: () {
                               updateRatios();
-                              Navigator.pop(context, null);
+                              // if (valid) {
+                              //   Navigator.pop(context, null);
+                              // }
                             },
                           ),
                         ],
                         if (!wasChanged) ...[
                           FlatButton(
-                              color: Colors.blue,
+                              color: Colors.grey,
                               // padding: EdgeInsets.symmetric(vertical: 20),
                               child: Text(
                                 'UPDATE ENTRY',
@@ -339,7 +345,9 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                                   color: Colors.white,
                                 ),
                               ),
-                              onPressed: null),
+                              onPressed: () => {
+
+                              }),
                         ],
                       ],
                     ),

@@ -5,6 +5,7 @@ import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityTrackingInputScreen extends StatefulWidget {
   ActivityModel fitnessActivity = new ActivityModel.emptyConstructor();
@@ -24,75 +25,39 @@ class _ActivityTrackingInputScreenState
   getActivityOptions() async {
     //only do if list is empty?
     // activityOptions.clear();
-    if(activityOptions.isEmpty) {
+    if (activityOptions.isEmpty) {
       var response = await db.getActivityOptions();
       var data = json.decode(response.body);
-      for(int i = 0; i < data.length; i++) {
-        if(data[i]['isVisible']) {
-          ActivityModel temp = ActivityModel.activityOptions(data[i]['type'], data[i]['intensity']);
+      for (int i = 0; i < data.length; i++) {
+        if (data[i]['isVisible']) {
+          ActivityModel temp = ActivityModel.activityOptions(
+              data[i]['type'], data[i]['intensity']);
           activityOptions.add(temp);
         }
       }
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('New Activity'),
-      ),
-      body: FutureBuilder(
-        builder: (context, projectSnap) {
+        appBar: AppBar(
+          title: Text('New Activity'),
+        ),
+        body: FutureBuilder(future: getActivityOptions(), builder: (context, projectSnap) {
           return Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: [
-                //     Text('New Fitness Activity'),
-                //   ],
-                // ),
-                // Divider(
-                //   thickness: 2,
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text('Activity'),
-                    // Container(
-                    //   width: 125,
-                    //   child: DropdownButtonFormField<String>(
-                    //     value: widget.fitnessActivity.type,
-                    //     hint: Text('select'),
-                    //     onChanged: (type) =>
-                    //         setState(() => widget.fitnessActivity.type = type),
-                    //     validator: (value) =>
-
-                    //     items: [
-                    //       'Running',
-                    //       'Walking',
-                    //       'Cycling',
-                    //       'Jogging',
-                    //       'Swimming',
-                    //       'Hiking',
-                    //     ].map<DropdownMenuItem<String>>((String value) {
-                    //       return DropdownMenuItem<String>(
-                    //         value: value,
-                    //         child: Text(value),
-                    //       );
-                    //     }).toList(),
-                    //   ),
-                    // ),
                     Container(
                       width: 200,
                       child: DropdownButtonFormField<ActivityModel>(
                         isExpanded: true,
-                        // value: widget.fitnessActivity,
-                        // value: fitnessActivityMasterList[0],
                         hint: Text('select'),
                         onChanged: (value) => setState(() {
                           widget.fitnessActivity.type = value.type;
@@ -107,40 +72,16 @@ class _ActivityTrackingInputScreenState
                         items: activityOptions
                             .map<DropdownMenuItem<ActivityModel>>(
                                 (ActivityModel value) {
-                              return DropdownMenuItem<ActivityModel>(
-                                value: value,
-                                child:
-                                Text(value.type, overflow: TextOverflow.ellipsis),
-                              );
-                            }).toList(),
+                          return DropdownMenuItem<ActivityModel>(
+                            value: value,
+                            child: Text(value.type,
+                                overflow: TextOverflow.ellipsis),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ],
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: [
-                //     Text('Intensity'),
-                //     Container(
-                //       width: 125,
-                //       child: DropdownButtonFormField<int>(
-                //         value: widget.fitnessActivity.intensity,
-                //         hint: Text('select'),
-                //         onChanged: (type) =>
-                //             setState(() => widget.fitnessActivity.intensity = type),
-                //         validator: (value) =>
-                //             value == null ? 'Intensity required' : null,
-                //         items:
-                //             [1, 2, 3, 4, 5].map<DropdownMenuItem<int>>((int value) {
-                //           return DropdownMenuItem<int>(
-                //             value: value,
-                //             child: Text(value.toString()),
-                //           );
-                //         }).toList(),
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -150,14 +91,13 @@ class _ActivityTrackingInputScreenState
                       child: Text(widget.fitnessActivity.intensity == null
                           ? ''
                           : widget.fitnessActivity.intensity == 1
-                          ? 'Light'
-                          : widget.fitnessActivity.intensity == 2
-                          ? 'Moderate'
-                          : 'Vigorous'),
+                              ? 'Light'
+                              : widget.fitnessActivity.intensity == 2
+                                  ? 'Moderate'
+                                  : 'Vigorous'),
                     ),
                   ],
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -241,10 +181,14 @@ class _ActivityTrackingInputScreenState
                         child: RaisedButton(
                           child: Text('Submit'),
                           onPressed: () async {
-                            print(widget.fitnessActivity.type);
                             if (_formKey.currentState.validate()) {
-                              var x = await db.saveNewActivity(widget.fitnessActivity);
-                              Navigator.pop(context, '');
+                              var sharedPref =
+                                  await SharedPreferences.getInstance();
+                              String id = sharedPref.getString('id');
+                              widget.fitnessActivity.userId = int.parse(id);
+                              var x = await db
+                                  .saveNewActivity(widget.fitnessActivity);
+                              Navigator.pop(context, 'Saved Activity');
                             }
                           },
                         ),
@@ -255,9 +199,6 @@ class _ActivityTrackingInputScreenState
               ],
             ),
           );
-        },
-        future: getActivityOptions(),
-      ),
-    );
+        }));
   }
 }
