@@ -927,7 +927,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
 
                           if(!wasChanged) ... [
                             FlatButton(
-                                color: Colors.blue,
+                                color: Colors.grey,
                                 // padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Text(
                                   'UPDATE ENTRY',
@@ -935,7 +935,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                onPressed: null
+                                onPressed: () => {
+
+                                }
                             ),
                           ],
 
