@@ -105,7 +105,8 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
             icon: Icon(Icons.clear),
             onPressed: () {
               if (hasMadeEdit) {
-                _editedFieldsAlert();
+                showAlertDialog(context);
+                // _editedFieldsAlert();
               } else {
                 Navigator.of(context).pop();
               }
@@ -194,7 +195,8 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                   ),
                                   onPressed: () {
                                     if (hasMadeEdit) {
-                                      _editedFieldsAlert();
+                                      showAlertDialog(context);
+                                      // _editedFieldsAlert();
                                     } else {
                                       Navigator.of(context).pop();
                                     }
@@ -232,8 +234,8 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                     )))));
   }
 
-  _editedFieldsAlert() async {
-    await showDialog<void>(
+  _editedFieldsAlert() {
+    showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
@@ -249,7 +251,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
           actions: <Widget>[
             FlatButton(
                 child: const Text(
-                  'CANCEL',
+                  'DISCARD',
                   style: TextStyle(color: Colors.grey),
                 ),
                 onPressed: () {
@@ -289,6 +291,50 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
             //     }),
           ],
         );
+      },
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+        child: const Text(
+          'DISCARD',
+          style: TextStyle(color: Colors.grey),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          closePage();
+        });
+    Widget confirmButton = FlatButton(
+        child: const Text('SAVE',
+            style:
+            TextStyle(color: Colors.white)),
+        color: Colors.blue,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.grey[800],
+        onPressed: () {
+          if (isUpdate) {
+            updateQuestion();
+          } else {
+            saveNewQuestion();
+          }
+          Navigator.of(context).pop();
+          closePage();
+        });
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Would you like to save your changes for your question?"),
+      actions: [
+        cancelButton,
+        confirmButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
     );
   }

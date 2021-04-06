@@ -287,17 +287,19 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text(
-        "CANCEL",
+        "DISCARD",
         style: TextStyle(color: Colors.grey),
       ),
       onPressed: () {
         Navigator.of(context).pop();
+        closePage();
       },
     );
     Widget confirmButton = FlatButton(
-      child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
+      child: Text("SAVE", style: TextStyle(color: Colors.white)),
       color: Colors.blue,
       onPressed: () {
+        updateEntry();
         Navigator.of(context).pop();
         closePage();
       },
@@ -305,7 +307,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Are you sure you want to cancel this update?"),
+      title: Text("Would you like to save your changes?"),
       actions: [
         cancelButton,
         confirmButton,

@@ -1,22 +1,158 @@
 import 'package:cnc_flutter_app/connections/database.dart' as DBHelper;
 import 'package:cnc_flutter_app/connections/database.dart';
 import 'package:cnc_flutter_app/models/user_question_model.dart';
-import 'file:///C:/Users/sarah/AndroidStudioProjects/cnc_flutter_app/lib/widgets/user_questions_screen_widgets/user_questions_entry_widget.dart';
+import 'package:cnc_flutter_app/widgets/user_questions_screen_widgets/user_questions_entry_widget.dart';
+import 'package:cnc_flutter_app/widgets/user_questions_screen_widgets/user_questions_list_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class UserQuestionsScreen extends StatefulWidget {
-  @override
-  _UserQuestionsScreen createState() => new _UserQuestionsScreen();
-}
-
-class _UserQuestionsScreen extends State<UserQuestionsScreen> {
-  // var db = new DBProvider();
-
   List<UserQuestion> userQuestions = [];
 
+  @override
+  _UserQuestionsScreenState createState() => _UserQuestionsScreenState();
+}
+
+class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
+  DBProvider dbp = DBHelper.DBProvider.instance;
+  String dropDownSort = 'Date Added: old to new';
+
+  List<String> _sorts = [
+    'Date Added: new to old',
+    'Date Added: old to new',
+    'Date Updated: new to old',
+    'Date Updated: old to new'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Your Questions'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () async {
+                Navigator.of(context)
+                    .push(
+                      new MaterialPageRoute(
+                          builder: (_) => AddQuestionScreen(false, null)),
+                    )
+                    .then((value) => refresh(context));
+              },
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+            physics: ScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 0),
+            child: Column(children: [
+              Container(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Align(
+                      alignment: Alignment.topRight, child: _buildSort())),
+              // Container(
+              //     padding:
+              //         EdgeInsets.only(left: 5, right: 0, top: 5, bottom: 0),
+              //     child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.end,
+              //         children: <Widget>[
+              //           // Text('Sort by: '),
+              //           _buildSort(),
+              //         ])),
+              FutureBuilder(
+                builder: (context, projectSnap) {
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: widget.userQuestions.length,
+                    itemBuilder: (context, index) {
+                      // return UserQuestionsListTile(widget.userQuestions[index]);
+                      return ListTile(
+                        contentPadding: EdgeInsets.fromLTRB(10, 10, 15, 10),
+                        // leading: Icon(Icons.add),
+                        title: Text(
+                          widget.userQuestions[index].question,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: widget.userQuestions[index].question_notes == "" ||
+                            widget.userQuestions[index].question_notes == null ||
+                            widget.userQuestions[index].question_notes == " "
+                            ? Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                          SizedBox(height: 5),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(""),
+                          ),
+                          SizedBox(height: 5),
+                          Align(alignment: Alignment.centerLeft, child: Text(getDate(widget.userQuestions[index]))),
+                        ])
+                            : Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                          SizedBox(height: 5),
+                          Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(widget.userQuestions[index].question_notes,
+                                  maxLines: 3, overflow: TextOverflow.ellipsis)),
+                          SizedBox(height: 5),
+                          Align(alignment: Alignment.centerLeft, child: Text(getDate(widget.userQuestions[index]))),
+                        ]),
+                        trailing: GestureDetector(
+                          onTap: () {
+                            _deleteDialog(widget.userQuestions[index].question, widget.userQuestions[index].id);
+                            // refresh();
+                          },
+                          child: Icon(
+                            Icons.delete,
+                            size: 20,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(
+                            new MaterialPageRoute(
+                                builder: (_) => AddQuestionScreen(true, widget.userQuestions[index])),
+                          )
+                              .then((value) => refresh(context));
+                        },
+                      );
+                    },
+                  );
+                },
+                future: getQuestions(),
+              ),
+            ])));
+  }
+
+  Widget _buildSort() {
+    return Container(
+        width: double.infinity,
+        child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButtonFormField(
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                      // labelText: 'Sort by',
+                      // border: OutlineInputBorder(),
+                      // hintText: "Sort by",
+                      ),
+                  value: dropDownSort,
+                  validator: (value) => value == null ? 'Field Required' : null,
+                  onChanged: (String value) {
+                    dropDownSort = value;
+                    refresh(context);
+                  },
+                  items: _sorts
+                      .map((sort) =>
+                          DropdownMenuItem(value: sort, child: Text("$sort")))
+                      .toList(),
+                ))));
+  }
+
   getQuestions() async {
-    userQuestions.clear();
-    DBProvider dbp = DBHelper.DBProvider.instance;
+    widget.userQuestions.clear();
     var userQuestionsFromDB = await dbp.getAllUserQuestions(1);
     if (userQuestionsFromDB != null) {
       for (int i = 0; i < userQuestionsFromDB.length; i++) {
@@ -25,346 +161,102 @@ class _UserQuestionsScreen extends State<UserQuestionsScreen> {
         userQuestion.question = userQuestionsFromDB[i]['question'];
         userQuestion.question_notes = userQuestionsFromDB[i]['question_notes'];
         userQuestion.date_created = userQuestionsFromDB[i]['date_created'];
+        // getDate(userQuestionsFromDB[i]['date_created']);
         userQuestion.date_updated = userQuestionsFromDB[i]['date_updated'];
-        userQuestions.add(userQuestion);
+        widget.userQuestions.add(userQuestion);
       }
     }
+
+    if (dropDownSort == 'Date Added: new to old') {
+      widget.userQuestions.sort((a, b) => DateFormat.yMd()
+          .add_jm()
+          .parse(b.date_created)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.date_created)));
+    } else if (dropDownSort == 'Date Added: old to new') {
+      widget.userQuestions.sort((a, b) => DateFormat.yMd()
+          .add_jm()
+          .parse(a.date_created)
+          .compareTo(DateFormat.yMd().add_jm().parse(b.date_created)));
+    } else if (dropDownSort == 'Date Updated: new to old') {
+      widget.userQuestions.sort((a, b) => DateFormat.yMd()
+          .add_jm()
+          .parse(b.date_updated)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.date_updated)));
+    } else if (dropDownSort == 'Date Updated: old to new') {
+      widget.userQuestions.sort((a, b) => DateFormat.yMd()
+          .add_jm()
+          .parse(a.date_updated)
+          .compareTo(DateFormat.yMd().add_jm().parse(b.date_updated)));
+    }
+
+    // if (dropDownSort == 'Date Added: new to old') {
+    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
+    //       .parse(b.date_created)
+    //       .compareTo(DateTime.parse(a.date_created)));
+    // } else if (dropDownSort == 'Date Added: old to new') {
+    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
+    //       .parse(a.date_created)
+    //       .compareTo(DateFormat("yyyy-MM-dd Hms").parse(b.date_created)));
+    //
+    // } else if (dropDownSort == 'Date Updated: new to old') {
+    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
+    //       .parse(b.date_created)
+    //       .compareTo(DateFormat("yyyy-MM-dd Hms").parse(a.date_created)));
+    // } else if (dropDownSort == 'Date Updated: old to new') {
+    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
+    //       .parse(a.date_created)
+    //       .compareTo(DateFormat("yyyy-MM-dd Hms").parse(b.date_created)));
+    //
+    // }
   }
-
-  update(context) async{
-    await getQuestions();
-    setState(() {});
-  }
-
-  // saveNewQuestion() async {
-  //   var newUserQuestion = UserQuestion(
-  //       id: 0, user_id: 1, question: _userQuestion, question_notes: "");
-  //   await DBProvider.db.newUserQuestion(newUserQuestion);
-  //   setState(() {});
-  // }
-
-  deleteQuestion(userQuestionID) async {
-    await DBProvider.db.deleteUserQuestion(userQuestionID);
-    setState(() {});
-  }
-
-  var showAll = true;
-  final length = 150;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Your Questions'),
-          actions: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  new MaterialPageRoute(
-                      builder: (_) => AddQuestionScreen(false, null)),
-                ).then((value) => update(context));
-              },
-              child: Icon(
-                Icons.add,
-                // size: 26.0,
-              ),
-            )),
-      ]),
-      body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          // child: Padding:
-          child: Column(children: [
-            FutureBuilder(
-              builder: (context, projectSnap) {
-                return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: userQuestions.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      color: Theme.of(context).highlightColor,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: InkWell(
-                        // onTap: () {
-                        //   showInfoDialog(context, foodLogEntries[index].food,
-                        //       foodLogEntries[index].portion);
-                        // },
-                        child: Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: Text(
-                                      userQuestions[index].question,
-                                      maxLines: null,
-                                      overflow: TextOverflow.fade,
-                                      style: TextStyle(
-                                          color: Theme.of(context).shadowColor,
-                                          fontSize: 18,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: "OpenSans"),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              userQuestions[index].question_notes != null &&
-                                      userQuestions[index].question_notes != ""
-                                  ? Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                          SizedBox(height: 10),
-                                          Divider(
-                                            color: Colors.grey[600],
-                                            height: 0,
-                                            thickness: 1,
-                                          ),
-                                          SizedBox(height: 10),
-                                          Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Container(
-                                                  child: Text(
-                                                "Notes:",
-                                                style: TextStyle(
-                                                    color: Colors.grey[600],
-                                                    fontSize: 18,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily: "OpenSans"),
-                                              ))),
-                                          SizedBox(height: 10),
-                                        ])
-                                  : SizedBox(),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    // Flexible(
-                                    //     child: Text.rich(TextSpan(
-                                    //   children: <InlineSpan>[
-                                    //     TextSpan(
-                                    //       text: userQuestions[index]
-                                    //                       .question_notes
-                                    //                       .length >
-                                    //                   length &&
-                                    //               !showAll
-                                    //           ? userQuestions[index]
-                                    //               .question_notes
-                                    //               .substring(0, length) + ". . ."
-                                    //           : userQuestions[index]
-                                    //               .question_notes,
-                                    //       style: TextStyle(
-                                    //           color:
-                                    //               Theme.of(context).shadowColor,
-                                    //           fontSize: 18,
-                                    //           // fontWeight: FontWeight.bold,
-                                    //           fontFamily: "OpenSans"),
-                                    //     ),
-                                    //     userQuestions[index]
-                                    //                 .question_notes
-                                    //                 .length >
-                                    //             length
-                                    //         ? WidgetSpan(
-                                    //             child: GestureDetector(
-                                    //                 onTap: () {
-                                    //                   setState(() {
-                                    //                     showAll = !showAll;
-                                    //                   });
-                                    //                 },
-                                    //                 // child: Align(
-                                    //                 //   alignment:
-                                    //                 //       Alignment.centerRight,
-                                    //                 //   child: Container(
-                                    //                     child: Text(
-                                    //                       showAll
-                                    //                           ? ' read less'
-                                    //                           : ' read more!',
-                                    //                       style: TextStyle(
-                                    //                           color:
-                                    //                               Colors.blue,
-                                    //                           fontSize: 18, fontFamily: "OpenSans"),
-                                    //                     ),
-                                    //                   ),
-                                    //                )
-                                    //         : TextSpan(),
-                                    //   ],
-                                    // ))),
-                                    Flexible(
-                                      child: Text(
-                                        userQuestions[index].question_notes,
-                                        maxLines: 5,
-                                        overflow: TextOverflow.fade,
-                                        style: TextStyle(
-                                            color: Theme.of(context).shadowColor,
-                                            fontSize: 18,
-                                            // fontWeight: FontWeight.bold,
-                                            fontFamily: "OpenSans"),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width - 40,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            new MaterialPageRoute(
-                                                builder: (_) =>
-                                                    AddQuestionScreen(true,
-                                                        userQuestions[index])),
-                                          ).then((value) => update(context));
-                                        },
-                                        child: Icon(
-                                          Icons.edit,
-                                          size: 20,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(left: 5, right: 5),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _deleteDialog(
-                                              userQuestions[index].question,
-                                              userQuestions[index].id);
-                                          print("delete pressed");
-                                        },
-                                        child: Icon(
-                                          Icons.delete,
-                                          size: 20,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      elevation: 0,
-                    );
-                  },
-                );
-              },
-              future: getQuestions(),
-            ),
-          ])),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     _showAddDialog();
-      //   },
-      //   child: Icon(Icons.add, color: Theme.of(context).highlightColor),
-      //   backgroundColor: Theme.of(context).buttonColor,
-      // ),
-    );
-  }
-
-  // final TextEditingController _questionController = new TextEditingController();
-  // String _userQuestion;
-
-  // _showAddDialog() async {
-  //   await showDialog<String>(
-  //     context: context,
-  //     builder: (context) => new AlertDialog(
-  //       contentPadding: const EdgeInsets.all(16.0),
-  //       content: new Row(
-  //         children: <Widget>[
-  //           new Expanded(
-  //               child: Container(
-  //             padding: EdgeInsets.fromLTRB(18, 10, 18, 0),
-  //             decoration: BoxDecoration(
-  //               border: Border.all(color: Colors.grey),
-  //               borderRadius: BorderRadius.circular(5),
-  //             ),
-  //             child: TextFormField(
-  //               maxLength: 256,
-  //               maxLengthEnforced: true,
-  //               maxLines: 3,
-  //               decoration: InputDecoration.collapsed(
-  //                   // labelText: 'Type your question here:',
-  //                   hintText: 'Type your question here.'),
-  //               // controller: _questionController,
-  //               validator: (String value) {
-  //                 String input = value;
-  //                 if (input == null) {
-  //                   return 'Field Required';
-  //                 }
-  //                 return null;
-  //               },
-  //               onChanged: (String value) {
-  //                 _userQuestion = value;
-  //               },
-  //             ),
-  //           ))
-  //         ],
-  //       ),
-  //       actions: <Widget>[
-  //         new FlatButton(
-  //             child: const Text('SAVE', style: TextStyle(color: Colors.white)),
-  //             color: Colors.blue,
-  //             onPressed: () {
-  //               saveNewQuestion();
-  //               Navigator.of(context, rootNavigator: true).pop();
-  //             }),
-  //         new FlatButton(
-  //             child: const Text(
-  //               'CANCEL',
-  //               style: TextStyle(color: Colors.grey),
-  //             ),
-  //             onPressed: () {
-  //               Navigator.of(context, rootNavigator: true).pop();
-  //             })
-  //       ],
-  //     ),
-  //   );
-  // }
 
   _deleteDialog(question, userQuestionID) async {
     await showDialog<String>(
         context: context,
         builder: (context) => new AlertDialog(
-              title:
-                  Text("Are you sure you would like to delete this question?"),
-              content: Text("\"" + question + "\""),
-              actions: [
-                new FlatButton(
-                    child: const Text('DELETE',
-                        style: TextStyle(color: Colors.white)),
-                    color: Colors.blue,
-                    onPressed: () {
-                      deleteQuestion(userQuestionID);
-                      Navigator.of(context, rootNavigator: true).pop();
-                    }),
-                new FlatButton(
-                    child: const Text(
-                      'CANCEL',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    })
-              ],
-            ));
+          title:
+          Text("Are you sure you would like to delete this question?"),
+          content: Text("\"" + question + "\""),
+          actions: [
+            new FlatButton(
+                child: const Text(
+                  'CANCEL',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  // refresh();
+                }),
+            new FlatButton(
+                child: const Text('DELETE',
+                    style: TextStyle(color: Colors.white)),
+                color: Colors.blue,
+                onPressed: () {
+                  deleteQuestion(userQuestionID);
+                  Navigator.of(context, rootNavigator: true).pop();
+                  // refresh();
+                })
+          ],
+        ));
+  }
+
+  getDate(UserQuestion userQuestion) {
+    DateTime dTime = DateFormat.yMd().add_jm()
+        .parse(userQuestion.date_updated);
+    var outputFormat = DateFormat.yMd().add_jm();
+    // DateTime dTime = DateFormat("yyyy-MM-dd Hms")
+    //     .parse(widget.userQuestion.date_updated);
+    // var outputFormat = DateFormat('MM/dd/yyyy H:mma');
+    return outputFormat.format(dTime).toString();
+  }
+
+  refresh(context) async{
+    await getQuestions();
+    setState(() {});
+  }
+
+  deleteQuestion(userQuestionID) async {
+    await DBProvider.db.deleteUserQuestion(userQuestionID);
+    setState(() {});
   }
 }

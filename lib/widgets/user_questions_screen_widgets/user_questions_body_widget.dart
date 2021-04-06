@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/connections/database.dart' as DBHelper;
 import 'package:cnc_flutter_app/connections/database.dart';
 import 'package:cnc_flutter_app/models/user_question_model.dart';
-import 'file:///C:/Users/sarah/AndroidStudioProjects/cnc_flutter_app/lib/widgets/user_questions_screen_widgets/user_questions_entry_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'user_questions_list_tile_widget.dart';
