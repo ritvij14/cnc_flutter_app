@@ -99,17 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: ListView(
                 children: [
+                  DietSummaryWidget(),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: Column(
                         children: [
-                          Text(
-                            "Diet Summary",
+                          Text("Diet Summary",
                             style: TextStyle(
                               fontSize: 20.0,
-                            ),
-                          ),
+                            ),),
                           ExpansionTile(
                             title: Text('Daily Diet Summary'),
                             subtitle: Text('4 items totaling 1000 calories.'),
@@ -118,12 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text('Food 2'),
                               Text('Food 3'),
                               Text('Food 4'),
+
                               TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                            context, '/dietTracking')
-                                        .then((value) =>
-                                            rebuildAllChildren(context));
+                                    Navigator.pushNamed(context, '/dietTracking').then((value) => rebuildAllChildren(context));
                                   },
                                   child: Text("Full Summary")),
                             ],
@@ -187,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemCount: weeklySavedGoalsModelList.length,
                                     itemBuilder: (context, index) {
                                       if (weeklySavedGoalsModelList[index]
-                                              .type !=
+                                          .type !=
                                           null) {
                                         return _buildListView(index);
                                       } else {
@@ -198,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0,60, 0, 0),
                   ),
                   // Padding(
                   //   padding: const EdgeInsets.all(8.0),
@@ -224,105 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         future: getGoals(),
       ),
-      body: Padding(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-          child: ListView(
-            children: [
-              DietSummaryWidget(),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Column(
-                    children: [
-                      Text("Diet Summary",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      ),),
-                      ExpansionTile(
-                        title: Text('Daily Diet Summary'),
-                        subtitle: Text('4 items totaling 1000 calories.'),
-                        children: <Widget>[
-                          Text('Food 1'),
-                          Text('Food 2'),
-                          Text('Food 3'),
-                          Text('Food 4'),
-
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/dietTracking').then((value) => rebuildAllChildren(context));
-                              },
-                              child: Text("Full Summary")),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: ExpansionTile(
-                  title: Text('Daily Activity Summary'),
-                  subtitle: Text('2 activities totaling 125 mets.'),
-                  children: <Widget>[
-                    Text('Activity 1'),
-                    Text('Activity 2'),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/fitnessTracking');
-                        },
-                        child: Text("Full Summary")),
-                  ],
-                ),
-              ),
-              Card(
-                child: ExpansionTile(
-                  title: Text('Daily Weight Summary'),
-                  subtitle: Text('No weight added today!'),
-                  children: <Widget>[
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/metricTracking');
-                        },
-                        child: Text("Full Summary")),
-                  ],
-                ),
-              ),
-              Card(
-                child: ExpansionTile(
-                  title: Text('Daily Symptom Summary'),
-                  subtitle: Text('No symptoms added today!'),
-                  children: <Widget>[
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/symptomTracking');
-                        },
-                        child: Text("Full Summary")),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0,60, 0, 0),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: WeeklyCalorieWidget(),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: MetricSummaryWidget(),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: ActivitySummaryWidget(),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: SymptomSummaryWidget(),
-              // ),
-              // Container(
-              //   height: 50,
-              // ),
-            ],
-          )),
     );
   }
 

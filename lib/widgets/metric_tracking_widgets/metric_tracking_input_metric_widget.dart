@@ -48,7 +48,8 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     date = await showDatePicker(
                       context: context,
                       initialDate: widget.metricModel.dateTime,
-                      firstDate: DateTime(now.year, now.month, now.day - 1),
+                      // TODO change date range
+                      firstDate: DateTime(now.year, now.month, now.day - 100),
                       lastDate: DateTime.now(),
                     );
                     dateCtl.text = DateFormat('MM/dd/yyyy').format(date);

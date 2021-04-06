@@ -63,6 +63,7 @@ class ActivityDBHelper extends DBHelperBase {
           'intensity': activityModel.intensity.toString(),
           'minutes': activityModel.minutes.toString(),
           'dateTime': activityModel.dateTime.toIso8601String(),
+          'userId': activityModel.userId.toString(),
         }));
   }
   Future<http.Response> getWeekActivityList(int numberOfDays, int intensity, int userId) async {

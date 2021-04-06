@@ -1,5 +1,6 @@
 // import 'dart:convert';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cnc_flutter_app/connections/db_helper.dart';
@@ -49,11 +50,10 @@ class _FoodLogState extends State<FoodLog> {
     var time = entryTime.toString().substring(0, 19);
     var response =
     await db.updateFoodLogEntry(foodLogEntryId, time, tempPortion);
-    rebuildAllChildren(context);
-    // rebuildAllChildren(() {});
+    // rebuildAllChildren(context);
   }
 
-  update(context) {
+  update() async {
     setState(() {});
   }
 
@@ -272,50 +272,6 @@ class _FoodLogState extends State<FoodLog> {
         content: Text(description + " with a portion size of " + portion.toString()),
         actions: [
           deleteButton,
-          cancelButton,
-        ],
-      );
-      // show the dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
-    } else {
-      AlertDialog alert = AlertDialog(
-        title: Text("Update Entry"),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 80,
-              child: Column(
-                children: [
-                  Text('Number of servings'),
-                  Container(
-                    width: 125,
-                    child: TextFormField(
-                      initialValue: portion.toString(),
-                      keyboardType: TextInputType.number,
-                      // inputFormatters: <TextInputFormatter>[
-                      //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      // ],
-                      decoration: InputDecoration(
-                        hintText: "Enter portions",
-                      ),
-                      onChanged: (text) {
-                        tempPortion = double.parse(text);
-                      },
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-        actions: [
-          updateButton,
           cancelButton,
         ],
       );
@@ -564,7 +520,7 @@ class _FoodLogState extends State<FoodLog> {
                       new MaterialPageRoute(
                           builder: (_) =>
                               EditFoodLogEntryScreen(foodLogEntries[index].food, foodLogEntries[index].date, foodLogEntries[index].entryTime, foodLogEntries[index].portion, foodLogEntries[index].id)),
-                    ).then((value) => update(context));
+                    ).then((value) => update());
                   },
                 );
               },

@@ -123,6 +123,18 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
                     child: Column(
                       children: <Widget>[
+
+
+
+
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            child: Text('Your Question: ',
+                                style: TextStyle(fontSize: 18)),
+                          ),
+                        ),
+                        SizedBox(height: 5),
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           decoration: BoxDecoration(
@@ -153,6 +165,26 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                           ),
                         ),
                         SizedBox(height: 20),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            child: Text('Additional Notes: ',
+                                style: TextStyle(fontSize: 18)),
+                          ),
+                        ),
+                        SizedBox(height: 5),
+
+
+
+
+
+
+
+
+
+
+
+
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           decoration: BoxDecoration(
@@ -186,7 +218,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                         ),
                         SizedBox(height: 20),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               FlatButton(
                                   child: const Text(

@@ -67,6 +67,7 @@ class SymptomDBHelper extends DBHelper {
           'vomiting': symptomModel.vomiting,
           'other': symptomModel.other,
           'dateTime': symptomModel.dateTime.toIso8601String(),
+          'userId': symptomModel.userId.toString(),
         }));
   }
 }

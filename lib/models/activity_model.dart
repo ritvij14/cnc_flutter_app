@@ -40,6 +40,7 @@ class ActivityModel {
   factory ActivityModel.fromJson(dynamic json) {
     ActivityModel activityModel = ActivityModel.emptyConstructor();
     activityModel.id  = json['id'];
+    activityModel.userId  = json['userId'];
     activityModel.type = json['type'] as String;
     activityModel.minutes = int.parse(json['minutes'] as String);
     activityModel.intensity = int.parse(json['intensity'] as String);
