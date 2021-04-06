@@ -40,7 +40,7 @@ class NutritionApp extends StatelessWidget {
                 routes: {
                   // '/': (context) => NavigatorScreen(),
                   // '/login': (context) => LoginScreen(),
-                  '/login': (context) => UserQuestionsScreen(),
+                  '/login': (context) => NavigatorScreen(),
                   '/home': (context) => NavigatorScreen(),
                   '/summary': (context) => SummaryScreen(),
                   '/dietTracking': (context) => DietTrackingScreen(),

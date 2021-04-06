@@ -33,14 +33,15 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
     isUpdate = isEdit;
     userQuestion = currentQuestion;
     if (userQuestion != null) {
-      print("WILL UPDATE QUESTION+++++++++++++++++++++++++++++++           " +
-          userQuestion.id.toString());
       _questionController.text = userQuestion.question;
       _noteController.text = userQuestion.question_notes;
       _userQuestion = userQuestion.question;
       _userNote = userQuestion.question_notes;
       _createdDate =
-          DateFormat("yyyy-MM-dd hh:mm:ss").parse(userQuestion.date_created);
+          DateFormat.yMd().add_jm().parse(userQuestion.date_created);
+
+      // _createdDate =
+      //     DateFormat("yyyy-MM-dd Hms").parse(userQuestion.date_created);
     }
   }
 
@@ -48,7 +49,9 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   void initState() {
     if (userQuestion != null) {
       _createdDate =
-          DateFormat("yyyy-MM-dd hh:mm:ss").parse(userQuestion.date_created);
+          DateFormat.yMd().add_jm().parse(userQuestion.date_created);
+      // _createdDate =
+      //     DateFormat("yyyy-MM-dd Hms").parse(userQuestion.date_created);
       _userQuestion = userQuestion.question;
       _questionController.text = userQuestion.question;
       if (_noteController.text != null || _noteController.text != "") {
@@ -68,8 +71,10 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
         user_id: 1,
         question: _userQuestion,
         question_notes: _userNote,
-        date_created: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-        date_updated: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()));
+        date_created: DateFormat.yMd().add_jm().format(DateTime.now()),
+        date_updated: DateFormat.yMd().add_jm().format(DateTime.now()));
+        // date_created: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()),
+        // date_updated: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()));
     await DBProvider.db.newUserQuestion(newUserQuestion);
     setState(() {});
   }
@@ -79,7 +84,9 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
     userQuestion.question = _userQuestion;
     userQuestion.question_notes = _userNote;
     userQuestion.date_updated =
-        DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+        DateFormat.yMd().add_jm().format(DateTime.now());
+    // userQuestion.date_updated =
+    //     DateFormat("yyyy-MM-dd Hms").format(DateTime.now());
     await DBProvider.db.updateUserQuestion(userQuestion);
     setState(() {});
   }
@@ -98,7 +105,6 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
             icon: Icon(Icons.clear),
             onPressed: () {
               if (hasMadeEdit) {
-                print("IN HAS EDITED+++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 _editedFieldsAlert();
               } else {
                 Navigator.of(context).pop();
@@ -129,7 +135,6 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                             maxLines: null,
                             minLines: 3,
                             decoration: InputDecoration.collapsed(
-                                // labelText: 'Type your question here:',
                                 hintText: 'Type your question here'),
                             controller: _questionController,
                             validator: (String value) {
@@ -188,7 +193,12 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                   onPressed: () {
-                                    Navigator.pop(context, null);
+                                    if (hasMadeEdit) {
+                                      _editedFieldsAlert();
+                                    } else {
+                                      Navigator.of(context).pop();
+                                    }
+                                    // Navigator.pop(context, null);
                                   }),
                               isUpdate
                                   ? FlatButton(
@@ -237,15 +247,22 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: Text('DISCARD'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                closePage();
-              },
-            ),
-            TextButton(
-                child: Text('SAVE'),
+            FlatButton(
+                child: const Text(
+                  'CANCEL',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  closePage();
+                }),
+            FlatButton(
+                child: const Text('SAVE',
+                    style:
+                    TextStyle(color: Colors.white)),
+                color: Colors.blue,
+                disabledColor: Colors.grey,
+                disabledTextColor: Colors.grey[800],
                 onPressed: () {
                   if (isUpdate) {
                     updateQuestion();
@@ -255,6 +272,21 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                   Navigator.of(context).pop();
                   closePage();
                 }),
+            // TextButton(
+            //     child: Text('SAVE', style:
+            //             TextStyle(color: Colors.white)),
+            //     style: TextButton.styleFrom(
+            //       primary: Colors.blue,
+            //     ),
+            //     onPressed: () {
+            //       if (isUpdate) {
+            //         updateQuestion();
+            //       } else {
+            //         saveNewQuestion();
+            //       }
+            //       Navigator.of(context).pop();
+            //       closePage();
+            //     }),
           ],
         );
       },

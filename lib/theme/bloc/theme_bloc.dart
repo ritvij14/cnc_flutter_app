@@ -46,14 +46,9 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   setTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String stringValue = prefs.getString('savedTheme');
-    print("string found???????????????????????????????????????????????");
     if (stringValue.isNotEmpty) {
-      print(
-          "NOT null string++++++++++++++++++++++++++++++++++++++++++++++    " +
-              stringValue);
       return stringValue;
     } else {
-      print("NOT null string++++++++++++++++++++++++++++++++++++++++++++++");
       stringValue = "AppTheme.Default";
       return stringValue;
     }

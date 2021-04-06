@@ -17,15 +17,15 @@ class UserQuestionsListTile extends StatefulWidget {
 }
 
 class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
-
   refresh() {
     setState(() {});
   }
 
   deleteQuestion(userQuestionID) async {
     await DBProvider.db.deleteUserQuestion(userQuestionID);
-    setState(() {});
+    await refresh();
   }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -36,18 +36,31 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: widget.userQuestion.question_notes == "" ? Align(alignment: Alignment.centerLeft, child: Text(getDate())) : Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-         SizedBox(height: 5),
-        Align(alignment: Alignment.centerLeft, child: Text(widget.userQuestion.question_notes,
-            maxLines: 3, overflow: TextOverflow.ellipsis)),
-        SizedBox(height: 5),
-      Align(alignment: Alignment.centerLeft, child: Text(getDate())),
-      ]),
+      subtitle: widget.userQuestion.question_notes == "" ||
+              widget.userQuestion.question_notes == null ||
+              widget.userQuestion.question_notes == " "
+          ? Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              SizedBox(height: 5),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(""),
+              ),
+              SizedBox(height: 5),
+              Align(alignment: Alignment.centerLeft, child: Text(getDate())),
+            ])
+          : Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              SizedBox(height: 5),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(widget.userQuestion.question_notes,
+                      maxLines: 3, overflow: TextOverflow.ellipsis)),
+              SizedBox(height: 5),
+              Align(alignment: Alignment.centerLeft, child: Text(getDate())),
+            ]),
       trailing: GestureDetector(
         onTap: () {
-          _deleteDialog(
-              widget.userQuestion.question,
-              widget.userQuestion.id);
+          _deleteDialog(widget.userQuestion.question, widget.userQuestion.id);
+          refresh();
         },
         child: Icon(
           Icons.delete,
@@ -65,63 +78,45 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
       },
     );
   }
+
   _deleteDialog(question, userQuestionID) async {
     await showDialog<String>(
         context: context,
         builder: (context) => new AlertDialog(
-          title:
-          Text("Are you sure you would like to delete this question?"),
-          content: Text("\"" + question + "\""),
-          actions: [
-            new FlatButton(
-                child: const Text('DELETE',
-                    style: TextStyle(color: Colors.white)),
-                color: Colors.blue,
-                onPressed: () {
-                  deleteQuestion(userQuestionID);
-                  Navigator.of(context, rootNavigator: true).pop();
-                }),
-            new FlatButton(
-                child: const Text(
-                  'CANCEL',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                })
-          ],
-        ));
+              title:
+                  Text("Are you sure you would like to delete this question?"),
+              content: Text("\"" + question + "\""),
+              actions: [
+                new FlatButton(
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      refresh();
+                    }),
+                new FlatButton(
+                    child: const Text('DELETE',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.blue,
+                    onPressed: () {
+                      deleteQuestion(userQuestionID);
+                      Navigator.of(context, rootNavigator: true).pop();
+                      refresh();
+                    })
+              ],
+            ));
   }
-  // IconData getActivityIcon() {
-  //   if (widget.activityModel.type.contains('Basketball') ||
-  //       widget.activityModel.type == 'Jogging') {
-  //     return Icons.directions_run;
-  //   }
-  //   if (widget.activityModel.type == 'Swimming') {
-  //     return Icons.pool;
-  //   }
-  //   if (widget.activityModel.type == 'Cycling') {
-  //     return Icons.directions_bike;
-  //   }
-  //   if (widget.activityModel.type == 'Hiking' ||
-  //       widget.activityModel.type == 'Walking') {
-  //     return Icons.directions_walk;
-  //   }
-  // }
 
-  // IconData getActivityIcon() {
-  //   if (widget.activityModel.intensity == 1) {
-  //     return (MdiIcons.speedometerSlow);
-  //   }
-  //   if (widget.activityModel.intensity == 2) {
-  //     return (MdiIcons.speedometerMedium);
-  //   }
-  //   return (MdiIcons.speedometer);
-  // }
   getDate() {
-    DateTime dTime = DateFormat("yyyy-MM-dd hh:mm:ss")
-        .parse(widget.userQuestion.date_created);
-    var outputFormat = DateFormat('MM/dd/yyyy hh:mm');
+
+    DateTime dTime = DateFormat.yMd().add_jm()
+        .parse(widget.userQuestion.date_updated);
+    var outputFormat = DateFormat.yMd().add_jm();
+    // DateTime dTime = DateFormat("yyyy-MM-dd Hms")
+    //     .parse(widget.userQuestion.date_updated);
+    // var outputFormat = DateFormat('MM/dd/yyyy H:mma');
     return outputFormat.format(dTime).toString();
   }
 }
