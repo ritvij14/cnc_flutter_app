@@ -40,4 +40,22 @@ class MetricDBHelper extends DBHelperBase{
           'userId': metricModel.userId.toString(),
         }));
   }
+
+  Future<http.Response> getMetricsForPastDays(int userId, int numberOfDays) async {
+    var queryParameters = {
+      'userId': userId.toString(),
+      'numberOfDays': numberOfDays.toString(),
+    };
+
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/metric/user/range', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    return response;
+
+  }
 }

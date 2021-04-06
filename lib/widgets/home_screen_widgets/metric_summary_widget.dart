@@ -1,5 +1,11 @@
+import 'dart:convert';
+
+import 'package:cnc_flutter_app/connections/metric_db_helper.dart';
+import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class MetricSummaryWidget extends StatefulWidget {
   @override
@@ -7,8 +13,14 @@ class MetricSummaryWidget extends StatefulWidget {
 }
 
 class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
-
+  MetricDBHelper db = new MetricDBHelper();
   bool showAll = false;
+  List<FlSpot> spots = [
+    FlSpot(0, 0),
+  ];
+
+  //0 = 10 days, 1 = 30 days, 2 = 1 year
+  int chart = 0;
 
   List<Color> gradientColors = [
     const Color(0xff23b6e6),
@@ -19,11 +31,11 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(18)),
-          gradient: LinearGradient(colors: [
-            Color(0xff232d37),
-            Color(0xff232d37),
-          ]),
+        borderRadius: BorderRadius.all(Radius.circular(18)),
+        gradient: LinearGradient(colors: [
+          Color(0xff232d37),
+          Color(0xff232d37),
+        ]),
       ),
       // color: Colors.lightGreen,
       // height: 150.0,
@@ -35,7 +47,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
               Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
                 child: new Text(
-                  "Weight",
+                  "Weight (lbs)",
                   style: TextStyle(
                     color: Color(0xff68737d),
                   ),
@@ -44,20 +56,43 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
               FlatButton(
                 onPressed: () {
                   setState(() {
-                    showAll = !showAll;
+                    if (chart == 2) {
+                      chart = 0;
+                    } else {
+                      chart++;
+                    }
                   });
                 },
-                child: showAll ? Text('Month') : Text('Year'),
-                ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: IconButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/metricTracking');
-                  },
-                    icon: Icon(Icons.arrow_right_sharp),
-                ),
+                child: (chart == 0)
+                    ? Text(
+                        '10 Days',
+                        style: TextStyle(
+                          color: Color(0xff68737d),
+                        ),
+                      )
+                    : (chart == 1)
+                        ? Text(
+                            '30 Days',
+                            style: TextStyle(
+                              color: Color(0xff68737d),
+                            ),
+                          )
+                        : Text(
+                            "Year",
+                            style: TextStyle(
+                              color: Color(0xff68737d),
+                            ),
+                          ),
               ),
+              // Padding(
+              //   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              //   child: IconButton(
+              //     onPressed: (){
+              //       Navigator.pushNamed(context, '/metricTracking');
+              //     },
+              //       icon: Icon(Icons.arrow_right_sharp),
+              //   ),
+              // ),
             ],
           ),
           Stack(
@@ -66,16 +101,20 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
                 aspectRatio: 1.70,
                 child: Container(
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(18),
-                      ),
-                      // color: Color(0xff232d37),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(18),
+                    ),
+                    // color: Color(0xff232d37),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        right: 18.0, left: 12.0, top: 24, bottom: 12),
+                        right: 30.0, left: 0.0, top: 24, bottom: 12),
                     child: LineChart(
-                      showAll ? allData() : mainData(),
+                      (chart == 0)
+                          ? tenDays()
+                          : (chart == 1)
+                              ? thirtyDays()
+                              : year(),
                     ),
                   ),
                 ),
@@ -87,7 +126,8 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
     );
   }
 
-  LineChartData mainData() {
+  LineChartData tenDays() {
+    setSpots(10);
     return LineChartData(
       gridData: FlGridData(
         show: true,
@@ -116,14 +156,15 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
               fontSize: 16),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 1:
-                return '2018';
-              case 4:
-                return '2019';
-              case 7:
-                return '2020';
+              case 0:
+                return DateFormat('MM/dd')
+                    .format(DateTime.now().subtract(Duration(days: 10)));
+
+              case 5:
+                return DateFormat('MM/dd')
+                    .format(DateTime.now().subtract(Duration(days: 5)));
               case 10:
-                return '2021';
+                return DateFormat('MM/dd').format(DateTime.now());
             }
             return '';
           },
@@ -138,12 +179,16 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           ),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 1:
-                return '150';
-              case 3:
-                return '175';
-              case 5:
-                return '200';
+              case 50:
+                return '50';
+              case 110:
+                return '110';
+              case 170:
+                return '170';
+              case 230:
+                return '230';
+              case 290:
+                return '290';
             }
             return '';
           },
@@ -155,26 +200,19 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           show: true,
           border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
+      maxX: 10,
+      minY: 50,
+      maxY: 300,
+
       lineBarsData: [
         LineChartBarData(
-          spots: [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 5),
-            FlSpot(8, 6),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-          ],
+          spots: spots,
           isCurved: true,
           colors: gradientColors,
           barWidth: 5,
           isStrokeCapRound: true,
           dotData: FlDotData(
-            show: false,
+            show: true,
           ),
           belowBarData: BarAreaData(
             show: true,
@@ -186,19 +224,19 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
     );
   }
 
-  LineChartData allData() {
+  LineChartData thirtyDays() {
+    setSpots(30);
     return LineChartData(
-      lineTouchData: LineTouchData(enabled: false),
       gridData: FlGridData(
         show: true,
-        drawHorizontalLine: true,
-        getDrawingVerticalLine: (value) {
+        drawVerticalLine: true,
+        getDrawingHorizontalLine: (value) {
           return FlLine(
             color: const Color(0xff37434d),
             strokeWidth: 1,
           );
         },
-        getDrawingHorizontalLine: (value) {
+        getDrawingVerticalLine: (value) {
           return FlLine(
             color: const Color(0xff37434d),
             strokeWidth: 1,
@@ -216,12 +254,15 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
               fontSize: 16),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 2:
-                return '2/12';
-              case 5:
-                return '2/22';
-              case 8:
-                return '3/5';
+              case 0:
+                return DateFormat('MM/dd')
+                    .format(DateTime.now().subtract(Duration(days: 30)));
+
+              case 15:
+                return DateFormat('MM/dd')
+                    .format(DateTime.now().subtract(Duration(days: 15)));
+              case 30:
+                return DateFormat('MM/dd').format(DateTime.now());
             }
             return '';
           },
@@ -236,12 +277,16 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           ),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 1:
-                return '150';
-              case 3:
-                return '175';
-              case 5:
-                return '200';
+              case 50:
+                return '50';
+              case 110:
+                return '110';
+              case 170:
+                return '170';
+              case 230:
+                return '230';
+              case 290:
+                return '290';
             }
             return '';
           },
@@ -253,42 +298,153 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           show: true,
           border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
+      maxX: 30,
+      minY: 50,
+      maxY: 300,
+
       lineBarsData: [
         LineChartBarData(
-          spots: [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
+          spots: spots,
           isCurved: true,
-          colors: [
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2),
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2),
-          ],
+          colors: gradientColors,
           barWidth: 5,
           isStrokeCapRound: true,
           dotData: FlDotData(
-            show: false,
+            show: true,
           ),
-          belowBarData: BarAreaData(show: true, colors: [
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2)
-                .withOpacity(0.1),
-            ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                .lerp(0.2)
-                .withOpacity(0.1),
-          ]),
+          belowBarData: BarAreaData(
+            show: true,
+            colors:
+            gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          ),
         ),
       ],
     );
+  }
+
+  LineChartData year() {
+    setSpots(365);
+    return LineChartData(
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 22,
+          getTextStyles: (value) => const TextStyle(
+              color: Color(0xff68737d),
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 0:
+                return DateFormat('MM/yyyy')
+                    .format(DateTime.now().subtract(Duration(days: 365)));
+
+              case 180:
+                return DateFormat('MM/yyyy')
+                    .format(DateTime.now().subtract(Duration(days: 180)));
+              case 360:
+                return DateFormat('MM/yyyy').format(DateTime.now());
+            }
+            return '';
+          },
+          margin: 8,
+        ),
+        leftTitles: SideTitles(
+          showTitles: true,
+          getTextStyles: (value) => const TextStyle(
+            color: Color(0xff67727d),
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
+          getTitles: (value) {
+
+            switch (value.toInt()) {
+              case 50:
+                return '50';
+              case 110:
+                return '110';
+              case 170:
+                return '170';
+              case 230:
+                return '230';
+              case 290:
+                return '290';
+            }
+            return '';
+          },
+          reservedSize: 28,
+          margin: 12,
+        ),
+      ),
+      borderData: FlBorderData(
+          show: true,
+          border: Border.all(color: const Color(0xff37434d), width: 1)),
+      minX: 0,
+      maxX: 365,
+      minY: 50,
+      maxY: 300,
+
+      lineBarsData: [
+        LineChartBarData(
+          spots: spots,
+          isCurved: true,
+          colors: gradientColors,
+          barWidth: 5,
+          isStrokeCapRound: true,
+          dotData: FlDotData(
+            show: true,
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            colors:
+            gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          ),
+        ),
+      ],
+    );  }
+
+  void initState() {
+    setState(() {
+      setSpots(10);
+    });
+  }
+
+  void refresh() {
+    setState(() {});
+  }
+
+  Future<void> setSpots(int days) async {
+    var sharedPref = await SharedPreferences.getInstance();
+    int id = int.parse(sharedPref.getString('id'));
+    var response = await db.getMetricsForPastDays(id, days);
+    List<MetricModel> metricModelList = (json.decode(response.body) as List)
+        .map((data) => MetricModel.fromJson(data))
+        .toList();
+
+    List<FlSpot> spots = [];
+    for (MetricModel met in metricModelList) {
+      spots.add(FlSpot(
+          days - (DateTime.now().difference(met.dateTime).inDays).toDouble(),
+          met.weight.toDouble()));
+    }
+    this.spots = spots;
+    refresh();
   }
 }
