@@ -1,7 +1,7 @@
 import 'package:cnc_flutter_app/connections/database.dart' as DBHelper;
 import 'package:cnc_flutter_app/connections/database.dart';
 import 'package:cnc_flutter_app/models/user_question_model.dart';
-import 'package:cnc_flutter_app/widgets/user_questions_entry_widget.dart';
+import 'file:///C:/Users/sarah/AndroidStudioProjects/cnc_flutter_app/lib/widgets/user_questions_screen_widgets/user_questions_entry_widget.dart';
 import 'package:flutter/material.dart';
 
 class UserQuestionsScreen extends StatefulWidget {
@@ -24,6 +24,8 @@ class _UserQuestionsScreen extends State<UserQuestionsScreen> {
         userQuestion.id = userQuestionsFromDB[i]['id'];
         userQuestion.question = userQuestionsFromDB[i]['question'];
         userQuestion.question_notes = userQuestionsFromDB[i]['question_notes'];
+        userQuestion.date_created = userQuestionsFromDB[i]['date_created'];
+        userQuestion.date_updated = userQuestionsFromDB[i]['date_updated'];
         userQuestions.add(userQuestion);
       }
     }
