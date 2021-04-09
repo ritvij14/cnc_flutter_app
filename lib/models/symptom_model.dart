@@ -12,6 +12,8 @@ class SymptomModel {
   String other = '';
   int id;
   DateTime dateTime = DateTime.now();
+  int userId;
+
 
   SymptomModel(
       bool abdominalPain,

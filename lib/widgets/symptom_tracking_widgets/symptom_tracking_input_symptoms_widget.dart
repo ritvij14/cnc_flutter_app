@@ -2,6 +2,7 @@ import 'package:cnc_flutter_app/connections/symptom_db_helper.dart';
 import 'package:cnc_flutter_app/models/symptom_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SymptomTrackingInputScreen extends StatefulWidget {
@@ -165,9 +166,12 @@ class _SymptomTrackingInputScreenState
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
                     child: Text('Submit'),
-                    onPressed: () {
+                    onPressed: () async {
+                      var sharedPref = await SharedPreferences.getInstance();
+                      String id = sharedPref.getString('id');
+                      widget.symptomModel.userId = int.parse(id);
                       var x = db.saveNewSymptom(widget.symptomModel);
-                      Navigator.pop(context,'');
+                      Navigator.pop(context, 'Saved Symptom(s)');
                     },
                   ),
                 ),

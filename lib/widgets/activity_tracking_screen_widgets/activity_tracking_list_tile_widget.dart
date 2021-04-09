@@ -27,13 +27,14 @@ class _ActivityTrackingListTileState extends State<ActivityTrackingListTile> {
       contentPadding: EdgeInsets.fromLTRB(10, 10, 15, 10),
       leading: Icon(getActivityIcon()),
       title: Text(widget.activityModel.type),
-      subtitle: Text(widget.activityModel.minutes.toString() +
-          ' minutes' +
-          // ' at intensity level ' +
-          // widget.activityModel.intensity.toString() +
-          '\n' +
+      subtitle: Text(
+        // widget.activityModel.minutes.toString() +
+        // ' minutes' +
+        // ' at intensity level ' +
+        // widget.activityModel.intensity.toString() +
+        // '\n' +
           DateFormat('MM/dd/yyyy').format(widget.activityModel.dateTime)),
-      trailing: Text(widget.activityModel.getCalories().toString() + ' mets'),
+      trailing: Text(widget.activityModel.minutes.toString() + ' minutes'),
       onTap: () async {
         await Navigator.push(
           context,

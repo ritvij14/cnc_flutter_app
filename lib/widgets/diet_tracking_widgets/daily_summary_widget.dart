@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
+import 'package:cnc_flutter_app/screens/nutrient_ratio_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -18,6 +19,9 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
   int dailyCarbohydrateLimit;
   int dailyFatLimit;
   int caloriesRemaining = 0;
+  int proteinRatio = 0;
+  int carbohydrateRatio = 0;
+  int fatRatio = 0;
   double caloriePercent = 0;
   double proteinPercent = 0;
   double carbohydratePercent = 0;
@@ -28,6 +32,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
   double carbohydratesInGrams = 0;
   String calorieMessage = "CALORIES UNDER BUDGET";
   bool showGrams = false;
+  int userId;
 
   List<FoodLogEntry> dailyFoodLogEntryList = [];
 
@@ -40,6 +45,19 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
   }
 
   getFood() async {
+    var db = new DBHelper();
+    var x = await db.getUserInfo();
+    var userData = json.decode(x.body);
+
+    if(userData['weight'] <= 174) {
+      dailyCalorieLimit = 1200;
+    } else if(userData['weight'] > 174 && userData['weight'] <= 219) {
+      dailyCalorieLimit = 1500;
+    } else if(userData['weight'] > 219 && userData['weight'] <= 249) {
+      dailyCalorieLimit = 1800;
+    } else {
+      dailyCalorieLimit = 2000;
+    }
     caloriesRemaining = 0;
     caloriePercent = 0;
     proteinPercent = 0;
@@ -50,17 +68,17 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
     fatInGrams = 0;
     carbohydratesInGrams = 0;
     dailyFoodLogEntryList.clear();
-    // get user weight
-    // get user limits
-    dailyCalorieLimit = 1200;
-    dailyCarbohydrateLimit = (dailyCalorieLimit * 0.5).truncate();
-    dailyProteinLimit = (dailyCalorieLimit * 0.25).truncate();
-    dailyFatLimit = (dailyCalorieLimit * 0.25).truncate();
+
+    proteinRatio = userData['proteinPercent'];
+    carbohydrateRatio = userData['carbohydratePercent'];
+    fatRatio = userData['fatPercent'];
+    dailyCarbohydrateLimit = (dailyCalorieLimit * (carbohydrateRatio / 100)).truncate();
+    dailyProteinLimit = (dailyCalorieLimit * (proteinRatio / 100)).truncate();
+    dailyFatLimit = (dailyCalorieLimit * (fatRatio / 100)).truncate();
     dailyFoodLogEntryList.clear();
-    var db = new DBHelper();
     DateTime selectedDate = DateTime.now();
     String key = selectedDate.toString().split(" ")[0];
-    var response = await db.getFoodLog('1', key);
+    var response = await db.getFoodLog(key);
     var data = json.decode(response.body);
     for (int i = 0; i < data.length; i++) {
       FoodLogEntry foodLogEntry = new FoodLogEntry();
@@ -129,12 +147,15 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
     caloriesRemaining = caloriesRemaining.abs();
   }
 
-  update() {
+  update() async{
+    await getFood();
     setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
+    print('test');
     if (!showGrams) {
       return FutureBuilder(
         builder: (context, projectSnap) {
@@ -195,39 +216,13 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                                       color: Theme.of(context).buttonColor)),
                             ),
                           ),
+
                         ],
                       ),
                       // Text('toggle'),
                       // Text('toggle'),
                     ],
                   ),
-                  // IconButton(icon: Icon(Icons.add_circle), onPressed: () {
-                  //   Navigator.pushNamed(context, '/dietTracking')
-                  //       .then((value) => update());
-                  //   setState(() {});
-                  // },),
-                  // ButtonTheme(
-                  //   minWidth: 35,
-                  //   height: 20,
-                  //   child: RaisedButton(
-                  //     color: Theme
-                  //         .of(context)
-                  //         .buttonColor,
-                  //     padding: EdgeInsets.all(0),
-                  //     onPressed: () {
-                  //       Navigator.pushNamed(context, '/dietTracking')
-                  //           .then((value) => update());
-                  //       setState(() {});
-                  //     },
-                  //     child: Text(
-                  //       "test",
-                  //       style: TextStyle(
-                  //           color: Theme
-                  //               .of(context)
-                  //               .highlightColor),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               Padding(padding: EdgeInsets.all(2)),
@@ -311,6 +306,20 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                         ),
                       ],
                     ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.pie_chart),
+                    tooltip: 'Modify Nutrition Ratios',
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
+                      )).then((value) => update());
+                    },
                   ),
                 ],
               ),
@@ -487,8 +496,24 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                               new Text(fatInGrams.truncate().toString() + 'g'),
                           progressColor: Colors.yellow,
                         ),
+
                       ],
                     ),
+                  ),
+
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.pie_chart),
+                    tooltip: 'Modify Nutrition Ratios',
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
+                      )).then((value) =>update());
+                    },
                   ),
                 ],
               ),

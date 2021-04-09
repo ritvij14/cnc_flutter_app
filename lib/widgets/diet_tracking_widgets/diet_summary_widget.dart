@@ -1,5 +1,6 @@
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
+import 'package:cnc_flutter_app/widgets/activity_tracking_screen_widgets/weekly_activity_progress_widget.dart';
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/daily_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/weekly_calorie_widget.dart';
 import 'package:cnc_flutter_app/widgets/home_screen_widgets/metric_summary_widget.dart';
@@ -24,7 +25,7 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
 
   int _currentIndex = 0;
 
-  List cardList = [DailySummaryWidget(), WeeklyCalorieWidget(), MetricSummaryWidget()];
+  List cardList = [DailySummaryWidget(), WeeklyActivityProgressWidget(), WeeklyCalorieWidget(), MetricSummaryWidget()];
 
   List<Food> foods = [];
   List<FoodLogEntry> foodLogEntries = [];
@@ -49,7 +50,7 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
           // },
           child: CarouselSlider(
             options: CarouselOptions(
-              height: 310,
+              height: 350,
               enableInfiniteScroll: false,
               viewportFraction: 1.0,
               onPageChanged: (index, reason) {

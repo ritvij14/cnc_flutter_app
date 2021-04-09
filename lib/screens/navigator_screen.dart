@@ -1,14 +1,11 @@
-import 'package:cnc_flutter_app/screens/articles_screen.dart';
 import 'package:cnc_flutter_app/screens/communication_screen.dart';
+import 'package:cnc_flutter_app/screens/content/content_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goal_calendar_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home/home_screen.dart';
 
-// import 'ask/ask_page.dart';
-// import 'home_page.dart';
-// import 'profile/profile_page.dart';
-// import 'welcome/welcome_screen.dart';
+
 
 import 'package:flutter/cupertino.dart';
 import '../settings/preferences.dart';
@@ -30,7 +27,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
 
   List<Widget> screens = <Widget>[
     HomeScreen(),
-    ArticlesScreen(),
+    ContentScreen(),
     CommunicationsScreen(),
     CalendarPage(),
   ];

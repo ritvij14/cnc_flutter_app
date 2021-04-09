@@ -7,6 +7,7 @@ class ActivityModel {
   int mets;
   double metsPerHour;
   int id;
+  int userId;
   DateTime dateTime;
 
   //intensity can be a scale, 1-3; 1 = light, 2 = moderate, 3 = vigorous
@@ -39,6 +40,7 @@ class ActivityModel {
   factory ActivityModel.fromJson(dynamic json) {
     ActivityModel activityModel = ActivityModel.emptyConstructor();
     activityModel.id  = json['id'];
+    activityModel.userId  = json['userId'];
     activityModel.type = json['type'] as String;
     activityModel.minutes = int.parse(json['minutes'] as String);
     activityModel.intensity = int.parse(json['intensity'] as String);

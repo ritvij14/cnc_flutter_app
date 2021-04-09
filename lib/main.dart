@@ -10,13 +10,12 @@ import 'nutrition_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Authorization auth = Authorization();
+  Authorization auth = Authorization();
   await Preferences.init();
   HttpOverrides.global = new MyHttpOverrides();
   final bool loggedIn = await auth.isLogged();
   final bool screenerComplete = await auth.isScreenerComplete();
   // ignore: unrelated_type_equality_checks
   final NutritionApp nutritionApp = NutritionApp(initialRoute: loggedIn == false ? '/login' : screenerComplete == false ? '/welcome' : '/home');
-
   runApp(nutritionApp);
 }

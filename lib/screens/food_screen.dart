@@ -212,7 +212,7 @@ class FoodProfile extends State<FoodPage> {
     var dateTime = selectedDate + " " + time;
     print(dateTime);
     var response = await db.saveNewFoodLogEntry(
-        dateTime, selectedDate, 1, currentFood.id, portion);
+        dateTime, selectedDate, currentFood.id, portion);
   }
 
   _pickTime() async {

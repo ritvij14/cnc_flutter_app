@@ -56,7 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<bool> setUserData() async {
     var db = new DBHelper();
-    var response = await db.getUserInfo("1");
+    var response = await db.getUserInfo();
     var data = json.decode(response.body);
     print(data);
     _dateTime = data['dateOfBirth'];
@@ -328,9 +328,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
 
     DBHelper db = new DBHelper();
-    db.deleteUserGiIssues("1");
+    db.deleteUserGiIssues();
     db.updateFormInfo(
-      "1",
       birthDate.toString().split(" ")[0],
       dropDownRace.replaceAll(" ", "-"),
       dropDownEthnicities.replaceAll(" ", "-"),
