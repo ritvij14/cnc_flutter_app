@@ -66,7 +66,7 @@ class ActivityDBHelper extends DBHelperBase {
           'userId': activityModel.userId.toString(),
         }));
   }
-  Future<http.Response> getWeekActivityList(int numberOfDays, int intensity, int userId) async {
+  Future<http.Response> getDaysActivityList(int numberOfDays, int intensity, int userId) async {
     var requestUrl = baseUrl + 'api/fitnessActivity/week/user/';
     var queryParameters = {
       'numberOfDays': numberOfDays.toString(),
@@ -75,6 +75,21 @@ class ActivityDBHelper extends DBHelperBase {
     };
     var uri =
     Uri.https('10.0.2.2:7777', '/api/fitnessActivity/week/user/', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+    return response;
+  }
+
+  Future<http.Response> getDayActivityList(int userId) async {
+    var requestUrl = baseUrl + 'api/fitnessActivity/day/user/';
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/fitnessActivity/day/user/', queryParameters);
 
     var response = await http.get(
       uri,
