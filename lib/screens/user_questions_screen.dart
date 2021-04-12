@@ -279,7 +279,7 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
                 new FlatButton(
                     child: const Text('DELETE',
                         style: TextStyle(color: Colors.white)),
-                    color: Colors.blue,
+                    color: Theme.of(context).buttonColor,
                     onPressed: () {
                       deleteQuestion(userQuestionID);
                       Navigator.of(context, rootNavigator: true).pop();

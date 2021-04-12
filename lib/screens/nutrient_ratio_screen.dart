@@ -214,7 +214,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                     alignment: Alignment.centerLeft,
                     child: Container(
                       child: Text("Carbohydrates %",
-                          style: TextStyle(fontSize: 18)),
+                      ),
                     ),
                   ),
                   SizedBox(height: 5),
@@ -256,11 +256,12 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      child: Text("Protein %", style: TextStyle(fontSize: 18)),
+                      child: Text("Protein %",
+                      ),
                     ),
                   ),
                   SizedBox(height: 5),
@@ -302,11 +303,11 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      child: Text("Fat %", style: TextStyle(fontSize: 18)),
+                      child: Text("Fat %", ),
                     ),
                   ),
                   SizedBox(height: 5),

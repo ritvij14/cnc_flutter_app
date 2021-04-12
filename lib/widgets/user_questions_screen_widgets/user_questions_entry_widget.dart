@@ -74,31 +74,44 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   }
 
   saveNewQuestion() async {
-    var newUserQuestion = UserQuestion(
-        id: 0,
-        user_id: 1,
-        question: _userQuestion,
-        question_notes: _userNote,
-        date_created: DateFormat.yMd().add_jm().format(DateTime.now()),
-        date_updated: DateFormat.yMd().add_jm().format(DateTime.now()),
-        is_answered: 0);
+    bool a = formKey.currentState.validate();
 
-    // date_created: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()),
-    // date_updated: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()));
-    await DBProvider.db.newUserQuestion(newUserQuestion);
-    setState(() {});
+    if (a) {
+      var newUserQuestion = UserQuestion(
+          id: 0,
+          user_id: 1,
+          question: _userQuestion,
+          question_notes: _userNote,
+          date_created: DateFormat.yMd().add_jm().format(DateTime.now()),
+          date_updated: DateFormat.yMd().add_jm().format(DateTime.now()),
+          is_answered: 0);
+
+      // date_created: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()),
+      // date_updated: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()));
+      await DBProvider.db.newUserQuestion(newUserQuestion);
+      setState(() {});
+      Navigator.pop(context, null);
+    }
+
+
   }
 
   updateQuestion() async {
+    bool a = formKey.currentState.validate();
+
     print("IN UPDATE:");
-    userQuestion.question = _userQuestion;
-    userQuestion.question_notes = _userNote;
-    userQuestion.date_updated =
-        DateFormat.yMd().add_jm().format(DateTime.now());
-    // userQuestion.date_updated =
-    //     DateFormat("yyyy-MM-dd Hms").format(DateTime.now());
-    await DBProvider.db.updateUserQuestion(userQuestion);
-    setState(() {});
+    if (a) {
+      userQuestion.question = _userQuestion;
+      userQuestion.question_notes = _userNote;
+      userQuestion.date_updated =
+          DateFormat.yMd().add_jm().format(DateTime.now());
+      // userQuestion.date_updated =
+      //     DateFormat("yyyy-MM-dd Hms").format(DateTime.now());
+      await DBProvider.db.updateUserQuestion(userQuestion);
+      setState(() {});
+      Navigator.pop(context, null);
+    }
+
   }
 
   void closePage() {
@@ -229,26 +242,26 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                       child: const Text('UPDATE',
                                           style:
                                               TextStyle(color: Colors.white)),
-                                      color: Colors.blue,
+                                      color: Theme.of(context).buttonColor,
                                       disabledColor: Colors.grey,
                                       disabledTextColor: Colors.grey[800],
                                       onPressed: hasMadeEdit
                                           ? () {
                                               updateQuestion();
-                                              Navigator.pop(context, null);
+                                              // Navigator.pop(context, null);
                                             }
                                           : null)
                                   : FlatButton(
                                       child: const Text('SAVE',
                                           style:
                                               TextStyle(color: Colors.white)),
-                                      color: Colors.blue,
+                                      color: Theme.of(context).buttonColor,
                                       disabledColor: Colors.grey,
                                       disabledTextColor: Colors.grey[800],
                                       onPressed: hasMadeEdit
                                           ? () {
                                               saveNewQuestion();
-                                              Navigator.pop(context, null);
+                                              // Navigator.pop(context, null);
                                             }
                                           : null)
                             ])
@@ -330,7 +343,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
         });
     Widget confirmButton = FlatButton(
         child: const Text('CONFIRM', style: TextStyle(color: Colors.white)),
-        color: Colors.blue,
+        color: Theme.of(context).buttonColor,
         disabledColor: Colors.grey,
         disabledTextColor: Colors.grey[800],
         onPressed: () {
