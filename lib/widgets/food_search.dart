@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FoodSearch extends SearchDelegate<String> {
+  @override
+  String get searchFieldLabel => "temp search";
+
   bool isSearching = false;
 
   // var recentSearchList = [];
