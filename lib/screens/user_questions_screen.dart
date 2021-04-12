@@ -70,52 +70,120 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
                       // return UserQuestionsListTile(widget.userQuestions[index]);
                       return ListTile(
                         contentPadding: EdgeInsets.fromLTRB(10, 10, 15, 10),
-                        // leading: Icon(Icons.add),
+                        leading:  widget.userQuestions[index].is_answered == 0 ?Icon(  Icons.help_outline, color: Colors.red) : Icon(  Icons.done_outline, color: Colors.green),
                         title: Text(
                           widget.userQuestions[index].question,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        subtitle: widget.userQuestions[index].question_notes == "" ||
-                            widget.userQuestions[index].question_notes == null ||
-                            widget.userQuestions[index].question_notes == " "
-                            ? Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                          SizedBox(height: 5),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(""),
-                          ),
-                          SizedBox(height: 5),
-                          Align(alignment: Alignment.centerLeft, child: Text(getDate(widget.userQuestions[index]))),
-                        ])
-                            : Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                          SizedBox(height: 5),
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(widget.userQuestions[index].question_notes,
-                                  maxLines: 3, overflow: TextOverflow.ellipsis)),
-                          SizedBox(height: 5),
-                          Align(alignment: Alignment.centerLeft, child: Text(getDate(widget.userQuestions[index]))),
-                        ]),
-                        trailing: GestureDetector(
-                          onTap: () {
-                            _deleteDialog(widget.userQuestions[index].question, widget.userQuestions[index].id);
-                            // refresh();
+                        subtitle: widget
+                                        .userQuestions[index].question_notes ==
+                                    "" ||
+                                widget.userQuestions[index].question_notes ==
+                                    null ||
+                                widget.userQuestions[index].question_notes ==
+                                    " "
+                            ? Column(mainAxisSize: MainAxisSize.min, children: <
+                                Widget>[
+                                SizedBox(height: 5),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(""),
+                                ),
+                                SizedBox(height: 5),
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                        getDate(widget.userQuestions[index]))),
+                              ])
+                            : Column(mainAxisSize: MainAxisSize.min, children: <
+                                Widget>[
+                                SizedBox(height: 5),
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                        widget.userQuestions[index]
+                                            .question_notes,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis)),
+                                SizedBox(height: 5),
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                        getDate(widget.userQuestions[index]))),
+                              ]),
+                        trailing: PopupMenuButton(
+                          // tooltip: 'Menu',
+                          color: Theme.of(context).canvasColor,
+                          onSelected: (value) {
+                            if (value == 0) {
+                              Navigator.of(context)
+                                  .push(
+                                    new MaterialPageRoute(
+                                        builder: (_) => AddQuestionScreen(
+                                            true, widget.userQuestions[index])),
+                                  )
+                                  .then((value) => refresh(context));
+                            } else if (value == 1) {
+                              _deleteDialog(
+                                  widget.userQuestions[index].question,
+                                  widget.userQuestions[index].id);
+                            } else  if (value == 2){
+                              updateAnswered(widget.userQuestions[index]);
+                            }
                           },
                           child: Icon(
-                            Icons.delete,
-                            size: 20,
+                            Icons.more_vert,
+                            // size: 28.0,
                             color: Colors.grey,
                           ),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Edit",
+                                  ),
+                                ],
+                              ),
+                              value: 0,
+                            ),
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Delete",
+                                  ),
+                                ],
+                              ),
+                              value: 1,
+                            ),
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  widget.userQuestions[index].is_answered == 0
+                                      ? Text(
+                                          "Mark as answered",
+                                        )
+                                      : Text(
+                                          "Mark as unanswered",
+                                        ),
+                                ],
+                              ),
+                              value: 2,
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(
-                            new MaterialPageRoute(
-                                builder: (_) => AddQuestionScreen(true, widget.userQuestions[index])),
-                          )
-                              .then((value) => refresh(context));
-                        },
+
+                        // onTap: () {
+                        //   Navigator.of(context)
+                        //       .push(
+                        //         new MaterialPageRoute(
+                        //             builder: (_) => AddQuestionScreen(
+                        //                 true, widget.userQuestions[index])),
+                        //       )
+                        //       .then((value) => refresh(context));
+                        // },
                       );
                     },
                   );
@@ -163,6 +231,7 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
         userQuestion.date_created = userQuestionsFromDB[i]['date_created'];
         // getDate(userQuestionsFromDB[i]['date_created']);
         userQuestion.date_updated = userQuestionsFromDB[i]['date_updated'];
+        userQuestion.is_answered =userQuestionsFromDB[i]['is_answered'];
         widget.userQuestions.add(userQuestion);
       }
     }
@@ -188,75 +257,69 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
           .parse(a.date_updated)
           .compareTo(DateFormat.yMd().add_jm().parse(b.date_updated)));
     }
-
-    // if (dropDownSort == 'Date Added: new to old') {
-    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
-    //       .parse(b.date_created)
-    //       .compareTo(DateTime.parse(a.date_created)));
-    // } else if (dropDownSort == 'Date Added: old to new') {
-    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
-    //       .parse(a.date_created)
-    //       .compareTo(DateFormat("yyyy-MM-dd Hms").parse(b.date_created)));
-    //
-    // } else if (dropDownSort == 'Date Updated: new to old') {
-    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
-    //       .parse(b.date_created)
-    //       .compareTo(DateFormat("yyyy-MM-dd Hms").parse(a.date_created)));
-    // } else if (dropDownSort == 'Date Updated: old to new') {
-    //   widget.userQuestions.sort((a, b) => DateFormat("yyyy-MM-dd Hms")
-    //       .parse(a.date_created)
-    //       .compareTo(DateFormat("yyyy-MM-dd Hms").parse(b.date_created)));
-    //
-    // }
   }
 
   _deleteDialog(question, userQuestionID) async {
     await showDialog<String>(
         context: context,
         builder: (context) => new AlertDialog(
-          title:
-          Text("Are you sure you would like to delete this question?"),
-          content: Text("\"" + question + "\""),
-          actions: [
-            new FlatButton(
-                child: const Text(
-                  'CANCEL',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  // refresh();
-                }),
-            new FlatButton(
-                child: const Text('DELETE',
-                    style: TextStyle(color: Colors.white)),
-                color: Colors.blue,
-                onPressed: () {
-                  deleteQuestion(userQuestionID);
-                  Navigator.of(context, rootNavigator: true).pop();
-                  // refresh();
-                })
-          ],
-        ));
+              title:
+                  Text("Are you sure you would like to delete this question?"),
+              content: Text("\"" + question + "\""),
+              actions: [
+                new FlatButton(
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      // refresh();
+                    }),
+                new FlatButton(
+                    child: const Text('DELETE',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.blue,
+                    onPressed: () {
+                      deleteQuestion(userQuestionID);
+                      Navigator.of(context, rootNavigator: true).pop();
+                      // refresh();
+                    })
+              ],
+            ));
   }
 
   getDate(UserQuestion userQuestion) {
-    DateTime dTime = DateFormat.yMd().add_jm()
-        .parse(userQuestion.date_updated);
-    var outputFormat = DateFormat.yMd().add_jm();
-    // DateTime dTime = DateFormat("yyyy-MM-dd Hms")
-    //     .parse(widget.userQuestion.date_updated);
-    // var outputFormat = DateFormat('MM/dd/yyyy H:mma');
-    return outputFormat.format(dTime).toString();
+    if (userQuestion.date_updated != userQuestion.date_created){
+      DateTime dTime = DateFormat.yMd().add_jm().parse(userQuestion.date_updated);
+      var outputFormat = DateFormat.yMd().add_jm();
+      return "Last updated: " + outputFormat.format(dTime).toString();
+    }else{
+      DateTime dTime = DateFormat.yMd().add_jm().parse(userQuestion.date_created);
+      var outputFormat = DateFormat.yMd().add_jm();
+      return outputFormat.format(dTime).toString();
+    }
   }
 
-  refresh(context) async{
+  refresh(context) async {
     await getQuestions();
     setState(() {});
   }
 
   deleteQuestion(userQuestionID) async {
     await DBProvider.db.deleteUserQuestion(userQuestionID);
+    setState(() {});
+  }
+
+  updateAnswered(userQuestion) async {
+    userQuestion.date_updated = DateFormat.yMd().add_jm().format(DateTime.now());
+    if (userQuestion.is_answered == 0) {
+      userQuestion.is_answered = 1;
+    } else {
+      userQuestion.is_answered = 0;
+    }
+
+    await DBProvider.db.updateIsAnswered(userQuestion);
     setState(() {});
   }
 }

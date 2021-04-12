@@ -40,6 +40,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
   final proteinKey = GlobalKey<FormState>();
   final fatKey = GlobalKey<FormState>();
 
+
   _NutrientRatioScreenState(
       int carbohydratePercent, int proteinPercent, int fatPercent) {
     this.carbohydratePercent = carbohydratePercent;
@@ -145,7 +146,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
             }
           },
         ),
-        title: Text('Nutrient Ratios'),
+        title: Text('Macronutrient Distribution Breakdown'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -157,6 +158,58 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
               color: Theme.of(context).canvasColor,
               child: Column(
                 children: [
+                  RichText(
+                    text: TextSpan(
+                      text: "You have ",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: ((carbohydratePercent != null
+                                ? carbohydratePercent
+                                : 0) +
+                                (proteinPercent != null ? proteinPercent : 0) +
+                                (fatPercent != null ? fatPercent : 0)).toString() + "%",
+                            style: TextStyle(
+                                color: ((carbohydratePercent != null
+                                    ? carbohydratePercent
+                                    : 0) +
+                                    (proteinPercent != null ? proteinPercent : 0) +
+                                    (fatPercent != null ? fatPercent : 0)) != 100
+                                    ? Colors.red
+                                    : Colors.green)),
+                        TextSpan(
+                            text: " of 100% assigned: ",
+                            style: TextStyle(color: Colors.black)),
+                        TextSpan(
+                            text: (((carbohydratePercent != null
+                                ? carbohydratePercent
+                                : 0) +
+                                (proteinPercent != null ? proteinPercent : 0) +
+                                (fatPercent != null ? fatPercent : 0)) - 100).abs().toString() + "%",
+                            style: TextStyle(
+                                color: (((carbohydratePercent != null
+                                    ? carbohydratePercent
+                                    : 0) +
+                                    (proteinPercent != null ? proteinPercent : 0) +
+                                    (fatPercent != null ? fatPercent : 0)) - 100).abs() != 0
+                                    ? Colors.red
+                                    : Colors.green)),
+                        (((carbohydratePercent != null
+                            ? carbohydratePercent
+                            : 0) +
+                            (proteinPercent != null ? proteinPercent : 0) +
+                            (fatPercent != null ? fatPercent : 0)) - 100) >= 1 ?
+                        TextSpan( text: " over\n",
+                            style: TextStyle(color: Colors.black)):
+                        TextSpan( text:  " remaining\n",
+                            style: TextStyle(color: Colors.black))
+
+                      ],
+                    ),
+                  ),
+
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
@@ -169,7 +222,6 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                     key: carbohydrateKey,
                     child: TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Carbohydrates %',
                         hintText: 'Enter desired carbohydrate percent.',
                         border: OutlineInputBorder(),
                       ),
@@ -216,7 +268,6 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                     key: proteinKey,
                     child: TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Protein %',
                         hintText: 'Enter desired Protein percent.',
                         border: OutlineInputBorder(),
                       ),
@@ -263,7 +314,6 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                     key: fatKey,
                     child: TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Fat %',
                         hintText: 'Enter desired Fat percent.',
                         border: OutlineInputBorder(),
                       ),
@@ -317,12 +367,11 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                           },
                         ),
                         if (wasChanged) ...[
-
                           FlatButton(
                             color: Colors.blue,
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
-                              'UPDATE ENTRY',
+                              'UPDATE',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -340,14 +389,12 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                               color: Colors.grey,
                               // padding: EdgeInsets.symmetric(vertical: 20),
                               child: Text(
-                                'UPDATE ENTRY',
+                                'UPDATE',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
-                              onPressed: () => {
-
-                              }),
+                              onPressed: () => {}),
                         ],
                       ],
                     ),
