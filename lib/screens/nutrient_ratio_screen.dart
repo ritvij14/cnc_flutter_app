@@ -189,11 +189,11 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                                 (proteinPercent != null ? proteinPercent : 0) +
                                 (fatPercent != null ? fatPercent : 0)) - 100).abs().toString() + "%",
                             style: TextStyle(
-                                color: ((carbohydratePercent != null
+                                color: (((carbohydratePercent != null
                                     ? carbohydratePercent
                                     : 0) +
                                     (proteinPercent != null ? proteinPercent : 0) +
-                                    (fatPercent != null ? fatPercent : 0)) != 0
+                                    (fatPercent != null ? fatPercent : 0)) - 100).abs() != 0
                                     ? Colors.red
                                     : Colors.green)),
                         (((carbohydratePercent != null

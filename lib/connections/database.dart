@@ -64,10 +64,25 @@ class DBProvider {
     print(newUserQuestion.question);
     getAllUserQuestions(1);
     print("IN DB ADDING THE QUESTION STRING DATETIME:   "+newUserQuestion.date_created);
+    print("IS ANSWERED: "+ newUserQuestion.is_answered.toString());
     return raw;
   }
 
-  // updateUserQuestion(UserQuestion updatedUserQuestion) async {
+
+  updateUserQuestion(UserQuestion updatedUserQuestion) async {
+    final db = await database;
+    print("in update: " + updatedUserQuestion.id.toString());
+    print(updatedUserQuestion.question);
+    await db.rawUpdate('''
+    UPDATE user_questions 
+    SET question = ?, question_notes = ? , date_updated = ?
+    WHERE id = ?
+    ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.date_updated, updatedUserQuestion.id]);
+    // var res = await db.update("user_questions", updatedUserQuestion.toMap(),
+    //     where: "id = ?", whereArgs: [updatedUserQuestion.id]);
+    // return res;
+  }
+  // updateIsAnswered(UserQuestion updatedUserQuestion) async {
   //   final db = await database;
   //   print("in update: " + updatedUserQuestion.id.toString());
   //   print(updatedUserQuestion.question);
@@ -75,39 +90,21 @@ class DBProvider {
   //   UPDATE user_questions
   //   SET question = ?, question_notes = ? , date_updated = ?, is_answered = ?
   //   WHERE id = ?
-  //   ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.date_updated, updatedUserQuestion.is_answered,  updatedUserQuestion.id]);
+  //   ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.date_updated, updatedUserQuestion.is_answered, updatedUserQuestion.id]);
   //   // var res = await db.update("user_questions", updatedUserQuestion.toMap(),
   //   //     where: "id = ?", whereArgs: [updatedUserQuestion.id]);
   //   // return res;
   // }
-  updateUserQuestion(UserQuestion updatedUserQuestion) async {
-    final db = await database;
-    print("in update: " + updatedUserQuestion.id.toString());
-    print(updatedUserQuestion.question);
-    await db.rawUpdate('''
-    UPDATE user_questions 
-    SET question = ?, question_notes = ? , date_updated = ?, 
-    WHERE id = ?
-    ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.date_updated, updatedUserQuestion.id]);
 
-  }
   updateIsAnswered(UserQuestion updatedUserQuestion) async {
     final db = await database;
-    print("in update: " + updatedUserQuestion.id.toString());
-    print(updatedUserQuestion.question);
     await db.rawUpdate('''
-    UPDATE user_questions 
-    SET is_answered = ?, 
+    UPDATE user_questions
+    SET  date_updated = ?, is_answered = ?
     WHERE id = ?
-    ''', [updatedUserQuestion.is_answered, updatedUserQuestion.id]);
-
+    ''', [updatedUserQuestion.date_updated, updatedUserQuestion.is_answered, updatedUserQuestion.id]);
   }
 
-  // getUserQuestion(int user_id) async {
-  //   final db = await database;
-  //   var res = await db.query("user_questions", where: "user_id = ?", whereArgs: [user_id]);
-  //   return res.isNotEmpty ? UserQuestion.fromMap(res.first) : null;
-  // }
 
   Future<List> getAllUserQuestions(int user_id) async {
     final db = await database;

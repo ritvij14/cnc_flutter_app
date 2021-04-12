@@ -27,7 +27,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   String _userQuestion;
   String _userNote = "";
   DateTime _createdDate;
-  bool _isAnswered;
+  // bool _isAnswered;
   bool hasMadeEdit = false;
 
   _AddQuestionScreen(isEdit, currentQuestion) {
@@ -39,11 +39,11 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
       _userQuestion = userQuestion.question;
       _userNote = userQuestion.question_notes;
       _createdDate = DateFormat.yMd().add_jm().parse(userQuestion.date_created);
-      if (userQuestion.is_answered == 0) {
-        _isAnswered = true;
-      } else {
-        _isAnswered = false;
-      }
+      // if (userQuestion.is_answered == 1) {
+      //   _isAnswered = true;
+      // } else {
+      //   _isAnswered = false;
+      // }
       // _createdDate =
       //     DateFormat("yyyy-MM-dd Hms").parse(userQuestion.date_created);
     }
@@ -64,6 +64,11 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
         _noteController.text = "";
         _userNote = "";
       }
+      // if (userQuestion.is_answered == 1) {
+      //   _isAnswered = true;
+      // } else {
+      //   _isAnswered = false;
+      // }
     }
     return super.initState();
   }
@@ -76,7 +81,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
         question_notes: _userNote,
         date_created: DateFormat.yMd().add_jm().format(DateTime.now()),
         date_updated: DateFormat.yMd().add_jm().format(DateTime.now()),
-        is_answered: 1);
+        is_answered: 0);
 
     // date_created: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()),
     // date_updated: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()));
