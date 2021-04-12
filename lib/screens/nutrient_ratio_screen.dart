@@ -146,7 +146,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
             }
           },
         ),
-        title: Text('Macro-nutrient Ratios'),
+        title: Text('Macronutrient Distribution Breakdown'),
       ),
       body: SingleChildScrollView(
         child: Container(

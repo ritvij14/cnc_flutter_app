@@ -60,19 +60,15 @@ class DBProvider {
           newUserQuestion.date_updated,
           newUserQuestion.is_answered
         ]);
-    print(id);
-    print(newUserQuestion.question);
+
     getAllUserQuestions(1);
-    print("IN DB ADDING THE QUESTION STRING DATETIME:   "+newUserQuestion.date_created);
-    print("IS ANSWERED: "+ newUserQuestion.is_answered.toString());
+
     return raw;
   }
 
 
   updateUserQuestion(UserQuestion updatedUserQuestion) async {
     final db = await database;
-    print("in update: " + updatedUserQuestion.id.toString());
-    print(updatedUserQuestion.question);
     await db.rawUpdate('''
     UPDATE user_questions 
     SET question = ?, question_notes = ? , date_updated = ?
@@ -109,7 +105,7 @@ class DBProvider {
   Future<List> getAllUserQuestions(int user_id) async {
     final db = await database;
     var questions = await db.rawQuery(    'SELECT * FROM user_questions WHERE user_id = ?', [user_id]);
-   print("in get all users: "+ questions.length.toString());
+   // print("in get all users: "+ questions.length.toString());
     return questions;
   }
 

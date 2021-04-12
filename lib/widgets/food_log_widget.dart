@@ -428,33 +428,46 @@ class _FoodLogState extends State<FoodLog> {
               //       fontSize: 16,
               //       fontFamily: "OpenSans"),
               // ),
-              ButtonTheme(
-                height: 20,
-                child: OutlineButton(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).buttonColor,
-                      style: BorderStyle.solid,
-                      width: 2),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(
-                      new MaterialPageRoute(
-                          builder: (_) =>
-                              DailyNutritionBreakdown(foodLogEntries)),
-                    );
-                  },
-                  child: Text("Nutrient Breakdown",
-                      style: TextStyle(color: Theme.of(context).buttonColor)),
-                ),
-              ),
+          FlatButton(
+          child: Text("View Today's Nutrient Breakdown",
+          style: TextStyle(color: Colors.white)),
+      color: Colors.blue,
+      onPressed: () {
+        Navigator.of(context)
+            .push(
+          new MaterialPageRoute(
+              builder: (_) =>
+                  DailyNutritionBreakdown(foodLogEntries)),
+        );
+      },
+    ),
+              // ButtonTheme(
+              //   height: 20,
+              //   child: OutlineButton(
+              //     borderSide: BorderSide(
+              //         color: Theme.of(context).buttonColor,
+              //         style: BorderStyle.solid,
+              //         width: 2),
+              //     onPressed: () {
+              //       Navigator.of(context)
+              //           .push(
+              //         new MaterialPageRoute(
+              //             builder: (_) =>
+              //                 DailyNutritionBreakdown(foodLogEntries)),
+              //       );
+              //     },
+              //     child: Text("View Today's Nutrient Breakdown",
+              //         style: TextStyle(color: Theme.of(context).buttonColor)),
+              //   ),
+              // ),
 
             ],
           ),
-        Divider(
-          color: Colors.grey[600],
-          height: 0,
-          thickness: 1,
-        ),
+        // Divider(
+        //   color: Colors.grey[600],
+        //   height: 0,
+        //   thickness: 1,
+        // ),
         // ),
         FutureBuilder(
           builder: (context, projectSnap) {
@@ -496,7 +509,7 @@ class _FoodLogState extends State<FoodLog> {
                   ),
                   subtitle:   Text(
                     getPortionAsFraction(
-                        foodLogEntries[index].portion) + ' at ' + getMealTime(foodLogEntries[index].entryTime),
+                        foodLogEntries[index].portion)+ "("+   foodLogEntries[index].portion * foodLogEntries[index].food.commonPortionSizeAmount + " " + foodLogEntries[index].food.commonPortionSizeUnit + ")" ' at ' + getMealTime(foodLogEntries[index].entryTime),
                   ),
                   trailing: GestureDetector(
                     onTap: () {
@@ -528,11 +541,11 @@ class _FoodLogState extends State<FoodLog> {
           },
           future: getFood(),
         ),
-        Divider(
-          color: Colors.grey[600],
-          height: 0,
-          thickness: 1,
-        )
+        // Divider(
+        //   color: Colors.grey[600],
+        //   height: 0,
+        //   thickness: 1,
+        // )
 
       ]),
     );

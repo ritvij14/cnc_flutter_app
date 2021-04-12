@@ -290,8 +290,6 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
   }
 
   getDate(UserQuestion userQuestion) {
-    print(userQuestion.date_updated);
-    print(userQuestion.date_created);
     if (userQuestion.date_updated != userQuestion.date_created){
       DateTime dTime = DateFormat.yMd().add_jm().parse(userQuestion.date_updated);
       var outputFormat = DateFormat.yMd().add_jm();
