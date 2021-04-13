@@ -1,17 +1,22 @@
+import 'dart:developer';
+
+import 'package:cnc_flutter_app/connections/db_helper.dart';
+import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
+import 'package:cnc_flutter_app/connections/metric_db_helper.dart';
+import 'package:cnc_flutter_app/connections/symptom_db_helper.dart';
+import 'package:cnc_flutter_app/models/activity_model.dart';
+import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
+import 'package:cnc_flutter_app/models/food_model.dart';
+import 'package:cnc_flutter_app/models/metric_model.dart';
+import 'package:cnc_flutter_app/models/symptom_model.dart';
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/diet_summary_widget.dart';
-import 'dart:convert';
-
-import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
-import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-// import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-// import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,8 +24,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
-  var db2 = new WeeklySavedDBHelper();
+  List<FoodLogEntry> dayFoodLogEntryList = [];
+  List<ActivityModel> dayActivityList = [];
+  List<MetricModel> dayMetricList = [];
+  List<SymptomModel> daySymptomList = [];
+
+  refresh() {
+    setState(() {
+      getDailyActivity();
+    });
+  }
 
   void rebuildAllChildren(BuildContext context) {
     void rebuild(Element el) {
@@ -41,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, '/profile').then((value) => rebuildAllChildren(context));
+              Navigator.pushNamed(context, '/profile')
+                  .then((value) => rebuildAllChildren(context));
             },
           )
         ],
@@ -64,14 +78,40 @@ class _HomeScreenState extends State<HomeScreen> {
           SpeedDialChild(
               child: Icon(Icons.directions_run),
               label: 'Log Activity',
-              onTap: () {
-                Navigator.pushNamed(context, '/inputActivity');
+              onTap: () async {
+                await Navigator.pushNamed(context, '/inputActivity')
+                    .then((value) => setState(() {
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
+
+                // );
+
+                //   final result =
+                //       await Navigator.pushNamed(context, '/inputActivity');
+                //   if (result != null) {
+                //     ScaffoldMessenger.of(context)
+                //       ..removeCurrentSnackBar()
+                //       ..showSnackBar(SnackBar(content: Text("$result")));
+                //   } else {
+                //     ScaffoldMessenger.of(context)
+                //       ..removeCurrentSnackBar()
+                //       ..showSnackBar(
+                //           SnackBar(content: Text("An Error Occurred")));
+                //     // setState(() {});
+                //   }
               }),
           SpeedDialChild(
               child: Icon(Icons.thermostat_outlined),
               label: 'Log Symptoms',
-              onTap: () {
-                Navigator.pushNamed(context, '/inputSymptom');
+              onTap: () async {
+                    await Navigator.pushNamed(context, '/inputSymptom')
+                .then((value) => setState(() {
+                ScaffoldMessenger.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text("$value")));
+                }));
               }),
           SpeedDialChild(
               child: Icon(Icons.question_answer),
@@ -81,9 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
           SpeedDialChild(
               child: Icon(MdiIcons.scale),
-              label: 'Log Metrics',
-              onTap: () {
-                Navigator.pushNamed(context, '/inputMetric').then((value) => rebuildAllChildren(context));
+              label: 'Log Weight',
+              onTap: () async {
+                    await Navigator.pushNamed(context, '/inputMetric')
+                .then((value) => setState(() {
+                ScaffoldMessenger.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text("$value")));
+                }));
               }),
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
@@ -93,164 +138,402 @@ class _HomeScreenState extends State<HomeScreen> {
           //     }),
         ],
       ),
-      body: FutureBuilder(
-        builder: (context, projectSnap) {
-          return Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: ListView(
-                children: [
-                  DietSummaryWidget(),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Column(
+      body: Padding(
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: ListView(
+            children: [
+              DietSummaryWidget(),
+              // HomeSummaryCardWidget('food', dayFoodLogEntryList),
+              Card(
+                child: FutureBuilder(
+                    future: getDailyFood(),
+                    builder: (context, projectSnap) {
+                      return Column(
                         children: [
-                          Text("Diet Summary",
-                            style: TextStyle(
-                              fontSize: 20.0,
-                            ),),
                           ExpansionTile(
                             title: Text('Daily Diet Summary'),
-                            subtitle: Text('4 items totaling 1000 calories.'),
-                            children: <Widget>[
-                              Text('Food 1'),
-                              Text('Food 2'),
-                              Text('Food 3'),
-                              Text('Food 4'),
-
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/dietTracking').then((value) => rebuildAllChildren(context));
-                                  },
-                                  child: Text("Full Summary")),
-                            ],
+                            subtitle: dayFoodLogEntryList.length == 0
+                                ? Text('No food tracked today!')
+                                : dayFoodLogEntryList.length == 1
+                                    ? Text(
+                                        dayFoodLogEntryList.length.toString() +
+                                            ' item totaling ' +
+                                            getDayFoodCalories().toString() +
+                                            ' calories.')
+                                    : Text(
+                                        dayFoodLogEntryList.length.toString() +
+                                            ' items totaling ' +
+                                            getDayFoodCalories().toString() +
+                                            ' calories.'),
+                            // subtitle: (dayFoodLogEntryList.length() == 0) ? Text(dayFoodLogEntryList.length.toString() + ' items totaling ' + getDayFoodCalories().toString() +  ' calories.'),
+                            children: getDailyFoodChildren()
+                            ,
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: ExpansionTile(
-                      title: Text('Daily Activity Summary'),
-                      subtitle: Text('2 activities totaling 125 mets.'),
-                      children: <Widget>[
-                        Text('Activity 1'),
-                        Text('Activity 2'),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/fitnessTracking');
-                            },
-                            child: Text("Full Summary")),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    child: ExpansionTile(
-                      title: Text('Daily Weight Summary'),
-                      subtitle: Text('No weight added today!'),
-                      children: <Widget>[
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/metricTracking');
-                            },
-                            child: Text("Full Summary")),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    child: ExpansionTile(
-                      title: Text('Daily Symptom Summary'),
-                      subtitle: Text('No symptoms added today!'),
-                      children: <Widget>[
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/symptomTracking');
-                            },
-                            child: Text("Full Summary")),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    child: ExpansionTile(
-                      title: Text('Weekly Goals Set'),
-                      subtitle: Text('Click to view your current selection!'),
-                      children: <Widget>[
-                        Container(
-                            color: Theme.of(context).primaryColor,
-                            child: Container(
-                                color: Theme.of(context).primaryColor,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: weeklySavedGoalsModelList.length,
-                                    itemBuilder: (context, index) {
-                                      if (weeklySavedGoalsModelList[index]
-                                          .type !=
-                                          null) {
-                                        return _buildListView(index);
-                                      } else {
-                                        return _buildEmpty();
-                                      }
-                                    }))),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0,60, 0, 0),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: WeeklyCalorieWidget(),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: MetricSummaryWidget(),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: ActivitySummaryWidget(),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: SymptomSummaryWidget(),
-                  // ),
-                  // Container(
-                  //   height: 50,
-                  // ),
-                ],
-              ));
-        },
-        future: getGoals(),
-      ),
+                      );
+                    }),
+              ),
+              Card(
+                child: FutureBuilder(
+                    future: getDailyActivity(),
+                    builder: (context, projectSnap) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(4.0),
+                          ),
+                          Text(
+                            "Daily Activity Summary",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          ExpansionTile(
+                            title: dayActivityList.length == 0
+                                ? Text(
+                                    "No activities tracked today!",
+                                  )
+                                : Text(dayActivityList.length.toString() +
+                                    " Activities Logged - " +
+                                    getDayActivityMinutes().toString() +
+                                    " Minutes"),
+                            // subtitle: dayActivityList.length == 0 ? Text(
+                            //     "No activities tracked!") : Text(dayActivityList
+                            //     .length.toString() + " activities logged."),
+                            children: getDailyActivityChildren(),
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+              Card(
+                child: FutureBuilder(
+                    future: getDailyWeight(),
+                    builder: (context, projectSnap) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(4.0),
+                          ),
+                          Text(
+                            "Daily Weight Summary",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          ExpansionTile(
+                            title: dayMetricList.length == 0
+                                ? Text("No Weight Logged Today!")
+                                : dayMetricList.length == 1
+                                    ? Text(dayMetricList.length.toString() +
+                                        " Weight Logged")
+                                    : Text(dayMetricList.length.toString() +
+                                        " Weights Logged"),
+                            // subtitle: dayActivityList.length == 0 ? Text(
+                            //     "No activities tracked!") : Text(dayActivityList
+                            //     .length.toString() + " activities logged."),
+                            children: getDailyWeightChildren(),
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+              Card(
+                child: FutureBuilder(
+                    future: getDailySymptom(),
+                    builder: (context, projectSnap) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(4.0),
+                          ),
+                          Text(
+                            "Daily Symptom Summary",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          ExpansionTile(
+                            title: daySymptomList.length == 0
+                                ? Text("No Symptoms Logged Today!")
+                                : daySymptomList.length == 1 ? Text("1 Symptom logged") : Text(daySymptomList.length.toString() +
+                                    " Symptoms Logged"),
+                            // subtitle: dayActivityList.length == 0 ? Text(
+                            //     "No activities tracked!") : Text(dayActivityList
+                            //     .length.toString() + " activities logged."),
+                            children: getDailySymptomChildren(),
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: WeeklyCalorieWidget(),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: MetricSummaryWidget(),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: ActivitySummaryWidget(),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: SymptomSummaryWidget(),
+              // ),
+              // Container(
+              //   height: 50,
+              // ),
+            ],
+          )),
     );
   }
 
-  Widget _buildEmpty() {
-    return Container(color: Colors.white // This is optional
-        );
-  }
+  getDailyFood() async {
+    List<FoodLogEntry> newFoodLogEntry = [];
+    DBHelper db = new DBHelper();
+    var response = await db.getFoodLog(DateTime.now().toIso8601String());
+    var data = json.decode(response.body);
+    for (int i = 0; i < data.length; i++) {
+      FoodLogEntry foodLogEntry = new FoodLogEntry();
+      foodLogEntry.portion = data[i]['portion'];
+      Food food = new Food();
+      String description = data[i]['food']['description'].toString();
+      description = description.replaceAll('"', "");
+      food.description = description;
 
-  Widget _buildListView(int index) {
-    int i = index + 1;
-    return Container(
-        padding: EdgeInsets.all(15.0),
-        color: Theme.of(context).primaryColor,
-        child: Text(i.toString() + ". " + weeklySavedGoalsModelList[index].goalDescription));
-  }
-
-  getGoals() async {
-    weeklySavedGoalsModelList.clear();
-    var response2 = await db2.getWeeklySavedGoals();
-    var wGDecode2 = json.decode(response2.body);
-
-    print(wGDecode2.length);
-    for (int i = 0; i < wGDecode2.length; i++) {
-      WeeklySavedGoalsModel weeklySavedGoalsModel = new WeeklySavedGoalsModel(
-          wGDecode2[i]['id'],
-          wGDecode2[i]['type'],
-          wGDecode2[i]['goalDescription'],
-          wGDecode2[i]['help_info'],
-          wGDecode2[i]['user_id']);
-      weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
+      food.kcal = data[i]['food']['kcal'];
+      // food.proteinInGrams = data[i]['food']['proteinInGrams'];
+      // food.carbohydratesInGrams = data[i]['food']['carbohydratesInGrams'];
+      // food.fatInGrams = data[i]['food']['fatInGrams'];
+      // food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
+      // food.saturatedFattyAcidsInGrams =
+      // data[i]['food']['saturatedFattyAcidsInGrams'];
+      // food.polyunsaturatedFattyAcidsInGrams =
+      // data[i]['food']['polyunsaturatedFattyAcidsInGrams'];
+      // food.monounsaturatedFattyAcidsInGrams =
+      // data[i]['food']['monounsaturatedFattyAcidsInGrams'];
+      // food.insolubleFiberInGrams = data[i]['food']['insolubleFiberInGrams'];
+      // food.solubleFiberInGrams = data[i]['food']['solubleFiberInGrams'];
+      // food.sugarInGrams = data[i]['food']['sugarInGrams'];
+      // food.calciumInMilligrams = data[i]['food']['calciumInMilligrams'];
+      // food.sodiumInMilligrams = data[i]['food']['sodiumInMilligrams'];
+      // food.vitaminDInMicrograms = data[i]['food']['vitaminDInMicrograms'];
+      // food.commonPortionSizeAmount = data[i]['food']['commonPortionSizeAmount'];
+      // food.commonPortionSizeGramWeight =
+      // data[i]['food']['commonPortionSizeGramWeight'];
+      // food.commonPortionSizeDescription =
+      // data[i]['food']['commonPortionSizeDescription'];
+      // food.commonPortionSizeUnit = data[i]['food']['commonPortionSizeUnit'];
+      // food.nccFoodGroupCategory = data[i]['food']['nccFoodGroupCategory'];
+      foodLogEntry.food = food;
+      newFoodLogEntry.add(foodLogEntry);
     }
+    dayFoodLogEntryList = newFoodLogEntry;
   }
+
+  getDailyActivity() async {
+    ActivityDBHelper db = new ActivityDBHelper();
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
+    var response = await db.getDayActivityList(int.parse(id));
+    List<ActivityModel> newActivityList = (json.decode(response.body) as List)
+        .map((data) => ActivityModel.fromJson(data))
+        .toList();
+    dayActivityList = newActivityList;
+  }
+
+  getDailyWeight() async {
+  MetricDBHelper db = new MetricDBHelper();
+  var sharedPref = await SharedPreferences.getInstance();
+  String id = sharedPref.getString('id');
+  var response = await db.getDayMetricList(int.parse(id));
+  List<MetricModel> newMetricList = (json.decode(response.body) as List)
+      .map((data) => MetricModel.fromJson(data))
+      .toList();
+  dayMetricList = newMetricList;
+
+  }
+
+  getDailySymptom() async {
+    SymptomDBHelper db = new SymptomDBHelper();
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
+    var response = await db.getDaySymptomList(int.parse(id));
+    List<SymptomModel> newSymptomList = (json.decode(response.body) as List)
+        .map((data) => SymptomModel.fromJson(data))
+        .toList();
+    daySymptomList = newSymptomList;
+  }
+
+
+  getDailyActivityChildren() {
+    if (dayActivityList.isEmpty) {
+      return <Widget>[
+        Text("Nothing here. Log some activities."),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/fitnessTracking')
+                  .then((value) => rebuildAllChildren(context));
+            },
+            child: Text("View All Activities")),
+      ];
+    } else if (dayActivityList.isNotEmpty) {
+      return <Widget>[
+        ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: dayActivityList.length,
+          itemBuilder: (context, index) {
+            final item = dayActivityList[index];
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
+              child: Text(
+                  item.type + " for " + item.minutes.toString() + " minutes."),
+            );
+          },
+        ),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/fitnessTracking')
+                  .then((value) => setState(() {}));
+            },
+            child: Text("View All Activities")),
+      ];
+    }
+    return <Widget>[];
+  }
+
+  getDailyFoodChildren() {
+    if (dayFoodLogEntryList.isEmpty) {
+      return <Widget>[
+        Text("Nothing here. Log some foods."),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/dietTracking')
+                  .then((value) => rebuildAllChildren(context));
+            },
+            child: Text("View All Foods")),
+      ];
+    } else if (dayFoodLogEntryList.isNotEmpty) {
+      return <Widget>[
+        ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: dayFoodLogEntryList.length,
+          itemBuilder: (context, index) {
+            final item = dayFoodLogEntryList[index];
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
+              child: Text(
+                  item.food.description),
+            );
+          },
+        ),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/dietTracking')
+                  .then((value) => setState(() {}));
+            },
+            child: Text("View All Foods")),
+      ];
+    }
+    return <Widget>[];
+  }
+
+  getDailyWeightChildren() {
+    if (dayMetricList.isEmpty) {
+      return <Widget>[
+        Text("Nothing here. Log your weight!"),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/metricTracking')
+                  .then((value) => rebuildAllChildren(context));
+            },
+            child: Text("View Weight Log")),
+      ];
+    } else if (dayMetricList.isNotEmpty) {
+      return <Widget>[
+        ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: dayMetricList.length,
+          itemBuilder: (context, index) {
+            final item = dayMetricList[index];
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
+              child: Text(
+                  item.weight.toString() + "lbs @ " + DateFormat.Hm().format(item.dateTime.toLocal())),
+            );
+          },
+        ),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/metricTracking')
+                  .then((value) => setState(() {}));
+            },
+            child: Text("View Weight Log")),
+      ];
+    }
+    return <Widget>[];
+  }
+
+  getDayActivityMinutes() {
+    int minutes = 0;
+    for (ActivityModel activityModel in dayActivityList) {
+      minutes += activityModel.minutes;
+    }
+    return minutes;
+  }
+
+  getDayFoodCalories() {
+    int calories = 0;
+    for (FoodLogEntry foodLogEntry in dayFoodLogEntryList) {
+      calories += foodLogEntry.food.kcal.toInt();
+    }
+    return calories;
+  }
+
+  getDailySymptomChildren() {
+    if (daySymptomList.isEmpty) {
+      return <Widget>[
+        Text("No Symptoms Tracked Today!"),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/symptomTracking')
+                  .then((value) => rebuildAllChildren(context));
+            },
+            child: Text("View Symptom Log")),
+      ];
+    } else if (daySymptomList.isNotEmpty) {
+      return <Widget>[
+        ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: daySymptomList.length,
+          itemBuilder: (context, index) {
+            final item = daySymptomList[index];
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
+              child: Text(
+                  "Symptom(s) recorded @ " + DateFormat.Hm().format(item.dateTime.toLocal())),
+            );
+          },
+        ),
+        TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/symptomTracking')
+                  .then((value) => setState(() {}));
+            },
+            child: Text("View Symptom Log")),
+      ];
+    }
+    return <Widget>[];
+  }
+
 }

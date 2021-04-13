@@ -444,7 +444,9 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           days - (DateTime.now().difference(met.dateTime).inDays).toDouble(),
           met.weight.toDouble()));
     }
-    this.spots = spots;
-    refresh();
+    if (spots.length > 0) {
+      this.spots = spots;
+      refresh();
+    }
   }
 }
