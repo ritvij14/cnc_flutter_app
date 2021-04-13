@@ -30,7 +30,9 @@ class WeeklySavedDBHelper extends DBHelper {
   }
 
   Future<http.Response> deleteWeeklyGoalsSavedByID(int id) async {
-    var requestUrl = baseUrl + '/api/weekly_goals_saved/delete/$id';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
+    var requestUrl = baseUrl + 'api/weekly_goals_saved/delete/$userId';
     http.Response response =
     await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;

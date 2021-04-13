@@ -2,7 +2,6 @@ import 'package:cnc_flutter_app/screens/home/activity_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/ask_screen.dart';
 import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goals_home_screen.dart';
-import 'file:///C:/Users/Liam/StudioProjects/cnc_flutter_app/lib/screens/daily_goals_screen.dart';
 import 'package:cnc_flutter_app/screens/home/home_screen.dart';
 import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/metric_tracking_screen.dart';
