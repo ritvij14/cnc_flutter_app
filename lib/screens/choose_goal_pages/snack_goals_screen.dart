@@ -58,6 +58,28 @@ class _ChooseSnackGoalsPageState extends State<ChooseSnackGoalsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(15.0),
+            color: Theme.of(context).primaryColor,
+            child:  Text(
+                "Choose a Goal",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: weeklyGoalsModelList.length,
+              itemBuilder: (context, index) {
+                if (weeklyGoalsModelList[index].type == "Snacks and Condiments") {
+                  return _buildSlideView(index);
+                } else {
+                  return _buildEmpty();
+                }
+              }),
+          Container(
             color:  Theme.of(context).primaryColor,
             child: ExpansionTile(
               title: Text(
@@ -83,28 +105,6 @@ class _ChooseSnackGoalsPageState extends State<ChooseSnackGoalsPage> {
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(15.0),
-            color: Theme.of(context).primaryColor,
-            child:  Text(
-                "Choose a Goal",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: weeklyGoalsModelList.length,
-              itemBuilder: (context, index) {
-                if (weeklyGoalsModelList[index].type == "Snacks and Condiments") {
-                  return _buildSlideView(index);
-                } else {
-                  return _buildEmpty();
-                }
-              })
         ],
       ),
     );

@@ -10,28 +10,28 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:share/share.dart';
 
-import '../choose_goals_screen.dart';
-import '../weekly_goals_screen.dart';
+import 'choose_goals_screen.dart';
+import 'weekly_goals_screen.dart';
 
-class GoalCalendar extends StatelessWidget {
+class DailyGoals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ChooseGoalsPage(title: 'Choose Weekly Goals'),
+      body: ChooseGoalsPage(title: 'Personal Daily Goals'),
     );
   }
 }
 
-class CalendarPage extends StatefulWidget {
-  CalendarPage({Key key, this.title}) : super(key: key);
+class DailyGoalsPage extends StatefulWidget {
+  DailyGoalsPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  _DailyGoalsPageState createState() => _DailyGoalsPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _DailyGoalsPageState extends State<DailyGoalsPage> {
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;
@@ -97,7 +97,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choose Weekly Goals'),
+        title: Text('Your Personal Daily Goals'),
       ),
       body: FutureBuilder(
         builder: (context, projectSnap) {
@@ -164,85 +164,6 @@ class _CalendarPageState extends State<CalendarPage> {
             calendarController: _controller,
           ),
 
-          Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            color: Theme.of(context).primaryColor,
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              children: <Widget>[
-                ExpansionTile(
-                  title: Text(
-                    "Weekly Goals",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          ElevatedButton(
-                            child: Text('Choose Weekly Goals'),
-                            style: ElevatedButton.styleFrom(
-                              primary:
-                              Theme.of(context).accentColor, // background
-                              onPrimary: Colors.white, // foreground
-                            ),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .push(
-                                  new MaterialPageRoute(
-                                    builder: (_) =>
-                                        ChooseWeeklyGoals(),
-                                  )).then((value) => update(context));
-                            },
-                          ),
-                          ElevatedButton(
-                            child: Text('Weekly Goal View'),
-                            style: ElevatedButton.styleFrom(
-                              primary:
-                              Theme.of(context).accentColor, // background
-                              onPrimary: Colors.white, // foreground
-                            ),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .push(
-                                  new MaterialPageRoute(
-                                    builder: (_) =>
-                                        WeeklyGoals(),
-                                  )).then((value) => update(context));
-                            },
-                          ),
-                        ]),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          weeklySavedGoalsModelList.length > 0
-              ? _buildWeeklyView()
-              : SizedBox(height: 0),
-
-          totalWeeklyGoalsCompleted != null
-              ? _buildGetWeeklyCompleted()
-              : SizedBox(height: 0),
-
-          //Container(
-          //  padding: EdgeInsets.all(15.0),
-          //  color: Theme.of(context).primaryColor,
-          //  alignment: Alignment.bottomLeft,
-          //  child: Text(
-          //    'Personal Goals',
-          //    style: TextStyle(
-          //      fontWeight: FontWeight.bold,
-          //      fontSize: 18.0,
-          //      color: Colors.white,
-          //    ),
-          //  ),
-          //),
-
           RaisedButton(
             onPressed: _showAddDialog,
             color: Theme.of(context).primaryColor,
@@ -284,20 +205,6 @@ class _CalendarPageState extends State<CalendarPage> {
               ? _buildGetPersonalCompleted()
               : SizedBox(height: 0),
         ],
-      ),
-    );
-  }
-
-  Widget _buildGetWeeklyCompleted() {
-    return Container(
-      padding: EdgeInsets.all(15.0),
-      child: Text(
-        'Total Weekly Goals Completed: ' +
-            prefs.getInt("weekly goal total").toString(),
-        style: TextStyle(
-          fontSize: 16.0,
-          color: Theme.of(context).primaryColor,
-        ),
       ),
     );
   }
@@ -403,83 +310,6 @@ class _CalendarPageState extends State<CalendarPage> {
         });
   }
 
-  Widget _buildWeeklyView() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: weeklySavedGoalsModelList.length,
-        itemBuilder: (context, index) {
-          return Slidable(
-            actionPane: SlidableDrawerActionPane(),
-            child: Container(
-              color: Colors.white,
-              child: ListTile(
-                title: Text(weeklySavedGoalsModelList[index].goalDescription),
-              ),
-            ),
-            actions: <Widget>[
-              IconSlideAction(
-                  caption: 'Completed',
-                  color: Colors.green,
-                  icon: Icons.check,
-                  onTap: () {
-                    deleteByGoalDescription(weeklySavedGoalsModelList[index]
-                        .id);
-                    if (totalWeeklyGoalsCompleted == null) {
-                      totalWeeklyGoalsCompleted = 1;
-                      prefs.setInt(
-                          "weekly goal total", totalWeeklyGoalsCompleted);
-                    } else {
-                      totalWeeklyGoalsCompleted =
-                      (totalWeeklyGoalsCompleted + 1);
-                      prefs.setInt(
-                          "weekly goal total", totalWeeklyGoalsCompleted);
-                    }
-
-                    prefs.setInt(
-                        "weekly goal total", totalWeeklyGoalsCompleted);
-                    _eventController2.clear();
-                    update(context);
-                    _showSnackBar(context, 'Completed Goal');
-                  }),
-              IconSlideAction(
-                  caption: 'Copy',
-                  color: Colors.grey[400],
-                  icon: Icons.content_copy,
-                  onTap: () {
-                    FlutterClipboard.copy(weeklySavedGoalsModelList[index]
-                        .goalDescription
-                        .toString());
-                    _showSnackBar(context, 'Copied to Clipboard');
-                  }),
-            ],
-            secondaryActions: <Widget>[
-              IconSlideAction(
-                  caption: 'Share',
-                  color: Colors.indigo,
-                  icon: Icons.share,
-                  onTap: () {
-                    Share.share(
-                        weeklySavedGoalsModelList[index]
-                            .goalDescription
-                            .toString(),
-                        subject:
-                        'Check out my new goal on the Enact diet tracking app!');
-                  }),
-              IconSlideAction(
-                  caption: 'Delete',
-                  color: Colors.red,
-                  icon: Icons.delete,
-                  onTap: () {
-                    update(context);
-                    deleteByGoalDescription(weeklySavedGoalsModelList[index]
-                        .id);
-                    _showSnackBar(context, 'Deleted Goal');
-                  }),
-            ],
-          );
-        });
-  }
-
   void _showSnackBar(BuildContext context, String text) {
     Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
@@ -494,7 +324,13 @@ class _CalendarPageState extends State<CalendarPage> {
             controller: _eventController,
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
               child: Text("Save"),
               onPressed: () {
                 if (_eventController.text.isEmpty) return;
@@ -510,8 +346,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 _eventController.clear();
                 Navigator.pop(context);
               },
-            )
-          ],
+            ),
+            ],
         ));
     setState(() {
       if (_events[_controller.selectedDay] != null) {

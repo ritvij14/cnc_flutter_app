@@ -11,7 +11,6 @@ void main() => runApp(WeeklyGoals());
 
 class WeeklyGoals extends StatelessWidget {
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: WeeklyGoalsPage(title: 'Chosen Weekly Goals'),
