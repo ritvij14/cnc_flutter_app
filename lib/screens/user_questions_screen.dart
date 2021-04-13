@@ -21,7 +21,9 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
     'Date Added: new to old',
     'Date Added: old to new',
     'Date Updated: new to old',
-    'Date Updated: old to new'
+    'Date Updated: old to new',
+    'Answered to unanswered',
+    'Unanswered to answered'
   ];
 
   @override
@@ -256,6 +258,20 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
           .add_jm()
           .parse(a.date_updated)
           .compareTo(DateFormat.yMd().add_jm().parse(b.date_updated)));
+    } else if (dropDownSort == 'Answered to unanswered') {
+      widget.userQuestions.sort((a, b) => DateFormat.yMd()
+          .add_jm()
+          .parse(b.date_updated)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.date_updated)));
+      widget.userQuestions.sort((a, b) => b.is_answered.toString()
+          .compareTo(a.is_answered.toString()));
+    }else if (dropDownSort == 'Unanswered to answered') {
+      widget.userQuestions.sort((a, b) => DateFormat.yMd()
+          .add_jm()
+          .parse(b.date_updated)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.date_updated)));
+      widget.userQuestions.sort((a,b) => a.is_answered.toString()
+          .compareTo(b.is_answered.toString()));
     }
   }
 
