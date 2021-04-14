@@ -58,4 +58,21 @@ class MetricDBHelper extends DBHelperBase{
     return response;
 
   }
+
+  Future<http.Response> getDayMetricList(int userId) async {
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/metric/day/user', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    return response;
+
+  }
 }

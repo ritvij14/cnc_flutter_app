@@ -883,7 +883,7 @@ class FoodProfile extends State<FoodPage> {
                             color: Colors.blue,
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
-                              'SAVE ENTRY',
+                              'SAVE',
                               style: TextStyle(
                                 color: Colors.white,
                               ),

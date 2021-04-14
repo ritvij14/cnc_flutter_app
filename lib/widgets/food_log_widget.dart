@@ -248,7 +248,7 @@ class _FoodLogState extends State<FoodLog> {
     Widget deleteButton = FlatButton(
       child: Text("DELETE",
           style: TextStyle(color: Colors.white)),
-      color: Colors.blue,
+      color: Theme.of(context).buttonColor,
       onPressed: () {
         deleteEntry(foodLogEntryId);
         Navigator.of(context).pop();
@@ -271,8 +271,8 @@ class _FoodLogState extends State<FoodLog> {
         title: Text("Are you sure you would like to delete this entry?"),
         content: Text(description + " with a portion size of " + portion.toString()),
         actions: [
-          deleteButton,
           cancelButton,
+          deleteButton,
         ],
       );
       // show the dialog
@@ -431,7 +431,7 @@ class _FoodLogState extends State<FoodLog> {
           FlatButton(
           child: Text("View Today's Nutrient Breakdown",
           style: TextStyle(color: Colors.white)),
-      color: Colors.blue,
+      color:Theme.of(context).buttonColor,
       onPressed: () {
         Navigator.of(context)
             .push(
@@ -509,7 +509,7 @@ class _FoodLogState extends State<FoodLog> {
                   ),
                   subtitle:   Text(
                     getPortionAsFraction(
-                        foodLogEntries[index].portion)+ "("+   foodLogEntries[index].portion * foodLogEntries[index].food.commonPortionSizeAmount + " " + foodLogEntries[index].food.commonPortionSizeUnit + ")" ' at ' + getMealTime(foodLogEntries[index].entryTime),
+                        foodLogEntries[index].portion)+ " ("+   (foodLogEntries[index].portion * foodLogEntries[index].food.commonPortionSizeAmount).toString() + " " + foodLogEntries[index].food.commonPortionSizeUnit + ")" ' at ' + getMealTime(foodLogEntries[index].entryTime),
                   ),
                   trailing: GestureDetector(
                     onTap: () {

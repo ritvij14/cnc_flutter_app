@@ -295,7 +295,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
         });
     Widget confirmButton = FlatButton(
         child: const Text('CONFIRM', style: TextStyle(color: Colors.white)),
-        color: Colors.blue,
+        color: Theme.of(context).buttonColor,
         disabledColor: Colors.grey,
         disabledTextColor: Colors.grey[800],
         onPressed: () {
@@ -911,7 +911,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           ),
                           if(wasChanged) ... [
                             FlatButton(
-                              color: Colors.blue,
+                              color: Theme.of(context).buttonColor,
                               // padding: EdgeInsets.symmetric(vertical: 20),
                               child: Text(
                                 'UPDATE',

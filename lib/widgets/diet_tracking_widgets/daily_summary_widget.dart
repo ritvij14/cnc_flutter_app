@@ -169,7 +169,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Daily',
+                    'Daily Summary',
                     style: new TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
