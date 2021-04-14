@@ -70,4 +70,21 @@ class SymptomDBHelper extends DBHelper {
           'userId': symptomModel.userId.toString(),
         }));
   }
+
+  Future<http.Response> getDaySymptomList(int userId) async {
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/symptom/day/user', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    return response;
+
+  }
 }

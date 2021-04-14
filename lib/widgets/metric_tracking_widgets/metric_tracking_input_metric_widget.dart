@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../alerts.dart';
+
 class MetricTrackingInputScreen extends StatefulWidget {
   MetricModel metricModel = new MetricModel.emptyConstructor();
 
@@ -24,10 +26,17 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading:
+          IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: (){
+              Alerts().showAlert(context);
+            },
+          ),
         title: Text('New Metrics'),
       ),
-      body: ListView(
-        scrollDirection: Axis.vertical,
+      body: Column(
+        // scrollDirection: Axis.vertical,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,39 +99,78 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
               )
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        child: Text('CANCEL'),
+                        onPressed: () async {
+                          Alerts().showAlert(context);
+                          // showAlert().then(
+                          //     Navigator.pop(context, "Cancelled Weight Input")
+                          // );
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FlatButton(
+                        color: Colors.blue,
+                        child: Text('SAVE ENTRY'),
+                        onPressed: () async {
+                          if(widget.metricModel.weight != null) {
+                            var sharedPref = await SharedPreferences.getInstance();
+                            String id = sharedPref.getString('id');
+                            dbHelper.updateWeight(widget.metricModel);
+                            widget.metricModel.userId = int.parse(id);
+                            var x = db.saveNewMetric(widget.metricModel);
+                            Navigator.pop(context, 'Saved Weight of ' + widget
+                                .metricModel.weight.toString() + 'lbs');
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    child: Text('Submit'),
-                    onPressed: () async {
-                      var sharedPref = await SharedPreferences.getInstance();
-                      String id = sharedPref.getString('id');
-                      dbHelper.updateWeight(widget.metricModel);
-                      widget.metricModel.userId = int.parse(id);
-                      var x = db.saveNewMetric(widget.metricModel);
-                      Navigator.pop(context, 'Saved Weight');
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
+  // showAlert(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text("Cancel Input?"),
+  //     content: Text("Are you sure you want to cancel this entry? Nothing will be saved."),
+  //     actions: [
+  //       TextButton(
+  //         child: Text("Undo"),
+  //         onPressed:  () {
+  //         },
+  //       ),
+  //       TextButton(
+  //         child: Text("Confirm"),
+  //         onPressed:  () {
+  //           Navigator.of(context).pop();
+  //           Navigator.of(context).pop("Cancelled Input");
+  //         },
+  //       ),
+  //     ],
+  //   );
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context){
+  //       return alert;
+  //     }
+  //   );
+  // }
 }

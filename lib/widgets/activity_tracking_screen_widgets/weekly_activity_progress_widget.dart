@@ -30,7 +30,7 @@ double percentComplete = 0;
           ),
           footer: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: new Text((requiredMinutes - completedMinutes).toString() + " Minutes Left"
+            child: new Text(completedMinutes > requiredMinutes ? "Completed Weekly Target" :(requiredMinutes - completedMinutes).toString() + " Minutes Left"
               ,
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
             ),
@@ -52,7 +52,7 @@ double percentComplete = 0;
     DateTime dateTime = DateTime.now();
     int intensity = 1;
     int userId = 1;
-    var x = await db.getWeekActivityList(5, intensity, userId);
+    var x = await db.getDaysActivityList(5, intensity, userId);
     int y = int.parse(x.body);
     return y;
   }
@@ -66,7 +66,8 @@ double percentComplete = 0;
   Future<void> setData() async {
     completedMinutes = await getData();
     percentComplete = completedMinutes/requiredMinutes;
-    print(percentComplete);
-
+    if (percentComplete > 1.0){
+      percentComplete = 1.0;
+    }
   }
 }

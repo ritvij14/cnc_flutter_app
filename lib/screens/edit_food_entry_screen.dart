@@ -286,28 +286,26 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text(
-        "DISCARD",
-        style: TextStyle(color: Colors.grey),
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-        closePage();
-      },
-    );
+        child: const Text(
+          'CANCEL',
+          style: TextStyle(color: Colors.grey),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        });
     Widget confirmButton = FlatButton(
-      child: Text("SAVE", style: TextStyle(color: Colors.white)),
-      color: Colors.blue,
-      onPressed: () {
-        updateEntry();
-        Navigator.of(context).pop();
-        closePage();
-      },
-    );
+        child: const Text('CONFIRM', style: TextStyle(color: Colors.white)),
+        color: Theme.of(context).buttonColor,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.grey[800],
+        onPressed: () {
+          Navigator.of(context).pop();
+          closePage();
+        });
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Would you like to save your changes?"),
+      title:  Text("Are you sure you want to cancel this update?"),
       actions: [
         cancelButton,
         confirmButton,
@@ -320,6 +318,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -912,10 +911,10 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           ),
                           if(wasChanged) ... [
                             FlatButton(
-                              color: Colors.blue,
+                              color: Theme.of(context).buttonColor,
                               // padding: EdgeInsets.symmetric(vertical: 20),
                               child: Text(
-                                'UPDATE ENTRY',
+                                'UPDATE',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -932,7 +931,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 color: Colors.grey,
                                 // padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Text(
-                                  'UPDATE ENTRY',
+                                  'UPDATE',
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
