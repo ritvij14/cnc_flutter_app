@@ -1,33 +1,84 @@
 import 'package:flutter/material.dart';
 
+class Alerts {
+  showAlert(BuildContext context, bool isEdit) {
+    AlertDialog alert;
+    if (isEdit) {
+      alert = AlertDialog(
+        title: Text("Cancel Edit?"),
+        content: Text(
+            "Are you sure you want to cancel this edit? Your changes will not be saved."),
+        actions: [
+          TextButton(
+            child: Text(
+              "CANCEL",
+              style: TextStyle(color: Colors.grey),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            color: Theme.of(context).buttonColor,
+            // padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              'CONFIRM',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop("Cancelled Edit");
+            },
+          ),
+        ],
+      );
+    } else {
+      alert = AlertDialog(
+        title: Text("Cancel Entry?"),
+        content: Text(
+            "Are you sure you want to cancel this entry? Nothing will be saved."),
+        actions: [
+          TextButton(
+            child: Text(
+              "CANCEL",
+              style: TextStyle(color: Colors.grey),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            color: Theme.of(context).buttonColor,
+            // padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              'CONFIRM',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop("Cancelled Entry");
+            },
+          ),
 
-class Alerts{
-  showAlert(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      title: Text("Cancel Input?"),
-      content: Text("Are you sure you want to cancel this entry? Nothing will be saved."),
-      actions: [
-        TextButton(
-          child: Text("Undo"),
-          onPressed:  () {
-          },
-        ),
-        TextButton(
-          child: Text("Confirm"),
-          onPressed:  () {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop("Cancelled Input");
-          },
-        ),
-      ],
-    );
+          // TextButton(
+          //   child: Text("Confirm"),
+          //   onPressed:  () {
+          //     Navigator.of(context).pop();
+          //     Navigator.of(context).pop("Cancelled Entry");
+          //   },
+          // ),
+        ],
+      );
+    }
+
     showDialog(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return alert;
-        }
-    );
+        });
   }
-
-
 }

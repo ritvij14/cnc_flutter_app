@@ -264,12 +264,21 @@ class _FoodLogState extends State<FoodLog> {
         Navigator.of(context).pop();
       },
     );
-
     if (action == "delete") {
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
-        title: Text("Are you sure you would like to delete this entry?"),
-        content: Text(description + " with a portion size of " + portion.toString()),
+        title: Text("Delete Entry"),
+        content: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: 'Are you sure you would like to delete this entry?:\n\n',),
+              TextSpan(text:  description + " with a portion size of " + portion.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text:  '\n\nThis action cannot be undone.')
+            ],
+          ),
+        ),
+
+        // Text('Are you sure you would like to delete this entry?: \n\n' + description + " with a portion size of " + portion.toString()+'\n\nThis action cannot be undone.'),
         actions: [
           cancelButton,
           deleteButton,

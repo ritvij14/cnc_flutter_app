@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../alerts.dart';
+
 class AddQuestionScreen extends StatefulWidget {
   bool isEdit;
   UserQuestion currentQuestion;
@@ -27,6 +29,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   String _userQuestion;
   String _userNote = "";
   DateTime _createdDate;
+
   // bool _isAnswered;
   bool hasMadeEdit = false;
 
@@ -92,8 +95,6 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
       setState(() {});
       Navigator.pop(context, null);
     }
-
-
   }
 
   updateQuestion() async {
@@ -111,7 +112,6 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
       setState(() {});
       Navigator.pop(context, null);
     }
-
   }
 
   void closePage() {
@@ -128,7 +128,8 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
             icon: Icon(Icons.clear),
             onPressed: () {
               if (hasMadeEdit) {
-                showAlertDialog(context);
+                Alerts().showAlert(context, true);
+                // showAlertDialog(context);
                 // _editedFieldsAlert();
               } else {
                 Navigator.of(context).pop();
@@ -230,7 +231,8 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                   ),
                                   onPressed: () {
                                     if (hasMadeEdit) {
-                                      showAlertDialog(context);
+                                      Alerts().showAlert(context, true);
+                                      // showAlertDialog(context);
                                       // _editedFieldsAlert();
                                     } else {
                                       Navigator.of(context).pop();
@@ -353,7 +355,9 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: isUpdate ? Text("Are you sure you want to cancel this update?"): Text("Are you sure you want to discard this question?"),
+      title: isUpdate
+          ? Text("Are you sure you want to cancel this update?")
+          : Text("Are you sure you want to discard this question?"),
       actions: [
         cancelButton,
         confirmButton,

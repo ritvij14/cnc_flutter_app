@@ -19,6 +19,7 @@ class MetricTrackingInputScreen extends StatefulWidget {
 class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
   final db = MetricDBHelper();
   final dbHelper = DBHelper();
+  bool isEnabled = false;
   TextEditingController dateCtl = TextEditingController(
       text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
 
@@ -30,119 +31,177 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
           IconButton(
             icon: Icon(Icons.clear),
             onPressed: (){
-              Alerts().showAlert(context);
+              Alerts().showAlert(context, false);
             },
           ),
         title: Text('New Metrics'),
       ),
-      body: Column(
-        // scrollDirection: Axis.vertical,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                'Date',
-                style: TextStyle(fontSize: 16),
-              ),
-              Container(
-                width: 200,
-                child: TextFormField(
-                  enableInteractiveSelection: false,
-                  controller: dateCtl,
-                  onTap: () async {
-                    DateTime date = widget.metricModel.dateTime;
-                    DateTime now = DateTime.now();
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    date = await showDatePicker(
-                      context: context,
-                      initialDate: widget.metricModel.dateTime,
-                      // TODO change date range
-                      firstDate: DateTime(now.year, now.month, now.day - 100),
-                      lastDate: DateTime.now(),
-                    );
-                    dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
-                    widget.metricModel.dateTime = date;
-                  },
+      body: Container(
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+        child: Column(
+          // scrollDirection: Axis.vertical,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'Date',
+                  style: TextStyle(fontSize: 16),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                'Weight',
-                style: TextStyle(fontSize: 16),
-              ),
-              Container(
-                width: 200,
-                child: TextFormField(
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Weight required';
-                    }
-                    return null;
-                  },
-                  // initialValue: '',
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  // decoration: InputDecoration(
-                  //   hintText: "enter",
-                  // ),
-                  onChanged: (text) {
-                    widget.metricModel.weight = int.parse(text);
-                  },
+                Container(
+                  width: 200,
+                  child: TextFormField(
+                    enableInteractiveSelection: false,
+                    controller: dateCtl,
+                    onTap: () async {
+                      DateTime date = widget.metricModel.dateTime;
+                      DateTime now = DateTime.now();
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      date = await showDatePicker(
+                        context: context,
+                        initialDate: widget.metricModel.dateTime,
+                        // TODO change date range
+                        firstDate: DateTime(now.year, now.month, now.day - 100),
+                        lastDate: DateTime.now(),
+                      );
+                      dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
+                      widget.metricModel.dateTime = date;
+                    },
+                  ),
                 ),
-              )
-            ],
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlatButton(
-                        child: Text('CANCEL'),
-                        onPressed: () async {
-                          Alerts().showAlert(context);
-                          // showAlert().then(
-                          //     Navigator.pop(context, "Cancelled Weight Input")
-                          // );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlatButton(
-                        color: Colors.blue,
-                        child: Text('SAVE ENTRY'),
-                        onPressed: () async {
-                          if(widget.metricModel.weight != null) {
-                            var sharedPref = await SharedPreferences.getInstance();
-                            String id = sharedPref.getString('id');
-                            dbHelper.updateWeight(widget.metricModel);
-                            widget.metricModel.userId = int.parse(id);
-                            var x = db.saveNewMetric(widget.metricModel);
-                            Navigator.pop(context, 'Saved Weight of ' + widget
-                                .metricModel.weight.toString() + 'lbs');
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ],
             ),
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'Weight',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Container(
+                  width: 200,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Weight required';
+                      }
+                      return null;
+                    },
+                    // initialValue: '',
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(3),
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    // decoration: InputDecoration(
+                    //   hintText: "enter",
+                    // ),
+                    onChanged: (text) {
+                      if(text.isNotEmpty) {
+                        widget.metricModel.weight = int.parse(text);
+                        isEnabled = true;
+                      } else {
+                        isEnabled = false;
+                      }
+                      setState(() {
+
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 20),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+
+              children: [
+                FlatButton(
+                  child: Text('CANCEL', style: TextStyle(color: Colors.grey)),
+                  onPressed: () async {
+                    Alerts().showAlert(context, false);
+                    // showAlert().then(
+                    //     Navigator.pop(context, "Cancelled Weight Input")
+                    // );
+                  },
+                ),
+                if(isEnabled)... [
+                  FlatButton(
+                    color: Theme.of(context).buttonColor,
+                    child: Text('SAVE ENTRY', style: TextStyle(color: Theme.of(context).highlightColor),),
+                    onPressed: () async {
+                      if(widget.metricModel.weight != null) {
+                        var sharedPref = await SharedPreferences.getInstance();
+                        String id = sharedPref.getString('id');
+                        dbHelper.updateWeight(widget.metricModel);
+                        widget.metricModel.userId = int.parse(id);
+                        var x = db.saveNewMetric(widget.metricModel);
+                        Navigator.pop(context, 'Saved Weight of ' + widget
+                            .metricModel.weight.toString() + 'lbs');
+                      }
+                    },
+                  ),
+
+                ],
+                if(!isEnabled)... [
+                  FlatButton(
+                    color: Colors.grey,
+                    child: Text('SAVE ENTRY', style: TextStyle(color: Theme.of(context).highlightColor),),
+                    onPressed: () {
+
+                    },
+                  ),
+
+                ],
+
+              ],
+            ),
+            // Expanded(
+            //   child: Align(
+            //     alignment: Alignment.bottomRight,
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(15.0),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: [
+            //           Padding(
+            //             padding: const EdgeInsets.all(8.0),
+            //             child: FlatButton(
+            //               child: Text('CANCEL', style: TextStyle(color: Colors.grey)),
+            //               onPressed: () async {
+            //                 Alerts().showAlert(context, false);
+            //                 // showAlert().then(
+            //                 //     Navigator.pop(context, "Cancelled Weight Input")
+            //                 // );
+            //               },
+            //             ),
+            //           ),
+            //           Padding(
+            //             padding: const EdgeInsets.all(8.0),
+            //             child: FlatButton(
+            //               color: Theme.of(context).buttonColor,
+            //               child: Text('SAVE ENTRY', style: TextStyle(color: Theme.of(context).highlightColor),),
+            //               onPressed: () async {
+            //                 if(widget.metricModel.weight != null) {
+            //                   var sharedPref = await SharedPreferences.getInstance();
+            //                   String id = sharedPref.getString('id');
+            //                   dbHelper.updateWeight(widget.metricModel);
+            //                   widget.metricModel.userId = int.parse(id);
+            //                   var x = db.saveNewMetric(widget.metricModel);
+            //                   Navigator.pop(context, 'Saved Weight of ' + widget
+            //                       .metricModel.weight.toString() + 'lbs');
+            //                 }
+            //               },
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }

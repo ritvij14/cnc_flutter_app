@@ -279,9 +279,16 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
     await showDialog<String>(
         context: context,
         builder: (context) => new AlertDialog(
-              title:
-                  Text("Are you sure you would like to delete this question?"),
-              content: Text("\"" + question + "\""),
+          title: Text("Delete Entry"),
+          content: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: 'Are you sure you would like to delete this question?:\n\n',),
+                TextSpan(text:  "\"" + question + "\"", style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text:  '\n\nThis action cannot be undone.')
+              ],
+            ),
+          ),
               actions: [
                 new FlatButton(
                     child: const Text(
