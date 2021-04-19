@@ -164,7 +164,6 @@ class _ChooseProteinGoalsPageState extends State<ChooseProteinGoalsPage> {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       child: Container(
-        color: Colors.white,
         child: ListTile(
           title: Text(weeklyGoalsModelList[index].type),
           subtitle: Text(weeklyGoalsModelList[index].goalDescription),

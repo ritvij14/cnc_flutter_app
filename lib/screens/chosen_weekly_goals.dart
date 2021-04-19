@@ -191,8 +191,26 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                           color: Colors.white,
                         ),
                       ),
+                      Padding(padding: EdgeInsets.symmetric(horizontal: 50)),
+                      TextButton(
+                        child: Icon(Icons.info),
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor, // background
+                          onPrimary: Colors.white, // foreground
+                        ),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(new MaterialPageRoute(
+                            builder: (_) => WeeklyGoals(),
+                          ))
+                              .then((value) => update(context));
+                        },
+                      ),
                       PopupMenuButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
                         itemBuilder: (BuildContext context) => [
                           PopupMenuItem(
                             child: ElevatedButton(
@@ -377,7 +395,6 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
             prefs.getInt("weekly goal total").toString(),
         style: TextStyle(
           fontSize: 16.0,
-          color: Theme.of(context).primaryColor,
         ),
       ),
     );
@@ -409,7 +426,6 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
           return Slidable(
             actionPane: SlidableDrawerActionPane(),
             child: Container(
-              color: Colors.white,
               child: ListTile(
                 title: Text(weeklySavedGoalsModelList[index].goalDescription),
               ),
@@ -468,9 +484,9 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                   color: Colors.red,
                   icon: Icons.delete,
                   onTap: () {
-                    update(context);
                     deleteByGoalDescription(
                         weeklySavedGoalsModelList[index].id);
+                    update(context);
                     _showSnackBar(context, 'Deleted Goal');
                   }),
             ],
