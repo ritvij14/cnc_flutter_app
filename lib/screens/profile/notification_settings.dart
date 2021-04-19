@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cnc_flutter_app/settings/preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -19,6 +20,8 @@ class _NotificationSettings extends State<NotificationSettings> {
   bool enableDailyNotifications = false;
   bool enableWeeklyNotifications = false;
   String dropDownDay = 'Sunday';
+String appTheme;
+  bool wasChanged =false;
   List<String> _days = [
     'Sunday',
     'Monday',
@@ -51,6 +54,7 @@ class _NotificationSettings extends State<NotificationSettings> {
     sharedPreferences = await SharedPreferences.getInstance();
     String storedDaily = sharedPreferences.get('dailyTime');
     String storedWeekly = sharedPreferences.get('weeklyTime');
+   appTheme =    Preferences.getTheme().toString();
     if (storedDaily != null) {
       enableNotifications = true;
       enableDailyNotifications = true;
@@ -109,11 +113,85 @@ class _NotificationSettings extends State<NotificationSettings> {
     weeklyTimeCtl.text = hour + ':' + minute + ' ' + tod;
   }
 
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text(
+        "CANCEL",
+        style: TextStyle(color: Colors.grey),
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget confirmButton = FlatButton(
+      child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
+      color: Colors.blue,
+      onPressed: () {
+        Navigator.of(context).pop();
+        closePage();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Are you sure you want to cancel this update?"),
+      actions: [
+        cancelButton,
+        confirmButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void closePage() {
+    Navigator.of(context).pop();
+  }
   _pickDailyTime() async {
     TimeOfDay t = await showTimePicker(
         context: context,
         initialTime:
             new TimeOfDay(hour: dailyTime.hour, minute: dailyTime.minute),
+        builder: (context, child) {
+          return appTheme == "AppTheme.Default" ? Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                // change the border color
+                primary: Theme.of(context).primaryColor,
+                // change the text color
+                onSurface:Theme.of(context).shadowColor,
+              ),
+              // button colors
+              buttonTheme: ButtonThemeData(
+                colorScheme: ColorScheme.light(
+                  primary: Theme.of(context).buttonColor,
+                ),
+              ),
+            ),
+            child: child,
+          ): Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: ColorScheme.dark(
+                // change the border color
+                primary: Theme.of(context).highlightColor,
+                // change the text color
+                onSurface:Theme.of(context).highlightColor,
+              ),
+              // button colors
+              buttonTheme: ButtonThemeData(
+                colorScheme: ColorScheme.light(
+                  primary: Theme.of(context).buttonColor,
+                ),
+              ),
+            ),
+            child: child,
+          );
+        },
         initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Notification Time');
     if (t != null) {
@@ -140,6 +218,41 @@ class _NotificationSettings extends State<NotificationSettings> {
         context: context,
         initialTime:
             new TimeOfDay(hour: weeklyTime.hour, minute: weeklyTime.minute),
+        builder: (context, child) {
+          return appTheme == "AppTheme.Default" ? Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                // change the border color
+                primary: Theme.of(context).primaryColor,
+                // change the text color
+                onSurface:Theme.of(context).shadowColor,
+              ),
+              // button colors
+              buttonTheme: ButtonThemeData(
+                colorScheme: ColorScheme.light(
+                  primary: Theme.of(context).buttonColor,
+                ),
+              ),
+            ),
+            child: child,
+          ): Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: ColorScheme.dark(
+                // change the border color
+                primary: Theme.of(context).highlightColor,
+                // change the text color
+                onSurface:Theme.of(context).highlightColor,
+              ),
+              // button colors
+              buttonTheme: ButtonThemeData(
+                colorScheme: ColorScheme.light(
+                  primary: Theme.of(context).buttonColor,
+                ),
+              ),
+            ),
+            child: child,
+          );
+        },
         initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Notification Time');
     if (t != null) {
@@ -298,6 +411,7 @@ class _NotificationSettings extends State<NotificationSettings> {
                             enableDailyNotifications = false;
                             enableWeeklyNotifications = false;
                           }
+                          wasChanged =true;
                         });
                       },
                     ),
@@ -316,6 +430,7 @@ class _NotificationSettings extends State<NotificationSettings> {
                           setState(() {
                             enableDailyNotifications =
                                 !enableDailyNotifications;
+                            wasChanged =true;
                           });
                         },
                       ),
@@ -341,7 +456,7 @@ class _NotificationSettings extends State<NotificationSettings> {
                                     hintText: "Enter time",
                                     isDense: true,
                                   ),
-                                  onChanged: (text) {},
+                                  onChanged: (text) {      wasChanged =true;},
                                 ),
                               ),
                             ),
@@ -371,6 +486,7 @@ class _NotificationSettings extends State<NotificationSettings> {
                           setState(() {
                             enableWeeklyNotifications =
                                 !enableWeeklyNotifications;
+                            wasChanged =true;
                           });
                         },
                       ),
@@ -395,6 +511,7 @@ class _NotificationSettings extends State<NotificationSettings> {
                                 onChanged: (String Value) {
                                   setState(() {
                                     dropDownDay = Value;
+                                    wasChanged =true;
                                   });
                                 },
                                 items: _days
@@ -423,7 +540,7 @@ class _NotificationSettings extends State<NotificationSettings> {
                                         hintText: "Enter time",
                                         isDense: true,
                                       ),
-                                      onChanged: (text) {},
+                                      onChanged: (text) {      wasChanged =true;},
                                     ),
                                   ),
                                 ),
@@ -453,39 +570,98 @@ class _NotificationSettings extends State<NotificationSettings> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                RaisedButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                RaisedButton(
-                  child: Text('Save'),
-                  onPressed: () {
-                    if (enableNotifications) {
-                      if (enableDailyNotifications) {
-                        scheduleDailyNotifications();
+            Padding(
+              padding: EdgeInsets.only(right: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FlatButton(
+                    // padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Text('CANCEL',
+                        style: TextStyle(color: Colors.grey)),
+                    onPressed: () {
+                      if (wasChanged) {
+                        showAlertDialog(context);
                       } else {
-                        clearDailyNotifications();
+                        Navigator.pop(context, null);
                       }
-                      if (enableWeeklyNotifications) {
-                        scheduleWeeklyNotification();
-                      } else {
-                        clearWeeklyNotifications();
-                      }
-                    } else {
-                      clearAllNotifications();
-                    }
-                    _showMyDialog();
-                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(milliseconds: 500),
-                    //     backgroundColor: Colors.blue, content: Text('Saved')));
-                  },
-                ),
-              ],
+                    },
+                  ),
+
+                  wasChanged ?  FlatButton(
+                      color: Theme.of(context).buttonColor,
+                      // padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        'UPDATE',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        if (enableNotifications) {
+                          if (enableDailyNotifications) {
+                            scheduleDailyNotifications();
+                          } else {
+                            clearDailyNotifications();
+                          }
+                          if (enableWeeklyNotifications) {
+                            scheduleWeeklyNotification();
+                          } else {
+                            clearWeeklyNotifications();
+                          }
+                        } else {
+                          clearAllNotifications();
+                        }
+                        _showMyDialog();
+                      },
+                    ) :
+
+                    FlatButton(
+                        color: Colors.grey,
+                        // padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Text(
+                          'UPDATE',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () => {}),
+                  ]
+              ),
             ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //   children: [
+            //     RaisedButton(
+            //       child: Text('Cancel'),
+            //       onPressed: () {
+            //         Navigator.pop(context);
+            //       },
+            //     ),
+            //     RaisedButton(
+            //       child: Text('Save'),
+            //       onPressed: () {
+            //         if (enableNotifications) {
+            //           if (enableDailyNotifications) {
+            //             scheduleDailyNotifications();
+            //           } else {
+            //             clearDailyNotifications();
+            //           }
+            //           if (enableWeeklyNotifications) {
+            //             scheduleWeeklyNotification();
+            //           } else {
+            //             clearWeeklyNotifications();
+            //           }
+            //         } else {
+            //           clearAllNotifications();
+            //         }
+            //         _showMyDialog();
+            //         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(milliseconds: 500),
+            //         //     backgroundColor: Colors.blue, content: Text('Saved')));
+            //       },
+            //     ),
+            //   ],
+            // ),
             Padding(padding: EdgeInsets.all(50))
           ],
         ),

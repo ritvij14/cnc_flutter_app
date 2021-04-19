@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
+import '../nutrient_ratio_screen.dart';
+
 class DetailsScreen extends StatefulWidget {
+
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 }
@@ -53,6 +56,77 @@ class _DetailsScreenState extends State<DetailsScreen> {
     'Unknown',
     'Prefer not to say',
   ];
+
+
+  int proteinRatio = 0;
+  int carbohydrateRatio = 0;
+  int fatRatio = 0;
+  TextEditingController proteinCtl = new TextEditingController();
+  TextEditingController carbohydrateCtl = new TextEditingController();
+  TextEditingController fatCtl = new TextEditingController();
+
+  int proteinPercent = 0;
+  int carbohydratePercent = 0;
+  int fatPercent = 0;
+
+  int initialProteinPercent = 0;
+  int initialCarbohydratePercent = 0;
+  int initialFatPercent = 0;
+
+  int ratioTotal = 100;
+  bool wasChanged = false;
+  bool valid = false;
+
+  final carbohydrateKey = GlobalKey<FormState>();
+  final proteinKey = GlobalKey<FormState>();
+  final fatKey = GlobalKey<FormState>();
+
+
+  _NutrientRatioScreenState(
+      int carbohydratePercent, int proteinPercent, int fatPercent) {
+    this.carbohydratePercent = carbohydratePercent;
+    this.proteinPercent = proteinPercent;
+    this.fatPercent = fatPercent;
+
+    this.initialCarbohydratePercent = carbohydratePercent;
+    this.initialProteinPercent = proteinPercent;
+    this.initialFatPercent = fatPercent;
+
+    ratioTotal =
+        this.carbohydratePercent + this.proteinPercent + this.fatPercent;
+    carbohydrateCtl.text = this.carbohydratePercent.toString();
+    proteinCtl.text = this.proteinPercent.toString();
+    fatCtl.text = this.fatPercent.toString();
+  }
+
+  void updateRatios() async {
+    bool a = carbohydrateKey.currentState.validate();
+    bool b = proteinKey.currentState.validate();
+    bool c = fatKey.currentState.validate();
+
+    if (a && b && c) {
+      var db = new DBHelper();
+      await db.saveRatios(fatPercent, proteinPercent, carbohydratePercent);
+      Navigator.pop(context, null);
+      valid = true;
+    }
+  }
+
+
+  getRatioData() async {
+    var db = new DBHelper();
+    var x = await db.getUserInfo();
+    var userData = json.decode(x.body);
+
+    proteinRatio = userData['proteinPercent'];
+    carbohydrateRatio = userData['carbohydratePercent'];
+    fatRatio = userData['fatPercent'];
+  }
+
+  update() async{
+    await getRatioData();
+    setState(() {});
+  }
 
   Future<bool> setUserData() async {
     var db = new DBHelper();
@@ -379,7 +453,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     SizedBox(height: 5),
                     _buildWeight(_weightController),
-                    // _buildWeight(),
+                    NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
                     SizedBox(height: 15),
                     Align(
                       alignment: Alignment.centerLeft,

@@ -14,6 +14,7 @@ class AppThemes {
       shadowColor: Colors.black,
       buttonColor: Colors.blue[700],
       dividerColor: Colors.transparent,
+      hintColor: Colors.black
     ),
     AppTheme.DarkMode: ThemeData(
       brightness: Brightness.dark,
@@ -24,6 +25,7 @@ class AppThemes {
       shadowColor: Colors.black,
       buttonColor: Colors.teal,
       dividerColor: Colors.transparent,
+     hintColor: Colors.white
     ),
     // AppTheme.PeriwinkleLight: ThemeData(
     //   brightness: Brightness.light,

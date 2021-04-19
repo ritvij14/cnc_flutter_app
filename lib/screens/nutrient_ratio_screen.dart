@@ -134,21 +134,22 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
         fatPercent == initialFatPercent) {
       wasChanged = false;
     }
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            if (wasChanged) {
-              showAlertDialog(context);
-            } else {
-              Navigator.of(context).pop();
-            }
-          },
-        ),
-        title: Text('Macronutrient Distribution Breakdown'),
-      ),
-      body: SingleChildScrollView(
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     leading: IconButton(
+    //       icon: Icon(Icons.clear),
+    //       onPressed: () {
+    //         if (wasChanged) {
+    //           showAlertDialog(context);
+    //         } else {
+    //           Navigator.of(context).pop();
+    //         }
+    //       },
+    //     ),
+    //     title: Text('Macronutrient Distribution Breakdown'),
+    //   ),
+    //   body:
+     return SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           height: MediaQuery.of(context).size.height,
@@ -405,7 +406,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
             ),
           ]),
         ),
-      ),
+      // ),
     );
   }
 }
