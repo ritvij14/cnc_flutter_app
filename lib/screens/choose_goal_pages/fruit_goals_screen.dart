@@ -199,7 +199,6 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
 
   getGoals() async {
     weeklyGoalsModelList.clear();
-    var db = new WeeklyDBHelper();
     var response = await db.getWeeklyGoals();
     var wGDecode = json.decode(response.body);
 

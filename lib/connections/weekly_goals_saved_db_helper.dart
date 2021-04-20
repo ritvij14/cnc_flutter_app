@@ -23,7 +23,7 @@ class WeeklySavedDBHelper extends DBHelper {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https('10.0.2.2:7777', '/api/weekly_goals_saved/all/$userId', queryParameters);
+    Uri.https('enact-crc-app.herokuapp.com', '/api/weekly_goals_saved/all/$userId', queryParameters);
 
     var response = await http.get(
       uri,
@@ -50,9 +50,7 @@ class WeeklySavedDBHelper extends DBHelper {
   }
 
   Future<http.Response> deleteWeeklyGoalsSavedByID(int id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
-    var requestUrl = baseUrl + 'api/weekly_goals_saved/delete/$userId';
+    var requestUrl = baseUrl + 'api/weekly_goals_saved/delete/$id';
     http.Response response =
     await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
