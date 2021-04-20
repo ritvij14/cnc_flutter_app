@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getGoals() async {
     weeklySavedGoalsModelList.clear();
-    var response2 = await db2.getWeeklySavedGoals();
+    var response2 = await db2.getWeeklySavedGoalsByUserID();
     var wGDecode2 = json.decode(response2.body);
 
     print(wGDecode2.length);
