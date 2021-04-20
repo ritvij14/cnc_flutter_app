@@ -57,6 +57,7 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
+                  width: double.infinity,
                   padding: EdgeInsets.only(top: 15.0, bottom: 0),
                   color: _getColor(weeklySavedGoalsModelList[index].type),
                   child: Container(
@@ -73,6 +74,7 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
                   ),
                 ),
                 Container(
+                  width: double.infinity,
                   padding: EdgeInsets.only(top: 0, bottom: 15.0),
                   color: _getColor(weeklySavedGoalsModelList[index].type),
                   child: Container(
@@ -152,7 +154,7 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
 
     weeklySavedGoalsModelList.clear();
     var db2 = new WeeklySavedDBHelper();
-    var response2 = await db2.getWeeklySavedGoals();
+    var response2 = await db2.getWeeklySavedGoalsByUserID();
     var wGDecode2 = json.decode(response2.body);
 
     for (int i = 0; i < wGDecode.length; i++) {

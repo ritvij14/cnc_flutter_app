@@ -498,6 +498,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return calories;
   }
+  getGoals() async {
+    weeklySavedGoalsModelList.clear();
+    var response2 = await db2.getWeeklySavedGoalsByUserID();
+    var wGDecode2 = json.decode(response2.body);
 
   getDailySymptomChildren() {
     if (daySymptomList.isEmpty) {

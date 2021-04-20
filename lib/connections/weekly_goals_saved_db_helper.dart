@@ -15,8 +15,28 @@ class WeeklySavedDBHelper extends DBHelper {
     return response;
   }
 
+  Future<http.Response> getWeeklySavedGoalsByUserID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
+    var requestUrl = baseUrl + 'api/weekly_goals_saved/all/$userId';
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+    var uri =
+    Uri.https('10.0.2.2:7777', '/api/weekly_goals_saved/all/$userId', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    return response;
+  }
+
   Future<http.Response> saveWeeklySavedGoal(
       WeeklySavedGoalsModel weeklySavedGoalsModel) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/weekly_goals_saved/add/';
     var uriResponse = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
@@ -25,7 +45,7 @@ class WeeklySavedDBHelper extends DBHelper {
           'type': weeklySavedGoalsModel.type,
           'goalDescription': weeklySavedGoalsModel.goalDescription,
           'help_info': weeklySavedGoalsModel.helpInfo,
-          'userId': weeklySavedGoalsModel.userId,
+          'userId': userId,
         }));
   }
 
@@ -37,8 +57,5 @@ class WeeklySavedDBHelper extends DBHelper {
     await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
-
-
-
 
 }
