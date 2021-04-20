@@ -87,29 +87,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   var _dateTime;
   String buns;
 
-  List<String> _feet = List<String>.generate(9, (int index) => '${index + 1}');
-  List<String> _inches = List<String>.generate(12, (int index) => '${index}');
-
-  List<String> _genders = ['Male', 'Female', 'Other', 'Prefer not to say'];
-
-  List<String> _races = [
-    'American Indian or Alaska Native',
-    'Asian',
-    'Black or African American',
-    'Native Hawaiian or Other Pacific Islander',
-    'White',
-    'More than one Race',
-    'Unknown',
-    'Prefer not to say',
-  ];
-
-  List<String> _ethnicities = [
-    'Hispanic or Latinx',
-    'Non Hispanic or Latinx',
-    'Unknown',
-    'Prefer not to say',
-  ];
-
   void updateRatios() async {
     bool a = carbohydrateKey.currentState.validate();
     bool b = proteinKey.currentState.validate();
@@ -193,530 +170,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     Navigator.of(context).pop();
   }
 
-  Widget _buildBreakdown() {
-    return Container(
-    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-    decoration: BoxDecoration(
-    border: Border.all(color: Colors.grey),
-    borderRadius: BorderRadius.circular(5),
-    ),
-    child: Container(
-      // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      color: Theme.of(context).canvasColor,
-      child: Column(
-        children: [
-
-          // SizedBox(height: 10),
-          RichText(
-            text: TextSpan(
-              text: "You have ",
-              style: TextStyle(
-                color: Theme.of(context).hintColor,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                    text: ((carbohydratePercent != null
-                                    ? carbohydratePercent
-                                    : 0) +
-                                (proteinPercent != null ? proteinPercent : 0) +
-                                (fatPercent != null ? fatPercent : 0))
-                            .toString() +
-                        "%",
-                    style: TextStyle(
-                        color: ((carbohydratePercent != null
-                                        ? carbohydratePercent
-                                        : 0) +
-                                    (proteinPercent != null
-                                        ? proteinPercent
-                                        : 0) +
-                                    (fatPercent != null ? fatPercent : 0)) !=
-                                100
-                            ? Colors.red
-                            : Colors.green)),
-                TextSpan(
-                    text: " of 100% assigned: ",
-                    style: TextStyle(color: Theme.of(context).hintColor)),
-                TextSpan(
-                    text: (((carbohydratePercent != null
-                                        ? carbohydratePercent
-                                        : 0) +
-                                    (proteinPercent != null
-                                        ? proteinPercent
-                                        : 0) +
-                                    (fatPercent != null ? fatPercent : 0)) -
-                                100)
-                            .abs()
-                            .toString() +
-                        "%",
-                    style: TextStyle(
-                        color: (((carbohydratePercent != null
-                                                ? carbohydratePercent
-                                                : 0) +
-                                            (proteinPercent != null
-                                                ? proteinPercent
-                                                : 0) +
-                                            (fatPercent != null
-                                                ? fatPercent
-                                                : 0)) -
-                                        100)
-                                    .abs() !=
-                                0
-                            ? Colors.red
-                            : Colors.green)),
-                (((carbohydratePercent != null ? carbohydratePercent : 0) +
-                                (proteinPercent != null ? proteinPercent : 0) +
-                                (fatPercent != null ? fatPercent : 0)) -
-                            100) >=
-                        1
-                    ? TextSpan(
-                        text: " over\n", style: TextStyle(color: Theme.of(context).hoverColor))
-                    : TextSpan(
-                        text: " remaining\n",
-                        style: TextStyle(color: Theme.of(context).hintColor))
-              ],
-            ),
-          ),
-
-          Row(children: <Widget>[
-            Expanded(
-              child: Form(
-                key: carbohydrateKey,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                  labelText: 'Carbohydrate %',
-                  // hintText: 'Carbs %',
-                  border: OutlineInputBorder(),
-                ),
-                  keyboardType: TextInputType.number,
-                  controller: carbohydrateCtl,
-                  validator: (String value) {
-                    int carbs = int.tryParse(value);
-                    if (carbs == null) {
-                      return 'Field Required';
-                    } else if (carbohydratePercent +
-                            proteinPercent +
-                            fatPercent !=
-                        100) {
-                      return 'Values must add up to 100';
-                    } else if (carbs <= 0) {
-                      return 'Value must be greater than 0';
-                    } else if (carbs >= 99) {
-                      return 'Value must be less than 99';
-                    }
-                    return null;
-                  },
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(2),
-                    FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
-                  ],
-                  onChanged: (String value) {
-                    carbohydratePercent = int.tryParse(value);
-                    if (carbohydratePercent != initialCarbohydratePercent) {
-                      wasChanged = true;
-                    }
-                    setState(() {});
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: Form(
-                key: proteinKey,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Protein %',
-                    // hintText: 'Carbs %',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  controller: proteinCtl,
-                  validator: (String value) {
-                    int protein = int.tryParse(value);
-                    if (protein == null) {
-                      return 'Field Required';
-                    } else if (proteinPercent +
-                            carbohydratePercent +
-                            fatPercent !=
-                        100) {
-                      return 'Values must add up to 100';
-                    } else if (protein <= 0) {
-                      return 'Value must be greater than 0';
-                    } else if (protein >= 99) {
-                      return 'Value must be less than 99';
-                    }
-                    return null;
-                  },
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(2),
-                    FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
-                  ],
-                  onChanged: (String value) {
-                    proteinPercent = int.tryParse(value);
-                    if (proteinPercent != initialProteinPercent) {
-                      wasChanged = true;
-                    }
-                    setState(() {});
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: Form(
-                key: fatKey,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Fat %',
-                    // hintText: 'Carbs %',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  controller: fatCtl,
-                  validator: (String value) {
-                    int fat = int.tryParse(value);
-                    if (fat == null) {
-                      return 'Field Required';
-                    } else if (fatPercent +
-                            carbohydratePercent +
-                            proteinPercent !=
-                        100) {
-                      return 'Values must add up to 100';
-                    } else if (fat <= 0) {
-                      return 'Value must be greater than 0';
-                    } else if (fat >= 99) {
-                      return 'Value must be less than 99';
-                    }
-                    return null;
-                  },
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(2),
-                    FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
-                  ],
-                  onChanged: (String value) {
-                    fatPercent = int.tryParse(value);
-                    if (fatPercent != initialFatPercent) {
-                      wasChanged = true;
-                    }
-                    setState(() {});
-                  },
-                ),
-              ),
-            ),
-          ]),
-          SizedBox(height: 5),
-          // Form(
-          //   key: carbohydrateKey,
-          //   child: TextFormField(
-          //     decoration: InputDecoration(
-          //       hintText: 'Enter desired carbohydrate percent.',
-          //       border: OutlineInputBorder(),
-          //     ),
-          //     keyboardType: TextInputType.number,
-          //     controller: carbohydrateCtl,
-          //     validator: (String value) {
-          //       int carbs = int.tryParse(value);
-          //       if (carbs == null) {
-          //         return 'Field Required';
-          //       } else if (carbohydratePercent +
-          //               proteinPercent +
-          //               fatPercent !=
-          //           100) {
-          //         return 'Values must add up to 100';
-          //       } else if (carbs <= 0) {
-          //         return 'Value must be greater than 0';
-          //       } else if (carbs >= 99) {
-          //         return 'Value must be less than 99';
-          //       }
-          //       return null;
-          //     },
-          //     inputFormatters: [
-          //       LengthLimitingTextInputFormatter(2),
-          //       FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
-          //     ],
-          //     onChanged: (String value) {
-          //       carbohydratePercent = int.tryParse(value);
-          //       if (carbohydratePercent != initialCarbohydratePercent) {
-          //         wasChanged = true;
-          //       }
-          //       setState(() {});
-          //     },
-          //   ),
-          // ),
-          // SizedBox(height: 10),
-          // Align(
-          //   alignment: Alignment.centerLeft,
-          //   child: Container(
-          //     child: Text(
-          //       "Protein %",
-          //     ),
-          //   ),
-          // ),
-          // SizedBox(height: 5),
-          // Form(
-          //   key: proteinKey,
-          //   child: TextFormField(
-          //     decoration: InputDecoration(
-          //       hintText: 'Enter desired Protein percent.',
-          //       border: OutlineInputBorder(),
-          //     ),
-          //     keyboardType: TextInputType.number,
-          //     controller: proteinCtl,
-          //     validator: (String value) {
-          //       int protein = int.tryParse(value);
-          //       if (protein == null) {
-          //         return 'Field Required';
-          //       } else if (proteinPercent +
-          //               carbohydratePercent +
-          //               fatPercent !=
-          //           100) {
-          //         return 'Values must add up to 100';
-          //       } else if (protein <= 0) {
-          //         return 'Value must be greater than 0';
-          //       } else if (protein >= 99) {
-          //         return 'Value must be less than 99';
-          //       }
-          //       return null;
-          //     },
-          //     inputFormatters: [
-          //       LengthLimitingTextInputFormatter(2),
-          //       FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
-          //     ],
-          //     onChanged: (String value) {
-          //       proteinPercent = int.tryParse(value);
-          //       if (proteinPercent != initialProteinPercent) {
-          //         wasChanged = true;
-          //       }
-          //       setState(() {});
-          //     },
-          //   ),
-          // ),
-          // SizedBox(height: 10),
-          // Align(
-          //   alignment: Alignment.centerLeft,
-          //   child: Container(
-          //     child: Text(
-          //       "Fat %",
-          //     ),
-          //   ),
-          // ),
-          // SizedBox(height: 5),
-          // Form(
-          //   key: fatKey,
-          //   child: TextFormField(
-          //     decoration: InputDecoration(
-          //       hintText: 'Enter desired Fat percent.',
-          //       border: OutlineInputBorder(),
-          //     ),
-          //     keyboardType: TextInputType.number,
-          //     controller: fatCtl,
-          //     validator: (String value) {
-          //       int fat = int.tryParse(value);
-          //       if (fat == null) {
-          //         return 'Field Required';
-          //       } else if (fatPercent +
-          //               carbohydratePercent +
-          //               proteinPercent !=
-          //           100) {
-          //         return 'Values must add up to 100';
-          //       } else if (fat <= 0) {
-          //         return 'Value must be greater than 0';
-          //       } else if (fat >= 99) {
-          //         return 'Value must be less than 99';
-          //       }
-          //       return null;
-          //     },
-          //     inputFormatters: [
-          //       LengthLimitingTextInputFormatter(2),
-          //       FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
-          //     ],
-          //     onChanged: (String value) {
-          //       fatPercent = int.tryParse(value);
-          //       if (fatPercent != initialFatPercent) {
-          //         wasChanged = true;
-          //       }
-          //       setState(() {});
-          //     },
-          //   ),
-          // ),
-          // SizedBox(height: 15),
-        ],
-      ),
-    ),
-    );
-  }
-
-  Widget _buildBirthDatePicker() {
-    return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Expanded(child: Text('Your birthday:', style: TextStyle(fontSize: 18))),
-        Expanded(
-            child: Container(
-          child: TextFormField(
-            // initialValue: '5',
-            controller: dateCtl,
-            decoration: InputDecoration(hintText: 'Select Date'),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Date required';
-              }
-              return null;
-            },
-            onTap: () async {
-              DateTime date = DateTime.now();
-              FocusScope.of(context).requestFocus(new FocusNode());
-              date = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now());
-
-              dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
-              _dateTime = dateCtl.text;
-              // print('=================');
-              // print(_dateTime);
-              // print('=================');
-            },
-          ),
-        ))
-      ],
-    );
-    // },
-    // future: setUserData());
-  }
-
-  Widget _buildHeightFeet() {
-    return Container(
-        width: 10.0,
-        child: DropdownButtonHideUnderline(
-            child: ButtonTheme(
-                alignedDropdown: true,
-                child: DropdownButtonFormField(
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    labelText: 'Feet',
-                    border: OutlineInputBorder(),
-                    hintText: "Feet",
-                  ),
-                  value: dropDownFeet,
-                  validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String Value) {
-                    dropDownFeet = Value;
-                    _heightFeet = _feet.indexOf(Value) + 1;
-                  },
-                  items: _feet
-                      .map((feet) =>
-                          DropdownMenuItem(value: feet, child: Text("$feet")))
-                      .toList(),
-                ))));
-  }
-
-  Widget _buildHeightInches() {
-    return Container(
-        width: 10.0,
-        child: DropdownButtonHideUnderline(
-            child: ButtonTheme(
-                alignedDropdown: true,
-                child: DropdownButtonFormField(
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    labelText: 'Inches',
-                    border: OutlineInputBorder(),
-                    hintText: "Inches",
-                  ),
-                  value: dropDownInches,
-                  validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String Value) {
-                    dropDownInches = Value;
-                    _heightInches = _inches.indexOf(Value) + 1;
-                  },
-                  items: _inches
-                      .map((inch) =>
-                          DropdownMenuItem(value: inch, child: Text("$inch")))
-                      .toList(),
-                ))));
-  }
-
-  Widget _buildWeight(TextEditingController weightController) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Weight(lbs)',
-        hintText: 'Enter your weight in pounds(lbs).',
-        border: OutlineInputBorder(),
-      ),
-      keyboardType: TextInputType.number,
-      controller: _weightController,
-      validator: (String value) {
-        int weight = int.tryParse(value);
-        if (weight == null) {
-          return 'Field Required';
-        } else if (weight <= 0) {
-          return 'Weight must be greater than 0';
-        }
-        return null;
-      },
-      onChanged: (String value) {
-        _weight = int.tryParse(value);
-        if (_weight != userWeight) {
-          wasChanged = true;
-        }
-        setState(() {});
-      },
-    );
-  }
-
-  Widget _buildRace() {
-    return DropdownButtonFormField(
-      isExpanded: true,
-      decoration: InputDecoration(
-          labelText: 'Race', border: OutlineInputBorder(), hintText: "Race"),
-      value: dropDownRace,
-      validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownRace = Value;
-      },
-      items: _races
-          .map((race) => DropdownMenuItem(value: race, child: Text("$race")))
-          .toList(),
-    );
-  }
-
-  Widget _buildEthnicity() {
-    return DropdownButtonFormField(
-      isExpanded: true,
-      decoration: InputDecoration(
-          labelText: 'Ethnicity',
-          border: OutlineInputBorder(),
-          hintText: "Ethnicity"),
-      value: dropDownEthnicities,
-      validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownEthnicities = Value;
-      },
-      items: _ethnicities
-          .map((ethnicity) =>
-              DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
-          .toList(),
-    );
-  }
-
-  Widget _buildGender() {
-    return DropdownButtonFormField(
-      isExpanded: true,
-      decoration: InputDecoration(
-          labelText: 'Gender',
-          border: OutlineInputBorder(),
-          hintText: "Gender"),
-      value: dropDownGender,
-      validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownGender = Value;
-      },
-      items: _genders
-          .map((gender) =>
-              DropdownMenuItem(value: gender, child: Text("$gender")))
-          .toList(),
-    );
-  }
 
   List<String> _activity = [
     'Sedentary',
@@ -727,27 +180,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Widget activity;
 
-  Widget _buildActivity() {
-    return DropdownButtonFormField(
-      decoration: InputDecoration(
-          labelText: 'Activity Level',
-          border: OutlineInputBorder(),
-          hintText: "Activity Level"),
-      value: dropDownActivity,
-      validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownActivity = Value;
-        if (initialActivity != dropDownActivity) {
-          wasChanged = true;
-        }
-        setState(() {});
-      },
-      items: _activity
-          .map((actLevel) =>
-              DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
-          .toList(),
-    );
-  }
 
   _savedAlert() async {
     await showDialog<void>(
@@ -847,7 +279,31 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    _buildWeight(_weightController),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Weight(lbs)',
+                        hintText: 'Enter your weight in pounds(lbs).',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      controller: _weightController,
+                      validator: (String value) {
+                        int weight = int.tryParse(value);
+                        if (weight == null) {
+                          return 'Field Required';
+                        } else if (weight <= 0) {
+                          return 'Weight must be greater than 0';
+                        }
+                        return null;
+                      },
+                      onChanged: (String value) {
+                        _weight = int.tryParse(value);
+                        if (_weight != userWeight) {
+                          wasChanged = true;
+                        }
+                        setState(() {});
+                      },
+                    ),
                     SizedBox(height: 15),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -859,7 +315,219 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    _buildBreakdown(),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Container(
+                        // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        color: Theme.of(context).canvasColor,
+                        child: Column(
+                          children: [
+
+                            // SizedBox(height: 10),
+                            RichText(
+                              text: TextSpan(
+                                text: "You have ",
+                                style: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: ((carbohydratePercent != null
+                                          ? carbohydratePercent
+                                          : 0) +
+                                          (proteinPercent != null ? proteinPercent : 0) +
+                                          (fatPercent != null ? fatPercent : 0))
+                                          .toString() +
+                                          "%",
+                                      style: TextStyle(
+                                          color: ((carbohydratePercent != null
+                                              ? carbohydratePercent
+                                              : 0) +
+                                              (proteinPercent != null
+                                                  ? proteinPercent
+                                                  : 0) +
+                                              (fatPercent != null ? fatPercent : 0)) !=
+                                              100
+                                              ? Colors.red
+                                              : Colors.green)),
+                                  TextSpan(
+                                      text: " of 100% assigned: ",
+                                      style: TextStyle(color: Theme.of(context).hintColor)),
+                                  TextSpan(
+                                      text: (((carbohydratePercent != null
+                                          ? carbohydratePercent
+                                          : 0) +
+                                          (proteinPercent != null
+                                              ? proteinPercent
+                                              : 0) +
+                                          (fatPercent != null ? fatPercent : 0)) -
+                                          100)
+                                          .abs()
+                                          .toString() +
+                                          "%",
+                                      style: TextStyle(
+                                          color: (((carbohydratePercent != null
+                                              ? carbohydratePercent
+                                              : 0) +
+                                              (proteinPercent != null
+                                                  ? proteinPercent
+                                                  : 0) +
+                                              (fatPercent != null
+                                                  ? fatPercent
+                                                  : 0)) -
+                                              100)
+                                              .abs() !=
+                                              0
+                                              ? Colors.red
+                                              : Colors.green)),
+                                  (((carbohydratePercent != null ? carbohydratePercent : 0) +
+                                      (proteinPercent != null ? proteinPercent : 0) +
+                                      (fatPercent != null ? fatPercent : 0)) -
+                                      100) >=
+                                      1
+                                      ? TextSpan(
+                                      text: " over\n", style: TextStyle(color: Theme.of(context).hoverColor))
+                                      : TextSpan(
+                                      text: " remaining\n",
+                                      style: TextStyle(color: Theme.of(context).hintColor))
+                                ],
+                              ),
+                            ),
+
+                            Row(children: <Widget>[
+                              Expanded(
+                                child: Form(
+                                  key: carbohydrateKey,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Carbohydrate %',
+                                      // hintText: 'Carbs %',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    controller: carbohydrateCtl,
+                                    validator: (String value) {
+                                      int carbs = int.tryParse(value);
+                                      if (carbs == null) {
+                                        return 'Field Required';
+                                      } else if (carbohydratePercent +
+                                          proteinPercent +
+                                          fatPercent !=
+                                          100) {
+                                        return 'Values must add up to 100';
+                                      } else if (carbs <= 0) {
+                                        return 'Value must be greater than 0';
+                                      } else if (carbs >= 99) {
+                                        return 'Value must be less than 99';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(2),
+                                      FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
+                                    ],
+                                    onChanged: (String value) {
+                                      carbohydratePercent = int.tryParse(value);
+                                      if (carbohydratePercent != initialCarbohydratePercent) {
+                                        wasChanged = true;
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Form(
+                                  key: proteinKey,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Protein %',
+                                      // hintText: 'Carbs %',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    controller: proteinCtl,
+                                    validator: (String value) {
+                                      int protein = int.tryParse(value);
+                                      if (protein == null) {
+                                        return 'Field Required';
+                                      } else if (proteinPercent +
+                                          carbohydratePercent +
+                                          fatPercent !=
+                                          100) {
+                                        return 'Values must add up to 100';
+                                      } else if (protein <= 0) {
+                                        return 'Value must be greater than 0';
+                                      } else if (protein >= 99) {
+                                        return 'Value must be less than 99';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(2),
+                                      FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
+                                    ],
+                                    onChanged: (String value) {
+                                      proteinPercent = int.tryParse(value);
+                                      if (proteinPercent != initialProteinPercent) {
+                                        wasChanged = true;
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Form(
+                                  key: fatKey,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Fat %',
+                                      // hintText: 'Carbs %',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    controller: fatCtl,
+                                    validator: (String value) {
+                                      int fat = int.tryParse(value);
+                                      if (fat == null) {
+                                        return 'Field Required';
+                                      } else if (fatPercent +
+                                          carbohydratePercent +
+                                          proteinPercent !=
+                                          100) {
+                                        return 'Values must add up to 100';
+                                      } else if (fat <= 0) {
+                                        return 'Value must be greater than 0';
+                                      } else if (fat >= 99) {
+                                        return 'Value must be less than 99';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(2),
+                                      FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
+                                    ],
+                                    onChanged: (String value) {
+                                      fatPercent = int.tryParse(value);
+                                      if (fatPercent != initialFatPercent) {
+                                        wasChanged = true;
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ]),
+                            SizedBox(height: 5),
+                          ],
+                        ),
+                      ),
+                    ),
                     // NutrientRatioScreen(
                     //     carbohydrateRatio, proteinRatio, fatRatio),
                     SizedBox(height: 15),
@@ -872,33 +540,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    _buildActivity(),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                          labelText: 'Activity Level',
+                          border: OutlineInputBorder(),
+                          hintText: "Activity Level"),
+                      value: dropDownActivity,
+                      validator: (value) => value == null ? 'Field Required' : null,
+                      onChanged: (String Value) {
+                        dropDownActivity = Value;
+                        if (initialActivity != dropDownActivity) {
+                          wasChanged = true;
+                        }
+                        // setState(() {});
+                      },
+                      items: _activity
+                          .map((actLevel) =>
+                          DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
+                          .toList(),
+                    ),
                     SizedBox(height: 15),
-                    // _buildBirthDatePicker(),
-                    // SizedBox(height: 15),
-                    // Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Container(
-                    //     child: Text("Edit your height:",
-                    //         style: TextStyle(fontSize: 18)),
-                    //   ),
-                    // ),
-                    // SizedBox(height: 5),
-                    // Row(children: <Widget>[
-                    //   Expanded(
-                    //     child: _buildHeightFeet(),
-                    //   ),
-                    //   Expanded(
-                    //     child: _buildHeightInches(),
-                    //   )
-                    // ]),
-                    // SizedBox(height: 15),
-                    // _buildRace(),
-                    // SizedBox(height: 15),
-                    // _buildEthnicity(),
-                    // SizedBox(height: 15),
-                    // _buildGender(),
-                    // SizedBox(height: 15),
                     Padding(
                       padding: EdgeInsets.only(right: 15),
                       child: Row(
@@ -916,7 +577,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               }
                             },
                           ),
-                          if (wasChanged) ...[
+                          if (wasChanged && (carbohydratePercent+fatPercent+proteinPercent == 100)) ...[
                             FlatButton(
                               color: Colors.blue,
                               // padding: EdgeInsets.symmetric(vertical: 20),
@@ -936,7 +597,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               },
                             ),
                           ],
-                          if (!wasChanged) ...[
+                          if (!wasChanged || (carbohydratePercent+fatPercent+proteinPercent != 100)) ...[
                             FlatButton(
                                 color: Colors.grey,
                                 // padding: EdgeInsets.symmetric(vertical: 20),
@@ -955,19 +616,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
             );
-            // floatingActionButton: FloatingActionButton.extended(
-            //   onPressed: () {
-            //     submit();
-            //     _savedAlert();
-            //   },
-            //   label: Text(
-            //     'Save',
-            //     style: TextStyle(color: Theme.of(context).highlightColor),
-            //   ),
-            //   icon: Icon(Icons.save, color: Theme.of(context).highlightColor),
-            //   backgroundColor: Theme.of(context).buttonColor,
-            // ),
-          // );
         },
         future: setUserData());
   }

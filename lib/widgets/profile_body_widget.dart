@@ -23,12 +23,15 @@ class ProfileBody extends StatefulWidget {
   int proteinRatio = 0;
   int carbohydrateRatio = 0;
   int fatRatio = 0;
+  int weight = 0;
+  String activity = '';
 
   getRatioData() async {
     var db = new DBHelper();
     var x = await db.getUserInfo();
     var userData = json.decode(x.body);
-
+    activity = userData['activityLevel'].toString().replaceAll('-', ' ');
+    weight = userData['weight'];
     proteinRatio = userData['proteinPercent'];
     carbohydrateRatio = userData['carbohydratePercent'];
     fatRatio = userData['fatPercent'];
@@ -43,64 +46,69 @@ class ProfileBody extends StatefulWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        children: [
-          // ProfilePic(),
-          SizedBox(height: 20),
-          ProfileMenu(
-              text: "My Account",
-              icon: "./assets/icons/User Icon.svg",
-              press: () {
-                // Navigate to the PreferencePage
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AccountScreen(),
-                ));
-              }),
-          ProfileMenu(
-              text: "Personal Details",
-              icon: "assets/icons/Accessibility New.svg",
-              press: () {
-                // Navigate to the DetailsScreen
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => DetailsScreen(carbohydrateRatio, proteinRatio, fatRatio),
-                ));
-              }),
-          ProfileMenu(
-            text: "Notifications",
-            icon: "assets/icons/Bell.svg",
-            press: () {
-              // Navigate to the DetailsScreen
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NotificationSettings(),
-              ));
-            },
-          ),
-          ProfileMenu(
-              text: "Settings",
-              icon: "assets/icons/Settings.svg",
-              press: () {
-                // Navigate to the PreferencePage
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PreferenceScreen(),
-                ));
-              }),
-          ProfileMenu(
-            text: "Log Out",
-            icon: "assets/icons/Log out.svg",
-            press: () async {
-              var prefs = await SharedPreferences.getInstance();
-              prefs?.clear();
-              Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/login',
-                  (route) =>
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            children: [
+              // ProfilePic(),
+              SizedBox(height: 20),
+              ProfileMenu(
+                  text: "My Account",
+                  icon: "./assets/icons/User Icon.svg",
+                  press: () {
+                    // Navigate to the PreferencePage
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AccountScreen(proteinRatio, carbohydrateRatio, fatRatio, weight, activity),
+                    )).then((value) => update());
+                  }),
+              ProfileMenu(
+                  text: "Personal Details",
+                  icon: "assets/icons/Accessibility New.svg",
+                  press: () {
+                    // Navigate to the DetailsScreen
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DetailsScreen(carbohydrateRatio, proteinRatio, fatRatio),
+                    ));
+                  }),
+              ProfileMenu(
+                text: "Notifications",
+                icon: "assets/icons/Bell.svg",
+                press: () {
+                  // Navigate to the DetailsScreen
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => NotificationSettings(),
+                  ));
+                },
+              ),
+              ProfileMenu(
+                  text: "Settings",
+                  icon: "assets/icons/Settings.svg",
+                  press: () {
+                    // Navigate to the PreferencePage
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PreferenceScreen(),
+                    ));
+                  }),
+              ProfileMenu(
+                text: "Log Out",
+                icon: "assets/icons/Log out.svg",
+                press: () async {
+                  var prefs = await SharedPreferences.getInstance();
+                  prefs?.clear();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/login',
+                          (route) =>
                       false);
-            },
+                },
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
+      future: getRatioData(),
     );
   }
 }

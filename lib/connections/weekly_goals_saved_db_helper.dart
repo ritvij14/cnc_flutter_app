@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeeklySavedDBHelper extends DBHelper {
-  var baseUrl = 'https://10.0.2.2:7777/';
+  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
 
   Future<http.Response> getWeeklySavedGoals() async {
     var requestUrl = baseUrl + 'api/weekly_goals_saved/all/';

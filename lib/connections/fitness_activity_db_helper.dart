@@ -5,7 +5,7 @@ import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:http/http.dart' as http;
 
 class ActivityDBHelper extends DBHelperBase {
-  var baseUrl = 'https://10.0.2.2:7777/';
+  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
 
   //TODO get all activities method shouldn't exist in actual app.
   Future<http.Response> getAllActivities() async {
@@ -21,7 +21,7 @@ class ActivityDBHelper extends DBHelperBase {
       'userId': userId.toString(),
     };
     var uri =
-        Uri.https('10.0.2.2:7777', '/api/fitnessActivity/all/user', queryParameters);
+        Uri.https('enact-crc-app.herokuapp.com', '/api/fitnessActivity/all/user', queryParameters);
 
     var response = await http.get(
       uri,
@@ -74,7 +74,7 @@ class ActivityDBHelper extends DBHelperBase {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https('10.0.2.2:7777', '/api/fitnessActivity/week/user/', queryParameters);
+    Uri.https('enact-crc-app.herokuapp.com', '/api/fitnessActivity/week/user/', queryParameters);
 
     var response = await http.get(
       uri,
@@ -89,7 +89,7 @@ class ActivityDBHelper extends DBHelperBase {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https('10.0.2.2:7777', '/api/fitnessActivity/day/user/', queryParameters);
+    Uri.https('enact-crc-app.herokuapp.com', '/api/fitnessActivity/day/user/', queryParameters);
 
     var response = await http.get(
       uri,
