@@ -63,8 +63,6 @@ class _AccountScreenState extends State<AccountScreen> {
   int newCarbohydrates;
   int newFat;
   int newProtein;
-  int nutrientTotal;
-  int nutrientRemaining;
 
   String newActivity;
   bool weightChanged = false;
@@ -477,8 +475,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 validator: (value) => value == null ? 'Field Required' : null,
                 onChanged: (String Value) {
                   newActivity = Value;
-                  print('new activity = ' + newActivity);
-                  print('inital activity = ' + initialActivity);
                   if (initialActivity != newActivity) {
                     activityChanged = true;
                   } else {

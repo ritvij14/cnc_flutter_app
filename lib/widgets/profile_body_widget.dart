@@ -54,23 +54,23 @@ class ProfileBody extends StatefulWidget {
             children: [
               // ProfilePic(),
               SizedBox(height: 20),
-              ProfileMenu(
-                  text: "My Account",
-                  icon: "./assets/icons/User Icon.svg",
-                  press: () {
-                    // Navigate to the PreferencePage
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AccountScreen(proteinRatio, carbohydrateRatio, fatRatio, weight, activity),
-                    )).then((value) => update());
-                  }),
+              // ProfileMenu(
+              //     text: "My Account",
+              //     icon: "./assets/icons/User Icon.svg",
+              //     press: () {
+              //       // Navigate to the PreferencePage
+              //       Navigator.of(context).push(MaterialPageRoute(
+              //         builder: (context) => AccountScreen(proteinRatio, carbohydrateRatio, fatRatio, weight, activity),
+              //       )).then((value) => update());
+              //     }),
               ProfileMenu(
                   text: "Personal Details",
                   icon: "assets/icons/Accessibility New.svg",
                   press: () {
                     // Navigate to the DetailsScreen
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => DetailsScreen(carbohydrateRatio, proteinRatio, fatRatio),
-                    ));
+                      builder: (context) => DetailsScreen(proteinRatio, carbohydrateRatio, fatRatio, weight, activity),
+                    )).then((value) => update());
                   }),
               ProfileMenu(
                 text: "Notifications",

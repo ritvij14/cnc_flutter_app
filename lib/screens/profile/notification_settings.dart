@@ -126,7 +126,7 @@ String appTheme;
     );
     Widget confirmButton = FlatButton(
       child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
-      color: Colors.blue,
+      color: Theme.of(context).buttonColor,
       onPressed: () {
         Navigator.of(context).pop();
         closePage();
@@ -135,7 +135,9 @@ String appTheme;
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Are you sure you want to cancel this update?"),
+      title: Text("Cancel update"),
+      content: Text(
+          "Are you sure you want to cancel this edit? Your changes will not be saved."),
       actions: [
         cancelButton,
         confirmButton,
