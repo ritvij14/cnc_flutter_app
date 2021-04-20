@@ -3,64 +3,115 @@ import 'package:cnc_flutter_app/models/symptom_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
+import '../alerts.dart';
 
 class SymptomTrackingModifyScreen extends StatefulWidget {
-
   SymptomModel symptomModel;
 
-  SymptomTrackingModifyScreen(SymptomModel symptomModel){
+  SymptomTrackingModifyScreen(SymptomModel symptomModel) {
     this.symptomModel = symptomModel;
   }
 
   @override
-  _SymptomTrackingModifyScreenState createState() => _SymptomTrackingModifyScreenState();
+  _SymptomTrackingModifyScreenState createState() =>
+      _SymptomTrackingModifyScreenState(symptomModel);
 }
 
-class _SymptomTrackingModifyScreenState extends State<SymptomTrackingModifyScreen> {
+class _SymptomTrackingModifyScreenState
+    extends State<SymptomTrackingModifyScreen> {
   final db = SymptomDBHelper();
-  TextEditingController dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
+  bool initialAbdominal;
+  bool initialAppetite;
+  bool initialBloating;
+  bool initialConstipation;
+  bool initialDiarrhea;
+  bool initialNausea;
+  bool initialStoma;
+  bool initialVomiting;
+  String initialOther;
+  TextEditingController dateCtl = TextEditingController(
+      text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
+
+  _SymptomTrackingModifyScreenState(SymptomModel symptomModel) {
+    initialAbdominal = symptomModel.abdominalPain;
+    initialAppetite = symptomModel.appetiteLoss;
+    initialBloating = symptomModel.bloating;
+    initialConstipation = symptomModel.constipation;
+    initialDiarrhea = symptomModel.diarrhea;
+    initialNausea = symptomModel.nausea;
+    initialStoma = symptomModel.stomaProblems;
+    initialVomiting = symptomModel.vomiting;
+    initialOther = symptomModel.other;
+  }
+
+  bool wasChanged() {
+    return initialAbdominal != widget.symptomModel.abdominalPain ||
+        initialAppetite != widget.symptomModel.appetiteLoss ||
+        initialBloating != widget.symptomModel.bloating ||
+        initialConstipation != widget.symptomModel.constipation ||
+        initialDiarrhea != widget.symptomModel.diarrhea ||
+        initialNausea != widget.symptomModel.nausea ||
+        initialStoma != widget.symptomModel.stomaProblems ||
+        initialVomiting != widget.symptomModel.vomiting ||
+        initialOther != widget.symptomModel.other;
+  }
+
   // var otherController = TextEditingController(text: widget.symptomModel.other);
 
   @override
   Widget build(BuildContext context) {
-    dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(widget.symptomModel.dateTime));
+    dateCtl = TextEditingController(
+        text: DateFormat('MM/dd/yyyy').format(widget.symptomModel.dateTime));
     return Scaffold(
       appBar: AppBar(
         title: Text('Track Symptoms'),
+        leading: IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            if (wasChanged()) {
+              Alerts().showAlert(context, true);
+              // showAlertDialog(context);
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
       ),
       body: ListView(
         scrollDirection: Axis.vertical,
         children: [
+          Padding(padding: EdgeInsets.only(top: 15)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('Date',
-                style: TextStyle(
-                    fontSize: 16
-                ),),
-              Container(
-                width: 200,
-                child: TextFormField(
-                  enableInteractiveSelection: false,
-                  controller: dateCtl,
-                  // initialValue: widget.symptomModel.dateTime.month.toString() + '/' + widget.symptomModel.dateTime.day.toString() + '/' + widget.symptomModel.dateTime.year.toString(),
-                  onTap: () async {
-                    DateTime date = widget.symptomModel.dateTime;
-                    DateTime now = DateTime.now();
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    date = await showDatePicker(
-                      context: context,
-                      initialDate: widget.symptomModel.dateTime,
-                      firstDate: DateTime(now.year, now.month, now.day -1),
-                      lastDate: DateTime.now(),
-                    );
-                    dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
-                    widget.symptomModel.dateTime = date;
-                  },
-
-                ),
+              Text(
+                'Date',
+                style: TextStyle(fontSize: 16),
               ),
+              Container(
+                  width: 200,
+                  child: Text(DateFormat('MM/dd/yyyy')
+                      .format(widget.symptomModel.dateTime))
+                  // child: TextFormField(
+                  //   enableInteractiveSelection: false,
+                  //   controller: dateCtl,
+                  //   // initialValue: widget.symptomModel.dateTime.month.toString() + '/' + widget.symptomModel.dateTime.day.toString() + '/' + widget.symptomModel.dateTime.year.toString(),
+                  //   onTap: () async {
+                  //     DateTime date = widget.symptomModel.dateTime;
+                  //     DateTime now = DateTime.now();
+                  //     FocusScope.of(context).requestFocus(new FocusNode());
+                  //     date = await showDatePicker(
+                  //       context: context,
+                  //       initialDate: widget.symptomModel.dateTime,
+                  //       firstDate: DateTime(now.year, now.month, now.day -1),
+                  //       lastDate: DateTime.now(),
+                  //     );
+                  //     dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
+                  //     widget.symptomModel.dateTime = date;
+                  //   },
+                  //
+                  // ),
+                  ),
             ],
           ),
           SwitchListTile(
@@ -138,43 +189,70 @@ class _SymptomTrackingModifyScreenState extends State<SymptomTrackingModifyScree
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              initialValue: widget.symptomModel.other,
+                initialValue: widget.symptomModel.other,
                 maxLength: 256,
                 maxLengthEnforced: true,
-                onChanged: (value){
+                onChanged: (value) {
                   widget.symptomModel.other = value;
-                }
-                ,
+                },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Type any other symptoms here.'
-                )
-            ),
+                    labelText: 'Type any other symptoms here.')),
           ),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    child: Text('Cancel'),
+                  child: FlatButton(
+                    child: Text(
+                      'CANCEL',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      if (wasChanged()) {
+                        Alerts().showAlert(context, true);
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    child: Text('Update'),
-                    onPressed: () {
-                      db.updateExistingSymptom(widget.symptomModel);
-                      Navigator.pop(context, widget.symptomModel);
-                    },
+                if (wasChanged()) ...[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      color: Theme.of(context).buttonColor,
+                      child: Text(
+                        'UPDATE',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {
+                        db.updateExistingSymptom(widget.symptomModel);
+                        Navigator.pop(context, widget.symptomModel);
+                      },
+                    ),
                   ),
-                ),
+                ],
+                if (!wasChanged()) ...[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      color: Colors.grey,
+                      child: Text(
+                        'UPDATE',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {},
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

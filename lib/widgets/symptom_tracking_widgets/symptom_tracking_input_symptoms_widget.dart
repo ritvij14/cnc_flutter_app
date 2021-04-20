@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../alerts.dart';
 
-
 class SymptomTrackingInputScreen extends StatefulWidget {
   SymptomModel symptomModel = new SymptomModel.emptyConstructor();
 
@@ -17,9 +16,9 @@ class SymptomTrackingInputScreen extends StatefulWidget {
 
 class _SymptomTrackingInputScreenState
     extends State<SymptomTrackingInputScreen> {
-
   final db = SymptomDBHelper();
-  TextEditingController dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
+  TextEditingController dateCtl = TextEditingController(
+      text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
 
   // var _dateController = new TextEditingController(text: DateTime.now().toString());
 
@@ -27,11 +26,10 @@ class _SymptomTrackingInputScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading:
-        IconButton(
+        leading: IconButton(
           icon: Icon(Icons.clear),
-          onPressed: (){
-            Alerts().showAlert(context);
+          onPressed: () {
+            Alerts().showAlert(context, false);
           },
         ),
         title: Text('Track Symptoms'),
@@ -48,10 +46,10 @@ class _SymptomTrackingInputScreenState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('Date',
-                      style: TextStyle(
-                          fontSize: 16
-                      ),),
+                    Text(
+                      'Date',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     Container(
                       width: 200,
                       child: TextFormField(
@@ -65,13 +63,13 @@ class _SymptomTrackingInputScreenState
                           date = await showDatePicker(
                             context: context,
                             initialDate: widget.symptomModel.dateTime,
-                            firstDate: DateTime(now.year, now.month, now.day -1),
+                            firstDate:
+                                DateTime(now.year, now.month, now.day - 1),
                             lastDate: DateTime.now(),
                           );
                           dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
                           widget.symptomModel.dateTime = date;
                         },
-
                       ),
                     ),
                   ],
@@ -153,15 +151,12 @@ class _SymptomTrackingInputScreenState
                   child: TextField(
                       maxLength: 256,
                       maxLengthEnforced: true,
-                      onChanged: (value){
+                      onChanged: (value) {
                         widget.symptomModel.other = value;
-                      }
-                      ,
+                      },
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'Type any other symptoms here.'
-                      )
-                  ),
+                          labelText: 'Type any other symptoms here.')),
                 ),
               ],
             ),
@@ -291,9 +286,12 @@ class _SymptomTrackingInputScreenState
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlatButton(
-                      child: Text('Cancel'),
+                      child: Text(
+                        'CANCEL',
+                        style: TextStyle(color: Colors.grey),
+                      ),
                       onPressed: () {
-                        Alerts().showAlert(context);
+                        Alerts().showAlert(context, false);
                         // Navigator.pop(context, "Cancelled Symptom Input");
                       },
                     ),
@@ -301,8 +299,13 @@ class _SymptomTrackingInputScreenState
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlatButton(
-                      color: Colors.blue,
-                      child: Text('Submit'),
+                      color: Theme.of(context).buttonColor,
+                      child: Text(
+                        'SAVE',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                       onPressed: () async {
                         var sharedPref = await SharedPreferences.getInstance();
                         String id = sharedPref.getString('id');

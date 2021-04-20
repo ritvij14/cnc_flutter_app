@@ -13,7 +13,7 @@ import '../theme/bloc/theme_bloc.dart';
 import '../theme/bloc/theme_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'profile_screen.dart';
+import 'profile/profile_screen.dart';
 
 class NavigatorScreen extends StatefulWidget {
   @override

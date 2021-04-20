@@ -41,7 +41,7 @@ class SymptomDBHelper extends DBHelper {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https('10.0.2.2:7777', '/api/symptom/all/user', queryParameters);
+    Uri.https('enact-crc-app.herokuapp.com', '/api/symptom/all/user', queryParameters);
 
     var response = await http.get(
       uri,
@@ -77,7 +77,7 @@ class SymptomDBHelper extends DBHelper {
     };
 
     var uri =
-    Uri.https('10.0.2.2:7777', '/api/symptom/day/user', queryParameters);
+    Uri.https('enact-crc-app.herokuapp.com', '/api/symptom/day/user', queryParameters);
 
     var response = await http.get(
       uri,

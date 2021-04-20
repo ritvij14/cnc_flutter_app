@@ -7,7 +7,7 @@ import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/metric_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
 import 'package:cnc_flutter_app/screens/navigator_screen.dart';
-import 'package:cnc_flutter_app/screens/profile_screen.dart';
+import 'package:cnc_flutter_app/screens/profile/profile_screen.dart';
 import 'package:cnc_flutter_app/screens/summary_screen.dart';
 import 'package:cnc_flutter_app/screens/user_questions_screen.dart';
 import 'package:cnc_flutter_app/screens/welcome_screen_stepper.dart';

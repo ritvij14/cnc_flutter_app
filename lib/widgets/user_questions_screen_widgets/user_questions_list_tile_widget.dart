@@ -84,7 +84,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
         context: context,
         builder: (context) => new AlertDialog(
               title:
-                  Text("Are you sure you would like to delete this question?"),
+                  Text("Delete Question?"),
               content: Text("\"" + question + "\""),
               actions: [
                 new FlatButton(
@@ -99,7 +99,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
                 new FlatButton(
                     child: const Text('DELETE',
                         style: TextStyle(color: Colors.white)),
-                    color: Colors.blue,
+                    color: Theme.of(context).buttonColor,
                     onPressed: () {
                       deleteQuestion(userQuestionID);
                       Navigator.of(context, rootNavigator: true).pop();

@@ -4,11 +4,13 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/connections/fitness_activity_db_helper.dart';
 import 'package:cnc_flutter_app/connections/metric_db_helper.dart';
 import 'package:cnc_flutter_app/connections/symptom_db_helper.dart';
+import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:cnc_flutter_app/models/symptom_model.dart';
+import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/diet_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'dart:convert';
@@ -106,12 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(Icons.thermostat_outlined),
               label: 'Log Symptoms',
               onTap: () async {
-                    await Navigator.pushNamed(context, '/inputSymptom')
-                .then((value) => setState(() {
-                ScaffoldMessenger.of(context)
-                ..removeCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text("$value")));
-                }));
+                await Navigator.pushNamed(context, '/inputSymptom')
+                    .then((value) => setState(() {
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
               }),
           SpeedDialChild(
               child: Icon(Icons.question_answer),
@@ -123,12 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(MdiIcons.scale),
               label: 'Log Weight',
               onTap: () async {
-                    await Navigator.pushNamed(context, '/inputMetric')
-                .then((value) => setState(() {
-                ScaffoldMessenger.of(context)
-                ..removeCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text("$value")));
-                }));
+                await Navigator.pushNamed(context, '/inputMetric')
+                    .then((value) => setState(() {
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
               }),
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
@@ -166,8 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             getDayFoodCalories().toString() +
                                             ' calories.'),
                             // subtitle: (dayFoodLogEntryList.length() == 0) ? Text(dayFoodLogEntryList.length.toString() + ' items totaling ' + getDayFoodCalories().toString() +  ' calories.'),
-                            children: getDailyFoodChildren()
-                            ,
+                            children: getDailyFoodChildren(),
                           ),
                         ],
                       );
@@ -256,8 +257,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ExpansionTile(
                             title: daySymptomList.length == 0
                                 ? Text("No Symptoms Logged Today!")
-                                : daySymptomList.length == 1 ? Text("1 Symptom logged") : Text(daySymptomList.length.toString() +
-                                    " Symptoms Logged"),
+                                : daySymptomList.length == 1
+                                    ? Text("1 Symptom logged")
+                                    : Text(daySymptomList.length.toString() +
+                                        " Symptoms Logged"),
                             // subtitle: dayActivityList.length == 0 ? Text(
                             //     "No activities tracked!") : Text(dayActivityList
                             //     .length.toString() + " activities logged."),
@@ -349,15 +352,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getDailyWeight() async {
-  MetricDBHelper db = new MetricDBHelper();
-  var sharedPref = await SharedPreferences.getInstance();
-  String id = sharedPref.getString('id');
-  var response = await db.getDayMetricList(int.parse(id));
-  List<MetricModel> newMetricList = (json.decode(response.body) as List)
-      .map((data) => MetricModel.fromJson(data))
-      .toList();
-  dayMetricList = newMetricList;
-
+    MetricDBHelper db = new MetricDBHelper();
+    var sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('id');
+    var response = await db.getDayMetricList(int.parse(id));
+    List<MetricModel> newMetricList = (json.decode(response.body) as List)
+        .map((data) => MetricModel.fromJson(data))
+        .toList();
+    dayMetricList = newMetricList;
   }
 
   getDailySymptom() async {
@@ -370,7 +372,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList();
     daySymptomList = newSymptomList;
   }
-
 
   getDailyActivityChildren() {
     if (dayActivityList.isEmpty) {
@@ -430,8 +431,7 @@ class _HomeScreenState extends State<HomeScreen> {
             final item = dayFoodLogEntryList[index];
             return Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
-              child: Text(
-                  item.food.description),
+              child: Text(item.food.description),
             );
           },
         ),
@@ -467,8 +467,9 @@ class _HomeScreenState extends State<HomeScreen> {
             final item = dayMetricList[index];
             return Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
-              child: Text(
-                  item.weight.toString() + "lbs @ " + DateFormat.Hm().format(item.dateTime.toLocal())),
+              child: Text(item.weight.toString() +
+                  "lbs @ " +
+                  DateFormat.Hm().format(item.dateTime.toLocal())),
             );
           },
         ),
@@ -499,6 +500,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return calories;
   }
 
+  getGoals() async {
+    var db2 = new WeeklySavedDBHelper();
+    weeklySavedGoalsModelList.clear();
+    var response2 = await db2.getWeeklySavedGoalsByUserID();
+    var wGDecode2 = json.decode(response2.body);
+  }
+
   getDailySymptomChildren() {
     if (daySymptomList.isEmpty) {
       return <Widget>[
@@ -520,8 +528,8 @@ class _HomeScreenState extends State<HomeScreen> {
             final item = daySymptomList[index];
             return Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
-              child: Text(
-                  "Symptom(s) recorded @ " + DateFormat.Hm().format(item.dateTime.toLocal())),
+              child: Text("Symptom(s) recorded @ " +
+                  DateFormat.Hm().format(item.dateTime.toLocal())),
             );
           },
         ),
@@ -535,5 +543,4 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return <Widget>[];
   }
-
 }

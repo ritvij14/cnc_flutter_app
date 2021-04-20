@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
-import 'package:cnc_flutter_app/screens/nutrient_ratio_screen.dart';
+// import 'package:cnc_flutter_app/screens/nutrient_ratio_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -309,20 +309,20 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.pie_chart),
-                    tooltip: 'Modify Nutrition Ratios',
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
-                      )).then((value) => update());
-                    },
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     IconButton(
+              //       icon: const Icon(Icons.pie_chart),
+              //       tooltip: 'Modify Nutrition Ratios',
+              //       onPressed: () {
+              //         Navigator.of(context).push(MaterialPageRoute(
+              //           builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
+              //         )).then((value) => update());
+              //       },
+              //     ),
+              //   ],
+              // ),
             ],
           ));
         },
@@ -503,20 +503,20 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
 
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.pie_chart),
-                    tooltip: 'Modify Nutrition Ratios',
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
-                      )).then((value) =>update());
-                    },
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     IconButton(
+              //       icon: const Icon(Icons.pie_chart),
+              //       tooltip: 'Modify Nutrition Ratios',
+              //       onPressed: () {
+              //         Navigator.of(context).push(MaterialPageRoute(
+              //           builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
+              //         )).then((value) =>update());
+              //       },
+              //     ),
+              //   ],
+              // ),
             ],
           ));
         },

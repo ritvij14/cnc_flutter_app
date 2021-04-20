@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'db_helper_base.dart';
 
-class DBHelper{
-  var baseUrl = 'https://10.0.2.2:7777/';
+class DBHelper {
+  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
 
   Future<bool> isEmailValid(String email) async {
     var requestUrl = baseUrl + 'api/users/checkIfEmailExists/' + email;
@@ -30,10 +30,9 @@ class DBHelper{
   Future<bool> getFormCompletionStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
-    var requestUrl =
-        baseUrl + 'api/users/formstatus/' + userId;
+    var requestUrl = baseUrl + 'api/users/formstatus/' + userId;
     http.Response response =
-    await http.get(Uri.encodeFull(requestUrl), headers: {});
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
 
     return response.body.toString() == 'true';
   }
@@ -46,7 +45,7 @@ class DBHelper{
   }
 
   Future<http.Response> searchFood(String query) async {
-    var requestUrl = baseUrl + 'api/food/search/' + query ;
+    var requestUrl = baseUrl + 'api/food/search/' + query;
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
@@ -57,7 +56,7 @@ class DBHelper{
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/frequent';
     http.Response response =
-    await http.get(Uri.encodeFull(requestUrl), headers: {});
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 
@@ -66,18 +65,18 @@ class DBHelper{
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/get';
     http.Response response =
-    await http.get(Uri.encodeFull(requestUrl), headers: {});
+        await http.get(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 
   Future<http.Response> saveRatios(
-      int fatPercent,
-      int proteinPercent,
-      int carbohydratePercent,) async {
+    int fatPercent,
+    int proteinPercent,
+    int carbohydratePercent,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
-    var requestUrl = baseUrl +
-        'api/users/profile/ratios';
+    var requestUrl = baseUrl + 'api/users/profile/ratios';
     var response = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
         body: json.encode({
@@ -89,8 +88,7 @@ class DBHelper{
     return response;
   }
 
-  Future<http.Response> updateWeight(
-      MetricModel metricModel) async {
+  Future<http.Response> updateWeight(MetricModel metricModel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/$userId/update/weight/';
@@ -117,8 +115,7 @@ class DBHelper{
       String cancerTreatment) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
-    var requestUrl = baseUrl +
-        'api/users/form/save/';
+    var requestUrl = baseUrl + 'api/users/form/save/';
     var response = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
         body: json.encode({
@@ -140,18 +137,17 @@ class DBHelper{
   }
 
   Future<http.Response> updateFormInfo(
-      String birthDate,
-      String race,
-      String ethnicity,
-      String gender,
-      String height,
-      String weight,
-      String activityLevel,
+    String birthDate,
+    String race,
+    String ethnicity,
+    String gender,
+    String height,
+    String weight,
+    String activityLevel,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
-    var requestUrl = baseUrl +
-        'api/users/form/update/';
+    var requestUrl = baseUrl + 'api/users/form/update/';
     var response = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
         body: json.encode({
@@ -167,6 +163,22 @@ class DBHelper{
     return response;
   }
 
+  Future<http.Response> updateFormInfoBasic(
+    String weight,
+    String activityLevel,
+  ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
+    var requestUrl = baseUrl + 'api/users/form/update/basic';
+    var response = await http.post(requestUrl,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          'userId': userId,
+          'weight': weight,
+          'activityLevel': activityLevel,
+        }));
+    return response;
+  }
 
   // Future<http.Response> getActivities() async {
   //   var requestUrl = baseUrl + 'api/activity/all';
@@ -176,8 +188,7 @@ class DBHelper{
   // }
 
   Future<http.Response> registerNewUser(UserModel userModel) async {
-    var requestUrl =
-        baseUrl + 'api/users/register/';
+    var requestUrl = baseUrl + 'api/users/register/';
     var uriResponse = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
         body: json.encode({
@@ -186,7 +197,6 @@ class DBHelper{
         }));
     return uriResponse;
   }
-
 
   Future<http.Response> getFoodLog(date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -198,7 +208,8 @@ class DBHelper{
   }
 
   Future<http.Response> deleteFoodLogEntry(foodLogEntryId) async {
-    var requestUrl = baseUrl + 'api/users/foodlog/delete/' + foodLogEntryId.toString();
+    var requestUrl =
+        baseUrl + 'api/users/foodlog/delete/' + foodLogEntryId.toString();
     http.Response response =
         await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
@@ -207,13 +218,14 @@ class DBHelper{
   Future<http.Response> deleteUserGiIssues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
-    var requestUrl = baseUrl + 'api/users/'+userId+'/delete/issues/';
+    var requestUrl = baseUrl + 'api/users/' + userId + '/delete/issues/';
     http.Response response =
-    await http.delete(Uri.encodeFull(requestUrl), headers: {});
+        await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
 
-  Future<http.Response> saveNewFoodLogEntry(entryTime, date, foodId, portion) async {
+  Future<http.Response> saveNewFoodLogEntry(
+      entryTime, date, foodId, portion) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/foodlog/save/';
@@ -228,8 +240,6 @@ class DBHelper{
         }));
   }
 
-
-
   Future<http.Response> updateFoodLogEntry(id, entryTime, portion) async {
     var requestUrl = baseUrl + 'api/users/foodlog/update/';
     var uriResponse = await http.post(requestUrl,
@@ -240,6 +250,4 @@ class DBHelper{
           'portion': portion,
         }));
   }
-
 }
-

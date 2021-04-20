@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeeklySavedDBHelper extends DBHelper {
-  var baseUrl = 'https://10.0.2.2:7777/';
+  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
 
   Future<http.Response> getWeeklySavedGoals() async {
     var requestUrl = baseUrl + 'api/weekly_goals_saved/all/';
@@ -15,8 +15,28 @@ class WeeklySavedDBHelper extends DBHelper {
     return response;
   }
 
+  Future<http.Response> getWeeklySavedGoalsByUserID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
+    var requestUrl = baseUrl + 'api/weekly_goals_saved/all/$userId';
+    var queryParameters = {
+      'userId': userId.toString(),
+    };
+    var uri =
+    Uri.https('enact-crc-app.herokuapp.com', '/api/weekly_goals_saved/all/$userId', queryParameters);
+
+    var response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    return response;
+  }
+
   Future<http.Response> saveWeeklySavedGoal(
       WeeklySavedGoalsModel weeklySavedGoalsModel) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/weekly_goals_saved/add/';
     var uriResponse = await http.post(requestUrl,
         headers: {"Content-Type": "application/json"},
@@ -25,20 +45,15 @@ class WeeklySavedDBHelper extends DBHelper {
           'type': weeklySavedGoalsModel.type,
           'goalDescription': weeklySavedGoalsModel.goalDescription,
           'help_info': weeklySavedGoalsModel.helpInfo,
-          'userId': weeklySavedGoalsModel.userId,
+          'userId': userId,
         }));
   }
 
   Future<http.Response> deleteWeeklyGoalsSavedByID(int id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
-    var requestUrl = baseUrl + 'api/weekly_goals_saved/delete/$userId';
+    var requestUrl = baseUrl + 'api/weekly_goals_saved/delete/$id';
     http.Response response =
     await http.delete(Uri.encodeFull(requestUrl), headers: {});
     return response;
   }
-
-
-
 
 }
