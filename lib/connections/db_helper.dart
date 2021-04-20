@@ -187,6 +187,25 @@ class DBHelper{
     return uriResponse;
   }
 
+  resetPassword(String email) async{
+    var requestUrl =
+        baseUrl + 'api/users/resetPassword';
+
+    var queryParameters = {
+      'email': email,
+    };
+    var uri =
+    Uri.https('10.0.2.2:7777', 'api/users/resetPassword', queryParameters);
+
+    var response = await http.post(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+    print(response.body);
+    return response;
+
+  }
+
 
   Future<http.Response> getFoodLog(date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
