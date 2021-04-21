@@ -4,14 +4,14 @@ import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AccountScreen extends StatefulWidget {
+class DetailsScreen extends StatefulWidget {
   int initialProteinRatio = 0;
   int initialCarbohydrateRatio = 0;
   int initialFatRatio = 0;
   int initialWeight = 0;
   String initialActivity = '';
 
-  AccountScreen(int initialProteinRatio, int initialCarbohydrateRatio,
+  DetailsScreen(int initialProteinRatio, int initialCarbohydrateRatio,
       int initialFatRatio, int initialWeight, String initialActivity) {
     this.initialProteinRatio = initialProteinRatio;
     this.initialCarbohydrateRatio = initialCarbohydrateRatio;
@@ -21,7 +21,7 @@ class AccountScreen extends StatefulWidget {
   }
 
   @override
-  _AccountScreenState createState() => _AccountScreenState(
+  _DetailsScreenState createState() => _DetailsScreenState(
       this.initialProteinRatio,
       this.initialCarbohydrateRatio,
       this.initialFatRatio,
@@ -29,7 +29,7 @@ class AccountScreen extends StatefulWidget {
       this.initialActivity);
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _DetailsScreenState extends State<DetailsScreen> {
   int initialProteinRatio = 0;
   int initialCarbohydrateRatio = 0;
   int initialFatRatio = 0;
@@ -40,7 +40,7 @@ class _AccountScreenState extends State<AccountScreen> {
   TextEditingController carbohydrateCtl = new TextEditingController();
   TextEditingController fatCtl = new TextEditingController();
 
-  _AccountScreenState(int initialProteinRatio, int initialCarbohydrateRatio,
+  _DetailsScreenState(int initialProteinRatio, int initialCarbohydrateRatio,
       int initialFatRatio, int initialWeight, String initialActivity) {
     this.initialProteinRatio = initialProteinRatio;
     this.initialCarbohydrateRatio = initialCarbohydrateRatio;
@@ -226,25 +226,25 @@ class _AccountScreenState extends State<AccountScreen> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: ((newCarbohydrates != null
-                                                ? newCarbohydrates
-                                                : 0) +
-                                            (newProtein != null
-                                                ? newProtein
-                                                : 0) +
-                                            (newFat != null ? newFat : 0))
-                                        .toString() +
+                                    ? newCarbohydrates
+                                    : 0) +
+                                    (newProtein != null
+                                        ? newProtein
+                                        : 0) +
+                                    (newFat != null ? newFat : 0))
+                                    .toString() +
                                     "%",
                                 style: TextStyle(
                                     color: ((newCarbohydrates != null
-                                                    ? newCarbohydrates
-                                                    : 0) +
-                                                (newProtein != null
-                                                    ? newProtein
-                                                    : 0) +
-                                                (newFat != null
-                                                    ? newFat
-                                                    : 0)) !=
-                                            100
+                                        ? newCarbohydrates
+                                        : 0) +
+                                        (newProtein != null
+                                            ? newProtein
+                                            : 0) +
+                                        (newFat != null
+                                            ? newFat
+                                            : 0)) !=
+                                        100
                                         ? Colors.red
                                         : Colors.green)),
                             TextSpan(
@@ -253,48 +253,48 @@ class _AccountScreenState extends State<AccountScreen> {
                                     color: Theme.of(context).hintColor)),
                             TextSpan(
                                 text: (((newCarbohydrates != null
-                                                    ? newCarbohydrates
-                                                    : 0) +
-                                                (newProtein != null
-                                                    ? newProtein
-                                                    : 0) +
-                                                (newFat != null ? newFat : 0)) -
-                                            100)
-                                        .abs()
-                                        .toString() +
+                                    ? newCarbohydrates
+                                    : 0) +
+                                    (newProtein != null
+                                        ? newProtein
+                                        : 0) +
+                                    (newFat != null ? newFat : 0)) -
+                                    100)
+                                    .abs()
+                                    .toString() +
                                     "%",
                                 style: TextStyle(
                                     color: (((newCarbohydrates != null
-                                                            ? newCarbohydrates
-                                                            : 0) +
-                                                        (newProtein != null
-                                                            ? newProtein
-                                                            : 0) +
-                                                        (newFat != null
-                                                            ? newFat
-                                                            : 0)) -
-                                                    100)
-                                                .abs() !=
-                                            0
+                                        ? newCarbohydrates
+                                        : 0) +
+                                        (newProtein != null
+                                            ? newProtein
+                                            : 0) +
+                                        (newFat != null
+                                            ? newFat
+                                            : 0)) -
+                                        100)
+                                        .abs() !=
+                                        0
                                         ? Colors.red
                                         : Colors.green)),
                             (((newCarbohydrates != null
-                                                ? newCarbohydrates
-                                                : 0) +
-                                            (newProtein != null
-                                                ? newProtein
-                                                : 0) +
-                                            (newFat != null ? newFat : 0)) -
-                                        100) >=
-                                    1
+                                ? newCarbohydrates
+                                : 0) +
+                                (newProtein != null
+                                    ? newProtein
+                                    : 0) +
+                                (newFat != null ? newFat : 0)) -
+                                100) >=
+                                1
                                 ? TextSpan(
-                                    text: " over\n",
-                                    style: TextStyle(
-                                        color: Theme.of(context).hoverColor))
+                                text: " over\n",
+                                style: TextStyle(
+                                    color: Theme.of(context).hoverColor))
                                 : TextSpan(
-                                    text: " remaining\n",
-                                    style: TextStyle(
-                                        color: Theme.of(context).hintColor))
+                                text: " remaining\n",
+                                style: TextStyle(
+                                    color: Theme.of(context).hintColor))
                           ],
                         ),
                       ),
@@ -316,8 +316,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 if (carbs == null) {
                                   return 'Field Required';
                                 } else if (newCarbohydrates +
-                                        newProtein +
-                                        newFat !=
+                                    newProtein +
+                                    newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (carbs <= 0) {
@@ -367,8 +367,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 if (protein == null) {
                                   return 'Field Required';
                                 } else if (newProtein +
-                                        newCarbohydrates +
-                                        newFat !=
+                                    newCarbohydrates +
+                                    newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (protein <= 0) {
@@ -417,8 +417,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 if (fat == null) {
                                   return 'Field Required';
                                 } else if (newFat +
-                                        newCarbohydrates +
-                                        newProtein !=
+                                    newCarbohydrates +
+                                    newProtein !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (fat <= 0) {
@@ -489,7 +489,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   'Vigorously Active',
                 ]
                     .map((actLevel) => DropdownMenuItem(
-                        value: actLevel, child: Text("$actLevel")))
+                    value: actLevel, child: Text("$actLevel")))
                     .toList(),
               ),
               SizedBox(height: 15),
@@ -501,7 +501,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     FlatButton(
                       // padding: EdgeInsets.symmetric(vertical: 20),
                       child:
-                          Text('CANCEL', style: TextStyle(color: Colors.grey)),
+                      Text('CANCEL', style: TextStyle(color: Colors.grey)),
                       onPressed: () {
                         if (weightChanged ||
                             activityChanged ||
@@ -515,10 +515,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       },
                     ),
                     if ((weightChanged ||
-                            activityChanged ||
-                            proteinChanged ||
-                            carbohydrateChanged ||
-                            fatChanged) &&
+                        activityChanged ||
+                        proteinChanged ||
+                        carbohydrateChanged ||
+                        fatChanged) &&
                         (newFat + newProtein + newCarbohydrates == 100)) ...[
                       FlatButton(
                         color: Theme.of(context).buttonColor,
@@ -539,10 +539,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                     ],
                     if (!weightChanged &&
-                            !activityChanged &&
-                            !proteinChanged &&
-                            !carbohydrateChanged &&
-                            !fatChanged ||
+                        !activityChanged &&
+                        !proteinChanged &&
+                        !carbohydrateChanged &&
+                        !fatChanged ||
                         (newFat + newProtein + newCarbohydrates != 100)) ...[
                       FlatButton(
                           color: Colors.grey,

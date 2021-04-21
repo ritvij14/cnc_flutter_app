@@ -179,168 +179,210 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
             child: Padding(
               padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: Column(
-              children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Weekly Goals',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                children: <Widget>[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Weekly Goals',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      PopupMenuButton(
-                        icon: Icon(Icons.add),
-                        itemBuilder: (BuildContext context) => [
-                          PopupMenuItem(
-                            child: ElevatedButton(
-                              child: Text('Fruits'),
-                              style: ElevatedButton.styleFrom(
-                                primary: _getColor("Fruits"), // background
-                                onPrimary: Colors.white, // foreground
-                              ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                      builder: (_) => ChooseFruitGoals(),
-                                    ))
-                                    .then((value) => update(context));
-                              },
-                            ),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 50)),
+                        TextButton(
+                          child: Icon(Icons.info),
+                          style: ElevatedButton.styleFrom(
+                            primary:
+                                Theme.of(context).primaryColor, // background
+                            onPrimary: Colors.white, // foreground
                           ),
-                          PopupMenuItem(
-                            child: ElevatedButton(
-                              child: Text('Vegetables'),
-                              style: ElevatedButton.styleFrom(
-                                primary: _getColor("Vegetables"), // background
-                                onPrimary: Colors.white, // foreground
-                              ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                      builder: (_) => ChooseVegetableGoals(),
-                                    ))
-                                    .then((value) => update(context));
-                              },
-                            ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(new MaterialPageRoute(
+                                  builder: (_) => WeeklyGoals(),
+                                ))
+                                .then((value) => update(context));
+                          },
+                        ),
+                        PopupMenuButton(
+                          icon: Icon(
+                            Icons.add,
+                            color: Colors.white,
                           ),
-                          PopupMenuItem(
-                            child: ElevatedButton(
-                              child: Text('Grains'),
-                              style: ElevatedButton.styleFrom(
-                                primary: _getColor("Grains"), // background
-                                onPrimary: Colors.white, // foreground
+                          itemBuilder: (BuildContext context) => [
+                            PopupMenuItem(
+                              child: ElevatedButton(
+                                child: Text('Fruits'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: _getColor("Fruits"), // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(new MaterialPageRoute(
+                                        builder: (_) => ChooseFruitGoals(),
+                                      ))
+                                      .then((value) => update(context));
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                      builder: (_) => ChooseGrainGoals(),
-                                    ))
-                                    .then((value) => update(context));
-                              },
                             ),
-                          ),
-                          PopupMenuItem(
-                            child: ElevatedButton(
-                              child: Text('Protein'),
-                              style: ElevatedButton.styleFrom(
-                                primary: _getColor("Protein"), // background
-                                onPrimary: Colors.white, // foreground
+                            PopupMenuItem(
+                              child: ElevatedButton(
+                                child: Text('Vegetables'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: _getColor("Vegetables"),
+                                  // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(new MaterialPageRoute(
+                                        builder: (_) => ChooseVegetableGoals(),
+                                      ))
+                                      .then((value) => update(context));
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                      builder: (_) => ChooseProteinGoals(),
-                                    ))
-                                    .then((value) => update(context));
-                              },
                             ),
-                          ),
-                          PopupMenuItem(
-                            child: ElevatedButton(
-                              child: Text('Dairy'),
-                              style: ElevatedButton.styleFrom(
-                                primary: _getColor("Dairy"), // background
-                                onPrimary: Colors.white, // foreground
+                            PopupMenuItem(
+                              child: ElevatedButton(
+                                child: Text('Grains'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: _getColor("Grains"), // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(new MaterialPageRoute(
+                                        builder: (_) => ChooseGrainGoals(),
+                                      ))
+                                      .then((value) => update(context));
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                      builder: (_) => ChooseDairyGoals(),
-                                    ))
-                                    .then((value) => update(context));
-                              },
                             ),
-                          ),
-                          PopupMenuItem(
-                            child: ElevatedButton(
-                              child: Text('Snack'),
+                            PopupMenuItem(
+                              child: ElevatedButton(
+                                child: Text('Protein'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: _getColor("Protein"), // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(new MaterialPageRoute(
+                                        builder: (_) => ChooseProteinGoals(),
+                                      ))
+                                      .then((value) => update(context));
+                                },
+                              ),
+                            ),
+                            PopupMenuItem(
+                              child: ElevatedButton(
+                                child: Text('Dairy'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: _getColor("Dairy"), // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(new MaterialPageRoute(
+                                        builder: (_) => ChooseDairyGoals(),
+                                      ))
+                                      .then((value) => update(context));
+                                },
+                              ),
+                            ),
+                            PopupMenuItem(
+                              child: ElevatedButton(
+                                child: Text('Snack'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: _getColor("Snacks and Condiments"),
+                                  // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(new MaterialPageRoute(
+                                        builder: (_) => ChooseSnackGoals(),
+                                      ))
+                                      .then((value) => update(context));
+                                },
+                              ),
+                            ),
+                            PopupMenuItem(
+                              child: ElevatedButton(
+                                child: Text('Beverage'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: _getColor("Beverage"), // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(new MaterialPageRoute(
+                                        builder: (_) => ChooseBeverageGoals(),
+                                      ))
+                                      .then((value) => update(context));
+                                },
+                              ),
+                            ),
+                            PopupMenuItem(
+                                child: ElevatedButton(
+                              child: Text('Activity'),
                               style: ElevatedButton.styleFrom(
-                                primary: _getColor("Snacks and Condiments"),
+                                primary: _getColor("Physical Activity"),
                                 // background
                                 onPrimary: Colors.white, // foreground
                               ),
                               onPressed: () {
                                 Navigator.of(context)
                                     .push(new MaterialPageRoute(
-                                      builder: (_) => ChooseSnackGoals(),
+                                      builder: (_) => ChooseActivityGoals(),
                                     ))
                                     .then((value) => update(context));
                               },
-                            ),
-                          ),
-                          PopupMenuItem(
-                            child: ElevatedButton(
-                              child: Text('Beverage'),
-                              style: ElevatedButton.styleFrom(
-                                primary: _getColor("Beverage"), // background
-                                onPrimary: Colors.white, // foreground
-                              ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                      builder: (_) => ChooseBeverageGoals(),
-                                    ))
-                                    .then((value) => update(context));
-                              },
-                            ),
-                          ),
-                          PopupMenuItem(
-                              child: ElevatedButton(
-                            child: Text('Activity'),
-                            style: ElevatedButton.styleFrom(
-                              primary: _getColor("Physical Activity"),
-                              // background
-                              onPrimary: Colors.white, // foreground
-                            ),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .push(new MaterialPageRoute(
-                                    builder: (_) => ChooseActivityGoals(),
-                                  ))
-                                  .then((value) => update(context));
-                            },
-                          ))
-                        ],
-                        onSelected: (route) {
-                          print(route);
-                          // Note You must create respective pages for navigation
-                          Navigator.pushNamed(context, route);
-                        },
-                      ),
-                    ]),
-              ],
+                            ))
+                          ],
+                          onSelected: (route) {
+                            print(route);
+                            // Note You must create respective pages for navigation
+                            Navigator.pushNamed(context, route);
+                          },
+                        ),
+                      ]),
+                ],
+              ),
             ),
           ),
-          ),
-
           weeklySavedGoalsModelList.length > 0
               ? _buildWeeklyView()
               : SizedBox(height: 0),
-          totalWeeklyGoalsCompleted != null
-              ? _buildGetWeeklyCompleted()
+
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(left: 30, right: 15, top: 15, bottom: 15),
+            color: Theme.of(context).primaryColor,
+            child:  Text(
+              "Badge Status",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+
+          totalWeeklyGoalsCompleted != null && totalWeeklyGoalsCompleted < 5
+              ? _buildBadge1()
+              : SizedBox(height: 0),
+          totalWeeklyGoalsCompleted != null &&
+                  totalWeeklyGoalsCompleted >= 5 &&
+                  totalWeeklyGoalsCompleted < 10
+              ? _buildBadge2()
+              : SizedBox(height: 0),
+          totalWeeklyGoalsCompleted != null &&
+                  totalWeeklyGoalsCompleted >= 10
+              ? _buildBadge3()
               : SizedBox(height: 0),
         ],
       ),
@@ -369,6 +411,65 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
     }
   }
 
+  _showAddDialog() async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title:
+          Text("Goals Completed\n\nYou have completed a total of " + totalWeeklyGoalsCompleted.toString() + " goals so far!"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ));
+  }
+
+  Widget _buildBadge1() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          IconButton(
+            icon: Image.asset('./assets/images/badge1.png'),
+            iconSize: 75,
+            onPressed: () {_showAddDialog();},
+          )
+        ]);
+  }
+
+  Widget _buildBadge2() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          IconButton(
+            icon: Image.asset('./assets/images/badge2.png'),
+            iconSize: 75,
+            onPressed: () {_showAddDialog();},
+          )
+        ]);
+  }
+
+  Widget _buildBadge3() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          IconButton(
+            icon: Image.asset('./assets/images/badge3.png'),
+            iconSize: 75,
+            onPressed: () {_showAddDialog();},
+          )
+        ]);
+  }
+
   Widget _buildGetWeeklyCompleted() {
     return Container(
       padding: EdgeInsets.all(15.0),
@@ -377,7 +478,6 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
             prefs.getInt("weekly goal total").toString(),
         style: TextStyle(
           fontSize: 16.0,
-          color: Theme.of(context).primaryColor,
         ),
       ),
     );
@@ -409,7 +509,6 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
           return Slidable(
             actionPane: SlidableDrawerActionPane(),
             child: Container(
-              color: Colors.white,
               child: ListTile(
                 title: Text(weeklySavedGoalsModelList[index].goalDescription),
               ),
@@ -468,9 +567,9 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                   color: Colors.red,
                   icon: Icons.delete,
                   onTap: () {
-                    update(context);
                     deleteByGoalDescription(
                         weeklySavedGoalsModelList[index].id);
+                    update(context);
                     _showSnackBar(context, 'Deleted Goal');
                   }),
             ],
@@ -498,7 +597,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
 
     weeklySavedGoalsModelList.clear();
     var dbs2 = new WeeklySavedDBHelper();
-    var response2 = await dbs2.getWeeklySavedGoals();
+    var response2 = await dbs2.getWeeklySavedGoalsByUserID();
     var wGDecode2 = json.decode(response2.body);
 
     for (int i = 0; i < wGDecode2.length; i++) {

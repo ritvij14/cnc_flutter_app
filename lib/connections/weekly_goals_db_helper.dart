@@ -5,7 +5,7 @@ import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:http/http.dart' as http;
 
 class WeeklyDBHelper extends DBHelper {
-  var baseUrl = 'https://10.0.2.2:7777/';
+  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
 
   Future<http.Response> getWeeklyGoals() async {
     var requestUrl = baseUrl + 'api/weekly_goals/all/';

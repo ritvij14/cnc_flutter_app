@@ -164,7 +164,6 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       child: Container(
-        color: Colors.white,
         child: ListTile(
           title: Text(weeklyGoalsModelList[index].type),
           subtitle: Text(weeklyGoalsModelList[index].goalDescription),
@@ -200,7 +199,6 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
 
   getGoals() async {
     weeklyGoalsModelList.clear();
-    var db = new WeeklyDBHelper();
     var response = await db.getWeeklyGoals();
     var wGDecode = json.decode(response.body);
 
@@ -214,7 +212,7 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
 
     weeklySavedGoalsModelList.clear();
     var db2 = new WeeklySavedDBHelper();
-    var response2 = await db2.getWeeklySavedGoals();
+    var response2 = await db2.getWeeklySavedGoalsByUserID();
     var wGDecode2 = json.decode(response2.body);
 
     for (int i = 0; i < wGDecode2.length; i++) {
@@ -226,6 +224,24 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
           wGDecode2[i]['user_id']);
       weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
+  }
+
+  _showAddDialog() async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title:
+          Text("Tried to add more than 3 Goals\n\nYou already have 3 goals selected for this week. Either "
+              "delete a goal or complete a goal for this week to add more."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ));
   }
 
   addSavedGoals(int index) async {
@@ -241,14 +257,20 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
       x = 1;
 
     }
-    weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(x,weeklyGoalsModelList[index].type,weeklyGoalsModelList[index].goalDescription, weeklyGoalsModelList[index].helpInfo,1));
-    WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
-        x,
-        weeklyGoalsModelList[index].type,
-        weeklyGoalsModelList[index].goalDescription,
-        weeklyGoalsModelList[index].helpInfo,
-        1);
-    db2.saveWeeklySavedGoal(m);
+    if (weeklySavedGoalsModelList.length < 3){
+      weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(x,weeklyGoalsModelList[index].type,weeklyGoalsModelList[index].goalDescription, weeklyGoalsModelList[index].helpInfo,1));
+      WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
+          x,
+          weeklyGoalsModelList[index].type,
+          weeklyGoalsModelList[index].goalDescription,
+          weeklyGoalsModelList[index].helpInfo,
+          12);
+      db2.saveWeeklySavedGoal(m);
+    }
+    else {
+      _showAddDialog();
+      print("longer than 3");
+    }
 
   }
 

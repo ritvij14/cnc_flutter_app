@@ -1,13 +1,9 @@
 import 'package:cnc_flutter_app/settings/preferences.dart';
-import 'package:flutter/material.dart';
+import 'package:cnc_flutter_app/theme/app_themes.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_bloc.dart';
 import 'package:cnc_flutter_app/theme/bloc/theme_event.dart';
-import 'package:cnc_flutter_app/theme/app_themes.dart';
 import 'package:flutter/cupertino.dart';
-import '../theme/app_themes.dart';
-import '../settings/preferences.dart';
-import '../theme/bloc/theme_bloc.dart';
-import '../theme/bloc/theme_event.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PreferenceScreen extends StatefulWidget {
@@ -27,7 +23,7 @@ class _PreferenceScreen extends State<PreferenceScreen> {
   }
 
   _getTheme() async {
-    String temp = Preferences.getTheme().toString();
+    String temp =      Preferences.getTheme().toString();
     if (temp == "AppTheme.Default") {
       isSwitched = false;
     } else {

@@ -182,7 +182,7 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
                   ),
                   Icon(
                     Icons.add,
-                    color: Colors.black54,
+                    color: Colors.white,
                   )
                 ],
               ),
@@ -217,7 +217,6 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
             prefs.getInt("personal goal total").toString(),
         style: TextStyle(
           fontSize: 16.0,
-          color: Theme.of(context).primaryColor,
         ),
       ),
     );
@@ -235,7 +234,6 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
           return Slidable(
             actionPane: SlidableDrawerActionPane(),
             child: Container(
-              color: Colors.white,
               child: ListTile(
                 title: Text(_events[_controller.selectedDay][index].toString()),
               ),

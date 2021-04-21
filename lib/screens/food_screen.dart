@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
+import 'package:cnc_flutter_app/widgets/alerts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -331,7 +332,8 @@ class FoodProfile extends State<FoodPage> {
         leading: IconButton(
           icon: Icon(Icons.clear),
           onPressed: () {
-            showAlertDialog(context);
+            Alerts().showAlert(context, false);
+            // showAlertDialog(context);
           },
         ),
         title: Text('New Entry'),
@@ -876,11 +878,12 @@ class FoodProfile extends State<FoodPage> {
                             child: Text('CANCEL',
                                 style: TextStyle(color: Colors.grey)),
                             onPressed: () {
-                              Navigator.pop(context, null);
+                              Alerts().showAlert(context, false);
+                              // Navigator.pop(context, null);
                             },
                           ),
                           FlatButton(
-                            color: Colors.blue,
+                            color: Theme.of(context).buttonColor,
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
                               'SAVE',
