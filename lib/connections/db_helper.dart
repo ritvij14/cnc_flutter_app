@@ -206,7 +206,7 @@ class DBHelper {
       'email': email,
     };
     var uri =
-    Uri.https('10.0.2.2:7777', 'api/users/resetPassword', queryParameters);
+    Uri.https('enact-crc-app.herokuapp.com', 'api/users/resetPassword', queryParameters);
 
     var response = await http.post(
       uri,
