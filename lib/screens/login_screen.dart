@@ -57,8 +57,21 @@ class LoginScreen extends StatelessWidget {
 
   Future<String> _recoverPassword(String name) {
     print('Name: $name');
-    //TODO add in logic to recover password
-    return Future.delayed(loginTime).then((_) {
+    return Future.delayed(loginTime).then((_) async {
+      if (await db.isEmailValid(name) == false) {
+        // print("It looks like there isn't an account with that email.");
+      return "It looks like there isn't an account with that email.";
+      }
+      //Recover password logic here
+      var response = await db.resetPassword(name);
+
+
+
+
+
+
+
+      //Recover password logic end
       return null;
     });
   }
@@ -87,6 +100,10 @@ class LoginScreen extends StatelessWidget {
         Navigator.pushReplacementNamed(context, route);
       },
       onRecoverPassword: _recoverPassword,
+
+      messages: LoginMessages(
+        recoverPasswordDescription: "We will send you an email to reset your password."
+      ),
     );
   }
 
