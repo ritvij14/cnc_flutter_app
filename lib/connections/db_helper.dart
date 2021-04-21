@@ -198,6 +198,26 @@ class DBHelper {
     return uriResponse;
   }
 
+  resetPassword(String email) async{
+    var requestUrl =
+        baseUrl + 'api/users/resetPassword';
+
+    var queryParameters = {
+      'email': email,
+    };
+    var uri =
+    Uri.https('enact-crc-app.herokuapp.com', 'api/users/resetPassword', queryParameters);
+
+    var response = await http.post(
+      uri,
+      headers: {"Content-Type": "application/json"},
+    );
+    print(response.body);
+    return response;
+
+  }
+
+
   Future<http.Response> getFoodLog(date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
@@ -250,4 +270,6 @@ class DBHelper {
           'portion': portion,
         }));
   }
+
 }
+
