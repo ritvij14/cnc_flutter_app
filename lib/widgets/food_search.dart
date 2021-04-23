@@ -18,6 +18,9 @@ class FoodSearch extends SearchDelegate<String> {
   Food selection;
   String selectedDate;
 
+  String searchedQuery = '';
+  String message = '';
+
   FoodSearch(String selectedDate) {
     this.selectedDate = selectedDate;
   }
@@ -60,6 +63,10 @@ class FoodSearch extends SearchDelegate<String> {
       foodList.add(food);
     }
     return true;
+  }
+
+  void setMessage(message) {
+    this.message = message;
   }
 
   Future<bool> getFrequentFood() async {
@@ -123,7 +130,8 @@ class FoodSearch extends SearchDelegate<String> {
           progress: transitionAnimation,
         ),
         onPressed: () {
-          close(context, null);
+          Navigator.pop(context, message);
+          // close(context, message);
         });
   }
 
@@ -215,11 +223,192 @@ class FoodSearch extends SearchDelegate<String> {
     //   recentSearchList.add(query);
     //   recentSearchList = new List.from(recentSearchList.reversed);
     // }
+    if(searchedQuery==query) {
+      return ListView.builder(
+        itemCount: foodList.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Card(
+                margin: EdgeInsets.zero,
+                color: Theme.of(context).canvasColor,
+                child: ListTile(
+                  contentPadding: EdgeInsets.only(left: 0, right: 7),
+                  leading: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 15,
+                        height: double.infinity,
+                        child: Text(''),
+                        color:
+                        getColor(foodList[index].nccFoodGroupCategory),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                      ),
+                      getIcon(foodList[index].nccFoodGroupCategory),
+                    ],
+                  ),
+                  onTap: () {
+                    searchedQuery = query;
+                    Navigator.of(context)
+                        .push(
+                      new MaterialPageRoute(
+                          builder: (_) =>
+                              FoodPage(foodList[index], selectedDate)),
+                    )
+                        .then((val) => {
+                      setMessage(val)
+                          });
+                    // close(context, null)
+                  },
+                  title: Text(
+                    foodList[index].description,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ),
+              Divider(
+                color: Colors.grey[600],
+                height: 0,
+                thickness: 1,
+              )
+            ],
+          );
+        },
+      );
+    } else {
+      return FutureBuilder(
+          builder: (context, projectSnap) {
+            return ListView.builder(
+              itemCount: foodList.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Card(
+                      margin: EdgeInsets.zero,
+                      color: Theme.of(context).canvasColor,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.only(left: 0, right: 7),
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 15,
+                              height: double.infinity,
+                              child: Text(''),
+                              color:
+                              getColor(foodList[index].nccFoodGroupCategory),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5, right: 5),
+                            ),
+                            getIcon(foodList[index].nccFoodGroupCategory),
+                          ],
+                        ),
+                        onTap: () {
+                          searchedQuery = query;
+                          Navigator.of(context)
+                              .push(
+                            new MaterialPageRoute(
+                                builder: (_) =>
+                                    FoodPage(foodList[index], selectedDate)),
+                          )
 
-    return FutureBuilder(
+                              .then((val) => {
+                                setMessage(val)
+                              });
+                          // close(context, null)
+                        },
+                        title: Text(
+                          foodList[index].description,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey[600],
+                      height: 0,
+                      thickness: 1,
+                    )
+                  ],
+                );
+              },
+            );
+          },
+          future: getFood());
+    }
+
+
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    var searchResults;
+    if(query.isNotEmpty) {
+      searchResults = foodList;
+    } else {
+      searchResults = frequentFoodList;
+    }
+    if(searchedQuery==query) {
+      return ListView.builder(
+        itemCount: searchResults.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Card(
+                margin: EdgeInsets.zero,
+                color: Theme.of(context).canvasColor,
+                child: ListTile(
+                  contentPadding: EdgeInsets.only(left: 0, right: 7),
+                  leading: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 15,
+                        height: double.infinity,
+                        child: Text(''),
+                        color: getColor(searchResults[index].nccFoodGroupCategory),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                      ),
+                      getIcon(searchResults[index].nccFoodGroupCategory),
+                    ],
+                  ),
+                  onTap: () {
+                    this.searchedQuery = query;
+                    Navigator.of(context)
+                        .push(
+                      new MaterialPageRoute(
+                          builder: (_) =>
+                              FoodPage(searchResults[index], selectedDate)),
+                    )
+                        .then((val) => {
+                      setMessage(val)
+                    });
+                  },
+                  title: Text(
+                    searchResults[index].description,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ),
+              Divider(
+                color: Colors.grey[600],
+                height: 0,
+                thickness: 1,
+              )
+            ],
+          );
+        },
+      );
+    } else {
+      return FutureBuilder(
         builder: (context, projectSnap) {
           return ListView.builder(
-            itemCount: foodList.length,
+            itemCount: searchResults.length,
             itemBuilder: (context, index) {
               return Column(
                 children: [
@@ -235,27 +424,28 @@ class FoodSearch extends SearchDelegate<String> {
                             width: 15,
                             height: double.infinity,
                             child: Text(''),
-                            color:
-                                getColor(foodList[index].nccFoodGroupCategory),
+                            color: getColor(searchResults[index].nccFoodGroupCategory),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 5, right: 5),
                           ),
-                          getIcon(foodList[index].nccFoodGroupCategory),
+                          getIcon(searchResults[index].nccFoodGroupCategory),
                         ],
                       ),
                       onTap: () {
+                        this.searchedQuery = query;
                         Navigator.of(context)
                             .push(
-                              new MaterialPageRoute(
-                                  builder: (_) =>
-                                      FoodPage(foodList[index], selectedDate)),
-                            )
-                            .then((val) => {});
-                        // close(context, null)
+                          new MaterialPageRoute(
+                              builder: (_) =>
+                                  FoodPage(searchResults[index], selectedDate)),
+                        )
+                            .then((val) => {
+                          setMessage(val)
+                        });
                       },
                       title: Text(
-                        foodList[index].description,
+                        searchResults[index].description,
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -270,71 +460,10 @@ class FoodSearch extends SearchDelegate<String> {
             },
           );
         },
-        future: getFood());
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    var searchResults;
-    if(query.isNotEmpty) {
-      searchResults = foodList;
-    } else {
-      searchResults = frequentFoodList;
+        future: getFood(),
+      );
     }
-    return FutureBuilder(
-      builder: (context, projectSnap) {
-        return ListView.builder(
-          itemCount: searchResults.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Card(
-                  margin: EdgeInsets.zero,
-                  color: Theme.of(context).canvasColor,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.only(left: 0, right: 7),
-                    leading: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 15,
-                          height: double.infinity,
-                          child: Text(''),
-                          color: getColor(searchResults[index].nccFoodGroupCategory),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                        ),
-                        getIcon(searchResults[index].nccFoodGroupCategory),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(
-                            new MaterialPageRoute(
-                                builder: (_) =>
-                                    FoodPage(searchResults[index], selectedDate)),
-                          )
-                          .then((val) => {});
-                    },
-                    title: Text(
-                      searchResults[index].description,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: Colors.grey[600],
-                  height: 0,
-                  thickness: 1,
-                )
-              ],
-            );
-          },
-        );
-      },
-      future: getFood(),
-    );
+
     // }
   }
 }

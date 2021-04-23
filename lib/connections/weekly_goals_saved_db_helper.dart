@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class WeeklySavedDBHelper extends DBHelper {
-  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
+import 'db_helper_base.dart';
+
+class WeeklySavedDBHelper extends DBHelperBase {
 
   Future<http.Response> getWeeklySavedGoals() async {
     var requestUrl = baseUrl + 'api/weekly_goals_saved/all/';
@@ -23,7 +23,7 @@ class WeeklySavedDBHelper extends DBHelper {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', '/api/weekly_goals_saved/all/$userId', queryParameters);
+    Uri.https(baseUri, '/api/weekly_goals_saved/all/$userId', queryParameters);
 
     var response = await http.get(
       uri,

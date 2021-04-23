@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:http/http.dart' as http;
 
-class WeeklyDBHelper extends DBHelper {
-  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
+import 'db_helper_base.dart';
+
+class WeeklyDBHelper extends DBHelperBase  {
 
   Future<http.Response> getWeeklyGoals() async {
     var requestUrl = baseUrl + 'api/weekly_goals/all/';

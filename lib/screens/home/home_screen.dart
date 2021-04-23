@@ -69,12 +69,29 @@ class _HomeScreenState extends State<HomeScreen> {
           SpeedDialChild(
               child: Icon(Icons.food_bank),
               label: 'Log Food',
-              onTap: () {
-                showSearch(
-                        context: context,
-                        delegate: FoodSearch(DateTime.now().toString()))
-                    .then((value) => rebuildAllChildren(context));
-              }),
+        onTap: () async {
+          await showSearch(context: context, delegate: FoodSearch(DateTime.now().toString()))
+              .then((value) => setState(() {
+            if(value.isNotEmpty) {
+              ScaffoldMessenger.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text("$value")));
+            }
+
+
+            // ScaffoldMessenger.of(context)
+            //   ..removeCurrentSnackBar()
+            //   ..showSnackBar(SnackBar(content: Text("$value")));
+            rebuildAllChildren(context);
+          }));
+
+          // onTap: () {
+          //   showSearch(
+          //           context: context,
+          //           delegate: FoodSearch(DateTime.now().toString()))
+          //       .then((value) => rebuildAllChildren(context));
+          // }),
+        }),
 
           // Navigator.pushNamed(context, '/inputActivity');
           SpeedDialChild(

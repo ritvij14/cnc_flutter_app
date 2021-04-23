@@ -7,8 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'db_helper_base.dart';
 
-class DBHelper {
-  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
+class DBHelper extends DBHelperBase {
 
   Future<bool> isEmailValid(String email) async {
     var requestUrl = baseUrl + 'api/users/checkIfEmailExists/' + email;
@@ -199,14 +198,12 @@ class DBHelper {
   }
 
   resetPassword(String email) async{
-    var requestUrl =
-        baseUrl + 'api/users/resetPassword';
 
     var queryParameters = {
       'email': email,
     };
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', 'api/users/resetPassword', queryParameters);
+    Uri.https(baseUri, 'api/users/resetPassword', queryParameters);
 
     var response = await http.post(
       uri,
