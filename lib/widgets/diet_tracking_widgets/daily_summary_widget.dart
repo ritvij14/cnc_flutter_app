@@ -155,7 +155,6 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('test');
     if (!showGrams) {
       return FutureBuilder(
         builder: (context, projectSnap) {
