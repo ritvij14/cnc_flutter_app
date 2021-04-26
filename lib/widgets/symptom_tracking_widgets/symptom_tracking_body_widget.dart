@@ -36,7 +36,6 @@ class _SymptomTrackingBodyState extends State<SymptomTrackingBody> {
   }
 
   getSymptoms() async {
-    print('inside get symptoms method');
     symptomModelList.clear();
     var sharedPref = await SharedPreferences.getInstance();
     String id = sharedPref.getString('id');
@@ -46,7 +45,6 @@ class _SymptomTrackingBodyState extends State<SymptomTrackingBody> {
   }
 
   test() {
-    print('here');
   }
 
 

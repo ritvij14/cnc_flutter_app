@@ -22,9 +22,7 @@ class Authorization {
     var sharedPref = await SharedPreferences.getInstance();
     String id = sharedPref.getString('id');
     if(id != null){
-      print('User is already logged in, routing to home');
     } else {
-      print('User is not logged in, routing to login');
     }
     return id != null;
   }
@@ -39,7 +37,6 @@ class Authorization {
 
     bool formComplete = (response.toString() == 'true');
 
-    print('The welcome screener came back as ' + formComplete.toString());
     if (formComplete) {
       return true;
     } else {

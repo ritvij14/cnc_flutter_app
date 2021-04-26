@@ -211,7 +211,6 @@ class FoodProfile extends State<FoodPage> {
     var time = entryTime.toString().substring(0, 19);
     time = time.split(" ")[1];
     var dateTime = selectedDate + " " + time;
-    print(dateTime);
     var response = await db.saveNewFoodLogEntry(
         dateTime, selectedDate, currentFood.id, portion);
   }
@@ -253,7 +252,6 @@ class FoodProfile extends State<FoodPage> {
         dateCtl.text = hour + ':' + minute + ' ' + tod;
         entryTime = new DateTime(
             entryTime.year, entryTime.month, entryTime.day, t.hour, t.minute);
-        print('Time of Day in food = ' + t.toString());
       });
   }
 

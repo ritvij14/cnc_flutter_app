@@ -20,11 +20,26 @@ class DBHelper {
 
   //user id as a string or 'invalid'
   Future<String> login(String email, String password) async {
-    var requestUrl =
-        baseUrl + 'api/users/login/' + email + '/' + password + '/';
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
-    return response.body.toString();
+    // var requestUrl =
+    //     baseUrl + 'api/users/login/' + email + '/' + password + '/';
+    // http.Response response =
+    //     await http.get(Uri.encodeFull(requestUrl), headers: {});
+    // return response.body.toString();
+    var requestUrl = baseUrl + 'api/users/login';
+
+    var queryParameters = {
+      'email': email,
+      'password': password,
+    };
+    var uri = Uri.https(baseUrl, 'api/users/login', queryParameters);
+
+    var response = await http.get(
+    uri,
+    headers: {"Content-Type": "application/json"},
+    );
+
+    print(response.body + "<< This was the login response");
+    return response.body;
   }
 
   Future<bool> getFormCompletionStatus() async {
@@ -212,7 +227,6 @@ class DBHelper {
       uri,
       headers: {"Content-Type": "application/json"},
     );
-    print(response.body);
     return response;
 
   }

@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   refresh() {
     setState(() {
-      getDailyActivity();
+      // getDailyActivity();
     });
   }
 
@@ -73,7 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 showSearch(
                         context: context,
                         delegate: FoodSearch(DateTime.now().toString()))
-                    .then((value) => rebuildAllChildren(context));
+                    .then((value) => setState(() {
+                          rebuildAllChildren(context);
+                          refresh();
+                        }));
               }),
 
           // Navigator.pushNamed(context, '/inputActivity');
@@ -87,22 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ..removeCurrentSnackBar()
                             ..showSnackBar(SnackBar(content: Text("$value")));
                         }));
-
-                // );
-
-                //   final result =
-                //       await Navigator.pushNamed(context, '/inputActivity');
-                //   if (result != null) {
-                //     ScaffoldMessenger.of(context)
-                //       ..removeCurrentSnackBar()
-                //       ..showSnackBar(SnackBar(content: Text("$result")));
-                //   } else {
-                //     ScaffoldMessenger.of(context)
-                //       ..removeCurrentSnackBar()
-                //       ..showSnackBar(
-                //           SnackBar(content: Text("An Error Occurred")));
-                //     // setState(() {});
-                //   }
               }),
           SpeedDialChild(
               child: Icon(Icons.thermostat_outlined),
@@ -110,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputSymptom')
                     .then((value) => setState(() {
+                          refresh();
                           ScaffoldMessenger.of(context)
                             ..removeCurrentSnackBar()
                             ..showSnackBar(SnackBar(content: Text("$value")));
@@ -127,6 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputMetric')
                     .then((value) => setState(() {
+                          refresh();
+
                           ScaffoldMessenger.of(context)
                             ..removeCurrentSnackBar()
                             ..showSnackBar(SnackBar(content: Text("$value")));
@@ -380,7 +370,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/fitnessTracking')
-                  .then((value) => rebuildAllChildren(context));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View All Activities")),
       ];
@@ -402,7 +395,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/fitnessTracking')
-                  .then((value) => setState(() {}));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View All Activities")),
       ];
@@ -417,7 +413,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/dietTracking')
-                  .then((value) => rebuildAllChildren(context));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View All Foods")),
       ];
@@ -438,7 +437,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/dietTracking')
-                  .then((value) => setState(() {}));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View All Foods")),
       ];
@@ -453,7 +455,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/metricTracking')
-                  .then((value) => rebuildAllChildren(context));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View Weight Log")),
       ];
@@ -476,7 +481,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/metricTracking')
-                  .then((value) => setState(() {}));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View Weight Log")),
       ];
@@ -514,7 +522,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/symptomTracking')
-                  .then((value) => rebuildAllChildren(context));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View Symptom Log")),
       ];
@@ -536,7 +547,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/symptomTracking')
-                  .then((value) => setState(() {}));
+                  .then((value) => setState(() {
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Text("View Symptom Log")),
       ];

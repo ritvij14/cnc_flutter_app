@@ -30,7 +30,6 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
 //       yield ThemeState(themeData: appThemeData[event.theme]);
 //       // setCurrent(event.theme.toString());
 //       // addThemeToSP(event.theme.toString());
-//       print(event.theme.toString());
 //     }
 //   }
 
@@ -40,7 +39,6 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   addThemeToSP(String theme) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('savedTheme', theme);
-    print("Theme saved: " + theme);
   }
 
   setTheme() async {

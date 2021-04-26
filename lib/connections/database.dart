@@ -80,8 +80,6 @@ class DBProvider {
   }
   // updateIsAnswered(UserQuestion updatedUserQuestion) async {
   //   final db = await database;
-  //   print("in update: " + updatedUserQuestion.id.toString());
-  //   print(updatedUserQuestion.question);
   //   await db.rawUpdate('''
   //   UPDATE user_questions
   //   SET question = ?, question_notes = ? , date_updated = ?, is_answered = ?
@@ -105,7 +103,6 @@ class DBProvider {
   Future<List> getAllUserQuestions(int user_id) async {
     final db = await database;
     var questions = await db.rawQuery(    'SELECT * FROM user_questions WHERE user_id = ?', [user_id]);
-   // print("in get all users: "+ questions.length.toString());
     return questions;
   }
 

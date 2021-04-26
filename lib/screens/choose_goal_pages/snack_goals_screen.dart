@@ -249,12 +249,9 @@ class _ChooseSnackGoalsPageState extends State<ChooseSnackGoalsPage> {
     int i = 1;
     int x = 0;
     if (weeklySavedGoalsModelList.length > 0){
-      print(1);
       x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
-      print(x);
     }
     else{
-      print(2);
       x = 1;
 
     }
@@ -270,7 +267,6 @@ class _ChooseSnackGoalsPageState extends State<ChooseSnackGoalsPage> {
     }
     else {
       _showAddDialog();
-      print("longer than 3");
     }
   }
 
