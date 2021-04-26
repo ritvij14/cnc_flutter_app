@@ -343,7 +343,7 @@ class _ContentScreenState extends State<ContentScreen> {
 
   List<Color> getColor(String type) {
     if (type == "DIET/NUTRITION" || type == "DIET") {
-      return [Colors.lime, Colors.greenAccent];
+      return [Colors.lime, Colors.tealAccent[700]];
     } else if (type == "FITNESS/EXERCISE" || type == "EXERCISE") {
       return [Colors.limeAccent, Colors.deepOrange];
       // [Colors.orange, Colors.pinkAccent];
