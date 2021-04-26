@@ -180,6 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontSize: 18.0,
                                     color: Theme.of(context).highlightColor)),
 
+
                             // Align(
                             //   child: Text('Daily Diet Summary',
                             //       style: TextStyle(
@@ -522,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                       child: Text("View Today's Food Log",
                           style:
-                              TextStyle(color: Theme.of(context).buttonColor))),
+                              TextStyle(color: Theme.of(context).highlightColor))),
                 )))
       ];
     } else if (dayFoodLogEntryList.isNotEmpty) {
