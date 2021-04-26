@@ -177,7 +177,6 @@ class _ChooseDairyGoalsPageState extends State<ChooseDairyGoalsPage> {
             onTap: () {
               //_addGoal(items[index].subtitle);
               _addGoal(weeklyGoalsModelList[index].goalDescription);
-              print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
               addSavedGoals(index);
             }),
@@ -189,7 +188,6 @@ class _ChooseDairyGoalsPageState extends State<ChooseDairyGoalsPage> {
             icon: Icons.add,
             onTap: () {
               _addGoal(weeklyGoalsModelList[index].goalDescription);
-              print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
               addSavedGoals(index);
             }),
@@ -249,12 +247,9 @@ class _ChooseDairyGoalsPageState extends State<ChooseDairyGoalsPage> {
     int i = 1;
     int x = 0;
     if (weeklySavedGoalsModelList.length > 0){
-      print(1);
       x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
-      print(x);
     }
     else{
-      print(2);
       x = 1;
 
     }
@@ -270,7 +265,6 @@ class _ChooseDairyGoalsPageState extends State<ChooseDairyGoalsPage> {
     }
     else {
       _showAddDialog();
-      print("longer than 3");
     }
 
   }

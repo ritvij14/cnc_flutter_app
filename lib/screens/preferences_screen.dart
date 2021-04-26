@@ -75,7 +75,6 @@ class _PreferenceScreen extends State<PreferenceScreen> {
                   _setTheme("AppTheme.DarkMode", context);
                 }
 
-                print(isSwitched);
               });
             },
           ),

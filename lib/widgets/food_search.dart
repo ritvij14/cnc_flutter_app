@@ -182,7 +182,6 @@ class FoodSearch extends SearchDelegate<String> {
         Icons.ramen_dining,
       );
     }
-    print(category);
     // last is misc
     return Icon(
       Icons.food_bank,

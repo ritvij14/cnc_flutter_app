@@ -185,9 +185,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
               dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
               _dateTime = dateCtl.text;
-              print('=================');
-              print(_dateTime);
-              print('=================');
             },
           ),
         ))

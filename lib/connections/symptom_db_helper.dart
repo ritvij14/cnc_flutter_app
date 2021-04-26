@@ -28,7 +28,6 @@ class SymptomDBHelper extends DBHelper {
   }
 
   Future<http.Response> getAllSymptoms() async {
-    print('here');
     var requestUrl = baseUrl + 'api/symptom/all';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
@@ -36,7 +35,6 @@ class SymptomDBHelper extends DBHelper {
   }
 
   Future<http.Response> getSymptoms(int userId) async {
-    print('inside symptom db helper get symptoms by user id');
     var queryParameters = {
       'userId': userId.toString(),
     };

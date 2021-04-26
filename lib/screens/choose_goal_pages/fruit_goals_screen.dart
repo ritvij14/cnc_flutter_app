@@ -177,7 +177,6 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
             onTap: () {
               //_addGoal(items[index].subtitle);
               _addGoal(weeklyGoalsModelList[index].goalDescription);
-              print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
               addSavedGoals(index);
             }),
@@ -189,7 +188,6 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
             icon: Icons.add,
             onTap: () {
               _addGoal(weeklyGoalsModelList[index].goalDescription);
-              print(goals);
               _showSnackBar(context, 'Added Goal to Weekly Goals');
               addSavedGoals(index);
             }),
