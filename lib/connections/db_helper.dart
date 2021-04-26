@@ -24,13 +24,12 @@ class DBHelper extends DBHelperBase {
     // http.Response response =
     //     await http.get(Uri.encodeFull(requestUrl), headers: {});
     // return response.body.toString();
-    var requestUrl = baseUrl + 'api/users/login';
 
     var queryParameters = {
       'email': email,
       'password': password,
     };
-    var uri = Uri.https(baseUrl, 'api/users/login', queryParameters);
+    var uri = Uri.https(baseUri, 'api/users/login', queryParameters);
 
     var response = await http.get(
     uri,
