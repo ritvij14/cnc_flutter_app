@@ -13,6 +13,7 @@ import 'package:share/share.dart';
 
 import './choose_goals_screen.dart';
 import './weekly_goals_screen.dart';
+import 'badge_help_screen.dart';
 import 'choose_goal_pages/activity_goals_screen.dart';
 import 'choose_goal_pages/beverage_goals_screen.dart';
 import 'choose_goal_pages/dairy_goals_screen.dart';
@@ -53,8 +54,15 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
   TextEditingController _eventController2;
   SharedPreferences prefs2;
 
-  int totalWeeklyGoalsCompleted;
-  int totalPersonalGoalsCompleted;
+  int totalWeeklyGoalsCompleted = 0;
+  int totalActivityGoals = 0;
+  int totalBeverageGoals = 0;
+  int totalDairyGoals = 0;
+  int totalFruitGoals = 0;
+  int totalGrainGoals = 0;
+  int totalProteinGoals = 0;
+  int totalSnackGoals = 0;
+  int totalVegetableGoals = 0;
 
   List<String> goals;
   List<WeeklyGoalsModel> weeklyGoalsModelList = [];
@@ -66,7 +74,15 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
     prefs = await SharedPreferences.getInstance();
 
     totalWeeklyGoalsCompleted = prefs.getInt("weekly goal total");
-    totalPersonalGoalsCompleted = prefs.getInt("personal goal total");
+    totalActivityGoals = prefs.getInt("activity goals total");
+    totalDairyGoals = prefs.getInt("dairy goals total");
+    totalFruitGoals = prefs.getInt("fruit goals total");
+    totalBeverageGoals = prefs.getInt("beverage goals total");
+    totalGrainGoals = prefs.getInt("grain goals total");
+    totalProteinGoals = prefs.getInt("protein goals total");
+    totalSnackGoals = prefs.getInt("snack goals total");
+    totalVegetableGoals = prefs.getInt("vegetable goals total");
+
     _events = Map<DateTime, List<dynamic>>.from(
         decodeMap(json.decode(prefs.getString("events") ?? "{}")));
   }
@@ -184,7 +200,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          'Weekly Goals',
+                          'Your Goals',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -358,32 +374,382 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
           weeklySavedGoalsModelList.length > 0
               ? _buildWeeklyView()
               : SizedBox(height: 0),
-
           Container(
             width: double.infinity,
-            padding: EdgeInsets.only(left: 30, right: 15, top: 15, bottom: 15),
+            padding: EdgeInsets.only(left: 15, right: 25),
             color: Theme.of(context).primaryColor,
-            child:  Text(
-              "Badge Status",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold),
+            child: ExpansionTile(
+              title: Text(
+                "Your Badges",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              children: <Widget>[
+
+                Padding(padding: EdgeInsets.symmetric(horizontal: 50)),
+                TextButton(
+                  child: Icon(Icons.info),
+                  style: ElevatedButton.styleFrom(
+                    primary:
+                    Theme.of(context).primaryColor, // background
+                    onPrimary: Colors.white, // foreground
+                  ),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute(
+                      builder: (_) => BadgeHelp(),
+                    ))
+                        .then((value) => update(context));
+                  },
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Total Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalWeeklyGoalsCompleted == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalWeeklyGoalsCompleted != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalWeeklyGoalsCompleted)
+                          : SizedBox(height: 0),
+                      totalWeeklyGoalsCompleted != null &&
+                              totalWeeklyGoalsCompleted >= 25
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalWeeklyGoalsCompleted)
+                          : SizedBox(height: 0),
+                      totalWeeklyGoalsCompleted != null &&
+                              totalWeeklyGoalsCompleted >= 50
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalWeeklyGoalsCompleted)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Fruit Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalFruitGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalFruitGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalFruitGoals)
+                          : SizedBox(height: 0),
+                      totalFruitGoals != null &&
+                          totalFruitGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalFruitGoals)
+                          : SizedBox(height: 0),
+                      totalFruitGoals != null &&
+                          totalFruitGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalFruitGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Vegetable Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalVegetableGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalVegetableGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalVegetableGoals)
+                          : SizedBox(height: 0),
+                      totalVegetableGoals != null &&
+                          totalVegetableGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalVegetableGoals)
+                          : SizedBox(height: 0),
+                      totalVegetableGoals != null &&
+                          totalVegetableGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalVegetableGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Grains Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalGrainGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalGrainGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalGrainGoals)
+                          : SizedBox(height: 0),
+                      totalGrainGoals != null &&
+                          totalGrainGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalGrainGoals)
+                          : SizedBox(height: 0),
+                      totalGrainGoals != null &&
+                          totalGrainGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalGrainGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Protein Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalProteinGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalProteinGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalProteinGoals)
+                          : SizedBox(height: 0),
+                      totalProteinGoals != null &&
+                          totalProteinGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalProteinGoals)
+                          : SizedBox(height: 0),
+                      totalProteinGoals != null &&
+                          totalProteinGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalProteinGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Dairy Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalDairyGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalDairyGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalDairyGoals)
+                          : SizedBox(height: 0),
+                      totalDairyGoals != null &&
+                          totalDairyGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalDairyGoals)
+                          : SizedBox(height: 0),
+                      totalDairyGoals != null &&
+                          totalDairyGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalDairyGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Snack Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalSnackGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalSnackGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalSnackGoals)
+                          : SizedBox(height: 0),
+                      totalSnackGoals != null &&
+                          totalSnackGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalSnackGoals)
+                          : SizedBox(height: 0),
+                      totalSnackGoals != null &&
+                          totalSnackGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalSnackGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Beverage Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalBeverageGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalBeverageGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalBeverageGoals)
+                          : SizedBox(height: 0),
+                      totalBeverageGoals != null &&
+                          totalBeverageGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalBeverageGoals)
+                          : SizedBox(height: 0),
+                      totalBeverageGoals != null &&
+                          totalBeverageGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalBeverageGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.only(top: 15),
+                  color: Theme.of(context).primaryColor,
+                  child:  Text(
+                    "Activity Badges",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      totalActivityGoals == null
+                          ? Text("No Badges Achieved Yet")
+                          : SizedBox(height: 0),
+                      totalActivityGoals != null
+                          ? _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', totalActivityGoals)
+                          : SizedBox(height: 0),
+                      totalActivityGoals != null &&
+                          totalActivityGoals >= 5
+                          ? _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', totalActivityGoals)
+                          : SizedBox(height: 0),
+                      totalActivityGoals != null &&
+                          totalActivityGoals >= 10
+                          ? _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', totalActivityGoals)
+                          : SizedBox(height: 0),
+                    ],
+                  ),
+                ),
+
+              ],
             ),
           ),
-
-          totalWeeklyGoalsCompleted != null && totalWeeklyGoalsCompleted < 5
-              ? _buildBadge1()
-              : SizedBox(height: 0),
-          totalWeeklyGoalsCompleted != null &&
-                  totalWeeklyGoalsCompleted >= 5 &&
-                  totalWeeklyGoalsCompleted < 10
-              ? _buildBadge2()
-              : SizedBox(height: 0),
-          totalWeeklyGoalsCompleted != null &&
-                  totalWeeklyGoalsCompleted >= 10
-              ? _buildBadge3()
-              : SizedBox(height: 0),
         ],
       ),
     );
@@ -411,15 +777,51 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
     }
   }
 
-  _showAddDialog() async {
+  _showTotalDialog(int i) async {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title:
-          Text("Goals Completed\n\nYou have completed a total of " + totalWeeklyGoalsCompleted.toString() + " goals so far!"),
+              title: Text("Goals Completed\n\nYou have completed a total of " +
+                  i.toString() +
+                  " goals so far!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: const Text('OKAY',
+                      style:
+                      TextStyle(color: Colors.white)),
+                  color: Theme.of(context).buttonColor,
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.grey[800],
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ));
+  }
+
+  _showCongratsDialog(String i) async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Column( children:[
+            Text("New Badge\n\nYou have gained a new badge."),
+            Container(
+              child: Image(
+                height: 75,
+                width: 75,
+                image: AssetImage(i),
+              ),
+            ),],
+          ),
           actions: <Widget>[
-            TextButton(
-              child: Text("Okay"),
+            FlatButton(
+              child: const Text('OKAY',
+            style:
+            TextStyle(color: Colors.white)),
+              color: Theme.of(context).buttonColor,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.grey[800],
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -428,73 +830,23 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
         ));
   }
 
-  Widget _buildBadge1() {
-    return Row(
+  Widget _buildTotalBadge(String i, String j, int a) {
+    return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           IconButton(
-            icon: Image.asset('./assets/images/badge1.png'),
+            icon: Image.asset(i),
             iconSize: 75,
-            onPressed: () {_showAddDialog();},
-          )
+            onPressed: () {
+              _showTotalDialog(a);
+            },
+          ),
+          Text(
+            j
+          ),
         ]);
-  }
-
-  Widget _buildBadge2() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          IconButton(
-            icon: Image.asset('./assets/images/badge2.png'),
-            iconSize: 75,
-            onPressed: () {_showAddDialog();},
-          )
-        ]);
-  }
-
-  Widget _buildBadge3() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          IconButton(
-            icon: Image.asset('./assets/images/badge3.png'),
-            iconSize: 75,
-            onPressed: () {_showAddDialog();},
-          )
-        ]);
-  }
-
-  Widget _buildGetWeeklyCompleted() {
-    return Container(
-      padding: EdgeInsets.all(15.0),
-      child: Text(
-        'Total Weekly Goals Completed: ' +
-            prefs.getInt("weekly goal total").toString(),
-        style: TextStyle(
-          fontSize: 16.0,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGetPersonalCompleted() {
-    return Container(
-      padding: EdgeInsets.all(15.0),
-      child: Text(
-        'Total Personal Goals Completed: ' +
-            prefs.getInt("personal goal total").toString(),
-        style: TextStyle(
-          fontSize: 16.0,
-          color: Theme.of(context).primaryColor,
-        ),
-      ),
-    );
   }
 
   update(context) {
@@ -519,8 +871,95 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                   color: Colors.green,
                   icon: Icons.check,
                   onTap: () {
+
+                    if(totalActivityGoals == null && weeklySavedGoalsModelList[index].type == "Physical Activity") {
+                      totalActivityGoals = 1;
+                      prefs.setInt(
+                          "activity goals total", totalActivityGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Physical Activity"){
+                      totalActivityGoals =
+                      (totalActivityGoals + 1);
+                      prefs.setInt(
+                          "activity goals total", totalActivityGoals);
+                    }
+
+                    if(totalBeverageGoals == null && weeklySavedGoalsModelList[index].type == "Beverage") {
+                      totalBeverageGoals = 1;
+                      prefs.setInt(
+                          "beverage goals total", totalBeverageGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Beverage"){
+                      totalBeverageGoals =
+                      (totalBeverageGoals + 1);
+                      prefs.setInt(
+                          "beverage goals total", totalBeverageGoals);
+                    }
+
+                    if(totalDairyGoals == null && weeklySavedGoalsModelList[index].type == "Dairy") {
+                      totalDairyGoals = 1;
+                      prefs.setInt("dairy goals total", totalDairyGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Dairy"){
+                      totalDairyGoals = (totalDairyGoals + 1);
+                      prefs.setInt("dairy goals total", totalDairyGoals);
+                    }
+
+                    if(totalFruitGoals == null && weeklySavedGoalsModelList[index].type == "Fruits") {
+                      totalFruitGoals = 1;
+                      prefs.setInt(
+                          "fruit goals total", totalFruitGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Fruits") {
+                      totalFruitGoals =
+                      (totalFruitGoals + 1);
+                      prefs.setInt(
+                          "fruit goals total", totalFruitGoals);
+                    }
+
+                    if(totalGrainGoals == null && weeklySavedGoalsModelList[index].type == "Grains") {
+                      totalGrainGoals = 1;
+                      prefs.setInt(
+                          "grain goals total", totalGrainGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Grains") {
+                      totalGrainGoals =
+                      (totalGrainGoals + 1);
+                      prefs.setInt(
+                          "grain goals total", totalGrainGoals);
+                    }
+
+                    if(totalProteinGoals == null && weeklySavedGoalsModelList[index].type == "Protein") {
+                      totalProteinGoals = 1;
+                      prefs.setInt(
+                          "protein goals total", totalProteinGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Protein") {
+                      totalProteinGoals =
+                      (totalProteinGoals + 1);
+                      prefs.setInt(
+                          "protein goals total", totalProteinGoals);
+                    }
+
+                    if(totalSnackGoals == null && weeklySavedGoalsModelList[index].type == "Snacks and Condiments") {
+                      totalSnackGoals = 1;
+                      prefs.setInt(
+                          "snack goals total", totalSnackGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Snacks and Condiments") {
+                      totalSnackGoals =
+                      (totalSnackGoals + 1);
+                      prefs.setInt(
+                          "snack goals total", totalSnackGoals);
+                    }
+
+                    if(totalVegetableGoals == null && weeklySavedGoalsModelList[index].type == "Vegetables") {
+                      totalVegetableGoals = 1;
+                      prefs.setInt(
+                          "vegetable goals total", totalVegetableGoals);
+                    } else if (weeklySavedGoalsModelList[index].type == "Vegetables") {
+                      totalVegetableGoals =
+                      (totalVegetableGoals + 1);
+                      prefs.setInt(
+                          "vegetable goals total", totalVegetableGoals);
+                    }
+
                     deleteByGoalDescription(
                         weeklySavedGoalsModelList[index].id);
+
                     if (totalWeeklyGoalsCompleted == null) {
                       totalWeeklyGoalsCompleted = 1;
                       prefs.setInt(
@@ -534,8 +973,106 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
 
                     prefs.setInt(
                         "weekly goal total", totalWeeklyGoalsCompleted);
+                    prefs.setInt(
+                        "activity goals total", totalActivityGoals);
+                    prefs.setInt(
+                        "beverage goals total", totalBeverageGoals);
+                    prefs.setInt(
+                        "dairy goals total", totalDairyGoals);
+                    prefs.setInt(
+                        "fruit goals total", totalFruitGoals);
+                    prefs.setInt(
+                        "grain goals total", totalGrainGoals);
+                    prefs.setInt(
+                        "protein goals total", totalProteinGoals);
+                    prefs.setInt(
+                        "snack goals total", totalSnackGoals);
+                    prefs.setInt(
+                        "vegetable goals total", totalVegetableGoals);
+
                     _eventController2.clear();
                     update(context);
+
+                    if(totalFruitGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalFruitGoals == 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalFruitGoals == 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
+                    if(totalVegetableGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalVegetableGoals == 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalVegetableGoals == 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
+                    if(totalGrainGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalGrainGoals == 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalGrainGoals == 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
+                    if(totalProteinGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalProteinGoals == 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalProteinGoals == 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
+                    if(totalDairyGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalDairyGoals== 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalDairyGoals == 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
+                    if(totalSnackGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalSnackGoals == 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalSnackGoals == 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
+                    if(totalBeverageGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalBeverageGoals == 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalBeverageGoals== 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
+                    if(totalActivityGoals == 1){
+                      _showCongratsDialog('./assets/images/badge1.png');
+                    }
+                    if(totalActivityGoals == 5){
+                      _showCongratsDialog('./assets/images/badge2.png');
+                    }
+                    if(totalActivityGoals == 10){
+                      _showCongratsDialog('./assets/images/badge3.png');
+                    }
+
                     _showSnackBar(context, 'Completed Goal');
                   }),
               IconSlideAction(
