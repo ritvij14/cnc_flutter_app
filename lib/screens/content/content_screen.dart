@@ -14,7 +14,7 @@ class ContentScreen extends StatefulWidget {
 }
 
 class _ContentScreenState extends State<ContentScreen> {
-  List<String> videos = ['Video 1'];
+  List<String> videos = ['Video 1', 'Video 2'];
   List<String> dummyArticles = ['Article 1', 'Article 2', 'Article 3'];
   var _url =
       'https://www.youtube.com/channel/UCL6SGPPfesMz17QhaQK8Sgw/featured';
@@ -64,18 +64,13 @@ class _ContentScreenState extends State<ContentScreen> {
               height: 200,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.all(5),
                   itemCount: videos.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
                        child: GestureDetector(
                         onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ArticleViewer(articleList[index])));
+                          _launchURL();
                     },
                     child: Container(
                             width: 200,
@@ -95,7 +90,7 @@ class _ContentScreenState extends State<ContentScreen> {
                             ),
                             child: Column(children: <Widget>[
                               Container(
-                                  height: 75,
+                                  height: 70,
                                   width: 200,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.only(
@@ -115,9 +110,9 @@ class _ContentScreenState extends State<ContentScreen> {
                                   child: Container(
                                     child: Text(
                                      "Video Title Placeholder",
-                                      maxLines: 3,
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: 24),
+                                      style: TextStyle(fontSize: 20),
                                       textAlign: TextAlign.left,
                                     ),
                                   ),
@@ -179,7 +174,7 @@ class _ContentScreenState extends State<ContentScreen> {
                                   ),
                                   child: Column(children: <Widget>[
                                     Container(
-                                        height: 75,
+                                        height: 70,
                                         width: 200,
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.only(
@@ -205,9 +200,9 @@ class _ContentScreenState extends State<ContentScreen> {
                                           child: Text(
                                             articleList[index].articleName,
                                             // "Diet and Smoking Research study adfsd asv darbsgdf sghsdbs",
-                                            maxLines: 3,
+                                            maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: 24),
+                                            style: TextStyle(fontSize: 20),
                                             textAlign: TextAlign.left,
                                           ),
                                         ),

@@ -653,11 +653,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getDayFoodCalories() {
-    int calories = 0;
+    double calories = 0;
     for (FoodLogEntry foodLogEntry in dayFoodLogEntryList) {
-      calories += foodLogEntry.food.kcal.toInt();
+      calories += (foodLogEntry.food.kcal * foodLogEntry.portion);
     }
-    return calories;
+    return calories.toInt();
   }
 
   getGoals() async {

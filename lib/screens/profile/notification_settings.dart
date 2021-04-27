@@ -23,8 +23,8 @@ class _NotificationSettings extends State<NotificationSettings> {
   bool enableDailyNotificationsStart = false;
   bool enableWeeklyNotificationsStart = false;
   String dropDownDay = 'Sunday';
-String appTheme;
-  bool wasChanged =false;
+  String appTheme;
+  bool wasChanged = false;
   List<String> _days = [
     'Sunday',
     'Monday',
@@ -57,7 +57,7 @@ String appTheme;
     sharedPreferences = await SharedPreferences.getInstance();
     String storedDaily = sharedPreferences.get('dailyTime');
     String storedWeekly = sharedPreferences.get('weeklyTime');
-   appTheme =    Preferences.getTheme().toString();
+    appTheme = Preferences.getTheme().toString();
     if (storedDaily != null) {
       enableNotifications = true;
       enableDailyNotifications = true;
@@ -161,45 +161,48 @@ String appTheme;
   void closePage() {
     Navigator.of(context).pop();
   }
+
   _pickDailyTime() async {
     TimeOfDay t = await showTimePicker(
         context: context,
         initialTime:
             new TimeOfDay(hour: dailyTime.hour, minute: dailyTime.minute),
         builder: (context, child) {
-          return appTheme == "AppTheme.Default" ? Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: ColorScheme.light(
-                // change the border color
-                primary: Theme.of(context).primaryColor,
-                // change the text color
-                onSurface:Theme.of(context).shadowColor,
-              ),
-              // button colors
-              buttonTheme: ButtonThemeData(
-                colorScheme: ColorScheme.light(
-                  primary: Theme.of(context).buttonColor,
-                ),
-              ),
-            ),
-            child: child,
-          ): Theme(
-            data: ThemeData.dark().copyWith(
-              colorScheme: ColorScheme.dark(
-                // change the border color
-                primary: Theme.of(context).highlightColor,
-                // change the text color
-                onSurface:Theme.of(context).highlightColor,
-              ),
-              // button colors
-              buttonTheme: ButtonThemeData(
-                colorScheme: ColorScheme.light(
-                  primary: Theme.of(context).buttonColor,
-                ),
-              ),
-            ),
-            child: child,
-          );
+          return appTheme == "AppTheme.Default"
+              ? Theme(
+                  data: ThemeData.light().copyWith(
+                    colorScheme: ColorScheme.light(
+                      // change the border color
+                      primary: Theme.of(context).primaryColor,
+                      // change the text color
+                      onSurface: Theme.of(context).shadowColor,
+                    ),
+                    // button colors
+                    buttonTheme: ButtonThemeData(
+                      colorScheme: ColorScheme.light(
+                        primary: Theme.of(context).buttonColor,
+                      ),
+                    ),
+                  ),
+                  child: child,
+                )
+              : Theme(
+                  data: ThemeData.dark().copyWith(
+                    colorScheme: ColorScheme.dark(
+                      // change the border color
+                      primary: Theme.of(context).highlightColor,
+                      // change the text color
+                      onSurface: Theme.of(context).highlightColor,
+                    ),
+                    // button colors
+                    buttonTheme: ButtonThemeData(
+                      colorScheme: ColorScheme.light(
+                        primary: Theme.of(context).buttonColor,
+                      ),
+                    ),
+                  ),
+                  child: child,
+                );
         },
         initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Notification Time');
@@ -228,39 +231,41 @@ String appTheme;
         initialTime:
             new TimeOfDay(hour: weeklyTime.hour, minute: weeklyTime.minute),
         builder: (context, child) {
-          return appTheme == "AppTheme.Default" ? Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: ColorScheme.light(
-                // change the border color
-                primary: Theme.of(context).primaryColor,
-                // change the text color
-                onSurface:Theme.of(context).shadowColor,
-              ),
-              // button colors
-              buttonTheme: ButtonThemeData(
-                colorScheme: ColorScheme.light(
-                  primary: Theme.of(context).buttonColor,
-                ),
-              ),
-            ),
-            child: child,
-          ): Theme(
-            data: ThemeData.dark().copyWith(
-              colorScheme: ColorScheme.dark(
-                // change the border color
-                primary: Theme.of(context).highlightColor,
-                // change the text color
-                onSurface:Theme.of(context).highlightColor,
-              ),
-              // button colors
-              buttonTheme: ButtonThemeData(
-                colorScheme: ColorScheme.light(
-                  primary: Theme.of(context).buttonColor,
-                ),
-              ),
-            ),
-            child: child,
-          );
+          return appTheme == "AppTheme.Default"
+              ? Theme(
+                  data: ThemeData.light().copyWith(
+                    colorScheme: ColorScheme.light(
+                      // change the border color
+                      primary: Theme.of(context).primaryColor,
+                      // change the text color
+                      onSurface: Theme.of(context).shadowColor,
+                    ),
+                    // button colors
+                    buttonTheme: ButtonThemeData(
+                      colorScheme: ColorScheme.light(
+                        primary: Theme.of(context).buttonColor,
+                      ),
+                    ),
+                  ),
+                  child: child,
+                )
+              : Theme(
+                  data: ThemeData.dark().copyWith(
+                    colorScheme: ColorScheme.dark(
+                      // change the border color
+                      primary: Theme.of(context).highlightColor,
+                      // change the text color
+                      onSurface: Theme.of(context).highlightColor,
+                    ),
+                    // button colors
+                    buttonTheme: ButtonThemeData(
+                      colorScheme: ColorScheme.light(
+                        primary: Theme.of(context).buttonColor,
+                      ),
+                    ),
+                  ),
+                  child: child,
+                );
         },
         initialEntryMode: TimePickerEntryMode.dial,
         helpText: 'Notification Time');
@@ -384,7 +389,7 @@ String appTheme;
               child: Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
-        setState(() {});
+                setState(() {});
               },
             ),
           ],
@@ -431,17 +436,18 @@ String appTheme;
                             enableDailyNotifications = false;
                             enableWeeklyNotifications = false;
                           }
-                          if( enableNotifications != enableNotificationsStart){
+                          if (enableNotifications != enableNotificationsStart) {
                             wasChanged = true;
-                          }else{
-                            if (enableDailyNotifications != enableDailyNotificationsStart || enableWeeklyNotifications != enableWeeklyNotificationsStart){
+                          } else {
+                            if (enableDailyNotifications !=
+                                    enableDailyNotificationsStart ||
+                                enableWeeklyNotifications !=
+                                    enableWeeklyNotificationsStart) {
                               wasChanged = true;
-                            }else{
-                              wasChanged =false;
+                            } else {
+                              wasChanged = false;
                             }
-
                           }
-
                         });
                       },
                     ),
@@ -460,15 +466,18 @@ String appTheme;
                           setState(() {
                             enableDailyNotifications =
                                 !enableDailyNotifications;
-                            if( enableNotifications != enableNotificationsStart){
+                            if (enableNotifications !=
+                                enableNotificationsStart) {
                               wasChanged = true;
-                            }else{
-                              if (enableDailyNotifications != enableDailyNotificationsStart || enableWeeklyNotifications != enableWeeklyNotificationsStart){
+                            } else {
+                              if (enableDailyNotifications !=
+                                      enableDailyNotificationsStart ||
+                                  enableWeeklyNotifications !=
+                                      enableWeeklyNotificationsStart) {
                                 wasChanged = true;
-                              }else{
-                                wasChanged =false;
+                              } else {
+                                wasChanged = false;
                               }
-
                             }
                           });
                         },
@@ -495,7 +504,9 @@ String appTheme;
                                     hintText: "Enter time",
                                     isDense: true,
                                   ),
-                                  onChanged: (text) {      wasChanged =true;},
+                                  onChanged: (text) {
+                                    wasChanged = true;
+                                  },
                                 ),
                               ),
                             ),
@@ -525,17 +536,19 @@ String appTheme;
                           setState(() {
                             enableWeeklyNotifications =
                                 !enableWeeklyNotifications;
-                            if( enableNotifications != enableNotificationsStart){
+                            if (enableNotifications !=
+                                enableNotificationsStart) {
                               wasChanged = true;
-                            }else{
-                              if (enableDailyNotifications != enableDailyNotificationsStart || enableWeeklyNotifications != enableWeeklyNotificationsStart){
+                            } else {
+                              if (enableDailyNotifications !=
+                                      enableDailyNotificationsStart ||
+                                  enableWeeklyNotifications !=
+                                      enableWeeklyNotificationsStart) {
                                 wasChanged = true;
-                              }else{
-                                wasChanged =false;
+                              } else {
+                                wasChanged = false;
                               }
-
                             }
-
                           });
                         },
                       ),
@@ -560,7 +573,7 @@ String appTheme;
                                 onChanged: (String Value) {
                                   setState(() {
                                     dropDownDay = Value;
-                                    wasChanged =true;
+                                    wasChanged = true;
                                   });
                                 },
                                 items: _days
@@ -589,7 +602,9 @@ String appTheme;
                                         hintText: "Enter time",
                                         isDense: true,
                                       ),
-                                      onChanged: (text) {      wasChanged =true;},
+                                      onChanged: (text) {
+                                        wasChanged = true;
+                                      },
                                     ),
                                   ),
                                 ),
@@ -621,24 +636,57 @@ String appTheme;
             ),
             Padding(
               padding: EdgeInsets.only(right: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                FlatButton(
+                  // padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Text('CANCEL', style: TextStyle(color: Colors.grey)),
+                  onPressed: () {
+                    if (wasChanged) {
+                      showAlertDialog(context);
+                    } else {
+                      Navigator.pop(context, null);
+                    }
+                  },
+                ),
+                if (enableNotifications != enableDailyNotificationsStart ||
+                    enableDailyNotifications != enableDailyNotificationsStart ||
+                    enableWeeklyNotifications !=
+                        enableWeeklyNotificationsStart) ...[
                   FlatButton(
+                    color: Theme.of(context).buttonColor,
                     // padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Text('CANCEL',
-                        style: TextStyle(color: Colors.grey)),
+                    child: Text(
+                      'UPDATE',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                     onPressed: () {
-                      if (wasChanged) {
-                        showAlertDialog(context);
+                      if (enableNotifications) {
+                        if (enableDailyNotifications) {
+                          scheduleDailyNotifications();
+                        } else {
+                          clearDailyNotifications();
+                        }
+                        if (enableWeeklyNotifications) {
+                          scheduleWeeklyNotification();
+                        } else {
+                          clearWeeklyNotifications();
+                        }
                       } else {
-                        Navigator.pop(context, null);
+                        clearAllNotifications();
                       }
+                      wasChanged = false;
+                      _showMyDialog();
                     },
-                  ),
-
-                  wasChanged ?  FlatButton(
-                      color: Theme.of(context).buttonColor,
+                  )
+                ],
+                if (enableNotifications == enableDailyNotificationsStart &&
+                    enableDailyNotifications == enableDailyNotificationsStart &&
+                    enableWeeklyNotifications ==
+                        enableWeeklyNotificationsStart) ...[
+                  FlatButton(
+                      color: Colors.grey,
                       // padding: EdgeInsets.symmetric(vertical: 20),
                       child: Text(
                         'UPDATE',
@@ -646,72 +694,10 @@ String appTheme;
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () {
-                        if (enableNotifications) {
-                          if (enableDailyNotifications) {
-                            scheduleDailyNotifications();
-                          } else {
-                            clearDailyNotifications();
-                          }
-                          if (enableWeeklyNotifications) {
-                            scheduleWeeklyNotification();
-                          } else {
-                            clearWeeklyNotifications();
-                          }
-                        } else {
-                          clearAllNotifications();
-                        }
-                        wasChanged = false;
-                        _showMyDialog();
-                      },
-                    ) :
-
-                    FlatButton(
-                        color: Colors.grey,
-                        // padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Text(
-                          'UPDATE',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () => {}),
-                  ]
-              ),
+                      onPressed: () => {})
+                ]
+              ]),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //   children: [
-            //     RaisedButton(
-            //       child: Text('Cancel'),
-            //       onPressed: () {
-            //         Navigator.pop(context);
-            //       },
-            //     ),
-            //     RaisedButton(
-            //       child: Text('Save'),
-            //       onPressed: () {
-            //         if (enableNotifications) {
-            //           if (enableDailyNotifications) {
-            //             scheduleDailyNotifications();
-            //           } else {
-            //             clearDailyNotifications();
-            //           }
-            //           if (enableWeeklyNotifications) {
-            //             scheduleWeeklyNotification();
-            //           } else {
-            //             clearWeeklyNotifications();
-            //           }
-            //         } else {
-            //           clearAllNotifications();
-            //         }
-            //         _showMyDialog();
-            //         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(milliseconds: 500),
-            //         //     backgroundColor: Colors.blue, content: Text('Saved')));
-            //       },
-            //     ),
-            //   ],
-            // ),
             Padding(padding: EdgeInsets.all(50))
           ],
         ),
