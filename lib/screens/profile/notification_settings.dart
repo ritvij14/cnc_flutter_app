@@ -19,6 +19,9 @@ class _NotificationSettings extends State<NotificationSettings> {
   bool enableNotifications = false;
   bool enableDailyNotifications = false;
   bool enableWeeklyNotifications = false;
+  bool enableNotificationsStart = false;
+  bool enableDailyNotificationsStart = false;
+  bool enableWeeklyNotificationsStart = false;
   String dropDownDay = 'Sunday';
 String appTheme;
   bool wasChanged =false;
@@ -58,6 +61,8 @@ String appTheme;
     if (storedDaily != null) {
       enableNotifications = true;
       enableDailyNotifications = true;
+      enableNotificationsStart = true;
+      enableDailyNotificationsStart = true;
       String storedHour = storedDaily.split(':')[0];
       String storedMinute = storedDaily.split(':')[1];
       dailyTime = new DateTime(dailyTime.year, dailyTime.month, dailyTime.day,
@@ -67,6 +72,8 @@ String appTheme;
     if (storedWeekly != null) {
       enableNotifications = true;
       enableWeeklyNotifications = true;
+      enableNotificationsStart = true;
+      enableWeeklyNotificationsStart = true;
       String storedDay = sharedPreferences.get('weeklyDay');
       String storedHour = storedWeekly.split(':')[0];
       String storedMinute = storedWeekly.split(':')[1];
@@ -377,6 +384,7 @@ String appTheme;
               child: Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
+        setState(() {});
               },
             ),
           ],
@@ -389,6 +397,16 @@ String appTheme;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            if (wasChanged) {
+              showAlertDialog(context);
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
         title: Text(
           'Notification Settings',
         ),
@@ -413,7 +431,17 @@ String appTheme;
                             enableDailyNotifications = false;
                             enableWeeklyNotifications = false;
                           }
-                          wasChanged =true;
+                          if( enableNotifications != enableNotificationsStart){
+                            wasChanged = true;
+                          }else{
+                            if (enableDailyNotifications != enableDailyNotificationsStart || enableWeeklyNotifications != enableWeeklyNotificationsStart){
+                              wasChanged = true;
+                            }else{
+                              wasChanged =false;
+                            }
+
+                          }
+
                         });
                       },
                     ),
@@ -432,7 +460,16 @@ String appTheme;
                           setState(() {
                             enableDailyNotifications =
                                 !enableDailyNotifications;
-                            wasChanged =true;
+                            if( enableNotifications != enableNotificationsStart){
+                              wasChanged = true;
+                            }else{
+                              if (enableDailyNotifications != enableDailyNotificationsStart || enableWeeklyNotifications != enableWeeklyNotificationsStart){
+                                wasChanged = true;
+                              }else{
+                                wasChanged =false;
+                              }
+
+                            }
                           });
                         },
                       ),
@@ -488,7 +525,17 @@ String appTheme;
                           setState(() {
                             enableWeeklyNotifications =
                                 !enableWeeklyNotifications;
-                            wasChanged =true;
+                            if( enableNotifications != enableNotificationsStart){
+                              wasChanged = true;
+                            }else{
+                              if (enableDailyNotifications != enableDailyNotificationsStart || enableWeeklyNotifications != enableWeeklyNotificationsStart){
+                                wasChanged = true;
+                              }else{
+                                wasChanged =false;
+                              }
+
+                            }
+
                           });
                         },
                       ),
@@ -614,6 +661,7 @@ String appTheme;
                         } else {
                           clearAllNotifications();
                         }
+                        wasChanged = false;
                         _showMyDialog();
                       },
                     ) :

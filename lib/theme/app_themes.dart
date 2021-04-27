@@ -12,15 +12,16 @@ class AppThemes {
       accentColor: Colors.blue[400],
       highlightColor: Colors.white,
       shadowColor: Colors.black,
-      buttonColor: Colors.blue[700],
+      buttonColor: Colors.blue[600],
       dividerColor: Colors.transparent,
-      hintColor: Colors.black
+      hintColor: Colors.black,
+// primaryColorLight:
     ),
     AppTheme.DarkMode: ThemeData(
       brightness: Brightness.dark,
       primaryColor: Colors.black,
       cardColor: Colors.black,
-      accentColor: Colors.grey[900],
+      accentColor: Colors.grey[850],
       highlightColor: Colors.white,
       shadowColor: Colors.black,
       buttonColor: Colors.teal,

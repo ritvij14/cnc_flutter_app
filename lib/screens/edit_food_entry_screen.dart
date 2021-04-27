@@ -403,7 +403,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           dataRowHeight: 30,
                           dividerThickness: 0,
                           dataTextStyle:
-                              TextStyle(fontSize: 20, color: Colors.black),
+                              TextStyle(fontSize: 20, color: Theme.of(context).hintColor),
                           // columnSpacing: MediaQuery.of(context).size.width/ 3,
 
                           columns: <DataColumn>[
@@ -766,11 +766,12 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              SizedBox(height: 1),
                               if (showFraction) ...[
                                 GestureDetector(
                                   onTap: () => showPickerModal(context),
                                   child: Container(
-                                    color: Colors.grey[300],
+                                    color: Theme.of(context).accentColor,
                                     width: 175,
                                     child: TextFormField(
                                       enabled: false,
@@ -792,7 +793,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                               ],
                               if (!showFraction) ...[
                                 Container(
-                                  color: Colors.grey[300],
+                                  color:  Theme.of(context).accentColor,
                                   width: 175,
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
@@ -865,10 +866,11 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              SizedBox(height: 1),
                               GestureDetector(
                                 onTap: _pickTime,
                                 child: Container(
-                                  color: Colors.grey[300],
+                                  color:  Theme.of(context).accentColor,
                                   width: 175,
                                   child: TextFormField(
                                     enabled: false,
