@@ -27,9 +27,12 @@ class _SymptomTrackingScreenState extends State<SymptomTrackingScreen> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () async {
-              await Navigator.push(context, new MaterialPageRoute(builder:(context) => SymptomTrackingInputScreen()));
+              await Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => SymptomTrackingInputScreen()));
+              await getSymptoms();
               refresh();
-
             },
           )
         ],
