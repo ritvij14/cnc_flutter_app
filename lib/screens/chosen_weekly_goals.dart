@@ -64,6 +64,39 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
   int totalSnackGoals = 0;
   int totalVegetableGoals = 0;
 
+  int activityBadge1 = 0;
+  int activityBadge2 = 0;
+  int activityBadge3 = 0;
+
+  int beverageBadge1 = 0;
+  int beverageBadge2 = 0;
+  int beverageBadge3 = 0;
+
+  int dairyBadge1 = 0;
+  int dairyBadge2 = 0;
+  int dairyBadge3 = 0;
+
+  int fruitBadge1 = 0;
+  int fruitBadge2 = 0;
+  int fruitBadge3 = 0;
+
+  int grainBadge1 = 0;
+  int grainBadge2 = 0;
+  int grainBadge3 = 0;
+
+  int proteinBadge1 = 0;
+  int proteinBadge2 = 0;
+  int proteinBadge3 = 0;
+
+  int snackBadge1 = 0;
+  int snackBadge2 = 0;
+  int snackBadge3 = 0;
+
+  int vegetableBadge1 = 0;
+  int vegetableBadge2 = 0;
+  int vegetableBadge3 = 0;
+
+
   List<String> goals;
   List<WeeklyGoalsModel> weeklyGoalsModelList = [];
   List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
@@ -82,6 +115,38 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
     totalProteinGoals = prefs.getInt("protein goals total");
     totalSnackGoals = prefs.getInt("snack goals total");
     totalVegetableGoals = prefs.getInt("vegetable goals total");
+
+    activityBadge1 = prefs.getInt("activityBadge1");
+    activityBadge2 = prefs.getInt("activityBadge2");
+    activityBadge3 = prefs.getInt("activityBadge3");
+
+    beverageBadge1 = prefs.getInt("beverageBadge1");
+    beverageBadge2 = prefs.getInt("beverageBadge2");
+    beverageBadge3 = prefs.getInt("beverageBadge3");
+
+    dairyBadge1 = prefs.getInt("dairyBadge1");
+    dairyBadge2 = prefs.getInt("dairyBadge2");
+    dairyBadge3 = prefs.getInt("dairyBadge3");
+
+    fruitBadge1 = prefs.getInt("fruitBadge1");
+    fruitBadge2 = prefs.getInt("fruitBadge2");
+    fruitBadge3 = prefs.getInt("fruitBadge3");
+
+    grainBadge1 = prefs.getInt("grainBadge1");
+    grainBadge2 = prefs.getInt("grainBadge2");
+    grainBadge3 = prefs.getInt("grainBadge3");
+
+    proteinBadge1 = prefs.getInt("proteinBadge1");
+    proteinBadge2 = prefs.getInt("proteinBadge2");
+    proteinBadge3 = prefs.getInt("proteinBadge3");
+
+    snackBadge1 = prefs.getInt("snackBadge1");
+    snackBadge2 = prefs.getInt("snackBadge2");
+    snackBadge3 = prefs.getInt("snackBadge3");
+
+    vegetableBadge1 = prefs.getInt("vegetableBadge1");
+    vegetableBadge2 = prefs.getInt("vegetableBadge2");
+    vegetableBadge3 = prefs.getInt("vegetableBadge3");
 
     _events = Map<DateTime, List<dynamic>>.from(
         decodeMap(json.decode(prefs.getString("events") ?? "{}")));
@@ -993,84 +1058,132 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     _eventController2.clear();
                     update(context);
 
-                    if(totalFruitGoals == 1){
+                    if(totalFruitGoals == 1 && fruitBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      fruitBadge1 = 1;
+                      prefs.setInt("fruitBadge1", 1);
                     }
-                    if(totalFruitGoals == 5){
+                    if(totalFruitGoals == 5 && fruitBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      fruitBadge2 = 1;
+                      prefs.setInt("fruitBadge2", 1);
                     }
-                    if(totalFruitGoals == 10){
+                    if(totalFruitGoals == 10 && fruitBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      fruitBadge3 = 1;
+                      prefs.setInt("fruitBadge3", 1);
                     }
 
-                    if(totalVegetableGoals == 1){
+                    if(totalVegetableGoals == 1 && vegetableBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      vegetableBadge1 = 1;
+                      prefs.setInt("vegetableBadge1", 1);
                     }
-                    if(totalVegetableGoals == 5){
+                    if(totalVegetableGoals == 5 && vegetableBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      vegetableBadge2 = 1;
+                      prefs.setInt("vegetableBadge2", 1);
                     }
-                    if(totalVegetableGoals == 10){
+                    if(totalVegetableGoals == 10 && vegetableBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      vegetableBadge3 = 1;
+                      prefs.setInt("vegetableBadge3", 1);
                     }
 
-                    if(totalGrainGoals == 1){
+                    if(totalGrainGoals == 1 && grainBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      grainBadge1 = 1;
+                      prefs.setInt("grainBadge1", 1);
                     }
-                    if(totalGrainGoals == 5){
+                    if(totalGrainGoals == 5 && grainBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      grainBadge2 = 1;
+                      prefs.setInt("grainBadge2", 1);
                     }
-                    if(totalGrainGoals == 10){
+                    if(totalGrainGoals == 10 && grainBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      grainBadge3 = 1;
+                      prefs.setInt("grainBadge3", 1);
                     }
 
-                    if(totalProteinGoals == 1){
+                    if(totalProteinGoals == 1 && proteinBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      proteinBadge1 = 1;
+                      prefs.setInt("proteinBadge1", 1);
                     }
-                    if(totalProteinGoals == 5){
+                    if(totalProteinGoals == 5 && proteinBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      proteinBadge2 = 1;
+                      prefs.setInt("proteinBadge2", 1);
                     }
-                    if(totalProteinGoals == 10){
+                    if(totalProteinGoals == 10 && proteinBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      proteinBadge3 = 1;
+                      prefs.setInt("proteinBadge3", 1);
                     }
 
-                    if(totalDairyGoals == 1){
+                    if(totalDairyGoals == 1 && dairyBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      dairyBadge1 = 1;
+                      prefs.setInt("dairyBadge1", 1);
                     }
-                    if(totalDairyGoals== 5){
+                    if(totalDairyGoals== 5 && dairyBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      dairyBadge2 = 1;
+                      prefs.setInt("dairyBadge2", 1);
                     }
-                    if(totalDairyGoals == 10){
+                    if(totalDairyGoals == 10 && dairyBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      dairyBadge3 = 1;
+                      prefs.setInt("dairyBadge3", 1);
                     }
 
-                    if(totalSnackGoals == 1){
+                    if(totalSnackGoals == 1 && snackBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      snackBadge1 = 1;
+                      prefs.setInt("snackBadge1", 1);
                     }
-                    if(totalSnackGoals == 5){
+                    if(totalSnackGoals == 5 && snackBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      snackBadge2 = 1;
+                      prefs.setInt("snackBadge2", 1);
                     }
-                    if(totalSnackGoals == 10){
+                    if(totalSnackGoals == 10 && snackBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      snackBadge3 = 1;
+                      prefs.setInt("snackBadge3", 1);
                     }
 
-                    if(totalBeverageGoals == 1){
+                    if(totalBeverageGoals == 1 && beverageBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      beverageBadge1 = 1;
+                      prefs.setInt("beverageBadge1", 1);
                     }
-                    if(totalBeverageGoals == 5){
+                    if(totalBeverageGoals == 5 && beverageBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      beverageBadge2 = 1;
+                      prefs.setInt("beverageBadge2", 1);
                     }
-                    if(totalBeverageGoals== 10){
+                    if(totalBeverageGoals== 10 && beverageBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      beverageBadge3 = 1;
+                      prefs.setInt("beverageBadge3", 1);
                     }
 
-                    if(totalActivityGoals == 1){
+                    if(totalActivityGoals == 1 && activityBadge1 != 1){
                       _showCongratsDialog('./assets/images/badge1.png');
+                      activityBadge1 = 1;
+                      prefs.setInt("activityBadge1", 1);
                     }
-                    if(totalActivityGoals == 5){
+                    if(totalActivityGoals == 5 && activityBadge2 != 1){
                       _showCongratsDialog('./assets/images/badge2.png');
+                      activityBadge2 = 1;
+                      prefs.setInt("activityBadge2", 1);
                     }
-                    if(totalActivityGoals == 10){
+                    if(totalActivityGoals == 10 && activityBadge3 != 1){
                       _showCongratsDialog('./assets/images/badge3.png');
+                      activityBadge3 = 1;
+                      prefs.setInt("activityBadge3", 1);
                     }
 
                     _showSnackBar(context, 'Completed Goal');
