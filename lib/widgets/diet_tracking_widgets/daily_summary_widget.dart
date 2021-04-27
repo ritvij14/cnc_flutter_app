@@ -155,7 +155,6 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('test');
     if (!showGrams) {
       return FutureBuilder(
         builder: (context, projectSnap) {
@@ -341,7 +340,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Daily',
+                    'Daily Summary',
                     style: new TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),

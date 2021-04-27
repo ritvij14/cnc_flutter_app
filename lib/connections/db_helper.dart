@@ -7,8 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'db_helper_base.dart';
 
-class DBHelper {
-  var baseUrl = 'https://enact-crc-app.herokuapp.com/';
+class DBHelper extends DBHelperBase {
 
   Future<bool> isEmailValid(String email) async {
     var requestUrl = baseUrl + 'api/users/checkIfEmailExists/' + email;
@@ -20,11 +19,25 @@ class DBHelper {
 
   //user id as a string or 'invalid'
   Future<String> login(String email, String password) async {
-    var requestUrl =
-        baseUrl + 'api/users/login/' + email + '/' + password + '/';
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
-    return response.body.toString();
+    // var requestUrl =
+    //     baseUrl + 'api/users/login/' + email + '/' + password + '/';
+    // http.Response response =
+    //     await http.get(Uri.encodeFull(requestUrl), headers: {});
+    // return response.body.toString();
+
+    var queryParameters = {
+      'email': email,
+      'password': password,
+    };
+    var uri = Uri.https(baseUri, 'api/users/login', queryParameters);
+
+    var response = await http.get(
+    uri,
+    headers: {"Content-Type": "application/json"},
+    );
+
+    print(response.body + "<< This was the login response");
+    return response.body;
   }
 
   Future<bool> getFormCompletionStatus() async {
@@ -199,20 +212,17 @@ class DBHelper {
   }
 
   resetPassword(String email) async{
-    var requestUrl =
-        baseUrl + 'api/users/resetPassword';
 
     var queryParameters = {
       'email': email,
     };
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', 'api/users/resetPassword', queryParameters);
+    Uri.https(baseUri, 'api/users/resetPassword', queryParameters);
 
     var response = await http.post(
       uri,
       headers: {"Content-Type": "application/json"},
     );
-    print(response.body);
     return response;
 
   }

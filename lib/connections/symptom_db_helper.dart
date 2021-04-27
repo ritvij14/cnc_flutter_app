@@ -28,7 +28,6 @@ class SymptomDBHelper extends DBHelper {
   }
 
   Future<http.Response> getAllSymptoms() async {
-    print('here');
     var requestUrl = baseUrl + 'api/symptom/all';
     http.Response response =
         await http.get(Uri.encodeFull(requestUrl), headers: {});
@@ -36,12 +35,11 @@ class SymptomDBHelper extends DBHelper {
   }
 
   Future<http.Response> getSymptoms(int userId) async {
-    print('inside symptom db helper get symptoms by user id');
     var queryParameters = {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', '/api/symptom/all/user', queryParameters);
+    Uri.https(baseUri, '/api/symptom/all/user', queryParameters);
 
     var response = await http.get(
       uri,
@@ -77,7 +75,7 @@ class SymptomDBHelper extends DBHelper {
     };
 
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', '/api/symptom/day/user', queryParameters);
+    Uri.https(baseUri, '/api/symptom/day/user', queryParameters);
 
     var response = await http.get(
       uri,

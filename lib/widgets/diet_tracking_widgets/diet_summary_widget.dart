@@ -75,7 +75,7 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
               margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _currentIndex == index ? Colors.blueAccent : Colors.grey,
+                color: _currentIndex == index ? Theme.of(context).buttonColor : Colors.grey,
               ),
             );
           }),

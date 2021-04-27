@@ -16,7 +16,6 @@
 //
 // class _AccountBodyState extends State<AccountBody> {
 //   _AccountBodyState() {
-//     print('working');
 //   }
 //
 //   int initialWeight;
@@ -39,12 +38,9 @@
 //   String newActivity;
 //
 //   bool wasChanged() {
-//     print(newWeight.toString()+'===='+initialWeight.toString());
 //     if (newWeight != initialWeight) {
-//       print('this');
 //       return false;
 //     }
-//     print('this2');
 //     return true;
 //   }
 //

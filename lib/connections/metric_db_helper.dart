@@ -19,7 +19,7 @@ class MetricDBHelper extends DBHelperBase{
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', '/api/metric/all/user', queryParameters);
+    Uri.https(baseUri, '/api/metric/all/user', queryParameters);
 
     var response = await http.get(
       uri,
@@ -48,7 +48,7 @@ class MetricDBHelper extends DBHelperBase{
     };
 
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', '/api/metric/user/range', queryParameters);
+    Uri.https(baseUri, '/api/metric/user/range', queryParameters);
 
     var response = await http.get(
       uri,
@@ -65,7 +65,7 @@ class MetricDBHelper extends DBHelperBase{
     };
 
     var uri =
-    Uri.https('enact-crc-app.herokuapp.com', '/api/metric/day/user', queryParameters);
+    Uri.https(baseUri, '/api/metric/day/user', queryParameters);
 
     var response = await http.get(
       uri,
