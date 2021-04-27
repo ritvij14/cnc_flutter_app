@@ -68,73 +68,73 @@ class _ContentScreenState extends State<ContentScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
-                       child: GestureDetector(
-                        onTap: () {
-                          _launchURL();
-                    },
-                    child: Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).canvasColor,
-                              borderRadius: BorderRadius.circular(10.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 1,
-                                  blurRadius: 2,
-                                  offset: Offset(
-                                      1, 1), // changes position of shadow
+                        child: GestureDetector(
+                            onTap: () {
+                              _launchURL();
+                            },
+                            child: Container(
+                                width: 200,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).canvasColor,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                      offset: Offset(
+                                          1, 1), // changes position of shadow
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Column(children: <Widget>[
-                              Container(
-                                  height: 70,
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
+                                child: Column(children: <Widget>[
+                                  Container(
+                                      height: 70,
+                                      width: 200,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                          ),
+                                          gradient: LinearGradient(
+                                              begin: Alignment.topRight,
+                                              end: Alignment.bottomLeft,
+                                              colors: getColor("video"))),
+                                      child: getIcon("video")),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5, bottom: 3, left: 8, right: 8),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        child: Text(
+                                          "Video Title Placeholder",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(fontSize: 20),
+                                          textAlign: TextAlign.left,
+                                        ),
                                       ),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.topRight,
-                                          end: Alignment.bottomLeft,
-                                          colors: getColor("video"))),
-                                  child: getIcon("video")),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 3, left: 8, right: 8),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    child: Text(
-                                     "Video Title Placeholder",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.left,
                                     ),
                                   ),
-                                ),
-                              ),
-                              // Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 0, bottom: 5, left: 8, right: 8),
-                                child: Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Container(
-                                    child: Text(
-                                     "Video Description Placeholder",
-                                      style: TextStyle(fontSize: 14),
+                                  // Spacer(),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0, bottom: 5, left: 8, right: 8),
+                                    child: Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Container(
+                                        child: Text(
+                                          "Video Description Placeholder",
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ])
-                    )
-                       )
+                                ])
+                            )
+                        )
                     );
                   }),
             ),
@@ -154,7 +154,8 @@ class _ContentScreenState extends State<ContentScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                               onTap: () {
-                               _launchURL();
+                                // print(articleList[index].data);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ArticleViewer(articleList[index])));
                               },
                               child: Container(
                                   width: 200,
