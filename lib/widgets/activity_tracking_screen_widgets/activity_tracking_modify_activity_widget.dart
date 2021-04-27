@@ -124,7 +124,6 @@ class _ActivityTrackingModifyActivityState
                   //               widget.activityModel.type = value;
                   //               int index = fitnessActivityMasterList.indexWhere((element) => element.type == value);
                   //               widget.activityModel.intensity = fitnessActivityMasterList[index].intensity;
-                  //               print(widget.activityModel.type);
                   //             }
                   //             ),
                   //         validator: (value) =>
@@ -197,9 +196,6 @@ class _ActivityTrackingModifyActivityState
                             hintText: "enter",
                           ),
                           onChanged: (text) {
-                            print('==' +text+'==');
-                            print('==activite' +widget.activityModel.minutes.toString()+'==');
-                            print('==initial' +initialMinutes.toString()+'==');
                             if(text.isNotEmpty) {
                               widget.activityModel.minutes = int.parse(text);
                               minutesEntered = true;
@@ -285,13 +281,6 @@ class _ActivityTrackingModifyActivityState
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 var x = db.updateExistingActivity(widget.activityModel);
-                                print(widget.activityModel.id);
-                                print(widget.activityModel.intensity);
-                                print(widget.activityModel.dateTime);
-                                print(widget.activityModel.minutes);
-                                print(widget.activityModel.type);
-                                print(widget.activityModel.mets);
-                                print(widget.activityModel.metsPerHour);
 
                                 Navigator.pop(context, widget.activityModel);
                               }

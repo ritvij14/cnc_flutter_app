@@ -211,7 +211,6 @@ class FoodProfile extends State<FoodPage> {
     var time = entryTime.toString().substring(0, 19);
     time = time.split(" ")[1];
     var dateTime = selectedDate + " " + time;
-    print(dateTime);
     var response = await db.saveNewFoodLogEntry(
         dateTime, selectedDate, currentFood.id, portion);
   }
@@ -253,7 +252,6 @@ class FoodProfile extends State<FoodPage> {
         dateCtl.text = hour + ':' + minute + ' ' + tod;
         entryTime = new DateTime(
             entryTime.year, entryTime.month, entryTime.day, t.hour, t.minute);
-        print('Time of Day in food = ' + t.toString());
       });
   }
 
@@ -264,45 +262,6 @@ class FoodProfile extends State<FoodPage> {
     Icon(Icons.keyboard_arrow_down);
   }
 
-  void closePage() {
-    Navigator.of(context).pop();
-  }
-
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text(
-        "CANCEL",
-        style: TextStyle(color: Colors.grey),
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget confirmButton = FlatButton(
-      child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
-      color: Colors.blue,
-      onPressed: () {
-        Navigator.of(context).pop();
-        closePage();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Are you sure you want to cancel this entry?"),
-      actions: [
-        cancelButton,
-        confirmButton,
-      ],
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -893,7 +852,8 @@ class FoodProfile extends State<FoodPage> {
                             ),
                             onPressed: () {
                               saveNewEntry();
-                              Navigator.pop(context, null);
+                              Navigator.pop(context, 'Saved Food');
+                              // Navigator.pop(context, null);
                             },
                           ),
                         ],

@@ -99,8 +99,6 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
 
   updateQuestion() async {
     bool a = formKey.currentState.validate();
-
-    print("IN UPDATE:");
     if (a) {
       userQuestion.question = _userQuestion;
       userQuestion.question_notes = _userNote;

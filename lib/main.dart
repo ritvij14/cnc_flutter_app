@@ -15,6 +15,7 @@ void main() async {
   HttpOverrides.global = new MyHttpOverrides();
   final bool loggedIn = await auth.isLogged();
   final bool screenerComplete = await auth.isScreenerComplete();
+  print("screen is " + screenerComplete.toString());
   // ignore: unrelated_type_equality_checks
   final NutritionApp nutritionApp = NutritionApp(initialRoute: loggedIn == false ? '/login' : screenerComplete == false ? '/welcome' : '/home');
   runApp(nutritionApp);

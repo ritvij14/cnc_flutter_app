@@ -109,7 +109,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
             Padding(padding: EdgeInsets.only(top: 50)),
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
+              children:  <Widget>[
                 // Text(
                 //   'Average Line',
                 //   style: TextStyle(
@@ -120,7 +120,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                 Text(
                   'Calorie totals last 7 days ',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Theme.of(context).hintColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16),
                 ),
@@ -144,10 +144,10 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
               height: 18,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+              padding:  EdgeInsets.only(left: 14.0, right: 14.0),
               child: SizedBox(
                 width: double.infinity,
-                height: 150,
+                height:233,
                 child: LineChart(
                   LineChartData(
                     clipData: FlClipData.all(),
@@ -161,14 +161,14 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                           //   return null;
                           // }
                           return TouchedSpotIndicatorData(
-                            FlLine(color: Colors.blue, strokeWidth: 4),
+                            FlLine(color: Theme.of(context).accentColor, strokeWidth: 4),
                             FlDotData(
                               getDotPainter: (spot, percent, barData, index) {
                                 return FlDotCirclePainter(
                                     radius: 8,
                                     color: Colors.white,
                                     strokeWidth: 5,
-                                    strokeColor: Colors.deepOrange);
+                                    strokeColor: Theme.of(context).buttonColor);
                                 if (index % 2 == 0) {
                                   return FlDotCirclePainter(
                                       radius: 8,
@@ -189,7 +189,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                         }).toList();
                       },
                       touchTooltipData: LineTouchTooltipData(
-                          tooltipBgColor: Colors.blueAccent,
+                          tooltipBgColor:Theme.of(context).accentColor,
                           fitInsideHorizontally: true,
                           fitInsideVertically: true,
                           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
@@ -232,11 +232,11 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                       HorizontalLine(
                         label: HorizontalLineLabel(
                             show: true,
-                            // style: TextStyle(),
+                            style: TextStyle(color: Theme.of(context).hintColor,fontSize: 14),
                             labelResolver: (line) =>
                                 '${dailyCalorieLimit.round()}'),
                         y: dailyCalorieLimit,
-                        color: Colors.green.withOpacity(0.8),
+                        color: Colors.lightGreen.withOpacity(0.8),
                         strokeWidth: 3,
                         dashArray: [20, 2],
                       ),
@@ -250,13 +250,13 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                         isCurved: false,
                         barWidth: 4,
                         colors: [
-                          Colors.orange,
+                          Theme.of(context).buttonColor,
                         ],
                         belowBarData: BarAreaData(
                           show: true,
                           colors: [
-                            Colors.orange.withOpacity(0.5),
-                            Colors.orange.withOpacity(0.0),
+                            Theme.of(context).buttonColor.withOpacity(0.5),
+                            Theme.of(context).buttonColor.withOpacity(0.0),
                           ],
                           gradientColorStops: [0.5, 1.0],
                           gradientFrom: const Offset(0, 0),
@@ -264,7 +264,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                           spotsLine: BarAreaSpotsLine(
                             show: true,
                             flLineStyle: FlLine(
-                              color: Colors.blue,
+                              color: Theme.of(context).buttonColor,
                               strokeWidth: 2,
                             ),
                             checkToShowSpotLine: (spot) {
@@ -284,7 +284,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                                   radius: 6,
                                   color: Colors.white,
                                   strokeWidth: 3,
-                                  strokeColor: Colors.deepOrange);
+                                  strokeColor: Colors.lightGreen);
                               if (index % 2 == 0) {
                                 return FlDotCirclePainter(
                                     radius: 6,
@@ -314,7 +314,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                       getDrawingHorizontalLine: (value) {
                         if (value == 0) {
                           return FlLine(
-                            color: Colors.deepOrange,
+                            color:Theme.of(context).accentColor,
                             strokeWidth: 2,
                           );
                         } else {
@@ -327,7 +327,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                       getDrawingVerticalLine: (value) {
                         if (value == 0) {
                           return FlLine(
-                            color: Colors.black,
+                            color: Theme.of(context).hintColor,
                             strokeWidth: 2,
                           );
                         } else {
@@ -358,7 +358,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                         //   return '';
                         // },
                         getTextStyles: (value) =>
-                            const TextStyle(color: Colors.black, fontSize: 10),
+                             TextStyle(color: Theme.of(context).hintColor, fontSize: 14),
                       ),
                       bottomTitles: SideTitles(
                         margin: 12,
@@ -370,10 +370,10 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                         getTextStyles: (value) {
                           final isTouched = value == touchedValue;
                           return TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             color: isTouched
-                                ? Colors.deepOrange
-                                : Colors.deepOrange.withOpacity(0.5),
+                                ? Theme.of(context).hintColor
+                                : Theme.of(context).hintColor.withOpacity(0.5),
                             fontWeight: FontWeight.bold,
                           );
                         },

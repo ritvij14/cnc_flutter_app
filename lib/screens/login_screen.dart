@@ -1,8 +1,10 @@
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/user_model.dart';
 import 'package:cnc_flutter_app/theme/bloc/bloc.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const users = const {
@@ -11,21 +13,28 @@ const users = const {
   '': '',
 };
 
+final encryptionKey = encrypt.Key.fromUtf8("oKLS5V5QycG3MYzZYhVCbSpvDeQxx5xk");
+final encrypter =
+    encrypt.Encrypter(encrypt.AES(encryptionKey, mode: encrypt.AESMode.cbc));
+final iv = encrypt.IV.fromLength(16);
+
 class LoginScreen extends StatelessWidget {
   var db = new DBHelper();
 
-  // bool formComplete = true;
+  // final privateKey = "MIIBOQIBAAJBAKWzaxbF6oAXQmF0Qufqy/YPGvSNvbI6p0J+9RCQjcnmt9JZdS5gjY4j/Lrr7NuoAkRb5hNxL9F5cOV8WyP+WM8CAwEAAQJAbVqaOv5Ew2IWQeCLYyjWkD3pySld3qjMx5qnutXbbTmPS/XHlQ5dt08tug4CoTcGvIvVA5ULablAuai0xCzbsQIhAOpPV1eFWsPkQlBsONPqEHgOt2ckyEFWDV3DVT6L1a0ZAiEAtQovPRc9TYWOwSQFCoSXQAkzJph3zGoBNKWfJrLeCicCIG5RPMYwOzPP3IkQ6xCbO3XLN/6QCtj4MwLaXOA95jTBAiAQ0UliG26ObQG932K4f2itgi1GQJOgYZiLE3edWLBXsQIgFsSLREPQd1O7aTvsOy5Fi6CQjHkhsqiO5WIdLzVw2RQ=";
+  // final publicKey = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKWzaxbF6oAXQmF0Qufqy/YPGvSNvbI6p0J+9RCQjcnmt9JZdS5gjY4j/Lrr7NuoAkRb5hNxL9F5cOV8WyP+WM8CAwEAAQ==";
+  // final encrypter = Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
 
   Duration get loginTime => Duration(milliseconds: 2000);
 
   Future<String> _authUser(LoginData data) {
-    print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) async {
       //user doesn't exist in db
       if (await db.isEmailValid(data.name) == false) {
         return 'Username does not exist';
       }
-      var response = await db.login(data.name, data.password);
+      var response = await db.login(
+          data.name, encrypter.encrypt(data.password, iv: iv).base64);
       if (response == "invalid") {
         return 'Incorrect password';
       }
@@ -40,14 +49,16 @@ class LoginScreen extends StatelessWidget {
   }
 
   Future<String> _registerUser(LoginData data) {
-    print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) async {
       //check if username is already taken
       if (await db.isEmailValid(data.name) == true) {
         return 'Username is already taken.';
       }
       //create new user, save to db, then save to shared pref
-      UserModel userModel = new UserModel(data.name, data.password);
+      // final encryptedPass = encrypter.encrypt(data.password, iv: iv);
+      // print(encryptedPass.runtimeType);
+      UserModel userModel = new UserModel(
+          data.name, encrypter.encrypt(data.password, iv: iv).base64);
       var response = await db.registerNewUser(userModel);
       String currentUserID = response.body;
       saveUserIDtoPref(currentUserID);
@@ -56,20 +67,12 @@ class LoginScreen extends StatelessWidget {
   }
 
   Future<String> _recoverPassword(String name) {
-    print('Name: $name');
     return Future.delayed(loginTime).then((_) async {
       if (await db.isEmailValid(name) == false) {
-        // print("It looks like there isn't an account with that email.");
-      return "It looks like there isn't an account with that email.";
+        return "It looks like there isn't an account with that email.";
       }
       //Recover password logic here
       var response = await db.resetPassword(name);
-
-
-
-
-
-
 
       //Recover password logic end
       return null;
@@ -81,7 +84,7 @@ class LoginScreen extends StatelessWidget {
     return FlutterLogin(
       // title: 'ENACT',
       logo: 'assets/logo.png',
-      title: '',
+      title: 'V.4',
       theme: LoginTheme(
           primaryColor: Colors.white,
           accentColor: Colors.black,
@@ -96,14 +99,13 @@ class LoginScreen extends StatelessWidget {
       onSignup: _registerUser,
       onSubmitAnimationCompleted: () async {
         String route = await welcomeScreenComplete();
-        print(route);
         Navigator.pushReplacementNamed(context, route);
       },
       onRecoverPassword: _recoverPassword,
 
       messages: LoginMessages(
-        recoverPasswordDescription: "We will send you an email to reset your password."
-      ),
+          recoverPasswordDescription:
+              "We will send you an email to reset your password."),
     );
   }
 
@@ -112,7 +114,6 @@ class LoginScreen extends StatelessWidget {
     var id = prefs.get('id');
     var response = await db.getFormCompletionStatus();
     bool formComplete = (response.toString() == 'true');
-    print('The welcome screener came back as ' + formComplete.toString());
     if (formComplete) {
       return '/home';
     } else {

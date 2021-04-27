@@ -54,7 +54,10 @@ class _FoodLogState extends State<FoodLog> {
   }
 
   update() async {
-    setState(() {});
+    await getFood();
+    setState(() {
+      // rebuildAllChildren(context);
+    });
   }
 
   void rebuildAllChildren(BuildContext context) {
@@ -97,10 +100,7 @@ class _FoodLogState extends State<FoodLog> {
     var db = new DBHelper();
     var response = await db.getFoodLog(selectedDate);
     var data = json.decode(response.body);
-    // print(data[0]['entryTime'].runtimeType);
     // var x = TimeOfDay.fromDateTime(data[0]['entryTime']);
-    // print(x);
-    // print(data);
     for (int i = 0; i < data.length; i++) {
       FoodLogEntry foodLogEntry = new FoodLogEntry();
       foodLogEntry.id = data[i]['id'];
@@ -198,7 +198,6 @@ class _FoodLogState extends State<FoodLog> {
         color: getColor(category),
       );
     }
-    print(category);
     // last is misc
     return Icon(
       Icons.food_bank,

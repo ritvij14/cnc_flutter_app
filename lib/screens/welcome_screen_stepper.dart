@@ -1017,7 +1017,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           gIIssues = key;
         } else {
           gIIssues = gIIssues + "," + key;
-          print(gIIssues);
         }
       }
     }

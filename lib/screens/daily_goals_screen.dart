@@ -322,14 +322,22 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
             controller: _eventController,
           ),
           actions: <Widget>[
-            TextButton(
-              child: Text("Cancel"),
+            FlatButton(
+              child: const Text(
+                'CANCEL',
+                style: TextStyle(color: Colors.grey),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            TextButton(
-              child: Text("Save"),
+            FlatButton(
+              child: const Text('SAVE',
+                  style:
+                  TextStyle(color: Colors.white)),
+              color: Theme.of(context).buttonColor,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.grey[800],
               onPressed: () {
                 if (_eventController.text.isEmpty) return;
                 if (_events[_controller.selectedDay] != null) {
