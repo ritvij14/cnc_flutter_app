@@ -15,7 +15,6 @@ class SymptomTrackingScreen extends StatefulWidget {
 }
 
 class _SymptomTrackingScreenState extends State<SymptomTrackingScreen> {
-
   var db = new SymptomDBHelper();
 
   @override
@@ -37,25 +36,29 @@ class _SymptomTrackingScreenState extends State<SymptomTrackingScreen> {
           )
         ],
       ),
-        body: FutureBuilder(
-          builder: (context, projectSnap){
-            return ListView.builder(
-              itemCount: widget.symptomModelList.length,
-              itemBuilder: (context, index){
-                return SymptomTrackingListTile(widget.symptomModelList[index]);
-              },
-            );
-          },
-          future: getSymptoms(),
-        ),
+      body: FutureBuilder(
+        builder: (context, projectSnap) {
+          return ListView.builder(
+            itemCount: widget.symptomModelList.length,
+            itemBuilder: (context, index) {
+              return SymptomTrackingListTile(widget.symptomModelList[index]);
+            },
+          );
+        },
+        future: getSymptoms(),
+      ),
     );
   }
+
   getSymptoms() async {
     widget.symptomModelList.clear();
     var sharedPref = await SharedPreferences.getInstance();
     String id = sharedPref.getString('id');
     var response = await db.getSymptoms(int.parse(id));
-    List<SymptomModel> newSymptomModelList = (json.decode(response.body) as List).map((data) => SymptomModel.fromJson(data)).toList();
+    List<SymptomModel> newSymptomModelList =
+        (json.decode(response.body) as List)
+            .map((data) => SymptomModel.fromJson(data))
+            .toList();
     widget.symptomModelList = newSymptomModelList;
   }
 
