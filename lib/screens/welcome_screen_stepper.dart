@@ -117,31 +117,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool userConsent = false;
   bool userOptIn = true;
 
-
-
   Widget _buildtemp() {
     return Row(children: <Widget>[
-    new Transform.scale(
-    scale: 1.5,
+      new Transform.scale(
+        scale: 1.5,
         child: new Checkbox(
-          value: userConsent,
-          onChanged: (bool newValue) {
-            setState(() {
-              userConsent = newValue;
-            });
-          }),),
+            value: userConsent,
+            onChanged: (bool newValue) {
+              setState(() {
+                userConsent = newValue;
+              });
+            }),
+      ),
       Expanded(
           child: Text(
               "I understand agree to Cancer DietAssist's Terms of Service and Private Policy")),
-       IconButton(
-          icon: Icon(Icons.policy, color: Theme.of(context).buttonColor,  size: 35,),
-          tooltip: 'Private Policy',
-          onPressed: () {
-            setState(() {
-              openUrl();
-            });
-          },
+      IconButton(
+        icon: Icon(
+          Icons.policy,
+          color: Theme.of(context).buttonColor,
+          size: 35,
         ),
+        tooltip: 'Private Policy',
+        onPressed: () {
+          setState(() {
+            openUrl();
+          });
+        },
+      ),
     ]);
   }
 
@@ -839,8 +842,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(
-                    'Form successfully submitted!'),
+                Text('Form successfully submitted!'),
               ],
             ),
           ),
@@ -1100,7 +1102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: <Widget>[
                         // _buildConsentBox(),
                         _buildtemp(),
-SizedBox(height:15),
+                        SizedBox(height: 15),
                         // _buildOptIn(),
                       ],
                     ),
