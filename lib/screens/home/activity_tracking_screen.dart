@@ -41,7 +41,7 @@ class _ActivityTrackingScreenState extends State<ActivityTrackingScreen> {
               ],
             ),
             body: StickyGroupedListView<ActivityModel, DateTime>(
-              floatingHeader: true,
+                floatingHeader: true,
                 itemScrollController: GroupedItemScrollController(),
                 scrollDirection: Axis.vertical,
                 elements: widget.activityModelList,
@@ -82,9 +82,7 @@ class _ActivityTrackingScreenState extends State<ActivityTrackingScreen> {
                     ),
                 itemBuilder: (_, ActivityModel element) {
                   return Container(
-                    child: Card(
-                      child: ActivityTrackingListTile(element),
-                    ),
+                    child: ActivityTrackingListTile(element),
                   );
                 }));
       },

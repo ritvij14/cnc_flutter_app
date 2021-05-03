@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="cnc_flutter_app"
+        android:label="Cancer DietAssist"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

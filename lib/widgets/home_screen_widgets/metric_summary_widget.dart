@@ -439,10 +439,18 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         .toList();
 
     List<FlSpot> spots = [];
+    var now = DateTime.now();
+    var lastMidnight = DateTime(now.year, now.month, now.day - 1);
+
     for (MetricModel met in metricModelList) {
-      spots.add(FlSpot(
-          days - (DateTime.now().difference(met.dateTime).inDays).toDouble(),
-          met.weight.toDouble()));
+      if(days - (lastMidnight.difference(met.dateTime).inDays).toDouble() - 1 >= 0) {
+        print(met.dateTime.toString() + " " + met.weight.toString());
+        spots.add(FlSpot(
+            days - (lastMidnight
+                .difference(met.dateTime)
+                .inDays).toDouble() - 1,
+            met.weight.toDouble()));
+      }
     }
     if (spots.length > 0) {
       this.spots = spots;

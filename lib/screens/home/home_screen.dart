@@ -63,10 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: SpeedDial(
+
         icon: Icons.add,
         backgroundColor: Theme.of(context).buttonColor,
         children: [
           SpeedDialChild(
+            backgroundColor: Theme.of(context).canvasColor,
+              foregroundColor: Theme.of(context).buttonColor,
+              labelBackgroundColor: Theme.of(context).canvasColor,
               child: Icon(Icons.food_bank),
               label: 'Log Food',
               onTap: () async {
@@ -99,6 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
           // Navigator.pushNamed(context, '/inputActivity');
           SpeedDialChild(
               child: Icon(Icons.directions_run),
+              backgroundColor: Theme.of(context).canvasColor,
+              foregroundColor: Theme.of(context).buttonColor,
+              labelBackgroundColor: Theme.of(context).canvasColor,
               label: 'Log Activity',
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputActivity')
@@ -110,24 +117,35 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
           SpeedDialChild(
               child: Icon(Icons.thermostat_outlined),
+              backgroundColor: Theme.of(context).canvasColor,
+              foregroundColor: Theme.of(context).buttonColor,
+              labelBackgroundColor: Theme.of(context).canvasColor,
               label: 'Log Symptoms',
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputSymptom')
                     .then((value) => setState(() {
-                          refresh();
+                          getDailySymptom();
                           ScaffoldMessenger.of(context)
                             ..removeCurrentSnackBar()
                             ..showSnackBar(SnackBar(content: Text("$value")));
                         }));
+                await getDailySymptom();
+                refresh();
               }),
           SpeedDialChild(
               child: Icon(Icons.question_answer),
+              backgroundColor: Theme.of(context).canvasColor,
+              foregroundColor: Theme.of(context).buttonColor,
+              labelBackgroundColor: Theme.of(context).canvasColor,
               label: 'Log Questions',
               onTap: () {
                 Navigator.pushNamed(context, '/questions');
               }),
           SpeedDialChild(
               child: Icon(MdiIcons.scale),
+              backgroundColor: Theme.of(context).canvasColor,
+              foregroundColor: Theme.of(context).buttonColor,
+              labelBackgroundColor: Theme.of(context).canvasColor,
               label: 'Log Weight',
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputMetric')
@@ -138,6 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ..removeCurrentSnackBar()
                             ..showSnackBar(SnackBar(content: Text("$value")));
                         }));
+                await getDailyWeight();
+                refresh();
               }),
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
@@ -418,6 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getDailySymptom() async {
+    // daySymptomList.clear();
     SymptomDBHelper db = new SymptomDBHelper();
     var sharedPref = await SharedPreferences.getInstance();
     String id = sharedPref.getString('id');
