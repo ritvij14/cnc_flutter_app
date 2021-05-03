@@ -16,11 +16,14 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
   List<FoodLogEntry> foodLogEntries = [];
   Map map = Map<String, double>();
   var weekDays = ['', '', '', '', '', '', ''];
+  var weekDaysAsDates = ['', '', '', '', '', '', ''];
   double dailyCalorieLimit = 1200;
 
   List<double> yValues = [0, 0, 0, 0, 0, 0, 0];
+  bool isLoading = false;
 
   getFood() async {
+    isLoading = true;
     var db = new DBHelper();
     DateTime selectedDate;
     for (int i = 6; i >= 0; i--) {
@@ -76,315 +79,347 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
       map.update(key, (v) => kcal);
     }
     weekDays.clear();
+    weekDaysAsDates.clear();
     yValues.clear();
     for (String key in map.keys) {
       String newKey = key.split('-')[1] + '-' + key.split('-')[2];
       double v = double.parse(map[key].toStringAsFixed(2));
-      weekDays.add(newKey);
+      DateTime t = DateTime.parse(key);
+      weekDays.add(getDay(t.weekday));
+      weekDaysAsDates.add(newKey);
       yValues.add(v);
     }
 
     var x = await db.getUserInfo();
     var userData = json.decode(x.body);
 
-    if(userData['weight'] <= 174) {
+    if (userData['weight'] <= 174) {
       dailyCalorieLimit = 1200;
-    } else if(userData['weight'] > 174 && userData['weight'] <= 219) {
+    } else if (userData['weight'] > 174 && userData['weight'] <= 219) {
       dailyCalorieLimit = 1500;
-    } else if(userData['weight'] > 219 && userData['weight'] <= 249) {
+    } else if (userData['weight'] > 219 && userData['weight'] <= 249) {
       dailyCalorieLimit = 1800;
     } else {
       dailyCalorieLimit = 2000;
     }
+    isLoading = false;
+  }
+
+  getDay(day) {
+    Map dayData = {
+      1: "Mon",
+      2: "Tue",
+      3: "Wed",
+      4: "Thu",
+      5: "Fri",
+      6: "Sat",
+      7: "Sun"
+    };
+    return dayData[day];
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       builder: (context, projectSnap) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 50)),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children:  <Widget>[
-                // Text(
-                //   'Average Line',
-                //   style: TextStyle(
-                //       color: Colors.green,
-                //       fontWeight: FontWeight.bold,
-                //       fontSize: 16),
-                // ),
-                Text(
-                  'Calorie totals last 7 days ',
-                  style: TextStyle(
-                      color: Theme.of(context).hintColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-                // Text(
-                //   ' and ',
-                //   style: TextStyle(
-                //       color: Colors.black,
-                //       fontWeight: FontWeight.bold,
-                //       fontSize: 16),
-                // ),
-                // Text(
-                //   'Indicators',
-                //   style: TextStyle(
-                //       color: Colors.blue,
-                //       fontWeight: FontWeight.bold,
-                //       fontSize: 16),
-                // ),
-              ],
-            ),
-            const SizedBox(
-              height: 18,
-            ),
-            Padding(
-              padding:  EdgeInsets.only(left: 14.0, right: 14.0),
-              child: SizedBox(
-                width: double.infinity,
-                height:233,
-                child: LineChart(
-                  LineChartData(
-                    clipData: FlClipData.all(),
-                    maxY: 3000,
-                    lineTouchData: LineTouchData(
-                      getTouchedSpotIndicator:
-                          (LineChartBarData barData, List<int> spotIndexes) {
-                        return spotIndexes.map((spotIndex) {
-                          final FlSpot spot = barData.spots[spotIndex];
-                          // if (spot.x == 0 || spot.x == 6) {
-                          //   return null;
-                          // }
-                          return TouchedSpotIndicatorData(
-                            FlLine(color: Theme.of(context).accentColor, strokeWidth: 4),
-                            FlDotData(
-                              getDotPainter: (spot, percent, barData, index) {
-                                return FlDotCirclePainter(
-                                    radius: 8,
-                                    color: Colors.white,
-                                    strokeWidth: 5,
-                                    strokeColor: Theme.of(context).buttonColor);
-                                if (index % 2 == 0) {
+        if (isLoading) {
+          return Center(
+            child: CircularProgressIndicator(  valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),),
+          );
+        } else {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(top: 5)),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // Text(
+                  //   'Average Line',
+                  //   style: TextStyle(
+                  //       color: Colors.green,
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 16),
+                  // ),
+                  Text(
+                    'Last 7-Day Calorie Count ',
+                    style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 5)),
+
+                  // Text(
+                  //   ' and ',
+                  //   style: TextStyle(
+                  //       color: Colors.black,
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 16),
+                  // ),
+                  // Text(
+                  //   'Indicators',
+                  //   style: TextStyle(
+                  //       color: Colors.blue,
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 16),
+                  // ),
+                ],
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 14.0, right: 14.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 233,
+                  child: LineChart(
+                    LineChartData(
+                      clipData: FlClipData.all(),
+                      maxY: 3000,
+                      lineTouchData: LineTouchData(
+                        getTouchedSpotIndicator:
+                            (LineChartBarData barData, List<int> spotIndexes) {
+                          return spotIndexes.map((spotIndex) {
+                            final FlSpot spot = barData.spots[spotIndex];
+                            // if (spot.x == 0 || spot.x == 6) {
+                            //   return null;
+                            // }
+                            return TouchedSpotIndicatorData(
+                              FlLine(
+                                  color: Theme.of(context).accentColor,
+                                  strokeWidth: 4),
+                              FlDotData(
+                                getDotPainter: (spot, percent, barData, index) {
                                   return FlDotCirclePainter(
                                       radius: 8,
                                       color: Colors.white,
                                       strokeWidth: 5,
-                                      strokeColor: Colors.deepOrange);
-                                } else {
-                                  return FlDotSquarePainter(
-                                    size: 16,
-                                    color: Colors.white,
-                                    strokeWidth: 5,
-                                    strokeColor: Colors.deepOrange,
-                                  );
+                                      strokeColor:
+                                          Theme.of(context).buttonColor);
+                                  if (index % 2 == 0) {
+                                    return FlDotCirclePainter(
+                                        radius: 8,
+                                        color: Colors.white,
+                                        strokeWidth: 5,
+                                        strokeColor: Colors.deepOrange);
+                                  } else {
+                                    return FlDotSquarePainter(
+                                      size: 16,
+                                      color: Colors.white,
+                                      strokeWidth: 5,
+                                      strokeColor: Colors.deepOrange,
+                                    );
+                                  }
+                                },
+                              ),
+                            );
+                          }).toList();
+                        },
+                        touchTooltipData: LineTouchTooltipData(
+                            tooltipBgColor: Theme.of(context).accentColor,
+                            fitInsideHorizontally: true,
+                            fitInsideVertically: true,
+                            getTooltipItems:
+                                (List<LineBarSpot> touchedBarSpots) {
+                              return touchedBarSpots.map((barSpot) {
+                                final flSpot = barSpot;
+                                // if (flSpot.x == 0 || flSpot.x == 6) {
+                                //   return null;
+                                // }
+
+                                return LineTooltipItem(
+                                  '${weekDays[flSpot.x.toInt()] + ' '+ weekDaysAsDates[flSpot.x.toInt()]} \n${flSpot.y.round()} calories',
+                                  const TextStyle(color: Colors.white),
+                                );
+                              }).toList();
+                            }),
+                        // touchCallback: (LineTouchResponse lineTouch) {
+                        //   if (lineTouch.lineBarSpots.length == 1 &&
+                        //       lineTouch.touchInput is! FlLongPressEnd &&
+                        //       lineTouch.touchInput is! FlPanEnd) {
+                        //     final value = lineTouch.lineBarSpots[0].x;
+                        //
+                        //     // if (value == 0 || value == 6) {
+                        //       // setState(() {
+                        //       //   touchedValue = -1;
+                        //       // });
+                        //       // return null;
+                        //     // }
+                        //
+                        //     // setState(() {
+                        //     //   touchedValue = value;
+                        //     // });
+                        //   // } else {
+                        //     // setState(() {
+                        //     //   touchedValue = -1;
+                        //     // });
+                        //   }
+                        // }
+                      ),
+                      extraLinesData: ExtraLinesData(horizontalLines: [
+                        HorizontalLine(
+                          label: HorizontalLineLabel(
+                              show: true,
+                              style: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                  fontSize: 14),
+                              labelResolver: (line) =>
+                                  '${dailyCalorieLimit.round()}'),
+                          y: dailyCalorieLimit,
+                          color: Colors.lightGreen.withOpacity(0.8),
+                          strokeWidth: 3,
+                          dashArray: [20, 2],
+                        ),
+                      ]),
+                      lineBarsData: [
+                        LineChartBarData(
+                          isStepLineChart: true,
+                          spots: yValues.asMap().entries.map((e) {
+                            return FlSpot(e.key.toDouble(), e.value);
+                          }).toList(),
+                          isCurved: false,
+                          barWidth: 4,
+                          colors: [
+                            Theme.of(context).buttonColor,
+                          ],
+                          belowBarData: BarAreaData(
+                            show: true,
+                            colors: [
+                              Theme.of(context).buttonColor.withOpacity(0.5),
+                              Theme.of(context).buttonColor.withOpacity(0.0),
+                            ],
+                            gradientColorStops: [0.5, 1.0],
+                            gradientFrom: const Offset(0, 0),
+                            gradientTo: const Offset(0, 1),
+                            spotsLine: BarAreaSpotsLine(
+                              show: true,
+                              flLineStyle: FlLine(
+                                color: Theme.of(context).buttonColor,
+                                strokeWidth: 2,
+                              ),
+                              checkToShowSpotLine: (spot) {
+                                return true;
+                                if (spot.x == 0 || spot.x == 6) {
+                                  return false;
                                 }
+
+                                return true;
                               },
                             ),
-                          );
-                        }).toList();
-                      },
-                      touchTooltipData: LineTouchTooltipData(
-                          tooltipBgColor:Theme.of(context).accentColor,
-                          fitInsideHorizontally: true,
-                          fitInsideVertically: true,
-                          getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
-                            return touchedBarSpots.map((barSpot) {
-                              final flSpot = barSpot;
-                              // if (flSpot.x == 0 || flSpot.x == 6) {
-                              //   return null;
-                              // }
-
-                              return LineTooltipItem(
-                                '${weekDays[flSpot.x.toInt()]} \n${flSpot.y.round()} calories',
-                                const TextStyle(color: Colors.white),
-                              );
-                            }).toList();
-                          }),
-                      // touchCallback: (LineTouchResponse lineTouch) {
-                      //   if (lineTouch.lineBarSpots.length == 1 &&
-                      //       lineTouch.touchInput is! FlLongPressEnd &&
-                      //       lineTouch.touchInput is! FlPanEnd) {
-                      //     final value = lineTouch.lineBarSpots[0].x;
-                      //
-                      //     // if (value == 0 || value == 6) {
-                      //       // setState(() {
-                      //       //   touchedValue = -1;
-                      //       // });
-                      //       // return null;
-                      //     // }
-                      //
-                      //     // setState(() {
-                      //     //   touchedValue = value;
-                      //     // });
-                      //   // } else {
-                      //     // setState(() {
-                      //     //   touchedValue = -1;
-                      //     // });
-                      //   }
-                      // }
-                    ),
-                    extraLinesData: ExtraLinesData(horizontalLines: [
-                      HorizontalLine(
-                        label: HorizontalLineLabel(
-                            show: true,
-                            style: TextStyle(color: Theme.of(context).hintColor,fontSize: 14),
-                            labelResolver: (line) =>
-                                '${dailyCalorieLimit.round()}'),
-                        y: dailyCalorieLimit,
-                        color: Colors.lightGreen.withOpacity(0.8),
-                        strokeWidth: 3,
-                        dashArray: [20, 2],
-                      ),
-                    ]),
-                    lineBarsData: [
-                      LineChartBarData(
-                        isStepLineChart: true,
-                        spots: yValues.asMap().entries.map((e) {
-                          return FlSpot(e.key.toDouble(), e.value);
-                        }).toList(),
-                        isCurved: false,
-                        barWidth: 4,
-                        colors: [
-                          Theme.of(context).buttonColor,
-                        ],
-                        belowBarData: BarAreaData(
-                          show: true,
-                          colors: [
-                            Theme.of(context).buttonColor.withOpacity(0.5),
-                            Theme.of(context).buttonColor.withOpacity(0.0),
-                          ],
-                          gradientColorStops: [0.5, 1.0],
-                          gradientFrom: const Offset(0, 0),
-                          gradientTo: const Offset(0, 1),
-                          spotsLine: BarAreaSpotsLine(
-                            show: true,
-                            flLineStyle: FlLine(
-                              color: Theme.of(context).buttonColor,
-                              strokeWidth: 2,
-                            ),
-                            checkToShowSpotLine: (spot) {
-                              return true;
-                              if (spot.x == 0 || spot.x == 6) {
-                                return false;
-                              }
-
-                              return true;
-                            },
                           ),
-                        ),
-                        dotData: FlDotData(
-                            show: true,
-                            getDotPainter: (spot, percent, barData, index) {
-                              return FlDotCirclePainter(
-                                  radius: 6,
-                                  color: Colors.white,
-                                  strokeWidth: 3,
-                                  strokeColor: Colors.lightGreen);
-                              if (index % 2 == 0) {
+                          dotData: FlDotData(
+                              show: true,
+                              getDotPainter: (spot, percent, barData, index) {
                                 return FlDotCirclePainter(
                                     radius: 6,
                                     color: Colors.white,
                                     strokeWidth: 3,
-                                    strokeColor: Colors.deepOrange);
-                              } else {
-                                return FlDotSquarePainter(
-                                  size: 12,
-                                  color: Colors.white,
-                                  strokeWidth: 3,
-                                  strokeColor: Colors.deepOrange,
-                                );
-                              }
-                            },
-                            checkToShowDot: (spot, barData) {
-                              return true;
-                              return spot.x != 0 && spot.x != 6;
-                            }),
-                      ),
-                    ],
-                    minY: 0,
-                    gridData: FlGridData(
-                      show: false,
-                      drawHorizontalLine: true,
-                      drawVerticalLine: true,
-                      getDrawingHorizontalLine: (value) {
-                        if (value == 0) {
-                          return FlLine(
-                            color:Theme.of(context).accentColor,
-                            strokeWidth: 2,
-                          );
-                        } else {
-                          return FlLine(
-                            color: Colors.grey,
-                            strokeWidth: 0.5,
-                          );
-                        }
-                      },
-                      getDrawingVerticalLine: (value) {
-                        if (value == 0) {
-                          return FlLine(
-                            color: Theme.of(context).hintColor,
-                            strokeWidth: 2,
-                          );
-                        } else {
-                          return FlLine(
-                            color: Colors.grey,
-                            strokeWidth: 0.5,
-                          );
-                        }
-                      },
-                    ),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      leftTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 30,
-                        // getTitles: (value) {
-                        //   switch (value.toInt()) {
-                        //     case 0:
-                        //       return '';
-                        //     case 1:
-                        //       return '1k calories';
-                        //     case 2:
-                        //       return '2k calories';
-                        //     case 3:
-                        //       return '3k calories';
-                        //   }
-                        //
-                        //   return '';
-                        // },
-                        getTextStyles: (value) =>
-                             TextStyle(color: Theme.of(context).hintColor, fontSize: 14),
-                      ),
-                      bottomTitles: SideTitles(
-                        margin: 12,
-                        rotateAngle: 70,
-                        showTitles: true,
-                        getTitles: (value) {
-                          return weekDays[value.toInt()];
+                                    strokeColor: Colors.lightGreen);
+                                if (index % 2 == 0) {
+                                  return FlDotCirclePainter(
+                                      radius: 6,
+                                      color: Colors.white,
+                                      strokeWidth: 3,
+                                      strokeColor: Colors.deepOrange);
+                                } else {
+                                  return FlDotSquarePainter(
+                                    size: 12,
+                                    color: Colors.white,
+                                    strokeWidth: 3,
+                                    strokeColor: Colors.deepOrange,
+                                  );
+                                }
+                              },
+                              checkToShowDot: (spot, barData) {
+                                return true;
+                                return spot.x != 0 && spot.x != 6;
+                              }),
+                        ),
+                      ],
+                      minY: 0,
+                      gridData: FlGridData(
+                        show: false,
+                        drawHorizontalLine: true,
+                        drawVerticalLine: true,
+                        getDrawingHorizontalLine: (value) {
+                          if (value == 0) {
+                            return FlLine(
+                              color: Theme.of(context).accentColor,
+                              strokeWidth: 2,
+                            );
+                          } else {
+                            return FlLine(
+                              color: Colors.grey,
+                              strokeWidth: 0.5,
+                            );
+                          }
                         },
-                        getTextStyles: (value) {
-                          final isTouched = value == touchedValue;
-                          return TextStyle(
-                            fontSize: 14,
-                            color: isTouched
-                                ? Theme.of(context).hintColor
-                                : Theme.of(context).hintColor.withOpacity(0.5),
-                            fontWeight: FontWeight.bold,
-                          );
+                        getDrawingVerticalLine: (value) {
+                          if (value == 0) {
+                            return FlLine(
+                              color: Theme.of(context).hintColor,
+                              strokeWidth: 2,
+                            );
+                          } else {
+                            return FlLine(
+                              color: Colors.grey,
+                              strokeWidth: 0.5,
+                            );
+                          }
                         },
+                      ),
+                      titlesData: FlTitlesData(
+                        show: true,
+                        leftTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 30,
+                          getTitles: (value) {
+                            switch (value.toInt()) {
+                              case 0:
+                                return '0';
+                              case 1000:
+                                return '1k';
+                              case 2000:
+                                return '2k';
+                              case 3000:
+                                return '3k';
+                            }
+                            return '';
+                          },
+                          getTextStyles: (value) => TextStyle(
+                              color: Theme.of(context).hintColor, fontSize: 14, fontFamily: 'RobotoMono'),
+                        ),
+                        bottomTitles: SideTitles(
+                          margin: 12,
+                          rotateAngle: 0,
+                          showTitles: true,
+                          getTitles: (value) {
+                            return weekDays[value.toInt()];
+                          },
+                          getTextStyles: (value) {
+                            final isTouched = value == touchedValue;
+                            return TextStyle(
+                              fontSize: 14,
+                                fontFamily: 'RobotoMono',
+                              color: isTouched
+                                  ? Theme.of(context).hintColor
+                                  : Theme.of(context)
+                                      .hintColor,
+                              // fontWeight: FontWeight.bold,
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        );
+            ],
+          );
+        }
       },
       future: getFood(),
     );

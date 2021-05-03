@@ -540,9 +540,11 @@ class _HomeScreenState extends State<HomeScreen> {
           itemBuilder: (context, index) {
             final item = dayFoodLogEntryList[index];
             return Padding(
-              padding: const EdgeInsets.fromLTRB(20, 2, 0,2),
+              padding: const EdgeInsets.fromLTRB(20, 2, 20,2),
               child: Text("- " + item.food.description,
-                  style: TextStyle(color: Theme.of(context).highlightColor)),
+                  style: TextStyle(color: Theme.of(context).highlightColor),
+                overflow: TextOverflow.ellipsis,
+              ),
             );
           },
         ),
@@ -670,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getDailySymptomChildren() {
     if (daySymptomList.isEmpty) {
       return <Widget>[
-        Text("No Symptoms Tracked Today!",
+        Text("Nothing here. Log your symptoms!",
             style: TextStyle(color: Theme.of(context).highlightColor)),
         TextButton(
             onPressed: () {
