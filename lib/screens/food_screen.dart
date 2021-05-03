@@ -341,7 +341,7 @@ class FoodProfile extends State<FoodPage> {
                           dataRowHeight: 30,
                           dividerThickness: 0,
                           dataTextStyle:
-                              TextStyle(fontSize: 20, color: Colors.black),
+                          TextStyle(fontSize: 20, color: Theme.of(context).hintColor),
                           // columnSpacing: MediaQuery.of(context).size.width/ 3,
 
                           columns: <DataColumn>[
@@ -708,7 +708,7 @@ class FoodProfile extends State<FoodPage> {
                                 GestureDetector(
                                   onTap: () => showPickerModal(context),
                                   child: Container(
-                                    color: Colors.grey[300],
+                                    color: Theme.of(context).accentColor,
                                     width: 175,
                                     child: TextFormField(
                                       enabled: false,
@@ -730,7 +730,7 @@ class FoodProfile extends State<FoodPage> {
                               ],
                               if (!showFraction) ...[
                                 Container(
-                                  color: Colors.grey[300],
+                                  color: Theme.of(context).accentColor,
                                   width: 175,
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
@@ -802,7 +802,7 @@ class FoodProfile extends State<FoodPage> {
                               GestureDetector(
                                 onTap: _pickTime,
                                 child: Container(
-                                  color: Colors.grey[300],
+                                  color: Theme.of(context).accentColor,
                                   width: 175,
                                   child: TextFormField(
                                     enabled: false,

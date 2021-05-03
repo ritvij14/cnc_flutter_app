@@ -461,7 +461,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Row(children: <Widget>[
             Expanded(
               child: ListTile(
-                title: const Text('yes'),
+                title: const Text('Yes'),
                 leading: Radio(
                   value: true,
                   groupValue: _colorectal,
@@ -475,7 +475,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             Expanded(
               child: ListTile(
-                title: const Text('no'),
+                title: const Text('No'),
                 leading: Radio(
                   value: false,
                   groupValue: _colorectal,
@@ -700,7 +700,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Row(children: <Widget>[
             Expanded(
               child: ListTile(
-                title: const Text('yes'),
+                title: const Text('Yes'),
                 leading: Radio(
                   value: true,
                   groupValue: _ostomy,
@@ -714,7 +714,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             Expanded(
               child: ListTile(
-                title: const Text('no'),
+                title: const Text('No'),
                 leading: Radio(
                   value: false,
                   groupValue: _ostomy,
@@ -837,12 +837,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Form successfully submitted'),
+          // title: Text('Form successfully submitted'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                    'You can view and update these forms fields in the PROFILE tab by tapping on the Personal Details button.'),
+                    'Form successfully submitted!'),
               ],
             ),
           ),

@@ -15,7 +15,6 @@ class AppThemes {
       buttonColor: Colors.blue[600],
       dividerColor: Colors.transparent,
       hintColor: Colors.black,
-// primaryColorLight:
     ),
     AppTheme.DarkMode: ThemeData(
       brightness: Brightness.dark,
