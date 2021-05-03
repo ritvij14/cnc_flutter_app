@@ -121,21 +121,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Widget _buildtemp() {
     return Row(children: <Widget>[
-      Checkbox(
+    new Transform.scale(
+    scale: 1.5,
+        child: new Checkbox(
           value: userConsent,
           onChanged: (bool newValue) {
             setState(() {
               userConsent = newValue;
             });
-          }),
+          }),),
       Expanded(
           child: Text(
               "I understand agree to Cancer DietAssist's Terms of Service and Private Policy")),
-      Container(
-        padding: const EdgeInsets.all(0.0),
-        width: 30.0,
-        child: IconButton(
-          icon: Icon(Icons.policy, color: Colors.blue),
+       IconButton(
+          icon: Icon(Icons.policy, color: Theme.of(context).buttonColor,  size: 35,),
           tooltip: 'Private Policy',
           onPressed: () {
             setState(() {
@@ -143,7 +142,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             });
           },
         ),
-      )
     ]);
   }
 
@@ -1102,7 +1100,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: <Widget>[
                         // _buildConsentBox(),
                         _buildtemp(),
-
+SizedBox(height:15),
                         // _buildOptIn(),
                       ],
                     ),
