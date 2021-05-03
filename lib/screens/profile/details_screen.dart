@@ -305,7 +305,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             key: carbohydrateKey,
                             child: TextFormField(
                               decoration: InputDecoration(
-                                labelText: 'Carbohydrate %',
+                                labelText: 'Carbs %',
                                 // hintText: 'Carbs %',
                                 border: OutlineInputBorder(),
                               ),
@@ -357,7 +357,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'Protein %',
-                                // hintText: 'Carbs %',
                                 border: OutlineInputBorder(),
                               ),
                               keyboardType: TextInputType.number,
