@@ -175,7 +175,7 @@ class FoodSearch extends SearchDelegate<String> {
       );
     } else if (category == 'Commercial entrees and dinners') {
       return Icon(
-        Icons.dinner_dining,
+        Icons.restaurant,
       );
     } else if (category == 'Soups, gravy, and sauces') {
       return Icon(
@@ -209,7 +209,7 @@ class FoodSearch extends SearchDelegate<String> {
     } else if (category == 'Fruits and fruit products') {
       return Colors.red;
     } else if (category == 'Commercial entrees and dinners') {
-      return Colors.lightGreen[600];
+      return Colors.black;
     } else if (category == 'Soups, gravy, and sauces') {
       return Colors.deepOrange[400];
     }
