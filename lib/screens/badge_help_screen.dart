@@ -6,6 +6,7 @@ import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(BadgeHelp());
 
@@ -27,9 +28,19 @@ class BadgePage extends StatefulWidget {
 }
 
 class _BadgePageState extends State<BadgePage> {
-
+  SharedPreferences prefs;
   var db = new WeeklyDBHelper();
   final db2 = WeeklySavedDBHelper();
+
+  initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +58,8 @@ class _BadgePageState extends State<BadgePage> {
   }
 
   Widget buildGoalView() {
-    return Column(
+    return SingleChildScrollView( child:
+      Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,34 +73,164 @@ class _BadgePageState extends State<BadgePage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0, bottom: 10.0),
+            padding: EdgeInsets.only(
+                top: 30.0, left: 15.0, right: 15.0, bottom: 10.0),
             child: Text(
               'As you complete goals of different categories you will be awarded a new badge. By tapping '
-                  'on the badge you can view how many goals have been completed so far for that category. '
-                  'Each badge has multiple evolutions.',
+              'on the badge you can view how many goals have been completed so far for that category. '
+              'Each badge has multiple evolutions.',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,
               ),
             ),
           ),
-
           Container(
-            padding: EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0, bottom: 0),
+            padding:
+                EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0, bottom: 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-              _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', 1),
-              _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', 1),
-              _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', 1)
-            ],
+                _buildTotalBadge('./assets/images/badge1.png', 'Rank 1', 1),
+                _buildTotalBadge('./assets/images/badge2.png', 'Rank 2', 1),
+                _buildTotalBadge('./assets/images/badge3.png', 'Rank 3', 1)
+              ],
             ),
           ),
 
-        ]);
-    }
+          Container(
+            padding: EdgeInsets.only(
+                top: 30.0, left: 15.0, right: 15.0, bottom: 10.0),
+            child:Text(
+              'Reset Badge Category',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0,
+                color: Colors.blue[700],
+              ),
+            ),
+          ),
+
+         ElevatedButton(
+              child: Text('Fruits'),
+              style: ElevatedButton.styleFrom(
+                primary: _getColor("Fruits"), // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {
+                prefs.setInt("fruit goals total", null);
+                prefs.setInt("fruitBadge1", null);
+                prefs.setInt("fruitBadge2", null);
+                prefs.setInt("fruitBadge3", null);
+                _showSnackBar(context, 'Reset Fruit Badges');
+              },
+            ),
+          ElevatedButton(
+              child: Text('Vegetables'),
+              style: ElevatedButton.styleFrom(
+                primary: _getColor("Vegetables"),
+                // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {
+                prefs.setInt("vegetable goals total", null);
+                prefs.setInt("vegetableBadge1", null);
+                prefs.setInt("vegetableBadge2", null);
+                prefs.setInt("vegetableBadge3", null);
+                _showSnackBar(context, 'Reset Vegetable Badges');
+              },
+            ),
+          ElevatedButton(
+              child: Text('Grains'),
+              style: ElevatedButton.styleFrom(
+                primary: _getColor("Grains"), // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {
+                prefs.setInt("grain goals total", null);
+                prefs.setInt("grainBadge1", null);
+                prefs.setInt("grainBadge2", null);
+                prefs.setInt("grainBadge3", null);
+                _showSnackBar(context, 'Reset Grain Badges');
+              },
+            ),
+          ElevatedButton(
+              child: Text('Protein'),
+              style: ElevatedButton.styleFrom(
+                primary: _getColor("Protein"), // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {
+                prefs.setInt("protein goals total", null);
+                prefs.setInt("proteinBadge1", null);
+                prefs.setInt("proteinBadge2", null);
+                prefs.setInt("proteinBadge3", null);
+                _showSnackBar(context, 'Reset Protein Badges');
+              }
+            ),
+          ElevatedButton(
+              child: Text('Dairy'),
+              style: ElevatedButton.styleFrom(
+                primary: _getColor("Dairy"), // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {
+                prefs.setInt("dairy goals total", null);
+                prefs.setInt("dairyBadge1", null);
+                prefs.setInt("dairyBadge2", null);
+                prefs.setInt("dairyBadge3", null);
+                _showSnackBar(context, 'Reset Dairy Badges');
+              },
+            ),
+
+         ElevatedButton(
+              child: Text('Snack'),
+              style: ElevatedButton.styleFrom(
+                primary: _getColor("Snacks and Condiments"),
+                // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {
+                prefs.setInt("snack goals total", null);
+                prefs.setInt("snackBadge1", null);
+                prefs.setInt("snackBadge2", null);
+                prefs.setInt("snackBadge3", null);
+                _showSnackBar(context, 'Reset Snack Badges');
+              },
+            ),
+          ElevatedButton(
+              child: Text('Beverage'),
+              style: ElevatedButton.styleFrom(
+                primary: _getColor("Beverage"), // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {
+                prefs.setInt("beverage goals total", null);
+                prefs.setInt("beverageBadge1", null);
+                prefs.setInt("beverageBadge2", null);
+                prefs.setInt("beverageBadge3", null);
+                _showSnackBar(context, 'Reset Beverage Badges');
+              },
+            ),
+          ElevatedButton(
+                child: Text('Activity'),
+                style: ElevatedButton.styleFrom(
+                  primary: _getColor("Physical Activity"),
+                  // background
+                  onPrimary: Colors.white, // foreground
+                ),
+                onPressed: () {
+                  prefs.setInt("activity goals total", null);
+                  prefs.setInt("activityBadge1", null);
+                  prefs.setInt("activityBadge2", null);
+                  prefs.setInt("activityBadge3", null);
+                  _showSnackBar(context, 'Reset Activity Badges');
+                },
+              )
+        ]));
+  }
 
   Widget _buildTotalBadge(String i, String j, int a) {
     return Column(
@@ -99,15 +241,15 @@ class _BadgePageState extends State<BadgePage> {
           IconButton(
             icon: Image.asset(i),
             iconSize: 75,
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
-          Text(
-              j
-          ),
+          Text(j),
         ]);
   }
 
+  void _showSnackBar(BuildContext context, String text) {
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+  }
 
   Color _getColor(String index) {
     if (index == "Fruits") {
@@ -133,7 +275,7 @@ class _BadgePageState extends State<BadgePage> {
 
   Widget _buildEmpty() {
     return Container(color: Colors.white // This is optional
-    );
+        );
   }
 
   Widget _buildText() {
