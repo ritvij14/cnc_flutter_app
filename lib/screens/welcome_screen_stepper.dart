@@ -117,33 +117,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool userConsent = false;
   bool userOptIn = true;
 
-
-
   Widget _buildtemp() {
     return Row(children: <Widget>[
-      Checkbox(
-          value: userConsent,
-          onChanged: (bool newValue) {
-            setState(() {
-              userConsent = newValue;
-            });
-          }),
+      new Transform.scale(
+        scale: 1.5,
+        child: new Checkbox(
+            value: userConsent,
+            onChanged: (bool newValue) {
+              setState(() {
+                userConsent = newValue;
+              });
+            }),
+      ),
       Expanded(
           child: Text(
               "I understand agree to Cancer DietAssist's Terms of Service and Private Policy")),
-      Container(
-        padding: const EdgeInsets.all(0.0),
-        width: 30.0,
-        child: IconButton(
-          icon: Icon(Icons.policy, color: Colors.blue),
-          tooltip: 'Private Policy',
-          onPressed: () {
-            setState(() {
-              openUrl();
-            });
-          },
+      IconButton(
+        icon: Icon(
+          Icons.policy,
+          color: Theme.of(context).buttonColor,
+          size: 35,
         ),
-      )
+        tooltip: 'Private Policy',
+        onPressed: () {
+          setState(() {
+            openUrl();
+          });
+        },
+      ),
     ]);
   }
 
@@ -461,7 +462,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Row(children: <Widget>[
             Expanded(
               child: ListTile(
-                title: const Text('yes'),
+                title: const Text('Yes'),
                 leading: Radio(
                   value: true,
                   groupValue: _colorectal,
@@ -475,7 +476,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             Expanded(
               child: ListTile(
-                title: const Text('no'),
+                title: const Text('No'),
                 leading: Radio(
                   value: false,
                   groupValue: _colorectal,
@@ -700,7 +701,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Row(children: <Widget>[
             Expanded(
               child: ListTile(
-                title: const Text('yes'),
+                title: const Text('Yes'),
                 leading: Radio(
                   value: true,
                   groupValue: _ostomy,
@@ -714,7 +715,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             Expanded(
               child: ListTile(
-                title: const Text('no'),
+                title: const Text('No'),
                 leading: Radio(
                   value: false,
                   groupValue: _ostomy,
@@ -837,12 +838,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Form successfully submitted'),
+          // title: Text('Form successfully submitted'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(
-                    'You can view and update these forms fields in the PROFILE tab by tapping on the Personal Details button.'),
+                Text('Form successfully submitted!'),
               ],
             ),
           ),
@@ -1102,7 +1102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       children: <Widget>[
                         // _buildConsentBox(),
                         _buildtemp(),
-
+                        SizedBox(height: 15),
                         // _buildOptIn(),
                       ],
                     ),

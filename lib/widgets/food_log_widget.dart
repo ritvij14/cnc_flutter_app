@@ -29,6 +29,7 @@ class FoodLog extends StatefulWidget {
 }
 
 class _FoodLogState extends State<FoodLog> {
+  bool isLoading = false;
   List<Food> foods = [];
   List<FoodLogEntry> foodLogEntries = [];
   String selectedDate;
@@ -49,7 +50,7 @@ class _FoodLogState extends State<FoodLog> {
     var db = new DBHelper();
     var time = entryTime.toString().substring(0, 19);
     var response =
-    await db.updateFoodLogEntry(foodLogEntryId, time, tempPortion);
+        await db.updateFoodLogEntry(foodLogEntryId, time, tempPortion);
     // rebuildAllChildren(context);
   }
 
@@ -89,13 +90,18 @@ class _FoodLogState extends State<FoodLog> {
     var hour = time.hour == 0
         ? 12
         : time.hour <= 12
-        ? time.hour
-        : time.hour - 12;
+            ? time.hour
+            : time.hour - 12;
     var tod = time.hour < 12 ? 'AM' : 'PM';
-    return hour.toString() + ':'+time.minute.toString().padLeft(2, '0') + ' '+ tod;
+    return hour.toString() +
+        ':' +
+        time.minute.toString().padLeft(2, '0') +
+        ' ' +
+        tod;
   }
 
   getFood() async {
+    isLoading = true;
     foodLogEntries.clear();
     var db = new DBHelper();
     var response = await db.getFoodLog(selectedDate);
@@ -118,11 +124,11 @@ class _FoodLogState extends State<FoodLog> {
       food.fatInGrams = data[i]['food']['fatInGrams'];
       food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
       food.saturatedFattyAcidsInGrams =
-      data[i]['food']['saturatedFattyAcidsInGrams'];
+          data[i]['food']['saturatedFattyAcidsInGrams'];
       food.polyunsaturatedFattyAcidsInGrams =
-      data[i]['food']['polyunsaturatedFattyAcidsInGrams'];
+          data[i]['food']['polyunsaturatedFattyAcidsInGrams'];
       food.monounsaturatedFattyAcidsInGrams =
-      data[i]['food']['monounsaturatedFattyAcidsInGrams'];
+          data[i]['food']['monounsaturatedFattyAcidsInGrams'];
       food.insolubleFiberInGrams = data[i]['food']['insolubleFiberInGrams'];
       food.solubleFiberInGrams = data[i]['food']['solubleFiberInGrams'];
       food.sugarInGrams = data[i]['food']['sugarInGrams'];
@@ -131,15 +137,17 @@ class _FoodLogState extends State<FoodLog> {
       food.vitaminDInMicrograms = data[i]['food']['vitaminDInMicrograms'];
       food.commonPortionSizeAmount = data[i]['food']['commonPortionSizeAmount'];
       food.commonPortionSizeGramWeight =
-      data[i]['food']['commonPortionSizeGramWeight'];
+          data[i]['food']['commonPortionSizeGramWeight'];
       food.commonPortionSizeDescription =
-      data[i]['food']['commonPortionSizeDescription'];
+          data[i]['food']['commonPortionSizeDescription'];
       food.commonPortionSizeUnit = data[i]['food']['commonPortionSizeUnit'];
       food.nccFoodGroupCategory = data[i]['food']['nccFoodGroupCategory'];
       foodLogEntry.food = food;
       foodLogEntries.add(foodLogEntry);
+      isLoading = false;
     }
   }
+
   Icon getIcon(String category) {
     if (category == 'Vegetables and vegetable products') {
       return Icon(
@@ -189,7 +197,7 @@ class _FoodLogState extends State<FoodLog> {
       );
     } else if (category == 'Commercial entrees and dinners') {
       return Icon(
-        Icons.dinner_dining,
+        Icons.restaurant,
         color: getColor(category),
       );
     } else if (category == 'Soups, gravy, and sauces') {
@@ -226,18 +234,19 @@ class _FoodLogState extends State<FoodLog> {
     } else if (category == 'Fruits and fruit products') {
       return Colors.red;
     } else if (category == 'Commercial entrees and dinners') {
-      return Colors.lightGreen[600];
+      return Colors.black;
     } else if (category == 'Soups, gravy, and sauces') {
       return Colors.deepOrange[400];
     }
     return Colors.indigo[400];
   }
 
-
-  showAlertDialog(BuildContext context, foodLogEntryId, description, action, portion) {
+  showAlertDialog(
+      BuildContext context, foodLogEntryId, description, action, portion) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("CANCEL",
+      child: Text(
+        "CANCEL",
         style: TextStyle(color: Colors.grey),
       ),
       onPressed: () {
@@ -245,8 +254,7 @@ class _FoodLogState extends State<FoodLog> {
       },
     );
     Widget deleteButton = FlatButton(
-      child: Text("DELETE",
-          style: TextStyle(color: Colors.white)),
+      child: Text("DELETE", style: TextStyle(color: Colors.white)),
       color: Theme.of(context).buttonColor,
       onPressed: () {
         deleteEntry(foodLogEntryId);
@@ -255,8 +263,7 @@ class _FoodLogState extends State<FoodLog> {
     );
 
     Widget updateButton = FlatButton(
-      child: Text("UPDATE",
-          style: TextStyle(color: Colors.white)),
+      child: Text("UPDATE", style: TextStyle(color: Colors.white)),
       color: Colors.blue,
       onPressed: () {
         updateEntry(foodLogEntryId);
@@ -270,9 +277,15 @@ class _FoodLogState extends State<FoodLog> {
         content: Text.rich(
           TextSpan(
             children: [
-              TextSpan(text: 'Are you sure you would like to delete this entry?:\n\n',),
-              TextSpan(text:  description + " with a portion size of " + portion.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text:  '\n\nThis action cannot be undone.')
+              TextSpan(
+                text: 'Are you sure you would like to delete this entry?:\n\n',
+              ),
+              TextSpan(
+                  text: description +
+                      " with a portion size of " +
+                      portion.toString(),
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: '\n\nThis action cannot be undone.')
             ],
           ),
         ),
@@ -324,7 +337,6 @@ class _FoodLogState extends State<FoodLog> {
                   ),
                 ),
               ),
-
               Ink(
                 child: ListTile(
                   title: Text(
@@ -350,8 +362,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.proteinInGrams * portion).round().toString() +
-                        'g',
+                    (food.proteinInGrams * portion).round().toString() + 'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -365,8 +376,7 @@ class _FoodLogState extends State<FoodLog> {
                         fontStyle: FontStyle.italic),
                   ),
                   trailing: Text(
-                    (food.fatInGrams * portion).round().toString() +
-                        'g',
+                    (food.fatInGrams * portion).round().toString() + 'g',
                     // style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -426,126 +436,129 @@ class _FoodLogState extends State<FoodLog> {
         // Container(
         //   padding: EdgeInsets.only(left: 5, right: 0),
         //   child:
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Text(
-              //   "Meals",
-              //   style: TextStyle(
-              //       fontWeight: FontWeight.bold,
-              //       fontSize: 16,
-              //       fontFamily: "OpenSans"),
-              // ),
-          FlatButton(
-          child: Text("View Today's Nutrient Breakdown",
-          style: TextStyle(color: Colors.white)),
-      color:Theme.of(context).buttonColor,
-      onPressed: () {
-        Navigator.of(context)
-            .push(
-          new MaterialPageRoute(
-              builder: (_) =>
-                  DailyNutritionBreakdown(foodLogEntries)),
-        );
-      },
-    ),
-              // ButtonTheme(
-              //   height: 20,
-              //   child: OutlineButton(
-              //     borderSide: BorderSide(
-              //         color: Theme.of(context).buttonColor,
-              //         style: BorderStyle.solid,
-              //         width: 2),
-              //     onPressed: () {
-              //       Navigator.of(context)
-              //           .push(
-              //         new MaterialPageRoute(
-              //             builder: (_) =>
-              //                 DailyNutritionBreakdown(foodLogEntries)),
-              //       );
-              //     },
-              //     child: Text("View Today's Nutrient Breakdown",
-              //         style: TextStyle(color: Theme.of(context).buttonColor)),
-              //   ),
-              // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Text(
+            //   "Meals",
+            //   style: TextStyle(
+            //       fontWeight: FontWeight.bold,
+            //       fontSize: 16,
+            //       fontFamily: "OpenSans"),
+            // ),
+          ],
+        ),
 
-            ],
-          ),
-        // Divider(
-        //   color: Colors.grey[600],
-        //   height: 0,
-        //   thickness: 1,
-        // ),
-        // ),
         FutureBuilder(
           builder: (context, projectSnap) {
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              // separatorBuilder: (context, index) {
-              //   return Divider(
-              //     color: Colors.white,
-              //     height: 0,
-              //     thickness: 0,
-              //   );
-              // },
-              itemCount: foodLogEntries.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Container(
-                      //   width: 15,
-                      //   height: double.infinity,
-                      //   child: Text(''),
-                      //   color:
-                      //   getColor(foodLogEntries[index].food.nccFoodGroupCategory),
-                      // ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5, top: 0, bottom: 0),
-                      ),
-                      getIcon(foodLogEntries[index].food.nccFoodGroupCategory),
-                    ],
-                  ),
-                  title: Text(
-                    foodLogEntries[index].food.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle:   Text(
-                    getPortionAsFraction(
-                        foodLogEntries[index].portion)+ " ("+   (foodLogEntries[index].portion * foodLogEntries[index].food.commonPortionSizeAmount).toString() + " " + foodLogEntries[index].food.commonPortionSizeUnit + ")" ' at ' + getMealTime(foodLogEntries[index].entryTime),
-                  ),
-                  trailing: GestureDetector(
-                    onTap: () {
-                      showAlertDialog(
-                          context,
-                          foodLogEntries[index].id,
-                          foodLogEntries[index].food.description,
-                          "delete",
-                          foodLogEntries[index].portion);
+            if (isLoading) {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).buttonColor),
+                ),
+              );
+            } else {
+              return Column(
+                children: [
+                  FlatButton(
+                    child: Text("View Today's Nutrient Breakdown",
+                        style: TextStyle(color: Colors.white)),
+                    color: Theme.of(context).buttonColor,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (_) =>
+                                DailyNutritionBreakdown(foodLogEntries)),
+                      );
                     },
-
-                    child: Icon(
-                      Icons.delete,
-                      size: 20,
-                      color: Colors.grey,
-                    ),
                   ),
-                  onTap: () {
-                    Navigator.of(context)
-                        .push(
-                      new MaterialPageRoute(
-                          builder: (_) =>
-                              EditFoodLogEntryScreen(foodLogEntries[index].food, foodLogEntries[index].date, foodLogEntries[index].entryTime, foodLogEntries[index].portion, foodLogEntries[index].id)),
-                    ).then((value) => update());
-                  },
-                );
-              },
-            );
+                  ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    // separatorBuilder: (context, index) {
+                    //   return Divider(
+                    //     color: Colors.white,
+                    //     height: 0,
+                    //     thickness: 0,
+                    //   );
+                    // },
+                    itemCount: foodLogEntries.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Container(
+                            //   width: 15,
+                            //   height: double.infinity,
+                            //   child: Text(''),
+                            //   color:
+                            //   getColor(foodLogEntries[index].food.nccFoodGroupCategory),
+                            // ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 5, right: 5, top: 0, bottom: 0),
+                            ),
+                            getIcon(foodLogEntries[index]
+                                .food
+                                .nccFoodGroupCategory),
+                          ],
+                        ),
+                        title: Text(
+                          foodLogEntries[index].food.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          getPortionAsFraction(foodLogEntries[index].portion) +
+                              " (" +
+                              (foodLogEntries[index].portion *
+                                      foodLogEntries[index]
+                                          .food
+                                          .commonPortionSizeAmount)
+                                  .toString() +
+                              " " +
+                              foodLogEntries[index].food.commonPortionSizeUnit +
+                              ")" ' at ' +
+                              getMealTime(foodLogEntries[index].entryTime),
+                        ),
+                        trailing: GestureDetector(
+                          onTap: () {
+                            showAlertDialog(
+                                context,
+                                foodLogEntries[index].id,
+                                foodLogEntries[index].food.description,
+                                "delete",
+                                foodLogEntries[index].portion);
+                          },
+                          child: Icon(
+                            Icons.delete,
+                            size: 20,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(
+                                new MaterialPageRoute(
+                                    builder: (_) => EditFoodLogEntryScreen(
+                                        foodLogEntries[index].food,
+                                        foodLogEntries[index].date,
+                                        foodLogEntries[index].entryTime,
+                                        foodLogEntries[index].portion,
+                                        foodLogEntries[index].id)),
+                              )
+                              .then((value) => update());
+                        },
+                      );
+                    },
+                  )
+                ],
+              );
+            }
           },
           future: getFood(),
         ),
@@ -554,7 +567,6 @@ class _FoodLogState extends State<FoodLog> {
         //   height: 0,
         //   thickness: 1,
         // )
-
       ]),
     );
   }

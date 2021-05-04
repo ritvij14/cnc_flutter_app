@@ -30,6 +30,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+
   int initialProteinRatio = 0;
   int initialCarbohydrateRatio = 0;
   int initialFatRatio = 0;
@@ -55,7 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     newProtein = this.initialProteinRatio;
     newFat = this.initialFatRatio;
     newActivity = this.initialActivity;
-    newWeight=this.initialWeight;
+    newWeight = this.initialWeight;
   }
 
   int newWeight;
@@ -84,6 +85,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
       await db.saveRatios(newFat, newProtein, newCarbohydrates);
     }
     db.updateFormInfoBasic(newWeight.toString(), newActivity);
+    weightChanged = false;
+    proteinChanged = false;
+    carbohydrateChanged = false;
+    fatChanged = false;
+    activityChanged = false;
   }
 
   showAlertDialog(BuildContext context) {
@@ -162,7 +168,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 decoration: InputDecoration(
                   labelText: 'Weight(lbs)',
                   hintText: 'Enter your weight in pounds(lbs).',
-                  border: OutlineInputBorder(),
+                    labelStyle: TextStyle(
+                        color:  Theme.of(context).hintColor
+                    ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Theme.of(context).hintColor),
+                  ),
                 ),
                 keyboardType: TextInputType.number,
                 controller: weightCtl,
@@ -226,25 +242,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: ((newCarbohydrates != null
-                                    ? newCarbohydrates
-                                    : 0) +
-                                    (newProtein != null
-                                        ? newProtein
-                                        : 0) +
-                                    (newFat != null ? newFat : 0))
-                                    .toString() +
+                                                ? newCarbohydrates
+                                                : 0) +
+                                            (newProtein != null
+                                                ? newProtein
+                                                : 0) +
+                                            (newFat != null ? newFat : 0))
+                                        .toString() +
                                     "%",
                                 style: TextStyle(
                                     color: ((newCarbohydrates != null
-                                        ? newCarbohydrates
-                                        : 0) +
-                                        (newProtein != null
-                                            ? newProtein
-                                            : 0) +
-                                        (newFat != null
-                                            ? newFat
-                                            : 0)) !=
-                                        100
+                                                    ? newCarbohydrates
+                                                    : 0) +
+                                                (newProtein != null
+                                                    ? newProtein
+                                                    : 0) +
+                                                (newFat != null
+                                                    ? newFat
+                                                    : 0)) !=
+                                            100
                                         ? Colors.red
                                         : Colors.green)),
                             TextSpan(
@@ -253,48 +269,48 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     color: Theme.of(context).hintColor)),
                             TextSpan(
                                 text: (((newCarbohydrates != null
-                                    ? newCarbohydrates
-                                    : 0) +
-                                    (newProtein != null
-                                        ? newProtein
-                                        : 0) +
-                                    (newFat != null ? newFat : 0)) -
-                                    100)
-                                    .abs()
-                                    .toString() +
+                                                    ? newCarbohydrates
+                                                    : 0) +
+                                                (newProtein != null
+                                                    ? newProtein
+                                                    : 0) +
+                                                (newFat != null ? newFat : 0)) -
+                                            100)
+                                        .abs()
+                                        .toString() +
                                     "%",
                                 style: TextStyle(
                                     color: (((newCarbohydrates != null
-                                        ? newCarbohydrates
-                                        : 0) +
-                                        (newProtein != null
-                                            ? newProtein
-                                            : 0) +
-                                        (newFat != null
-                                            ? newFat
-                                            : 0)) -
-                                        100)
-                                        .abs() !=
-                                        0
+                                                            ? newCarbohydrates
+                                                            : 0) +
+                                                        (newProtein != null
+                                                            ? newProtein
+                                                            : 0) +
+                                                        (newFat != null
+                                                            ? newFat
+                                                            : 0)) -
+                                                    100)
+                                                .abs() !=
+                                            0
                                         ? Colors.red
                                         : Colors.green)),
                             (((newCarbohydrates != null
-                                ? newCarbohydrates
-                                : 0) +
-                                (newProtein != null
-                                    ? newProtein
-                                    : 0) +
-                                (newFat != null ? newFat : 0)) -
-                                100) >=
-                                1
+                                                ? newCarbohydrates
+                                                : 0) +
+                                            (newProtein != null
+                                                ? newProtein
+                                                : 0) +
+                                            (newFat != null ? newFat : 0)) -
+                                        100) >=
+                                    1
                                 ? TextSpan(
-                                text: " over\n",
-                                style: TextStyle(
-                                    color: Theme.of(context).hoverColor))
+                                    text: " over\n",
+                                    style: TextStyle(
+                                        color: Theme.of(context).hintColor))
                                 : TextSpan(
-                                text: " remaining\n",
-                                style: TextStyle(
-                                    color: Theme.of(context).hintColor))
+                                    text: " remaining\n",
+                                    style: TextStyle(
+                                        color: Theme.of(context).hintColor))
                           ],
                         ),
                       ),
@@ -305,9 +321,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             key: carbohydrateKey,
                             child: TextFormField(
                               decoration: InputDecoration(
-                                labelText: 'Carbohydrate %',
-                                // hintText: 'Carbs %',
-                                border: OutlineInputBorder(),
+                                labelText: 'Carbs %',
+
+                                labelStyle: TextStyle(
+                                    color:  Theme.of(context).hintColor
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Theme.of(context).hintColor),
+                                ),
                               ),
                               keyboardType: TextInputType.number,
                               controller: carbohydrateCtl,
@@ -316,8 +342,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 if (carbs == null) {
                                   return 'Field Required';
                                 } else if (newCarbohydrates +
-                                    newProtein +
-                                    newFat !=
+                                        newProtein +
+                                        newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (carbs <= 0) {
@@ -357,8 +383,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'Protein %',
-                                // hintText: 'Carbs %',
-                                border: OutlineInputBorder(),
+                                labelStyle: TextStyle(
+                                    color:  Theme.of(context).hintColor
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Theme.of(context).hintColor),
+                                ),
                               ),
                               keyboardType: TextInputType.number,
                               controller: proteinCtl,
@@ -367,8 +402,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 if (protein == null) {
                                   return 'Field Required';
                                 } else if (newProtein +
-                                    newCarbohydrates +
-                                    newFat !=
+                                        newCarbohydrates +
+                                        newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (protein <= 0) {
@@ -407,8 +442,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'Fat %',
-                                // hintText: 'Carbs %',
-                                border: OutlineInputBorder(),
+                                labelStyle: TextStyle(
+                                    color:  Theme.of(context).hintColor
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Theme.of(context).hintColor),
+                                ),
                               ),
                               keyboardType: TextInputType.number,
                               controller: fatCtl,
@@ -417,8 +461,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 if (fat == null) {
                                   return 'Field Required';
                                 } else if (newFat +
-                                    newCarbohydrates +
-                                    newProtein !=
+                                        newCarbohydrates +
+                                        newProtein !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (fat <= 0) {
@@ -469,7 +513,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
               DropdownButtonFormField(
                 decoration: InputDecoration(
                     labelText: 'Activity Level',
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(
+                        color:  Theme.of(context).hintColor
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(color: Theme.of(context).hintColor),
+                    ),
                     hintText: "Activity Level"),
                 value: newActivity,
                 validator: (value) => value == null ? 'Field Required' : null,
@@ -489,7 +543,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   'Vigorously Active',
                 ]
                     .map((actLevel) => DropdownMenuItem(
-                    value: actLevel, child: Text("$actLevel")))
+                        value: actLevel, child: Text("$actLevel")))
                     .toList(),
               ),
               SizedBox(height: 15),
@@ -501,7 +555,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     FlatButton(
                       // padding: EdgeInsets.symmetric(vertical: 20),
                       child:
-                      Text('CANCEL', style: TextStyle(color: Colors.grey)),
+                          Text('CANCEL', style: TextStyle(color: Colors.grey)),
                       onPressed: () {
                         if (weightChanged ||
                             activityChanged ||
@@ -515,10 +569,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       },
                     ),
                     if ((weightChanged ||
-                        activityChanged ||
-                        proteinChanged ||
-                        carbohydrateChanged ||
-                        fatChanged) &&
+                            activityChanged ||
+                            proteinChanged ||
+                            carbohydrateChanged ||
+                            fatChanged) &&
                         (newFat + newProtein + newCarbohydrates == 100)) ...[
                       FlatButton(
                         color: Theme.of(context).buttonColor,
@@ -539,10 +593,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ],
                     if (!weightChanged &&
-                        !activityChanged &&
-                        !proteinChanged &&
-                        !carbohydrateChanged &&
-                        !fatChanged ||
+                            !activityChanged &&
+                            !proteinChanged &&
+                            !carbohydrateChanged &&
+                            !fatChanged ||
                         (newFat + newProtein + newCarbohydrates != 100)) ...[
                       FlatButton(
                           color: Colors.grey,
@@ -569,13 +623,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Content Saved'),
+          title: Text('Update saved!'),
           actions: <Widget>[
             TextButton(
               child: Text('CLOSE'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                setState(() {});
               },
             ),
           ],

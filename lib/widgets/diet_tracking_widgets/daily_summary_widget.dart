@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
+
 // import 'package:cnc_flutter_app/screens/nutrient_ratio_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,10 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
   double proteinInGrams = 0;
   double fatInGrams = 0;
   double carbohydratesInGrams = 0;
-  String calorieMessage = "CALORIES UNDER BUDGET";
+  String calorieMessage = "CALORIES LEFT";
   bool showGrams = false;
   int userId;
+  bool isLoading = false;
 
   List<FoodLogEntry> dailyFoodLogEntryList = [];
 
@@ -45,15 +47,17 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
   }
 
   getFood() async {
+    dailyFoodLogEntryList.clear();
+    isLoading = true;
     var db = new DBHelper();
     var x = await db.getUserInfo();
     var userData = json.decode(x.body);
 
-    if(userData['weight'] <= 174) {
+    if (userData['weight'] <= 174) {
       dailyCalorieLimit = 1200;
-    } else if(userData['weight'] > 174 && userData['weight'] <= 219) {
+    } else if (userData['weight'] > 174 && userData['weight'] <= 219) {
       dailyCalorieLimit = 1500;
-    } else if(userData['weight'] > 219 && userData['weight'] <= 249) {
+    } else if (userData['weight'] > 219 && userData['weight'] <= 249) {
       dailyCalorieLimit = 1800;
     } else {
       dailyCalorieLimit = 2000;
@@ -67,12 +71,12 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
     proteinInGrams = 0;
     fatInGrams = 0;
     carbohydratesInGrams = 0;
-    dailyFoodLogEntryList.clear();
 
     proteinRatio = userData['proteinPercent'];
     carbohydrateRatio = userData['carbohydratePercent'];
     fatRatio = userData['fatPercent'];
-    dailyCarbohydrateLimit = (dailyCalorieLimit * (carbohydrateRatio / 100)).truncate();
+    dailyCarbohydrateLimit =
+        (dailyCalorieLimit * (carbohydrateRatio / 100)).truncate();
     dailyProteinLimit = (dailyCalorieLimit * (proteinRatio / 100)).truncate();
     dailyFatLimit = (dailyCalorieLimit * (fatRatio / 100)).truncate();
     dailyFoodLogEntryList.clear();
@@ -142,22 +146,24 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
       fatPercent = 1;
     }
     if (caloriesRemaining < 0) {
-      calorieMessage = "CALORIES OVER BUDGET";
+      calorieMessage = "CALORIES OVER";
+    } else {
+      calorieMessage = 'CALORIES LEFT';
     }
     caloriesRemaining = caloriesRemaining.abs();
-  }
-
-  update() async{
-    await getFood();
-    setState(() {});
+    isLoading = false;
   }
 
 
   @override
   Widget build(BuildContext context) {
-    if (!showGrams) {
-      return FutureBuilder(
-        builder: (context, projectSnap) {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (isLoading) {
+          return Center(
+            child: CircularProgressIndicator(  valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),),
+          );
+        } else {
           return Container(
               child: Column(
             children: [
@@ -165,66 +171,16 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                 padding: EdgeInsets.all(5),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Daily Summary',
                     style: new TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          ButtonTheme(
-                            minWidth: 60,
-                            height: 20,
-                            child: RaisedButton(
-                              color: Theme.of(context).buttonColor,
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {
-                                if (showGrams) {
-                                  showGrams = false;
-                                  setState(() {});
-                                }
-                              },
-                              child: Text(
-                                "Percent",
-                                style: TextStyle(
-                                    color: Theme.of(context).highlightColor),
-                              ),
-                            ),
-                          ),
-                          ButtonTheme(
-                            minWidth: 60,
-                            height: 20,
-                            child: OutlineButton(
-                              padding: EdgeInsets.all(0),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
-                              onPressed: () {
-                                if (!showGrams) {
-                                  showGrams = true;
-                                  setState(() {});
-                                }
-                              },
-                              child: Text("Grams",
-                                  style: TextStyle(
-                                      color: Theme.of(context).buttonColor)),
-                            ),
-                          ),
-
-                        ],
-                      ),
-                      // Text('toggle'),
-                      // Text('toggle'),
-                    ],
-                  ),
                 ],
               ),
-              Padding(padding: EdgeInsets.all(2)),
+              Padding(padding: EdgeInsets.all(8)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -249,7 +205,7 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                               calorieMessage,
                               textAlign: TextAlign.center,
                               style: new TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 13.5),
+                                  fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                           ),
                         ],
@@ -269,211 +225,6 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                     child: new Row(
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        new CircularPercentIndicator(
-                          radius: 56.0,
-                          lineWidth: 5.0,
-                          percent: proteinPercent,
-                          center: new Text(
-                              (proteinPercent * 100).round().toString() + '%'),
-                          footer: Text("Protein"),
-                          progressColor: Colors.red,
-                        ),
-                        new Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        ),
-                        new CircularPercentIndicator(
-                          radius: 56.0,
-                          lineWidth: 5.0,
-                          percent: carbohydratePercent,
-                          center: new Text(
-                              (carbohydratePercent * 100).round().toString() +
-                                  '%'),
-                          footer: Text("Carbs"),
-                          progressColor: Colors.orange,
-                        ),
-                        new Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        ),
-                        new CircularPercentIndicator(
-                          radius: 56.0,
-                          lineWidth: 5.0,
-                          percent: fatPercent,
-                          footer: Text("Fat"),
-                          center: new Text(
-                              (fatPercent * 100).round().toString() + '%'),
-                          progressColor: Colors.yellow,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     IconButton(
-              //       icon: const Icon(Icons.pie_chart),
-              //       tooltip: 'Modify Nutrition Ratios',
-              //       onPressed: () {
-              //         Navigator.of(context).push(MaterialPageRoute(
-              //           builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
-              //         )).then((value) => update());
-              //       },
-              //     ),
-              //   ],
-              // ),
-            ],
-          ));
-        },
-        future: getFood(),
-      );
-    } else {
-      return FutureBuilder(
-        builder: (context, projectSnap) {
-          return Container(
-              child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Daily Summary',
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          ButtonTheme(
-                            minWidth: 60,
-                            height: 20,
-                            child: OutlineButton(
-                              padding: EdgeInsets.all(0),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
-                              onPressed: () {
-                                if (showGrams) {
-                                  showGrams = false;
-                                  setState(() {});
-                                }
-                              },
-                              child: Text("Percent",
-                                  style: TextStyle(
-                                      color: Theme.of(context).buttonColor)),
-                            ),
-                          ),
-                          ButtonTheme(
-                            minWidth: 60,
-                            height: 20,
-                            child: RaisedButton(
-                              color: Theme.of(context).buttonColor,
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {
-                                if (!showGrams) {
-                                  showGrams = false;
-                                  setState(() {});
-                                }
-                              },
-                              child: Text(
-                                "Grams",
-                                style: TextStyle(
-                                    color: Theme.of(context).highlightColor),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Text('toggle'),
-                      // Text('toggle'),
-                    ],
-                  ),
-                  // ButtonTheme(
-                  //   minWidth: 35,
-                  //   height: 20,
-                  //   child: RaisedButton(
-                  //     color: Theme
-                  //         .of(context)
-                  //         .buttonColor,
-                  //     padding: EdgeInsets.all(0),
-                  //     onPressed: () {
-                  //       Navigator.pushNamed(context, '/dietTracking')
-                  //           .then((value) => update());
-                  //       setState(() {});
-                  //     },
-                  //     child: Text(
-                  //       "test",
-                  //       style: TextStyle(
-                  //           color: Theme
-                  //               .of(context)
-                  //               .highlightColor),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-              Padding(padding: EdgeInsets.all(2)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    // padding: EdgeInsets.only(left: 55),
-                    child: new CircularPercentIndicator(
-                      radius: 155.0,
-                      animation: true,
-                      animationDuration: 1200,
-                      lineWidth: 13.0,
-                      percent: caloriePercent,
-                      center: new Column(
-                        children: [
-                          Padding(padding: EdgeInsets.all(20)),
-                          Text(
-                            caloriesRemaining.toString(),
-                            style: new TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 40.0),
-                          ),
-                          Center(
-                            child: Text(
-                              calorieMessage,
-                              textAlign: TextAlign.center,
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 13.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                      circularStrokeCap: CircularStrokeCap.butt,
-                      // backgroundColor: Colors.yellow,
-                      progressColor: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: new Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new CircularPercentIndicator(
-                          radius: 56.0,
-                          lineWidth: 5.0,
-                          percent: proteinPercent,
-                          center: new Text(
-                              proteinInGrams.truncate().toString() + 'g'),
-                          footer: Text("Protein"),
-                          progressColor: Colors.red,
-                        ),
-                        new Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        ),
                         new CircularPercentIndicator(
                           radius: 56.0,
                           lineWidth: 5.0,
@@ -489,38 +240,34 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
                         new CircularPercentIndicator(
                           radius: 56.0,
                           lineWidth: 5.0,
+                          percent: proteinPercent,
+                          center: new Text(
+                              proteinInGrams.truncate().toString() + 'g'),
+                          footer: Text("Protein"),
+                          progressColor: Colors.red,
+                        ),
+                        new Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        ),
+                        new CircularPercentIndicator(
+                          radius: 56.0,
+                          lineWidth: 5.0,
                           percent: fatPercent,
                           footer: Text("Fat"),
                           center:
                               new Text(fatInGrams.truncate().toString() + 'g'),
                           progressColor: Colors.yellow,
                         ),
-
                       ],
                     ),
                   ),
-
                 ],
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     IconButton(
-              //       icon: const Icon(Icons.pie_chart),
-              //       tooltip: 'Modify Nutrition Ratios',
-              //       onPressed: () {
-              //         Navigator.of(context).push(MaterialPageRoute(
-              //           builder: (context) => NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
-              //         )).then((value) =>update());
-              //       },
-              //     ),
-              //   ],
-              // ),
             ],
           ));
-        },
-        future: getFood(),
-      );
-    }
+        }
+      },
+      future: getFood(),
+    );
   }
 }

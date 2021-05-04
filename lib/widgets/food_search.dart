@@ -26,11 +26,60 @@ class FoodSearch extends SearchDelegate<String> {
   }
 
   Future<bool> getFood() async {
-    await getFrequentFood();
-    foodList.clear();
-    // recentSearchList.clear();
+    if (query.isNotEmpty) {
+      isSearching = true;
+      // await getFrequentFood();
+      foodList.clear();
+      // recentSearchList.clear();
+      var db = new DBHelper();
+      var response = await db.searchFood(query);
+      var data = json.decode(response.body);
+      for (int i = 0; i < data.length; i++) {
+        Food food = new Food();
+        food.id = data[i]['id'];
+        food.keylist = data[i]['keyList'];
+        food.description = data[i]['description'];
+        food.description = food.description.replaceAll('"', '');
+        food.kcal = data[i]['kcal'];
+        food.proteinInGrams = data[i]['proteinInGrams'];
+        food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
+        food.fatInGrams = data[i]['fatInGrams'];
+        food.alcoholInGrams = data[i]['alcoholInGrams'];
+        food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
+        food.polyunsaturatedFattyAcidsInGrams =
+            data[i]['polyunsaturatedFattyAcidsInGrams'];
+        food.monounsaturatedFattyAcidsInGrams =
+            data[i]['monounsaturatedFattyAcidsInGrams'];
+        food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
+        food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
+        food.sugarInGrams = data[i]['sugarInGrams'];
+        food.calciumInMilligrams = data[i]['calciumInMilligrams'];
+        food.sodiumInMilligrams = data[i]['sodiumInMilligrams'];
+        food.vitaminDInMicrograms = data[i]['vitaminDInMicrograms'];
+        food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
+        food.commonPortionSizeGramWeight =
+            data[i]['commonPortionSizeGramWeight'];
+        food.commonPortionSizeDescription =
+            data[i]['commonPortionSizeDescription'];
+        food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
+        food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
+        foodList.add(food);
+      }
+    } else {
+      await getFrequentFood();
+    }
+    isSearching = false;
+    return true;
+  }
+
+  void setMessage(message) {
+    this.message = message;
+  }
+
+  Future<bool> getFrequentFood() async {
+    frequentFoodList.clear();
     var db = new DBHelper();
-    var response = await db.searchFood(query);
+    var response = await db.getUserFrequentFoods();
     var data = json.decode(response.body);
     for (int i = 0; i < data.length; i++) {
       Food food = new Food();
@@ -58,48 +107,6 @@ class FoodSearch extends SearchDelegate<String> {
       food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
       food.commonPortionSizeDescription =
           data[i]['commonPortionSizeDescription'];
-      food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
-      food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
-      foodList.add(food);
-    }
-    return true;
-  }
-
-  void setMessage(message) {
-    this.message = message;
-  }
-
-  Future<bool> getFrequentFood() async {
-    frequentFoodList.clear();
-    var db = new DBHelper();
-    var response = await db.getUserFrequentFoods();
-    var data = json.decode(response.body);
-    for (int i = 0; i < data.length; i++) {
-      Food food = new Food();
-      food.id = data[i]['id'];
-      food.keylist = data[i]['keyList'];
-      food.description = data[i]['description'];
-      food.description = food.description.replaceAll('"', '');
-      food.kcal = data[i]['kcal'];
-      food.proteinInGrams = data[i]['proteinInGrams'];
-      food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
-      food.fatInGrams = data[i]['fatInGrams'];
-      food.alcoholInGrams = data[i]['alcoholInGrams'];
-      food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
-      food.polyunsaturatedFattyAcidsInGrams =
-      data[i]['polyunsaturatedFattyAcidsInGrams'];
-      food.monounsaturatedFattyAcidsInGrams =
-      data[i]['monounsaturatedFattyAcidsInGrams'];
-      food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
-      food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
-      food.sugarInGrams = data[i]['sugarInGrams'];
-      food.calciumInMilligrams = data[i]['calciumInMilligrams'];
-      food.sodiumInMilligrams = data[i]['sodiumInMilligrams'];
-      food.vitaminDInMicrograms = data[i]['vitaminDInMicrograms'];
-      food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
-      food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
-      food.commonPortionSizeDescription =
-      data[i]['commonPortionSizeDescription'];
       food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
       food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
       frequentFoodList.add(food);
@@ -175,7 +182,7 @@ class FoodSearch extends SearchDelegate<String> {
       );
     } else if (category == 'Commercial entrees and dinners') {
       return Icon(
-        Icons.dinner_dining,
+        Icons.restaurant,
       );
     } else if (category == 'Soups, gravy, and sauces') {
       return Icon(
@@ -209,7 +216,7 @@ class FoodSearch extends SearchDelegate<String> {
     } else if (category == 'Fruits and fruit products') {
       return Colors.red;
     } else if (category == 'Commercial entrees and dinners') {
-      return Colors.lightGreen[600];
+      return Colors.black;
     } else if (category == 'Soups, gravy, and sauces') {
       return Colors.deepOrange[400];
     }
@@ -218,139 +225,72 @@ class FoodSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // if (query.isNotEmpty) {
-    //   recentSearchList.add(query);
-    //   recentSearchList = new List.from(recentSearchList.reversed);
-    // }
-    if(searchedQuery==query) {
-      return ListView.builder(
-        itemCount: foodList.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Card(
-                margin: EdgeInsets.zero,
-                color: Theme.of(context).canvasColor,
-                child: ListTile(
-                  contentPadding: EdgeInsets.only(left: 0, right: 7),
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 15,
-                        height: double.infinity,
-                        child: Text(''),
-                        color:
-                        getColor(foodList[index].nccFoodGroupCategory),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                      ),
-                      getIcon(foodList[index].nccFoodGroupCategory),
-                    ],
-                  ),
-                  onTap: () {
-                    searchedQuery = query;
-                    Navigator.of(context)
-                        .push(
-                      new MaterialPageRoute(
-                          builder: (_) =>
-                              FoodPage(foodList[index], selectedDate)),
-                    )
-                        .then((val) => {
-                      setMessage(val)
-                          });
-                    // close(context, null)
-                  },
-                  title: Text(
-                    foodList[index].description,
-                    textAlign: TextAlign.left,
-                  ),
+    searchedQuery = query;
+    return ListView.builder(
+      itemCount: foodList.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            Card(
+              margin: EdgeInsets.zero,
+              color: Theme.of(context).canvasColor,
+              child: ListTile(
+                contentPadding: EdgeInsets.only(left: 0, right: 7),
+                leading: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 15,
+                      height: double.infinity,
+                      child: Text(''),
+                      color: getColor(foodList[index].nccFoodGroupCategory),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
+                    ),
+                    getIcon(foodList[index].nccFoodGroupCategory),
+                  ],
+                ),
+                onTap: () {
+                  // searchedQuery = query;
+                  Navigator.of(context)
+                      .push(
+                        new MaterialPageRoute(
+                            builder: (_) =>
+                                FoodPage(foodList[index], selectedDate)),
+                      )
+                      .then((val) => {setMessage(val)});
+                  // close(context, null)
+                },
+                title: Text(
+                  foodList[index].description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
                 ),
               ),
-              Divider(
-                color: Colors.grey[600],
-                height: 0,
-                thickness: 1,
-              )
-            ],
-          );
-        },
-      );
-    } else {
-      return FutureBuilder(
-          builder: (context, projectSnap) {
-            return ListView.builder(
-              itemCount: foodList.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Card(
-                      margin: EdgeInsets.zero,
-                      color: Theme.of(context).canvasColor,
-                      child: ListTile(
-                        contentPadding: EdgeInsets.only(left: 0, right: 7),
-                        leading: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 15,
-                              height: double.infinity,
-                              child: Text(''),
-                              color:
-                              getColor(foodList[index].nccFoodGroupCategory),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 5, right: 5),
-                            ),
-                            getIcon(foodList[index].nccFoodGroupCategory),
-                          ],
-                        ),
-                        onTap: () {
-                          searchedQuery = query;
-                          Navigator.of(context)
-                              .push(
-                            new MaterialPageRoute(
-                                builder: (_) =>
-                                    FoodPage(foodList[index], selectedDate)),
-                          )
-
-                              .then((val) => {
-                                setMessage(val)
-                              });
-                          // close(context, null)
-                        },
-                        title: Text(
-                          foodList[index].description,
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.grey[600],
-                      height: 0,
-                      thickness: 1,
-                    )
-                  ],
-                );
-              },
-            );
-          },
-          future: getFood());
-    }
-
-
+            ),
+            Divider(
+              color: Colors.grey[600],
+              height: 0,
+              thickness: 1,
+            )
+          ],
+        );
+      },
+    );
+    // }
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     var searchResults;
-    if(query.isNotEmpty) {
+    if (query.isNotEmpty) {
       searchResults = foodList;
     } else {
       searchResults = frequentFoodList;
     }
-    if(searchedQuery==query) {
+    if (searchedQuery == query) {
       return ListView.builder(
         itemCount: searchResults.length,
         itemBuilder: (context, index) {
@@ -368,7 +308,8 @@ class FoodSearch extends SearchDelegate<String> {
                         width: 15,
                         height: double.infinity,
                         child: Text(''),
-                        color: getColor(searchResults[index].nccFoodGroupCategory),
+                        color:
+                            getColor(searchResults[index].nccFoodGroupCategory),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5, right: 5),
@@ -380,13 +321,11 @@ class FoodSearch extends SearchDelegate<String> {
                     this.searchedQuery = query;
                     Navigator.of(context)
                         .push(
-                      new MaterialPageRoute(
-                          builder: (_) =>
-                              FoodPage(searchResults[index], selectedDate)),
-                    )
-                        .then((val) => {
-                      setMessage(val)
-                    });
+                          new MaterialPageRoute(
+                              builder: (_) =>
+                                  FoodPage(searchResults[index], selectedDate)),
+                        )
+                        .then((val) => {setMessage(val)});
                   },
                   title: Text(
                     searchResults[index].description,
@@ -406,58 +345,66 @@ class FoodSearch extends SearchDelegate<String> {
     } else {
       return FutureBuilder(
         builder: (context, projectSnap) {
-          return ListView.builder(
-            itemCount: searchResults.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Card(
-                    margin: EdgeInsets.zero,
-                    color: Theme.of(context).canvasColor,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.only(left: 0, right: 7),
-                      leading: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 15,
-                            height: double.infinity,
-                            child: Text(''),
-                            color: getColor(searchResults[index].nccFoodGroupCategory),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5, right: 5),
-                          ),
-                          getIcon(searchResults[index].nccFoodGroupCategory),
-                        ],
-                      ),
-                      onTap: () {
-                        this.searchedQuery = query;
-                        Navigator.of(context)
-                            .push(
-                          new MaterialPageRoute(
-                              builder: (_) =>
-                                  FoodPage(searchResults[index], selectedDate)),
-                        )
-                            .then((val) => {
-                          setMessage(val)
-                        });
-                      },
-                      title: Text(
-                        searchResults[index].description,
-                        textAlign: TextAlign.left,
+          if (isSearching) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).buttonColor),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: searchResults.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Card(
+                      margin: EdgeInsets.zero,
+                      color: Theme.of(context).canvasColor,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.only(left: 0, right: 7),
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 15,
+                              height: double.infinity,
+                              child: Text(''),
+                              color: getColor(
+                                  searchResults[index].nccFoodGroupCategory),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5, right: 5),
+                            ),
+                            getIcon(searchResults[index].nccFoodGroupCategory),
+                          ],
+                        ),
+                        onTap: () {
+                          this.searchedQuery = query;
+                          Navigator.of(context)
+                              .push(
+                                new MaterialPageRoute(
+                                    builder: (_) => FoodPage(
+                                        searchResults[index], selectedDate)),
+                              )
+                              .then((val) => {setMessage(val)});
+                        },
+                        title: Text(
+                          searchResults[index].description,
+                          textAlign: TextAlign.left,
+                        ),
                       ),
                     ),
-                  ),
-                  Divider(
-                    color: Colors.grey[600],
-                    height: 0,
-                    thickness: 1,
-                  )
-                ],
-              );
-            },
-          );
+                    Divider(
+                      color: Colors.grey[600],
+                      height: 0,
+                      thickness: 1,
+                    )
+                  ],
+                );
+              },
+            );
+          }
         },
         future: getFood(),
       );

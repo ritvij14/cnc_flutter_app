@@ -19,8 +19,8 @@ class _WeeklyActivityProgressWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Container(
+      child: Center(
         child: new CircularPercentIndicator(
           radius: 200.0,
           lineWidth: 20.0,

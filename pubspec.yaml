@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 4.0.4+4
+version: 1.0.10+10
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -54,12 +54,15 @@ dependencies:
   sqflite: any
   path_provider: any
   flutter_redux: ^0.8.2
+  grouped_list: ^4.0.0
+
 
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  confetti: ^0.5.5
 
 dev_dependencies:
   flutter_test:
@@ -95,6 +98,30 @@ flutter:
     - assets/icons/Settings.svg
     - assets/icons/User Icon.svg
     - assets/icons/Weight.svg
+    - assets/images/activityBadge1.png
+    - assets/images/activityBadge2.png
+    - assets/images/activityBadge3.png
+    - assets/images/dairyBadge1.png
+    - assets/images/dairyBadge2.png
+    - assets/images/dairyBadge3.png
+    - assets/images/drinkBadge1.png
+    - assets/images/drinkBadge2.png
+    - assets/images/drinkBadge3.png
+    - assets/images/fruitBadge1.png
+    - assets/images/fruitBadge2.png
+    - assets/images/fruitBadge3.png
+    - assets/images/grainBadge1.png
+    - assets/images/grainBadge2.png
+    - assets/images/grainBadge3.png
+    - assets/images/proteinBadge1.png
+    - assets/images/proteinBadge2.png
+    - assets/images/proteinBadge3.png
+    - assets/images/snackBadge1.png
+    - assets/images/snackBadge2.png
+    - assets/images/snackBadge3.png
+    - assets/images/vegetableBadge1.png
+    - assets/images/vegetableBadge2.png
+    - assets/images/vegetableBadge3.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

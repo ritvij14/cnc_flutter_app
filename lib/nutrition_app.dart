@@ -19,6 +19,7 @@ import 'package:cnc_flutter_app/widgets/symptom_tracking_widgets/symptom_trackin
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart' ;
 
 class NutritionApp extends StatelessWidget {
   final String initialRoute;
@@ -28,6 +29,9 @@ class NutritionApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return FutureBuilder(builder: (context, projectSnap) {
       return BlocProvider(
         create: (context) => ThemeBloc(),

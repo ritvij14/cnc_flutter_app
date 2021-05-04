@@ -4,6 +4,8 @@ import 'package:cnc_flutter_app/models/article_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:flutter/services.dart' ;
+
 
 
 class ArticleViewer extends StatefulWidget {
@@ -24,8 +26,23 @@ class _ArticleViewerState extends State<ArticleViewer> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_sharp),
+          onPressed: () {
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+            ]);
+            Navigator.of(context).pop();
+
+          },
+        ),
         title: Text(widget.articleModel.articleName),
       ),
       body: Container(

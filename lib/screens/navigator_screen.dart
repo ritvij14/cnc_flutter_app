@@ -59,10 +59,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               tooltip: "Home",
               icon: Icon(Icons.home,
                   color: _selectedIndex == 0 ? Theme
+                      .of(context).highlightColor : Theme
                       .of(context)
-                      .backgroundColor : Theme
-                      .of(context)
-                      .accentColor),
+                      .backgroundColor),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(0);
@@ -73,9 +72,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               icon: Icon(Icons.library_books,
                   color: _selectedIndex == 1 ? Theme
                       .of(context)
-                      .backgroundColor : Theme
+                      .highlightColor  : Theme
                       .of(context)
-                      .accentColor),
+                      .backgroundColor  ),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(1);
@@ -86,9 +85,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               icon: Icon(Icons.chat,
                   color: _selectedIndex == 2 ? Theme
                       .of(context)
-                      .backgroundColor : Theme
+                      .highlightColor  : Theme
                       .of(context)
-                      .accentColor),
+                      .backgroundColor  ),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(2);
@@ -99,9 +98,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
               icon: Icon(Icons.verified,
                   color: _selectedIndex == 3 ? Theme
                       .of(context)
-                      .backgroundColor : Theme
+                      .highlightColor  : Theme
                       .of(context)
-                      .accentColor),
+                      .backgroundColor  ),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(3);
