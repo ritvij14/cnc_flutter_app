@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cnc_flutter_app/connections/metric_db_helper.dart';
 import 'package:cnc_flutter_app/models/metric_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,7 @@ class MetricSummaryWidget extends StatefulWidget {
 }
 
 class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
+  var backgroundColor = Colors.white;
   MetricDBHelper db = new MetricDBHelper();
   bool showAll = false;
   List<FlSpot> spots = [
@@ -29,18 +31,34 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
 
   @override
   Widget build(BuildContext context) {
+    backgroundColor = Theme.of(context).canvasColor;
+    ;
+    // const bgcol = Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black45;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(18)),
         gradient: LinearGradient(colors: [
-          Color(0xff232d37),
-          Color(0xff232d37),
+          Theme.of(context).canvasColor,
+          Theme.of(context).canvasColor,
         ]),
       ),
       // color: Colors.lightGreen,
       // height: 150.0,
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Historical Weight Chart",
+                style: TextStyle(
+                  fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -49,7 +67,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
                 child: new Text(
                   "Weight (lbs)",
                   style: TextStyle(
-                    color: Color(0xff68737d),
+                    color: Theme.of(context).hintColor,
                   ),
                 ),
               ),
@@ -67,20 +85,20 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
                     ? Text(
                         '10 Days',
                         style: TextStyle(
-                          color: Color(0xff68737d),
+                          color: Theme.of(context).hintColor,
                         ),
                       )
                     : (chart == 1)
                         ? Text(
                             '30 Days',
                             style: TextStyle(
-                              color: Color(0xff68737d),
+                              color: Theme.of(context).hintColor,
                             ),
                           )
                         : Text(
                             "Year",
                             style: TextStyle(
-                              color: Color(0xff68737d),
+                              color: Theme.of(context).hintColor,
                             ),
                           ),
               ),
@@ -100,11 +118,11 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
               AspectRatio(
                 aspectRatio: 1.70,
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
                       Radius.circular(18),
                     ),
-                    // color: Color(0xff232d37),
+                    color: Theme.of(context).canvasColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -150,8 +168,8 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          getTextStyles: (value) => const TextStyle(
-              color: Color(0xff68737d),
+          getTextStyles: (value) => TextStyle(
+              color: Theme.of(context).hintColor,
               fontWeight: FontWeight.bold,
               fontSize: 16),
           getTitles: (value) {
@@ -172,8 +190,8 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => const TextStyle(
-            color: Color(0xff67727d),
+          getTextStyles: (value) => TextStyle(
+            color: Theme.of(context).hintColor,
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
@@ -203,7 +221,6 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
       maxX: 10,
       minY: 50,
       maxY: 300,
-
       lineBarsData: [
         LineChartBarData(
           spots: spots,
@@ -301,7 +318,6 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
       maxX: 30,
       minY: 50,
       maxY: 300,
-
       lineBarsData: [
         LineChartBarData(
           spots: spots,
@@ -315,7 +331,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           belowBarData: BarAreaData(
             show: true,
             colors:
-            gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+                gradientColors.map((color) => color.withOpacity(0.3)).toList(),
           ),
         ),
       ],
@@ -374,7 +390,6 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
             fontSize: 15,
           ),
           getTitles: (value) {
-
             switch (value.toInt()) {
               case 50:
                 return '50';
@@ -400,7 +415,6 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
       maxX: 365,
       minY: 50,
       maxY: 300,
-
       lineBarsData: [
         LineChartBarData(
           spots: spots,
@@ -414,11 +428,12 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
           belowBarData: BarAreaData(
             show: true,
             colors:
-            gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+                gradientColors.map((color) => color.withOpacity(0.3)).toList(),
           ),
         ),
       ],
-    );  }
+    );
+  }
 
   void initState() {
     setState(() {
@@ -443,12 +458,14 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
     var lastMidnight = DateTime(now.year, now.month, now.day - 1);
 
     for (MetricModel met in metricModelList) {
-      if(days - (lastMidnight.difference(met.dateTime).inDays).toDouble() - 1 >= 0) {
-        print(met.dateTime.toString() + " " + met.weight.toString());
+      if (days -
+              (lastMidnight.difference(met.dateTime).inDays).toDouble() -
+              1 >=
+          0) {
         spots.add(FlSpot(
-            days - (lastMidnight
-                .difference(met.dateTime)
-                .inDays).toDouble() - 1,
+            days -
+                (lastMidnight.difference(met.dateTime).inDays).toDouble() -
+                1,
             met.weight.toDouble()));
       }
     }

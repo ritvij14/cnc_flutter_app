@@ -12,6 +12,27 @@ class _CommunicationsScreenState extends State<CommunicationsScreen> {
       appBar: AppBar(
         title: Text("Communications"),
       ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.build,
+              size: 50,)
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Under Construction",
+              style: TextStyle(
+                fontSize: 30
+              ),),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
