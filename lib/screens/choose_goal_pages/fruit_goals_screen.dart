@@ -15,7 +15,7 @@ class ChooseFruitGoals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ChooseFruitGoalsPage(title: 'Choose Weekly Goals'),
+      body: ChooseFruitGoalsPage(title: 'Choose Fruit Goals'),
     );
   }
 }
@@ -61,29 +61,32 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
             width: double.infinity,
             padding: EdgeInsets.all(15.0),
             color: Theme.of(context).primaryColor,
-            child:  Text(
-                "Choose a Goal",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
+            child: Text(
+              "Choose a Goal",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold),
             ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: weeklyGoalsModelList.length,
-              itemBuilder: (context, index) {
-                if (weeklyGoalsModelList[index].type == "Fruits") {
-                  return _buildSlideView(index);
-                } else {
-                  return _buildEmpty();
-                }
-              }),
+          ),
           Container(
-            color:  Theme.of(context).primaryColor,
+            height: ((MediaQuery.of(context).size.height) / 2) - 75,
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: weeklyGoalsModelList.length,
+                itemBuilder: (context, index) {
+                  if (weeklyGoalsModelList[index].type == "Fruits") {
+                    return _buildSlideView(index);
+                  } else {
+                    return _buildEmpty();
+                  }
+                }),
+          ),
+          Container(
+            color: Theme.of(context).primaryColor,
             child: ExpansionTile(
               title: Text(
-                "Chosen Goals",
+                "Your Goals",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
@@ -157,7 +160,9 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
     return Container(
         padding: EdgeInsets.all(15.0),
         color: Colors.white,
-        child: Text(i.toString() + ". " + weeklySavedGoalsModelList[index].goalDescription));
+        child: Text(i.toString() +
+            ". " +
+            weeklySavedGoalsModelList[index].goalDescription));
   }
 
   Widget _buildSlideView(int index) {
@@ -165,8 +170,7 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
       actionPane: SlidableDrawerActionPane(),
       child: Container(
         child: ListTile(
-          title: Text(weeklyGoalsModelList[index].type),
-          subtitle: Text(weeklyGoalsModelList[index].goalDescription),
+          title: Text(weeklyGoalsModelList[index].goalDescription),
         ),
       ),
       actions: <Widget>[
@@ -228,35 +232,39 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title:
-          Text("Tried to add more than 3 Goals\n\nYou already have 3 goals selected for this week. Either "
-              "delete a goal or complete a goal for this week to add more."),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Okay"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ));
+              title: Text(
+                  "Tried to add more than 3 Goals\n\nYou already have 3 goals selected for this week. Either "
+                  "delete a goal or complete a goal for this week to add more."),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Okay"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ));
   }
 
   addSavedGoals(int index) async {
     int i = 1;
     int x = 0;
-    if (weeklySavedGoalsModelList.length > 0){
+    if (weeklySavedGoalsModelList.length > 0) {
       print(1);
-      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
+      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length - 1].id +
+          1;
       print(x);
-    }
-    else{
+    } else {
       print(2);
       x = 1;
-
     }
-    if (weeklySavedGoalsModelList.length < 3){
-      weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(x,weeklyGoalsModelList[index].type,weeklyGoalsModelList[index].goalDescription, weeklyGoalsModelList[index].helpInfo,1));
+    if (weeklySavedGoalsModelList.length < 3) {
+      weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(
+          x,
+          weeklyGoalsModelList[index].type,
+          weeklyGoalsModelList[index].goalDescription,
+          weeklyGoalsModelList[index].helpInfo,
+          1));
       WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
           x,
           weeklyGoalsModelList[index].type,
@@ -264,12 +272,9 @@ class _ChooseFruitGoalsPageState extends State<ChooseFruitGoalsPage> {
           weeklyGoalsModelList[index].helpInfo,
           12);
       db2.saveWeeklySavedGoal(m);
-    }
-    else {
+    } else {
       _showAddDialog();
       print("longer than 3");
     }
-
   }
-
 }
