@@ -304,7 +304,7 @@ class _ContentScreenState extends State<ContentScreen> {
                               child: Column(children: <Widget>[
                                 Container(
                                     height: 55,
-                                    width: 200,
+                                    width: double.infinity,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(10),
@@ -418,7 +418,7 @@ class _ContentScreenState extends State<ContentScreen> {
                                 child: Column(children: <Widget>[
                                   Container(
                                       height: 55,
-                                      width: 200,
+                                      width: double.infinity,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),

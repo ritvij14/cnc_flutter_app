@@ -72,6 +72,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
                 ),
               ),
               FlatButton(
+                color: Theme.of(context).buttonColor,
                 onPressed: () {
                   setState(() {
                     if (chart == 2) {

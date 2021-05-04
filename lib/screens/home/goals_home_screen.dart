@@ -71,7 +71,7 @@ class _GoalsHomePageState extends State<GoalsHomePage> {
             child: Text('Personal Daily Goals',
             style: TextStyle(fontSize: 20.0,)),
             style: ElevatedButton.styleFrom(
-              primary: Colors.blue[700], // foreground
+              primary: Theme.of(context).buttonColor, // foreground
             ),
             onPressed: () {
               Navigator.of(context).push(new MaterialPageRoute(
@@ -95,7 +95,7 @@ class _GoalsHomePageState extends State<GoalsHomePage> {
             child: Text('Weekly Goals',
                 style: TextStyle(fontSize: 20.0,)),
             style: ElevatedButton.styleFrom(
-              primary: Colors.blue[700],
+              primary: Theme.of(context).buttonColor,
             ),
             onPressed: () {
               Navigator.of(context).push(new MaterialPageRoute(
