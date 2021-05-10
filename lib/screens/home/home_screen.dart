@@ -11,8 +11,10 @@ import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/models/metric_model.dart';
 import 'package:cnc_flutter_app/models/symptom_model.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
+import 'package:cnc_flutter_app/screens/navigator_screen.dart';
 import 'package:cnc_flutter_app/widgets/diet_tracking_widgets/diet_summary_widget.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
+import 'package:cnc_flutter_app/widgets/user_questions_screen_widgets/user_questions_entry_widget.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    rebuildAllChildren(context);
+    // rebuildAllChildren(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -57,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.person),
             onPressed: () {
               Navigator.pushNamed(context, '/profile')
-                  .then((value) => rebuildAllChildren(context));
+                  .then((value) => print("okay"));
+                  // rebuildAllChildren(context));
             },
           )
         ],
@@ -71,22 +74,21 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Log Food',
               onTap: () async {
                 await showSearch(
-                    context: context,
-                    delegate: FoodSearch(DateTime.now().toString()))
+                        context: context,
+                        delegate: FoodSearch(DateTime.now().toString()))
                     .then((value) => setState(() {
-                  if (value.isNotEmpty) {
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(SnackBar(content: Text("$value")));
-                  }
+                          if (value.isNotEmpty) {
+                            ScaffoldMessenger.of(context)
+                              ..removeCurrentSnackBar()
+                              ..showSnackBar(SnackBar(content: Text("$value")));
+                          }
 
-
-                  // ScaffoldMessenger.of(context)
-                  //   ..removeCurrentSnackBar()
-                  //   ..showSnackBar(SnackBar(content: Text("$value")));
-                  rebuildAllChildren(context);
-                  refresh();
-                }));
+                          // ScaffoldMessenger.of(context)
+                          //   ..removeCurrentSnackBar()
+                          //   ..showSnackBar(SnackBar(content: Text("$value")));
+                          rebuildAllChildren(context);
+                          refresh();
+                        }));
 
                 // onTap: () {
                 //   showSearch(
@@ -103,12 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputActivity')
                     .then((value) => setState(() {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(SnackBar(content: Text("$value")));
-                }));
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
                 await getDailyActivity();
-                rebuildAllChildren(context);
+                // rebuildAllChildren(context);
                 refresh();
               }),
           SpeedDialChild(
@@ -117,19 +119,20 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputSymptom')
                     .then((value) => setState(() {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(SnackBar(content: Text("$value")));
-                }));
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
                 await getDailySymptom();
-                rebuildAllChildren(context);
+                // rebuildAllChildren(context);
                 refresh();
               }),
           SpeedDialChild(
               child: Icon(Icons.question_answer),
               label: 'Log Questions',
               onTap: () {
-                Navigator.pushNamed(context, '/questions');
+                Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (_) => AddQuestionScreen(false, null)));
               }),
           SpeedDialChild(
               child: Icon(MdiIcons.scale),
@@ -137,10 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputMetric')
                     .then((value) => setState(() {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(SnackBar(content: Text("$value")));
-                }));
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
                 await getDailyWeight();
                 rebuildAllChildren(context);
                 refresh();
@@ -162,7 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Card(
                 color: Theme.of(context).canvasColor,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Theme.of(context).buttonColor, width: 2),
+                  side: BorderSide(
+                      color: Theme.of(context).buttonColor, width: 2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: FutureBuilder(
@@ -172,14 +176,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           ExpansionTile(
                             leading: Icon(
-                              Icons.food_bank, color:Theme.of(context).buttonColor,
+                              Icons.food_bank,
+                              color: Theme.of(context).buttonColor,
                               size: 40,
                             ),
                             title: Text('Daily Diet Summary',
                                 style: TextStyle(
                                     fontSize: 18.0,
-                                    color: Theme.of(context).hintColor )),
-
+                                    color: Theme.of(context).hintColor)),
 
                             // Align(
                             //   child: Text('Daily Diet Summary',
@@ -190,26 +194,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             // ),
                             subtitle: dayFoodLogEntryList.length == 0
                                 ? Text('No food tracked today!',
-                                style: TextStyle(
-                                    color:
-                                    Theme.of(context).hintColor ))
+                                    style: TextStyle(
+                                        color: Theme.of(context).hintColor))
                                 : dayFoodLogEntryList.length == 1
-                                ? Text(
-                                dayFoodLogEntryList.length.toString() +
-                                    ' item totaling ' +
-                                    getDayFoodCalories().toString() +
-                                    ' calories.',
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .hintColor ))
-                                : Text(
-                                dayFoodLogEntryList.length.toString() +
-                                    ' items totaling ' +
-                                    getDayFoodCalories().toString() +
-                                    ' calories.',
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .hintColor )),
+                                    ? Text(
+                                        dayFoodLogEntryList.length.toString() +
+                                            ' item totaling ' +
+                                            getDayFoodCalories().toString() +
+                                            ' calories.',
+                                        style: TextStyle(
+                                            color: Theme.of(context).hintColor))
+                                    : Text(
+                                        dayFoodLogEntryList.length.toString() +
+                                            ' items totaling ' +
+                                            getDayFoodCalories().toString() +
+                                            ' calories.',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).hintColor)),
                             // subtitle: (dayFoodLogEntryList.length() == 0) ? Text(dayFoodLogEntryList.length.toString() + ' items totaling ' + getDayFoodCalories().toString() +  ' calories.'),
                             children: getDailyFoodChildren(),
                           ),
@@ -220,7 +222,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Card(
                 color: Theme.of(context).canvasColor,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Theme.of(context).buttonColor, width: 2),
+                  side: BorderSide(
+                      color: Theme.of(context).buttonColor, width: 2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: FutureBuilder(
@@ -230,26 +233,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           ExpansionTile(
                             leading: Icon(
-                              Icons.directions_run, color: Theme.of(context).buttonColor,
+                              Icons.directions_run,
+                              color: Theme.of(context).buttonColor,
                               size: 40,
                             ),
                             title: Text("Daily Activity Summary",
                                 style: TextStyle(
                                     fontSize: 18,
-                                    color: Theme.of(context).hintColor  )),
+                                    color: Theme.of(context).hintColor)),
                             subtitle: dayActivityList.length == 0
                                 ? Text("No activities tracked today!",
-                                style: TextStyle(
-                                    color:
-                                    Theme.of(context).hintColor  ))
+                                    style: TextStyle(
+                                        color: Theme.of(context).hintColor))
                                 : Text(
-                                dayActivityList.length.toString() +
-                                    " Activities Logged - " +
-                                    getDayActivityMinutes().toString() +
-                                    " Minutes",
-                                style: TextStyle(
-                                    color:
-                                    Theme.of(context).hintColor  )),
+                                    dayActivityList.length.toString() +
+                                        " Activities Logged - " +
+                                        getDayActivityMinutes().toString() +
+                                        " Minutes",
+                                    style: TextStyle(
+                                        color: Theme.of(context).hintColor)),
                             // subtitle: dayActivityList.length == 0 ? Text(
                             //     "No activities tracked!") : Text(dayActivityList
                             //     .length.toString() + " activities logged."),
@@ -262,7 +264,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Card(
                 color: Theme.of(context).canvasColor,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Theme.of(context).buttonColor, width: 2),
+                  side: BorderSide(
+                      color: Theme.of(context).buttonColor, width: 2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: FutureBuilder(
@@ -272,31 +275,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           ExpansionTile(
                             leading: Icon(
-                              MdiIcons.scale, color: Theme.of(context).buttonColor,
+                              MdiIcons.scale,
+                              color: Theme.of(context).buttonColor,
                               size: 40,
                             ),
                             title: Text("Daily Weight Summary",
                                 style: TextStyle(
                                     fontSize: 18.0,
-                                    color: Theme.of(context).hintColor  )),
+                                    color: Theme.of(context).hintColor)),
                             subtitle: dayMetricList.length == 0
                                 ? Text("No Weight Logged Today!",
-                                style: TextStyle(
-                                    color:
-                                    Theme.of(context).hintColor  ))
+                                    style: TextStyle(
+                                        color: Theme.of(context).hintColor))
                                 : dayMetricList.length == 1
-                                ? Text(
-                                dayMetricList.length.toString() +
-                                    " Weight Logged",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .hintColor  ))
-                                : Text(
-                                dayMetricList.length.toString() +
-                                    " Weights Logged",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .hintColor  )),
+                                    ? Text(
+                                        dayMetricList.length.toString() +
+                                            " Weight Logged",
+                                        style: TextStyle(
+                                            color: Theme.of(context).hintColor))
+                                    : Text(
+                                        dayMetricList.length.toString() +
+                                            " Weights Logged",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).hintColor)),
                             // subtitle: dayActivityList.length == 0 ? Text(
                             //     "No activities tracked!") : Text(dayActivityList
                             //     .length.toString() + " activities logged."),
@@ -309,7 +311,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Card(
                 color: Theme.of(context).canvasColor,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Theme.of(context).buttonColor, width: 2),
+                  side: BorderSide(
+                      color: Theme.of(context).buttonColor, width: 2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: FutureBuilder(
@@ -319,29 +322,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           ExpansionTile(
                             leading: Icon(
-                              Icons.thermostat_outlined, color: Theme.of(context).buttonColor,
+                              Icons.thermostat_outlined,
+                              color: Theme.of(context).buttonColor,
                               size: 40,
                             ),
                             title: Text("Daily Symptom Summary",
                                 style: TextStyle(
                                     fontSize: 18.0,
-                                    color: Theme.of(context).hintColor  )),
+                                    color: Theme.of(context).hintColor)),
                             subtitle: daySymptomList.length == 0
                                 ? Text("No Symptoms Logged Today!",
-                                style: TextStyle(
-                                    color:
-                                    Theme.of(context).hintColor  ))
+                                    style: TextStyle(
+                                        color: Theme.of(context).hintColor))
                                 : daySymptomList.length == 1
-                                ? Text("1 Symptom logged",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .hintColor  ))
-                                : Text(
-                                daySymptomList.length.toString() +
-                                    " Symptoms Logged",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .hintColor  )),
+                                    ? Text("1 Symptom logged",
+                                        style: TextStyle(
+                                            color: Theme.of(context).hintColor))
+                                    : Text(
+                                        daySymptomList.length.toString() +
+                                            " Symptoms Logged",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).hintColor)),
                             // subtitle: dayActivityList.length == 0 ? Text(
                             //     "No activities tracked!") : Text(dayActivityList
                             //     .length.toString() + " activities logged."),
@@ -458,14 +460,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (dayActivityList.isEmpty) {
       return <Widget>[
         Text("Nothing here. Log some activities.",
-            style: TextStyle(color: Theme.of(context).hintColor  )),
+            style: TextStyle(color: Theme.of(context).hintColor)),
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/fitnessTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        // rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -478,7 +480,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                       child: Text("View All Activities",
                           style: TextStyle(
-                              color: Theme.of(context).highlightColor ))),
+                              color: Theme.of(context).highlightColor))),
                 )))
       ];
     } else if (dayActivityList.isNotEmpty) {
@@ -491,9 +493,13 @@ class _HomeScreenState extends State<HomeScreen> {
             final item = dayActivityList[index];
             return Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
-              child: Text( "- " +
-                  item.type + " for " + item.minutes.toString() + " minutes.",
-                  style: TextStyle(color: Theme.of(context).hintColor  )),
+              child: Text(
+                  "- " +
+                      item.type +
+                      " for " +
+                      item.minutes.toString() +
+                      " minutes.",
+                  style: TextStyle(color: Theme.of(context).hintColor)),
             );
           },
         ),
@@ -501,9 +507,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.pushNamed(context, '/fitnessTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        // rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -516,7 +522,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                       child: Text("View All Activities",
                           style: TextStyle(
-                              color: Theme.of(context).highlightColor ))),
+                              color: Theme.of(context).highlightColor))),
                 )))
       ];
     }
@@ -527,14 +533,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (dayFoodLogEntryList.isEmpty) {
       return <Widget>[
         Text("Nothing here. Log some foods.",
-            style: TextStyle(color: Theme.of(context).hintColor )),
+            style: TextStyle(color: Theme.of(context).hintColor)),
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/dietTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -546,8 +552,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: Alignment.center,
                   child: Container(
                       child: Text("View Today's Food Log",
-                          style:
-                          TextStyle(color: Theme.of(context).highlightColor ))),
+                          style: TextStyle(
+                              color: Theme.of(context).highlightColor))),
                 )))
       ];
     } else if (dayFoodLogEntryList.isNotEmpty) {
@@ -566,9 +572,9 @@ class _HomeScreenState extends State<HomeScreen> {
           itemBuilder: (context, index) {
             final item = dayFoodLogEntryList[index];
             return Padding(
-              padding: const EdgeInsets.fromLTRB(20, 2, 0,2),
+              padding: const EdgeInsets.fromLTRB(20, 2, 0, 2),
               child: Text("- " + item.food.description,
-                  style: TextStyle(color: Theme.of(context).hintColor )),
+                  style: TextStyle(color: Theme.of(context).hintColor)),
             );
           },
         ),
@@ -576,9 +582,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.pushNamed(context, '/dietTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -591,7 +597,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     child: Text("View Today's Food Log",
                         style:
-                        TextStyle(color: Theme.of(context).highlightColor )),
+                            TextStyle(color: Theme.of(context).highlightColor)),
                   ),
                 )))
       ];
@@ -603,14 +609,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (dayMetricList.isEmpty) {
       return <Widget>[
         Text("Nothing here. Log your weight!",
-            style: TextStyle(color: Theme.of(context).hintColor  )),
+            style: TextStyle(color: Theme.of(context).hintColor)),
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/metricTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -623,7 +629,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                       child: Text("View Weight Log",
                           style: TextStyle(
-                              color: Theme.of(context).highlightColor ))),
+                              color: Theme.of(context).highlightColor))),
                 )))
       ];
     } else if (dayMetricList.isNotEmpty) {
@@ -636,11 +642,12 @@ class _HomeScreenState extends State<HomeScreen> {
             final item = dayMetricList[index];
             return Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
-              child: Text( "- " +
-                  item.weight.toString() +
-                  "lbs @ " +
-                  DateFormat.Hm().format(item.dateTime.toLocal()),
-                  style: TextStyle(color: Theme.of(context).hintColor  )),
+              child: Text(
+                  "- " +
+                      item.weight.toString() +
+                      "lbs @ " +
+                      DateFormat.Hm().format(item.dateTime.toLocal()),
+                  style: TextStyle(color: Theme.of(context).hintColor)),
             );
           },
         ),
@@ -648,9 +655,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.pushNamed(context, '/metricTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -663,7 +670,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                       child: Text("View Weight Log",
                           style: TextStyle(
-                              color: Theme.of(context).highlightColor ))),
+                              color: Theme.of(context).highlightColor))),
                 )))
       ];
     }
@@ -697,14 +704,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (daySymptomList.isEmpty) {
       return <Widget>[
         Text("No Symptoms Tracked Today!",
-            style: TextStyle(color: Theme.of(context).hintColor  )),
+            style: TextStyle(color: Theme.of(context).hintColor)),
         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/symptomTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        // rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -717,7 +724,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                       child: Text("View Symptom Log",
                           style: TextStyle(
-                              color: Theme.of(context).highlightColor ))),
+                              color: Theme.of(context).highlightColor))),
                 )))
       ];
     } else if (daySymptomList.isNotEmpty) {
@@ -730,10 +737,11 @@ class _HomeScreenState extends State<HomeScreen> {
             final item = daySymptomList[index];
             return Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 2, 0, 2),
-              child: Text(  "- " +
-                  "Symptom(s) recorded @ " +
-                  DateFormat.Hm().format(item.dateTime.toLocal()),
-                  style: TextStyle(color: Theme.of(context).hintColor  )),
+              child: Text(
+                  "- " +
+                      "Symptom(s) recorded @ " +
+                      DateFormat.Hm().format(item.dateTime.toLocal()),
+                  style: TextStyle(color: Theme.of(context).hintColor)),
             );
           },
         ),
@@ -741,9 +749,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.pushNamed(context, '/symptomTracking')
                   .then((value) => setState(() {
-                refresh();
-                rebuildAllChildren(context);
-              }));
+                        refresh();
+                        // rebuildAllChildren(context);
+                      }));
             },
             child: Container(
                 width: double.infinity,
@@ -756,7 +764,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                       child: Text("View Symptom Log",
                           style: TextStyle(
-                              color: Theme.of(context).highlightColor ))),
+                              color: Theme.of(context).highlightColor))),
                 )))
       ];
     }
