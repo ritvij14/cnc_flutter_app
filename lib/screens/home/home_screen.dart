@@ -107,6 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ..removeCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text("$value")));
                 }));
+                await getDailyActivity();
+                rebuildAllChildren(context);
+                refresh();
               }),
           SpeedDialChild(
               child: Icon(Icons.thermostat_outlined),
@@ -114,11 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputSymptom')
                     .then((value) => setState(() {
-                  refresh();
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text("$value")));
                 }));
+                await getDailySymptom();
+                rebuildAllChildren(context);
+                refresh();
               }),
           SpeedDialChild(
               child: Icon(Icons.question_answer),
@@ -132,12 +137,13 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputMetric')
                     .then((value) => setState(() {
-                  refresh();
-
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
                     ..showSnackBar(SnackBar(content: Text("$value")));
                 }));
+                await getDailyWeight();
+                rebuildAllChildren(context);
+                refresh();
               }),
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
