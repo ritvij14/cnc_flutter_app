@@ -457,7 +457,7 @@ class FoodProfile extends State<FoodPage> {
                                   Row(
                                     children: [
                                       Text(
-                                        (currentFood.fatInGrams * portion)
+                                        (currentFood.carbohydratesInGrams * portion)
                                                 .round()
                                                 .toString() +
                                             'g',

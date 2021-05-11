@@ -70,34 +70,40 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).buttonColor,
         children: [
           SpeedDialChild(
-              child: Icon(Icons.food_bank),
-              label: 'Log Food',
-              onTap: () async {
-                await showSearch(
-                        context: context,
-                        delegate: FoodSearch(DateTime.now().toString()))
-                    .then((value) => setState(() {
-                          if (value.isNotEmpty) {
-                            ScaffoldMessenger.of(context)
-                              ..removeCurrentSnackBar()
-                              ..showSnackBar(SnackBar(content: Text("$value")));
-                          }
-
-                          // ScaffoldMessenger.of(context)
-                          //   ..removeCurrentSnackBar()
-                          //   ..showSnackBar(SnackBar(content: Text("$value")));
-                          rebuildAllChildren(context);
-                          refresh();
-                        }));
-
-                // onTap: () {
-                //   showSearch(
-                //           context: context,
-                //           delegate: FoodSearch(DateTime.now().toString()))
-                //       .then((value) => rebuildAllChildren(context));
-                // }),
+              child: Icon(Icons.question_answer),
+              label: 'Log Questions',
+              onTap: () {
+                Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (_) => AddQuestionScreen(false, null)));
               }),
-
+          SpeedDialChild(
+              child: Icon(Icons.thermostat_outlined),
+              label: 'Log Symptoms',
+              onTap: () async {
+                await Navigator.pushNamed(context, '/inputSymptom')
+                    .then((value) => setState(() {
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(SnackBar(content: Text("$value")));
+                }));
+                await getDailySymptom();
+                // rebuildAllChildren(context);
+                refresh();
+              }),
+          SpeedDialChild(
+              child: Icon(MdiIcons.scale),
+              label: 'Log Weight',
+              onTap: () async {
+                await Navigator.pushNamed(context, '/inputMetric')
+                    .then((value) => setState(() {
+                  ScaffoldMessenger.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(SnackBar(content: Text("$value")));
+                }));
+                await getDailyWeight();
+                rebuildAllChildren(context);
+                refresh();
+              }),
           // Navigator.pushNamed(context, '/inputActivity');
           SpeedDialChild(
               child: Icon(Icons.directions_run),
@@ -114,40 +120,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 refresh();
               }),
           SpeedDialChild(
-              child: Icon(Icons.thermostat_outlined),
-              label: 'Log Symptoms',
+              child: Icon(Icons.food_bank),
+              label: 'Log Food',
               onTap: () async {
-                await Navigator.pushNamed(context, '/inputSymptom')
+                await showSearch(
+                    context: context,
+                    delegate: FoodSearch(DateTime.now().toString()))
                     .then((value) => setState(() {
-                          ScaffoldMessenger.of(context)
-                            ..removeCurrentSnackBar()
-                            ..showSnackBar(SnackBar(content: Text("$value")));
-                        }));
-                await getDailySymptom();
-                // rebuildAllChildren(context);
-                refresh();
+                  if (value.isNotEmpty) {
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(SnackBar(content: Text("$value")));
+                  }
+
+                  // ScaffoldMessenger.of(context)
+                  //   ..removeCurrentSnackBar()
+                  //   ..showSnackBar(SnackBar(content: Text("$value")));
+                  rebuildAllChildren(context);
+                  refresh();
+                }));
+
+                // onTap: () {
+                //   showSearch(
+                //           context: context,
+                //           delegate: FoodSearch(DateTime.now().toString()))
+                //       .then((value) => rebuildAllChildren(context));
+                // }),
               }),
-          SpeedDialChild(
-              child: Icon(Icons.question_answer),
-              label: 'Log Questions',
-              onTap: () {
-                Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (_) => AddQuestionScreen(false, null)));
-              }),
-          SpeedDialChild(
-              child: Icon(MdiIcons.scale),
-              label: 'Log Weight',
-              onTap: () async {
-                await Navigator.pushNamed(context, '/inputMetric')
-                    .then((value) => setState(() {
-                          ScaffoldMessenger.of(context)
-                            ..removeCurrentSnackBar()
-                            ..showSnackBar(SnackBar(content: Text("$value")));
-                        }));
-                await getDailyWeight();
-                rebuildAllChildren(context);
-                refresh();
-              }),
+
+
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
           //     label: 'Test',

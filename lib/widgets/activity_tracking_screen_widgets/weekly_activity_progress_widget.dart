@@ -75,11 +75,11 @@ class _WeeklyActivityProgressWidgetState
     return y;
   }
 
-  @override
-  // ignore: must_call_super
-  void initState() {
-    setData();
-  }
+  // @override
+  // // ignore: must_call_super
+  // void initState() {
+  //   setData();
+  // }
 
   Future<void> setData() async {
     completedMinutes = await getData();
@@ -87,7 +87,7 @@ class _WeeklyActivityProgressWidgetState
     if (percentComplete > 1.0) {
       percentComplete = 1.0;
     }
-    refresh();
+    // refresh();
   }
 
   refresh() {
