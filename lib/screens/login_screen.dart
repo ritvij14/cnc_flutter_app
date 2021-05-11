@@ -84,7 +84,7 @@ class LoginScreen extends StatelessWidget {
     return FlutterLogin(
       // title: 'ENACT',
       logo: 'assets/logo.png',
-      title: 'v0.10',
+      title: 'v1.0.12',
       theme: LoginTheme(
           primaryColor: Colors.white,
           accentColor: Colors.black,

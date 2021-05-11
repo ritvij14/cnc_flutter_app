@@ -1,6 +1,7 @@
 import 'package:cnc_flutter_app/screens/communication_screen.dart';
 import 'package:cnc_flutter_app/screens/content/content_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goals_home_screen.dart';
+import 'package:cnc_flutter_app/screens/user_questions_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home/home_screen.dart';
@@ -28,7 +29,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   List<Widget> screens = <Widget>[
     HomeScreen(),
     ContentScreen(),
-    CommunicationsScreen(),
+    UserQuestionsScreen(),
     GoalsHome(),
   ];
 

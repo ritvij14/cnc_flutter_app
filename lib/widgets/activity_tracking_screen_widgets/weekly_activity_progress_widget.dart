@@ -19,40 +19,48 @@ class _WeeklyActivityProgressWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: new CircularPercentIndicator(
-          radius: 200.0,
-          lineWidth: 20.0,
-          animation: true,
-          percent: percentComplete,
-          center: new Text(
-            "${(percentComplete * 100).toStringAsFixed(0)}%",
-            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-          ),
-          footer: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: new Text(
-              completedMinutes > requiredMinutes
-                  ? "Completed Weekly Target!\n  " +
-                      (completedMinutes - requiredMinutes).toString() +
-                      " Minutes Over Target."
-                  : (requiredMinutes - completedMinutes).toString() +
-                      " Minutes Left",
-              style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+    return FutureBuilder(
+      future: setData(),
+      builder: (context, projectSnap) {
+        return Container(
+          child: Center(
+            child: new CircularPercentIndicator(
+              radius: 200.0,
+              lineWidth: 20.0,
+              animation: true,
+              percent: percentComplete,
+              center: new Text(
+                "${(percentComplete * 100).toStringAsFixed(0)}%",
+                style:
+                    new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+              footer: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: new Text(
+                  completedMinutes > requiredMinutes
+                      ? "Completed Weekly Target!\n  " +
+                          (completedMinutes - requiredMinutes).toString() +
+                          " Minutes Over Target."
+                      : (requiredMinutes - completedMinutes).toString() +
+                          " Minutes Left",
+                  style: new TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 17.0),
+                ),
+              ),
+              circularStrokeCap: CircularStrokeCap.round,
+              progressColor: Colors.purple,
+              header: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  "Weekly Activity Progress",
+                  style: new TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 17.0),
+                ),
+              ),
             ),
           ),
-          circularStrokeCap: CircularStrokeCap.round,
-          progressColor: Colors.purple,
-          header: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              "Weekly Activity Progress",
-              style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -83,6 +91,6 @@ class _WeeklyActivityProgressWidgetState
   }
 
   refresh() {
-    setState((){});
+    setState(() {});
   }
 }

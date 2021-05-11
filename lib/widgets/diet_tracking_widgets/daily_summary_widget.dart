@@ -38,6 +38,10 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
 
   List<FoodLogEntry> dailyFoodLogEntryList = [];
 
+  @override
+  void initState(){
+    dailyFoodLogEntryList.clear();
+  }
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {

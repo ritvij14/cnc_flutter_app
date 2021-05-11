@@ -15,6 +15,8 @@ class FoodSearch extends SearchDelegate<String> {
   // var recentSearchList = [];
   List<Food> foodList = [];
   List<Food> frequentFoodList = [];
+  List<num> ids = [];
+  List<num> favorite_ids = [];
   Food selection;
   String selectedDate;
 
@@ -26,12 +28,15 @@ class FoodSearch extends SearchDelegate<String> {
   }
 
   Future<bool> getFood() async {
+    var db = new DBHelper();
     if (query.isNotEmpty) {
       isSearching = true;
       // await getFrequentFood();
       foodList.clear();
+      ids.clear();
       // recentSearchList.clear();
-      var db = new DBHelper();
+      // var db = new DBHelper();
+      await db.getUserInfo();
       var response = await db.searchFood(query);
       var data = json.decode(response.body);
       for (int i = 0; i < data.length; i++) {
@@ -47,9 +52,9 @@ class FoodSearch extends SearchDelegate<String> {
         food.alcoholInGrams = data[i]['alcoholInGrams'];
         food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
         food.polyunsaturatedFattyAcidsInGrams =
-            data[i]['polyunsaturatedFattyAcidsInGrams'];
+        data[i]['polyunsaturatedFattyAcidsInGrams'];
         food.monounsaturatedFattyAcidsInGrams =
-            data[i]['monounsaturatedFattyAcidsInGrams'];
+        data[i]['monounsaturatedFattyAcidsInGrams'];
         food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
         food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
         food.sugarInGrams = data[i]['sugarInGrams'];
@@ -58,15 +63,21 @@ class FoodSearch extends SearchDelegate<String> {
         food.vitaminDInMicrograms = data[i]['vitaminDInMicrograms'];
         food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
         food.commonPortionSizeGramWeight =
-            data[i]['commonPortionSizeGramWeight'];
+        data[i]['commonPortionSizeGramWeight'];
         food.commonPortionSizeDescription =
-            data[i]['commonPortionSizeDescription'];
+        data[i]['commonPortionSizeDescription'];
         food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
         food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
-        foodList.add(food);
+        if(!ids.contains(data[i]['id'])) {
+          foodList.add(food);
+          ids.add(data[i]['id']);
+          // data[i]['id']
+        }
       }
     } else {
+      foodList.clear();
       await getFrequentFood();
+      await db.getUserInfo();
     }
     isSearching = false;
     return true;
@@ -78,6 +89,7 @@ class FoodSearch extends SearchDelegate<String> {
 
   Future<bool> getFrequentFood() async {
     frequentFoodList.clear();
+    favorite_ids.clear();
     var db = new DBHelper();
     var response = await db.getUserFrequentFoods();
     var data = json.decode(response.body);
@@ -94,9 +106,9 @@ class FoodSearch extends SearchDelegate<String> {
       food.alcoholInGrams = data[i]['alcoholInGrams'];
       food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
       food.polyunsaturatedFattyAcidsInGrams =
-          data[i]['polyunsaturatedFattyAcidsInGrams'];
+      data[i]['polyunsaturatedFattyAcidsInGrams'];
       food.monounsaturatedFattyAcidsInGrams =
-          data[i]['monounsaturatedFattyAcidsInGrams'];
+      data[i]['monounsaturatedFattyAcidsInGrams'];
       food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
       food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
       food.sugarInGrams = data[i]['sugarInGrams'];
@@ -106,10 +118,14 @@ class FoodSearch extends SearchDelegate<String> {
       food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
       food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
       food.commonPortionSizeDescription =
-          data[i]['commonPortionSizeDescription'];
+      data[i]['commonPortionSizeDescription'];
       food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
       food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
-      frequentFoodList.add(food);
+      if(!favorite_ids.contains(data[i]['id'])) {
+        frequentFoodList.add(food);
+        favorite_ids.add(data[i]['id']);
+      }
+      // frequentFoodList.add(food);
     }
     return true;
   }
@@ -123,7 +139,6 @@ class FoodSearch extends SearchDelegate<String> {
           icon: Icon(Icons.delete),
           onPressed: () {
             query = '';
-            // print(query);
           })
     ];
   }
@@ -255,10 +270,10 @@ class FoodSearch extends SearchDelegate<String> {
                   // searchedQuery = query;
                   Navigator.of(context)
                       .push(
-                        new MaterialPageRoute(
-                            builder: (_) =>
-                                FoodPage(foodList[index], selectedDate)),
-                      )
+                    new MaterialPageRoute(
+                        builder: (_) =>
+                            FoodPage(foodList[index], selectedDate)),
+                  )
                       .then((val) => {setMessage(val)});
                   // close(context, null)
                 },
@@ -285,10 +300,75 @@ class FoodSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     var searchResults;
-    if (query.isNotEmpty) {
-      searchResults = foodList;
+    if (query.isEmpty) {
+      // searchResults = frequentFoodList;
+      return FutureBuilder(
+        builder: (context, projectSnap) {
+          if (isSearching) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).buttonColor),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: frequentFoodList.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Card(
+                      margin: EdgeInsets.zero,
+                      color: Theme.of(context).canvasColor,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.only(left: 0, right: 7),
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 15,
+                              height: double.infinity,
+                              child: Text(''),
+                              color: getColor(
+                                  frequentFoodList[index].nccFoodGroupCategory),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5, right: 5),
+                            ),
+                            getIcon(frequentFoodList[index].nccFoodGroupCategory),
+                          ],
+                        ),
+                        onTap: () {
+                          this.searchedQuery = query;
+                          Navigator.of(context)
+                              .push(
+                            new MaterialPageRoute(
+                                builder: (_) => FoodPage(
+                                    frequentFoodList[index], selectedDate)),
+                          )
+                              .then((val) => {setMessage(val)});
+                        },
+                        title: Text(
+                          frequentFoodList[index].description,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey[600],
+                      height: 0,
+                      thickness: 1,
+                    )
+                  ],
+                );
+              },
+            );
+          }
+        },
+        future: getFrequentFood(),
+      );
     } else {
-      searchResults = frequentFoodList;
+      searchResults = foodList;
     }
     if (searchedQuery == query) {
       return ListView.builder(
@@ -309,7 +389,7 @@ class FoodSearch extends SearchDelegate<String> {
                         height: double.infinity,
                         child: Text(''),
                         color:
-                            getColor(searchResults[index].nccFoodGroupCategory),
+                        getColor(searchResults[index].nccFoodGroupCategory),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5, right: 5),
@@ -321,10 +401,10 @@ class FoodSearch extends SearchDelegate<String> {
                     this.searchedQuery = query;
                     Navigator.of(context)
                         .push(
-                          new MaterialPageRoute(
-                              builder: (_) =>
-                                  FoodPage(searchResults[index], selectedDate)),
-                        )
+                      new MaterialPageRoute(
+                          builder: (_) =>
+                              FoodPage(searchResults[index], selectedDate)),
+                    )
                         .then((val) => {setMessage(val)});
                   },
                   title: Text(
@@ -383,10 +463,10 @@ class FoodSearch extends SearchDelegate<String> {
                           this.searchedQuery = query;
                           Navigator.of(context)
                               .push(
-                                new MaterialPageRoute(
-                                    builder: (_) => FoodPage(
-                                        searchResults[index], selectedDate)),
-                              )
+                            new MaterialPageRoute(
+                                builder: (_) => FoodPage(
+                                    searchResults[index], selectedDate)),
+                          )
                               .then((val) => {setMessage(val)});
                         },
                         title: Text(

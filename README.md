@@ -16,5 +16,8 @@ APIs are handled in the "cnc_flutter_app\lib\connections\..." folder. Located th
 ##Usage
 Run from: "cnc_flutter_app\lib\main.dart main()".
 
+##Hosting
+App is hosted on google play store under enactresearch@gmail.com. Contact Dr. Annie Lin
+
 
 

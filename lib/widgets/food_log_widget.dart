@@ -107,6 +107,7 @@ class _FoodLogState extends State<FoodLog> {
     var response = await db.getFoodLog(selectedDate);
     var data = json.decode(response.body);
     // var x = TimeOfDay.fromDateTime(data[0]['entryTime']);
+
     for (int i = 0; i < data.length; i++) {
       FoodLogEntry foodLogEntry = new FoodLogEntry();
       foodLogEntry.id = data[i]['id'];
@@ -144,8 +145,8 @@ class _FoodLogState extends State<FoodLog> {
       food.nccFoodGroupCategory = data[i]['food']['nccFoodGroupCategory'];
       foodLogEntry.food = food;
       foodLogEntries.add(foodLogEntry);
-      isLoading = false;
     }
+    isLoading = false;
   }
 
   Icon getIcon(String category) {
