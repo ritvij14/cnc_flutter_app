@@ -86,20 +86,20 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
                     ? Text(
                         '10 Days',
                         style: TextStyle(
-                          color: Theme.of(context).hintColor,
+                          color: Theme.of(context).highlightColor,
                         ),
                       )
                     : (chart == 1)
                         ? Text(
                             '30 Days',
                             style: TextStyle(
-                              color: Theme.of(context).hintColor,
+                              color: Theme.of(context).highlightColor,
                             ),
                           )
                         : Text(
                             "Year",
                             style: TextStyle(
-                              color: Theme.of(context).hintColor,
+                              color: Theme.of(context).highlightColor,
                             ),
                           ),
               ),

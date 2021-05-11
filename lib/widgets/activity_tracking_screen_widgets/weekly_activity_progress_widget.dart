@@ -70,7 +70,7 @@ class _WeeklyActivityProgressWidgetState
     String id = sharedPref.getString('id');
     int intensity = 1;
     int userId = int.parse(id);
-    var x = await db.getDaysActivityList(5, intensity, userId);
+    var x = await db.getDaysActivityList(7, intensity, userId);
     int y = int.parse(x.body);
     return y;
   }

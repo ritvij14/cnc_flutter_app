@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ..showSnackBar(SnackBar(content: Text("$value")));
                         }));
                 await getDailyActivity();
-                // rebuildAllChildren(context);
+                rebuildAllChildren(context);
                 refresh();
               }),
           SpeedDialChild(
@@ -467,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.pushNamed(context, '/fitnessTracking')
                   .then((value) => setState(() {
                         refresh();
-                        // rebuildAllChildren(context);
+                        rebuildAllChildren(context);
                       }));
             },
             child: Container(
