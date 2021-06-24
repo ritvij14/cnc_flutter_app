@@ -30,7 +30,6 @@ class GoalsHomePage extends StatefulWidget {
 }
 
 class _GoalsHomePageState extends State<GoalsHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,45 +54,24 @@ class _GoalsHomePageState extends State<GoalsHomePage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0, bottom: 10.0),
+            padding: EdgeInsets.only(
+                top: 30.0, left: 15.0, right: 15.0, bottom: 10.0),
             child: Text(
-            'Choose personal daily goals to view and set your own goals for each day. '
-                'These goals are written in by you. You can add or delete goals at any point. '
-                'To set a goal click on the day of the week and press the plus. Swipe left or right '
-                'on a goal for more options.',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15.0,
+              'Choose weekly goals to view and set your own goals for each day. '
+              'These goals are chosen from a list we have created for you. You can add '
+              'or delete goals at any point. Choose a goal type and add a by swiping left or right. '
+              'Swipe left or right on a goal for more options.',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15.0,
+              ),
             ),
           ),
-          ),
-          Center(child: ElevatedButton(
-            child: Text('Personal Daily Goals',
-            style: TextStyle(fontSize: 20.0,)),
-            style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).buttonColor, // foreground
-            ),
-            onPressed: () {
-              Navigator.of(context).push(new MaterialPageRoute(
-                builder: (_) => DailyGoalsPage(),
-              ));
-            },
-          ),),
-          Container(
-            padding: EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0, bottom: 10.0),
-            child: Text(
-            'Choose weekly goals to view and set your own goals for each day. '
-                'These goals are chosen from a list we have created for you. You can add '
-                'or delete goals at any point. Choose a goal type and add a by swiping left or right. '
-                'Swipe left or right on a goal for more options.',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15.0,
-            ),
-          ),),
           ElevatedButton(
             child: Text('Weekly Goals',
-                style: TextStyle(fontSize: 20.0,)),
+                style: TextStyle(
+                  fontSize: 20.0,
+                )),
             style: ElevatedButton.styleFrom(
               primary: Theme.of(context).buttonColor,
             ),
