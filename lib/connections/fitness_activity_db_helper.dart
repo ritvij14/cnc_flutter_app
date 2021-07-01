@@ -5,12 +5,10 @@ import 'package:cnc_flutter_app/models/activity_model.dart';
 import 'package:http/http.dart' as http;
 
 class ActivityDBHelper extends DBHelperBase {
-
   //TODO get all activities method shouldn't exist in actual app.
   Future<http.Response> getAllActivities() async {
     var requestUrl = baseUrl + 'api/fitnessActivity/all';
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
@@ -32,15 +30,14 @@ class ActivityDBHelper extends DBHelperBase {
 
   Future<http.Response> getActivityOptions() async {
     var requestUrl = baseUrl + 'api/activityOptions/all';
-    http.Response response =
-    await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
   Future<http.Response> saveNewActivity(
       ActivityModel fitnessActivityModel) async {
     var requestUrl = baseUrl + 'api/fitnessActivity/add/';
-    var uriResponse = await http.post(requestUrl,
+    var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'type': fitnessActivityModel.type,
@@ -54,7 +51,7 @@ class ActivityDBHelper extends DBHelperBase {
   Future<http.Response> updateExistingActivity(
       ActivityModel activityModel) async {
     var requestUrl = baseUrl + 'api/fitnessActivity/update/';
-    var uriResponse = await http.put(requestUrl,
+    var uriResponse = await http.put(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'id': activityModel.id,
@@ -65,7 +62,9 @@ class ActivityDBHelper extends DBHelperBase {
           'userId': activityModel.userId.toString(),
         }));
   }
-  Future<http.Response> getDaysActivityList(int numberOfDays, int intensity, int userId) async {
+
+  Future<http.Response> getDaysActivityList(
+      int numberOfDays, int intensity, int userId) async {
     var requestUrl = baseUrl + 'api/fitnessActivity/week/user/';
     var queryParameters = {
       'numberOfDays': numberOfDays.toString(),
@@ -73,7 +72,7 @@ class ActivityDBHelper extends DBHelperBase {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https(baseUri, '/api/fitnessActivity/week/user/', queryParameters);
+        Uri.https(baseUri, '/api/fitnessActivity/week/user/', queryParameters);
 
     var response = await http.get(
       uri,
@@ -88,7 +87,7 @@ class ActivityDBHelper extends DBHelperBase {
       'userId': userId.toString(),
     };
     var uri =
-    Uri.https(baseUri, '/api/fitnessActivity/day/user/', queryParameters);
+        Uri.https(baseUri, '/api/fitnessActivity/day/user/', queryParameters);
 
     var response = await http.get(
       uri,
@@ -96,6 +95,4 @@ class ActivityDBHelper extends DBHelperBase {
     );
     return response;
   }
-
-
 }

@@ -8,11 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'db_helper_base.dart';
 
 class DBHelper extends DBHelperBase {
-
   Future<bool> isEmailValid(String email) async {
     var requestUrl = baseUrl + 'api/users/checkIfEmailExists/' + email;
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     bool isValid = json.decode(response.body);
     return isValid;
   }
@@ -32,8 +30,8 @@ class DBHelper extends DBHelperBase {
     var uri = Uri.https(baseUri, 'api/users/login', queryParameters);
 
     var response = await http.get(
-    uri,
-    headers: {"Content-Type": "application/json"},
+      uri,
+      headers: {"Content-Type": "application/json"},
     );
 
     print(response.body + "<< This was the login response");
@@ -44,23 +42,20 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/formstatus/' + userId;
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
 
     return response.body.toString() == 'true';
   }
 
   Future<http.Response> getFood() async {
     var requestUrl = baseUrl + 'api/food/all';
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
   Future<http.Response> searchFood(String query) async {
     var requestUrl = baseUrl + 'api/food/search/' + query;
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
@@ -68,8 +63,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/frequent';
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
@@ -77,8 +71,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/get';
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
@@ -90,7 +83,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/profile/ratios';
-    var response = await http.post(requestUrl,
+    var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'userId': userId,
@@ -105,7 +98,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/$userId/update/weight/';
-    var uriResponse = await http.post(requestUrl,
+    var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'weight': metricModel.weight.toString(),
@@ -129,7 +122,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/form/save/';
-    var response = await http.post(requestUrl,
+    var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'userId': userId,
@@ -161,7 +154,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/form/update/';
-    var response = await http.post(requestUrl,
+    var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'userId': userId,
@@ -183,7 +176,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/form/update/basic';
-    var response = await http.post(requestUrl,
+    var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'userId': userId,
@@ -202,7 +195,7 @@ class DBHelper extends DBHelperBase {
 
   Future<http.Response> registerNewUser(UserModel userModel) async {
     var requestUrl = baseUrl + 'api/users/register/';
-    var uriResponse = await http.post(requestUrl,
+    var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'email': userModel.email,
@@ -211,29 +204,24 @@ class DBHelper extends DBHelperBase {
     return uriResponse;
   }
 
-  resetPassword(String email) async{
-
+  resetPassword(String email) async {
     var queryParameters = {
       'email': email,
     };
-    var uri =
-    Uri.https(baseUri, 'api/users/resetPassword', queryParameters);
+    var uri = Uri.https(baseUri, 'api/users/resetPassword', queryParameters);
 
     var response = await http.post(
       uri,
       headers: {"Content-Type": "application/json"},
     );
     return response;
-
   }
-
 
   Future<http.Response> getFoodLog(date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/' + date;
-    http.Response response =
-        await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
@@ -241,7 +229,7 @@ class DBHelper extends DBHelperBase {
     var requestUrl =
         baseUrl + 'api/users/foodlog/delete/' + foodLogEntryId.toString();
     http.Response response =
-        await http.delete(Uri.encodeFull(requestUrl), headers: {});
+        await http.delete(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
@@ -250,7 +238,7 @@ class DBHelper extends DBHelperBase {
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/' + userId + '/delete/issues/';
     http.Response response =
-        await http.delete(Uri.encodeFull(requestUrl), headers: {});
+        await http.delete(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
@@ -259,7 +247,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id');
     var requestUrl = baseUrl + 'api/users/foodlog/save/';
-    var uriResponse = await http.post(requestUrl,
+    var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'entryTime': entryTime,
@@ -272,7 +260,7 @@ class DBHelper extends DBHelperBase {
 
   Future<http.Response> updateFoodLogEntry(id, entryTime, portion) async {
     var requestUrl = baseUrl + 'api/users/foodlog/update/';
-    var uriResponse = await http.post(requestUrl,
+    var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'id': id,
@@ -280,6 +268,4 @@ class DBHelper extends DBHelperBase {
           'portion': portion,
         }));
   }
-
 }
-
