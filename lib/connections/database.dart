@@ -11,9 +11,9 @@ class DBProvider {
 
   static final DBProvider instance = DBProvider._privateConstructor();
   static final DBProvider db = DBProvider._privateConstructor();
-  static Database _database;
+  static Database? _database;
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) {
       return _database;
     }
@@ -27,30 +27,32 @@ class DBProvider {
     String path = join(documentsDirectory.path, "SQLiteDB.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
-          await db.execute("CREATE TABLE user_questions ("
-              "id INTEGER PRIMARY KEY,"
-              "user_id INTEGER,"
-              "question TEXT,"
-              "question_notes TEXT,"
-            "date_created TEXT,"
-            "date_updated TEXT,"
-              "is_answered INTEGER)"
-          );
-        });
+      await db.execute("CREATE TABLE user_questions ("
+          "id INTEGER PRIMARY KEY,"
+          "user_id INTEGER,"
+          "question TEXT,"
+          "question_notes TEXT,"
+          "date_created TEXT,"
+          "date_updated TEXT,"
+          "is_answered INTEGER)");
+    });
   }
 
   newUserQuestion(UserQuestion newUserQuestion) async {
     final db = await database;
+    int id;
     //get the biggest id in the table
-    var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM user_questions");
-    int id = table.first["id"];
-    if (id == null){
-      id =1;
+    var table =
+        await db!.rawQuery("SELECT MAX(id)+1 as id FROM user_questions");
+    if (table.first["id"] == null) {
+      id = 1;
+    } else {
+      id = int.parse(table.first["id"].toString());
     }
     //insert to the table using the new id
     var raw = await db.rawInsert(
         "INSERT Into user_questions (id,user_id,question,question_notes, date_created, date_updated, is_answered)"
-            " VALUES (?,?,?,?,?,?,?)",
+        " VALUES (?,?,?,?,?,?,?)",
         [
           id,
           newUserQuestion.user_id,
@@ -66,14 +68,18 @@ class DBProvider {
     return raw;
   }
 
-
   updateUserQuestion(UserQuestion updatedUserQuestion) async {
     final db = await database;
-    await db.rawUpdate('''
+    await db!.rawUpdate('''
     UPDATE user_questions 
     SET question = ?, question_notes = ? , date_updated = ?
     WHERE id = ?
-    ''', [updatedUserQuestion.question, updatedUserQuestion.question_notes, updatedUserQuestion.date_updated, updatedUserQuestion.id]);
+    ''', [
+      updatedUserQuestion.question,
+      updatedUserQuestion.question_notes,
+      updatedUserQuestion.date_updated,
+      updatedUserQuestion.id
+    ]);
     // var res = await db.update("user_questions", updatedUserQuestion.toMap(),
     //     where: "id = ?", whereArgs: [updatedUserQuestion.id]);
     // return res;
@@ -92,32 +98,36 @@ class DBProvider {
 
   updateIsAnswered(UserQuestion updatedUserQuestion) async {
     final db = await database;
-    await db.rawUpdate('''
+    await db!.rawUpdate('''
     UPDATE user_questions
     SET  date_updated = ?, is_answered = ?
     WHERE id = ?
-    ''', [updatedUserQuestion.date_updated, updatedUserQuestion.is_answered, updatedUserQuestion.id]);
+    ''', [
+      updatedUserQuestion.date_updated,
+      updatedUserQuestion.is_answered,
+      updatedUserQuestion.id
+    ]);
   }
-
 
   Future<List> getAllUserQuestions(int user_id) async {
     final db = await database;
-    var questions = await db.rawQuery(    'SELECT * FROM user_questions WHERE user_id = ?', [user_id]);
+    var questions = await db!
+        .rawQuery('SELECT * FROM user_questions WHERE user_id = ?', [user_id]);
     return questions;
   }
 
   deleteUserQuestion(int id) async {
     final db = await database;
-    return db.delete("user_questions", where: "id = ?", whereArgs: [id]);
+    return db!.delete("user_questions", where: "id = ?", whereArgs: [id]);
   }
 
   deleteAllUserQuestions(int user_id) async {
     final db = await database;
-    db.delete('user_questions', where: 'user_id = ?', whereArgs: [user_id]);
+    db!.delete('user_questions', where: 'user_id = ?', whereArgs: [user_id]);
   }
 
   deleteAll() async {
     final db = await database;
-    db.rawDelete("Delete * from user_questions");
+    db!.rawDelete("Delete * from user_questions");
   }
 }

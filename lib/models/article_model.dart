@@ -1,10 +1,10 @@
 class ArticleModel {
-  String articleName;
-  String articleSubject;
-  String articleType;
+  late String articleName;
+  late String articleSubject;
+  late String articleType;
   var data;
 
-  ArticleModel({this.articleName, this.data});
+  ArticleModel({required this.articleName, this.data});
 
   factory ArticleModel.fromJson(dynamic json) {
     ArticleModel articleModel = ArticleModel.emptyConstructor();

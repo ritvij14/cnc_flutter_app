@@ -1,15 +1,11 @@
 import 'dart:core';
 
-class MetricModel{
-  int weight;
+class MetricModel {
+  late int weight;
   DateTime dateTime = DateTime.now();
-  int userId;
+  late int userId;
 
-
-  MetricModel(int weight, DateTime dateTime){
-    this.weight = weight;
-    this.dateTime = dateTime;
-  }
+  MetricModel(this.weight, this.dateTime);
   MetricModel.emptyConstructor();
 
   factory MetricModel.fromJson(dynamic json) {

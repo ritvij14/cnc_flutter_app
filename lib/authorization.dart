@@ -4,7 +4,6 @@ import 'connections/db_helper.dart';
 import 'models/user_model.dart';
 
 class Authorization {
-
   // Authorization._privateConstructor();
   //
   // static final Authorization _instance = Authorization._privateConstructor();
@@ -15,22 +14,17 @@ class Authorization {
 
   var db = new DBHelper();
 
-  UserModel user;
-
+  late UserModel user;
 
   Future<bool> isLogged() async {
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
-    if(id != null){
-    } else {
-    }
-    return id != null;
+    return sharedPref.getString('id') != null;
   }
 
   Future<bool> isScreenerComplete() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String id = prefs.get('id');
-    if(id == null){
+    String? id = prefs.getString('id');
+    if (id == null) {
       return false;
     }
     var response = await db.getFormCompletionStatus();
@@ -44,9 +38,9 @@ class Authorization {
     }
   }
 
-  Future<UserModel> getUser() async {
+  /*Future<UserModel> getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String id = prefs.get('id');
 
-  }
+  }*/
 }

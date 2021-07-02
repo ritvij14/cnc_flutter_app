@@ -1,22 +1,22 @@
 import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 
 class ActivityModel {
-  String type;
-  int minutes;
-  int intensity;
-  int mets;
-  double metsPerHour;
-  int id;
-  int userId;
-  DateTime dateTime;
+  late String type;
+  late int minutes;
+  late int intensity;
+  late int mets;
+  late double metsPerHour;
+  late int id;
+  late int userId;
+  late DateTime dateTime;
 
   //intensity can be a scale, 1-3; 1 = light, 2 = moderate, 3 = vigorous
-  ActivityModel(String type, int minutes, int intensity, DateTime dateTime) {
-    this.type = type;
-    this.minutes = minutes;
-    this.intensity = intensity;
+  ActivityModel(this.type, this.minutes, this.intensity, this.dateTime) {
+    //this.type = type;
+    //this.minutes = minutes;
+    //this.intensity = intensity;
     this.mets = _calculateMets(type, minutes, intensity);
-    this.dateTime = dateTime;
+    //this.dateTime = dateTime;
   }
 
   ActivityModel.activityOptions(String type, int intensity) {
@@ -39,8 +39,8 @@ class ActivityModel {
 
   factory ActivityModel.fromJson(dynamic json) {
     ActivityModel activityModel = ActivityModel.emptyConstructor();
-    activityModel.id  = json['id'];
-    activityModel.userId  = json['userId'];
+    activityModel.id = json['id'];
+    activityModel.userId = json['userId'];
     activityModel.type = json['type'] as String;
     activityModel.minutes = int.parse(json['minutes'] as String);
     activityModel.intensity = int.parse(json['intensity'] as String);
@@ -48,11 +48,11 @@ class ActivityModel {
 
     return activityModel;
 
-        // (json['type'] as String).capitalize(),
-        // int.parse((json['minutes'] as String)),
-        // int.parse(json['intensity'] as String),
-        // symptomModel.id = json['id'],
-        // DateTime.parse(json['dateTime'] as String));
+    // (json['type'] as String).capitalize(),
+    // int.parse((json['minutes'] as String)),
+    // int.parse(json['intensity'] as String),
+    // symptomModel.id = json['id'],
+    // DateTime.parse(json['dateTime'] as String));
   }
 }
 
@@ -98,5 +98,4 @@ final List<ActivityModel> fitnessActivityMasterList = [
   ActivityModel.activityOptions("Volleyball", 2),
   ActivityModel.activityOptions("Water aerobics", 2),
   ActivityModel.activityOptions("Yoga (Gentle)", 1),
-
 ];
