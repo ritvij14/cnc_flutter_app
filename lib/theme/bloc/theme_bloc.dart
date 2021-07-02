@@ -5,11 +5,10 @@ import 'bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-//
   ThemeBloc()
       : super(
           ThemeState(
-            themeData: AppThemes.appThemeData[AppTheme.Default],
+            themeData: AppThemes.appThemeData[AppTheme.Default]!,
           ),
         );
 
@@ -17,7 +16,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   Stream<ThemeState> mapEventToState(ThemeEvent event) async* {
     if (event is ThemeEvent) {
       yield ThemeState(
-        themeData: AppThemes.appThemeData[event.appTheme],
+        themeData: AppThemes.appThemeData[event.appTheme]!,
       );
     }
   }
@@ -43,8 +42,8 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
 
   setTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String stringValue = prefs.getString('savedTheme');
-    if (stringValue.isNotEmpty) {
+    String? stringValue = prefs.getString('savedTheme');
+    if (stringValue != null) {
       return stringValue;
     } else {
       stringValue = "AppTheme.Default";
