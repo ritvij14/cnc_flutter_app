@@ -46,7 +46,7 @@ class NutritionApp extends StatelessWidget {
                   '/fitnessTracking': (context) => ActivityTrackingScreen(),
                   '/symptomTracking': (context) => SymptomTrackingScreen(),
                   '/metricTracking': (context) => MetricTrackingScreen(),
-                  '/goals': (context) => GoalsHomePage(),
+                  '/goals': (context) => GoalsHome(),
                   '/welcome': (context) => WelcomeScreen(),
                   '/inputActivity': (context) => ActivityTrackingInputScreen(),
                   '/inputSymptom': (context) => SymptomTrackingInputScreen(),

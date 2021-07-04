@@ -21,7 +21,7 @@ class ChooseActivityGoals extends StatelessWidget {
 }
 
 class ChooseDairyGoalsPage extends StatefulWidget {
-  ChooseDairyGoalsPage({Key key, this.title}) : super(key: key);
+  ChooseDairyGoalsPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -71,7 +71,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
             ),
           ),
           Container(
-            height: ((MediaQuery.of(context).size.height) / 2)-75,
+            height: ((MediaQuery.of(context).size.height) / 2) - 75,
             child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: weeklyGoalsModelList.length,
@@ -135,15 +135,15 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
     } else if (index == "Vegetables") {
       return Colors.green;
     } else if (index == "Grains") {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (index == "Protein") {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (index == "Dairy") {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (index == "Snacks and Condiments") {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (index == "Beverage") {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (index == "Physical Activity") {
       return Colors.grey;
     } else {
@@ -251,10 +251,10 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
   addSavedGoals(int index) async {
     int i = 1;
     int x = 0;
-    if (weeklySavedGoalsModelList.length > 0){
-      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
-    }
-    else{
+    if (weeklySavedGoalsModelList.length > 0) {
+      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length - 1].id +
+          1;
+    } else {
       x = 1;
     }
 

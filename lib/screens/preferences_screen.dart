@@ -23,7 +23,7 @@ class _PreferenceScreen extends State<PreferenceScreen> {
   }
 
   _getTheme() async {
-    String temp =      Preferences.getTheme().toString();
+    String temp = Preferences.getTheme().toString();
     if (temp == "AppTheme.Default") {
       isSwitched = false;
     } else {
@@ -33,10 +33,10 @@ class _PreferenceScreen extends State<PreferenceScreen> {
 
   _setTheme(String selectedTheme, BuildContext context) async {
     AppTheme userTheme;
-    if (selectedTheme == "AppTheme.Default") {
-      userTheme = AppTheme.Default;
-    } else if (selectedTheme == "AppTheme.DarkMode") {
+    if (selectedTheme == "AppTheme.DarkMode") {
       userTheme = AppTheme.DarkMode;
+    } else {
+      userTheme = AppTheme.Default;
     }
     // else if(selectedTheme =="AppTheme.PinkLight") {
     //   userTheme = AppTheme.PinkLight;
@@ -46,7 +46,7 @@ class _PreferenceScreen extends State<PreferenceScreen> {
     //   userTheme = AppTheme.TealLight;
     // }
 
-    context.bloc<ThemeBloc>().add(ThemeEvent(appTheme: userTheme));
+    context.read<ThemeBloc>().add(ThemeEvent(appTheme: userTheme));
     Preferences.saveTheme(userTheme);
   }
 
@@ -61,40 +61,39 @@ class _PreferenceScreen extends State<PreferenceScreen> {
         //   Text("Application Theme",
         //       // To show light text with the dark variants...
         //       style: TextStyle(color: Colors.white)),
-        child:  SwitchListTile(
-            title: Text('Enable Dark Theme',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text('Application is set to light theme by default'),
-            value: isSwitched,
-            onChanged: (bool value) {
-              setState(() {
-                isSwitched = value;
-                if (!value) {
-                  _setTheme("AppTheme.Default", context);
-                } else {
-                  _setTheme("AppTheme.DarkMode", context);
-                }
-
-              });
-            },
-          ),
-          // Switch(
-          //   value: isSwitched,
-          //   onChanged: (value) {
-          //     setState(() {
-          //       isSwitched = value;
-          //       if (!value) {
-          //         _setTheme("AppTheme.Default", context);
-          //       } else {
-          //         _setTheme("AppTheme.DarkMode", context);
-          //       }
-          //
-          //       print(isSwitched);
-          //     });
-          //   },
-            // activeTrackColor: Colors.lightGreenAccent,
-            // activeColor: Colors.green,
-          // ),
+        child: SwitchListTile(
+          title: Text('Enable Dark Theme',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('Application is set to light theme by default'),
+          value: isSwitched,
+          onChanged: (bool value) {
+            setState(() {
+              isSwitched = value;
+              if (!value) {
+                _setTheme("AppTheme.Default", context);
+              } else {
+                _setTheme("AppTheme.DarkMode", context);
+              }
+            });
+          },
+        ),
+        // Switch(
+        //   value: isSwitched,
+        //   onChanged: (value) {
+        //     setState(() {
+        //       isSwitched = value;
+        //       if (!value) {
+        //         _setTheme("AppTheme.Default", context);
+        //       } else {
+        //         _setTheme("AppTheme.DarkMode", context);
+        //       }
+        //
+        //       print(isSwitched);
+        //     });
+        //   },
+        // activeTrackColor: Colors.lightGreenAccent,
+        // activeColor: Colors.green,
+        // ),
         // ]),
       ),
     );

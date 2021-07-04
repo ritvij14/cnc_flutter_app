@@ -54,7 +54,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
                 "Historical Weight Chart",
                 style: TextStyle(
                   fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold,
                 ),
               )
             ],
@@ -448,7 +448,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
 
   Future<void> setSpots(int days) async {
     var sharedPref = await SharedPreferences.getInstance();
-    int id = int.parse(sharedPref.getString('id'));
+    int id = int.parse(sharedPref.getString('id')!);
     var response = await db.getMetricsForPastDays(id, days);
     List<MetricModel> metricModelList = (json.decode(response.body) as List)
         .map((data) => MetricModel.fromJson(data))

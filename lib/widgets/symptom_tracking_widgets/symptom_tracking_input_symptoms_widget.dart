@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../alerts.dart';
 
 class SymptomTrackingInputScreen extends StatefulWidget {
-  SymptomModel symptomModel = new SymptomModel.emptyConstructor();
+  final SymptomModel symptomModel = new SymptomModel.emptyConstructor();
 
   @override
   _SymptomTrackingInputScreenState createState() =>
@@ -57,7 +57,7 @@ class _SymptomTrackingInputScreenState
                         controller: dateCtl,
                         // initialValue: widget.symptomModel.dateTime.month.toString() + '/' + widget.symptomModel.dateTime.day.toString() + '/' + widget.symptomModel.dateTime.year.toString(),
                         onTap: () async {
-                          DateTime date = widget.symptomModel.dateTime;
+                          DateTime? date = widget.symptomModel.dateTime;
                           DateTime now = DateTime.now();
                           FocusScope.of(context).requestFocus(new FocusNode());
                           date = await showDatePicker(
@@ -67,8 +67,11 @@ class _SymptomTrackingInputScreenState
                                 DateTime(now.year, now.month, now.day - 1),
                             lastDate: DateTime.now(),
                           );
-                          dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
-                          widget.symptomModel.dateTime = date;
+                          if (date != null) {
+                            dateCtl.text =
+                                DateFormat('MM/dd/yyyy').format(date);
+                            widget.symptomModel.dateTime = date;
+                          }
                         },
                       ),
                     ),
@@ -308,7 +311,7 @@ class _SymptomTrackingInputScreenState
                       ),
                       onPressed: () async {
                         var sharedPref = await SharedPreferences.getInstance();
-                        String id = sharedPref.getString('id');
+                        String id = sharedPref.getString('id')!;
                         widget.symptomModel.userId = int.parse(id);
                         var x = db.saveNewSymptom(widget.symptomModel);
                         Navigator.pop(context, 'Saved Symptom(s)');

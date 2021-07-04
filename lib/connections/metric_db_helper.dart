@@ -34,6 +34,7 @@ class MetricDBHelper extends DBHelperBase {
           'dateTime': metricModel.dateTime.toIso8601String(),
           'userId': metricModel.userId.toString(),
         }));
+    return uriResponse;
   }
 
   Future<http.Response> getMetricsForPastDays(

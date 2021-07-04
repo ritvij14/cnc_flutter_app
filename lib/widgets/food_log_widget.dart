@@ -1,7 +1,5 @@
 // import 'dart:convert';
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
@@ -10,19 +8,15 @@ import 'package:cnc_flutter_app/screens/daily_nutrition_breakdown_screen.dart';
 import 'package:cnc_flutter_app/screens/edit_food_entry_screen.dart';
 
 // import 'package:cnc_flutter_app/screens/food_screen.dart';
-import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fraction/fraction.dart';
 
 class FoodLog extends StatefulWidget {
-  String selectedDate;
+  final String selectedDate;
 
-  FoodLog(String selectedDate) {
-    this.selectedDate = selectedDate;
-  }
+  FoodLog(this.selectedDate);
 
   @override
   _FoodLogState createState() => _FoodLogState(selectedDate);
@@ -32,9 +26,9 @@ class _FoodLogState extends State<FoodLog> {
   bool isLoading = false;
   List<Food> foods = [];
   List<FoodLogEntry> foodLogEntries = [];
-  String selectedDate;
+  late String selectedDate;
   DateTime entryTime = DateTime.now();
-  double tempPortion;
+  late double tempPortion;
 
   _FoodLogState(String key) {
     this.selectedDate = key;
@@ -216,30 +210,30 @@ class _FoodLogState extends State<FoodLog> {
 
   Color getColor(String category) {
     if (category == 'Vegetables and vegetable products') {
-      return Colors.green[700];
+      return Colors.green[700]!;
     } else if (category == 'Meat, fish, and poultry') {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (category == 'Beverages') {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (category == 'Desserts' ||
         category == 'Candy, sugar, and sweets') {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (category == 'Grain products') {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (category == 'Milk, cream, cheese, and related products') {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (category == 'Fats, oils, and nuts') {
-      return Colors.brown[600];
+      return Colors.brown[600]!;
     } else if (category == 'Eggs and related products') {
-      return Colors.yellow[200];
+      return Colors.yellow[200]!;
     } else if (category == 'Fruits and fruit products') {
       return Colors.red;
     } else if (category == 'Commercial entrees and dinners') {
       return Colors.black;
     } else if (category == 'Soups, gravy, and sauces') {
-      return Colors.deepOrange[400];
+      return Colors.deepOrange[400]!;
     }
-    return Colors.indigo[400];
+    return Colors.indigo[400]!;
   }
 
   showAlertDialog(

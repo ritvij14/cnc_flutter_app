@@ -19,7 +19,7 @@ final encrypter =
 final iv = encrypt.IV.fromLength(16);
 
 class LoginScreen extends StatelessWidget {
-  var db = new DBHelper();
+  final DBHelper db = DBHelper();
 
   // final privateKey = "MIIBOQIBAAJBAKWzaxbF6oAXQmF0Qufqy/YPGvSNvbI6p0J+9RCQjcnmt9JZdS5gjY4j/Lrr7NuoAkRb5hNxL9F5cOV8WyP+WM8CAwEAAQJAbVqaOv5Ew2IWQeCLYyjWkD3pySld3qjMx5qnutXbbTmPS/XHlQ5dt08tug4CoTcGvIvVA5ULablAuai0xCzbsQIhAOpPV1eFWsPkQlBsONPqEHgOt2ckyEFWDV3DVT6L1a0ZAiEAtQovPRc9TYWOwSQFCoSXQAkzJph3zGoBNKWfJrLeCicCIG5RPMYwOzPP3IkQ6xCbO3XLN/6QCtj4MwLaXOA95jTBAiAQ0UliG26ObQG932K4f2itgi1GQJOgYZiLE3edWLBXsQIgFsSLREPQd1O7aTvsOy5Fi6CQjHkhsqiO5WIdLzVw2RQ=";
   // final publicKey = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKWzaxbF6oAXQmF0Qufqy/YPGvSNvbI6p0J+9RCQjcnmt9JZdS5gjY4j/Lrr7NuoAkRb5hNxL9F5cOV8WyP+WM8CAwEAAQ==";
@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('email', '${data.name}');
 
-      return null;
+      return "login success";
     });
   }
 
@@ -62,7 +62,7 @@ class LoginScreen extends StatelessWidget {
       var response = await db.registerNewUser(userModel);
       String currentUserID = response.body;
       saveUserIDtoPref(currentUserID);
-      return null;
+      return "Registration success";
     });
   }
 
@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
       var response = await db.resetPassword(name);
 
       //Recover password logic end
-      return null;
+      return "Password recovery success";
     });
   }
 

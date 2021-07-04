@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class AccountPic extends StatelessWidget {
   const AccountPic({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -12,8 +12,8 @@ class AccountPic extends StatelessWidget {
       height: 115,
       width: 115,
       child: Stack(
+        clipBehavior: Clip.none,
         fit: StackFit.expand,
-        overflow: Overflow.visible,
         children: [
           CircleAvatar(
             radius: 50,
@@ -34,10 +34,9 @@ class AccountPic extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                   side: BorderSide(color: Theme.of(context).highlightColor),
                 ),
-                color:  Theme.of(context).accentColor,
+                color: Theme.of(context).accentColor,
                 onPressed: () {},
-                child:
-                SvgPicture.asset(
+                child: SvgPicture.asset(
                   "assets/icons/Camera Icon.svg",
                   color: Theme.of(context).highlightColor,
                   width: 22,

@@ -22,5 +22,6 @@ class WeeklyDBHelper extends DBHelperBase {
           'goalDescription': weeklyGoalsModel.goalDescription,
           'help_info': weeklyGoalsModel.helpInfo,
         }));
+    return uriResponse;
   }
 }

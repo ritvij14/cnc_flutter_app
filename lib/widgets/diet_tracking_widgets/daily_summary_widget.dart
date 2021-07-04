@@ -15,10 +15,10 @@ class DailySummaryWidget extends StatefulWidget {
 }
 
 class _DailySummaryWidgetState extends State<DailySummaryWidget> {
-  int dailyCalorieLimit;
-  int dailyProteinLimit;
-  int dailyCarbohydrateLimit;
-  int dailyFatLimit;
+  late int dailyCalorieLimit;
+  late int dailyProteinLimit;
+  late int dailyCarbohydrateLimit;
+  late int dailyFatLimit;
   int caloriesRemaining = 0;
   int proteinRatio = 0;
   int carbohydrateRatio = 0;
@@ -33,15 +33,16 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
   double carbohydratesInGrams = 0;
   String calorieMessage = "CALORIES LEFT";
   bool showGrams = false;
-  int userId;
+  late int userId;
   bool isLoading = false;
 
   List<FoodLogEntry> dailyFoodLogEntryList = [];
 
   @override
-  void initState(){
+  void initState() {
     dailyFoodLogEntryList.clear();
   }
+
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {
@@ -158,14 +159,16 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
     isLoading = false;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       builder: (context, projectSnap) {
         if (isLoading) {
           return Center(
-            child: CircularProgressIndicator(  valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),),
+            child: CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).buttonColor),
+            ),
           );
         } else {
           return Container(

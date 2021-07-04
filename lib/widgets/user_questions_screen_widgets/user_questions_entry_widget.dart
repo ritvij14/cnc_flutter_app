@@ -1,4 +1,3 @@
-import 'package:cnc_flutter_app/connections/database.dart' as DBHelper;
 import 'package:cnc_flutter_app/connections/database.dart';
 import 'package:cnc_flutter_app/models/user_question_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,13 +7,10 @@ import 'package:intl/intl.dart';
 import '../alerts.dart';
 
 class AddQuestionScreen extends StatefulWidget {
-  bool isEdit;
-  UserQuestion currentQuestion;
+  final bool isEdit;
+  final UserQuestion? currentQuestion;
 
-  AddQuestionScreen(bool isEdit, UserQuestion currentQuestion) {
-    this.isEdit = isEdit;
-    this.currentQuestion = currentQuestion;
-  }
+  AddQuestionScreen(this.isEdit, this.currentQuestion);
 
   @override
   _AddQuestionScreen createState() =>
@@ -22,13 +18,13 @@ class AddQuestionScreen extends StatefulWidget {
 }
 
 class _AddQuestionScreen extends State<AddQuestionScreen> {
-  bool isUpdate;
-  UserQuestion userQuestion;
+  late bool isUpdate;
+  late UserQuestion userQuestion;
   final TextEditingController _questionController = new TextEditingController();
   final TextEditingController _noteController = new TextEditingController();
-  String _userQuestion;
+  late String _userQuestion;
   String _userNote = "";
-  DateTime _createdDate;
+  late DateTime _createdDate;
 
   // bool _isAnswered;
   bool hasMadeEdit = false;
@@ -38,10 +34,10 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
     userQuestion = currentQuestion;
     if (userQuestion != null) {
       _questionController.text = userQuestion.question;
-      _noteController.text = userQuestion.question_notes;
+      _noteController.text = userQuestion.questionNotes;
       _userQuestion = userQuestion.question;
-      _userNote = userQuestion.question_notes;
-      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion.date_created);
+      _userNote = userQuestion.questionNotes;
+      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion.dateCreated);
       // if (userQuestion.is_answered == 1) {
       //   _isAnswered = true;
       // } else {
@@ -55,14 +51,14 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   @override
   void initState() {
     if (userQuestion != null) {
-      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion.date_created);
+      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion.dateCreated);
       // _createdDate =
       //     DateFormat("yyyy-MM-dd Hms").parse(userQuestion.date_created);
       _userQuestion = userQuestion.question;
       _questionController.text = userQuestion.question;
       if (_noteController.text != null || _noteController.text != "") {
-        _noteController.text = userQuestion.question_notes;
-        _userNote = userQuestion.question_notes;
+        _noteController.text = userQuestion.questionNotes;
+        _userNote = userQuestion.questionNotes;
       } else {
         _noteController.text = "";
         _userNote = "";
@@ -77,17 +73,17 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   }
 
   saveNewQuestion() async {
-    bool a = formKey.currentState.validate();
+    bool a = formKey.currentState!.validate();
 
     if (a) {
       var newUserQuestion = UserQuestion(
           id: 0,
-          user_id: 1,
+          userId: 1,
           question: _userQuestion,
-          question_notes: _userNote,
-          date_created: DateFormat.yMd().add_jm().format(DateTime.now()),
-          date_updated: DateFormat.yMd().add_jm().format(DateTime.now()),
-          is_answered: 0);
+          questionNotes: _userNote,
+          dateCreated: DateFormat.yMd().add_jm().format(DateTime.now()),
+          dateUpdated: DateFormat.yMd().add_jm().format(DateTime.now()),
+          isAnswered: 0);
 
       // date_created: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()),
       // date_updated: DateFormat("yyyy-MM-dd Hms").format(DateTime.now()));
@@ -98,11 +94,11 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   }
 
   updateQuestion() async {
-    bool a = formKey.currentState.validate();
+    bool a = formKey.currentState!.validate();
     if (a) {
       userQuestion.question = _userQuestion;
-      userQuestion.question_notes = _userNote;
-      userQuestion.date_updated =
+      userQuestion.questionNotes = _userNote;
+      userQuestion.dateUpdated =
           DateFormat.yMd().add_jm().format(DateTime.now());
       // userQuestion.date_updated =
       //     DateFormat("yyyy-MM-dd Hms").format(DateTime.now());
@@ -168,9 +164,9 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                             decoration: InputDecoration.collapsed(
                                 hintText: 'Type your question here'),
                             controller: _questionController,
-                            validator: (String value) {
-                              String input = value;
-                              if (input == null || input == "") {
+                            validator: (String? value) {
+                              //String input = value;
+                              if (value == null || value == "") {
                                 return 'Field Required';
                               }
                               return null;
@@ -208,7 +204,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                 hintText:
                                     'Add some supplementary questions or\nadditional notes here'),
                             controller: _noteController,
-                            validator: (String value) {
+                            validator: (String? value) {
                               return null;
                             },
                             onChanged: (String value) {

@@ -46,6 +46,7 @@ class ActivityDBHelper extends DBHelperBase {
           'dateTime': fitnessActivityModel.dateTime.toIso8601String(),
           'userId': fitnessActivityModel.userId.toString(),
         }));
+    return uriResponse;
   }
 
   Future<http.Response> updateExistingActivity(
@@ -61,6 +62,7 @@ class ActivityDBHelper extends DBHelperBase {
           'dateTime': activityModel.dateTime.toIso8601String(),
           'userId': activityModel.userId.toString(),
         }));
+    return uriResponse;
   }
 
   Future<http.Response> getDaysActivityList(

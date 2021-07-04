@@ -20,7 +20,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  List<Step> steps;
+  late List<Step> steps;
 
   List<String> _months = [
     'January',
@@ -45,14 +45,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   int _heightFeet = 0;
   int _heightInches = 0;
-  String dropDownFeet;
-  String dropDownInches;
+  late String dropDownFeet;
+  late String dropDownInches;
 
   int _weight = 0;
-  String dropDownGender;
+  late String dropDownGender;
   List<String> _genders = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
-  String dropDownRace;
+  late String dropDownRace;
   List<String> _races = [
     'American Indian or Alaska Native',
     'Asian',
@@ -63,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Unknown',
     'Prefer not to say',
   ];
-  String dropDownEthnicities;
+  late String dropDownEthnicities;
   List<String> _ethnicities = [
     'Hispanic or Latinx',
     'Non Hispanic or Latinx',
@@ -76,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Moderately Active',
     'Vigorously Active',
   ];
-  String dropDownActivity;
+  late String dropDownActivity;
 
   Map<String, bool> frequentIssues = {
     'Abdominal Pain': false,
@@ -88,7 +88,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Stoma Problems': false,
   };
 
-  String dropDownStage;
+  late String dropDownStage;
 
   bool _colorectal = false;
   bool _surgery = false;
@@ -109,7 +109,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Stage 4',
   ];
 
-  String dropDownDiagMonth;
+  late String dropDownDiagMonth;
   int _diagYear = 0;
   int _diagMonth = 0;
   bool _ostomy = false;
@@ -123,10 +123,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         scale: 1.5,
         child: new Checkbox(
             value: userConsent,
-            onChanged: (bool newValue) {
-              setState(() {
-                userConsent = newValue;
-              });
+            onChanged: (bool? newvalue) {
+              if (newvalue != null)
+                setState(() {
+                  userConsent = newvalue;
+                });
             }),
       ),
       Expanded(
@@ -160,10 +161,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       subtitle: Text(
           "You will be asked to fill out the following forms regarding you and your current health"),
       value: userOptIn,
-      onChanged: (newValue) {
-        setState(() {
-          userOptIn = newValue;
-        });
+      onChanged: (bool? newvalue) {
+        if (newvalue != null)
+          setState(() {
+            userOptIn = newvalue;
+          });
       },
       controlAffinity: ListTileControlAffinity.leading,
     );
@@ -179,14 +181,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: TextFormField(
             controller: dateCtl,
             decoration: InputDecoration(hintText: 'Select Date'),
-            validator: (value) {
-              if (value.isEmpty) {
+            validator: (String? value) {
+              if (value == null) {
                 return 'Date required';
               }
               return null;
             },
             onTap: () async {
-              DateTime date = DateTime.now();
+              DateTime? date = DateTime.now();
               FocusScope.of(context).requestFocus(new FocusNode());
               date = await showDatePicker(
                   context: context,
@@ -194,8 +196,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now());
 
-              dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
-              _dateTime = dateCtl.text;
+              if (date != null) {
+                dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
+                _dateTime = dateCtl.text;
+              }
             },
           ),
         ))
@@ -259,11 +263,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   value: dropDownFeet,
                   validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String Value) {
-                    setState(() {
-                      dropDownFeet = Value;
-                      _heightFeet = _feet.indexOf(Value) + 1;
-                    });
+                  onChanged: (String? value) {
+                    if (value != null)
+                      setState(() {
+                        dropDownFeet = value;
+                        _heightFeet = _feet.indexOf(value) + 1;
+                      });
                   },
                   items: _feet
                       .map((feet) =>
@@ -287,11 +292,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   value: dropDownInches,
                   validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String Value) {
-                    setState(() {
-                      dropDownInches = Value;
-                      _heightInches = _inches.indexOf(Value) + 1;
-                    });
+                  onChanged: (String? value) {
+                    if (value != null)
+                      setState(() {
+                        dropDownInches = value;
+                        _heightInches = _inches.indexOf(value) + 1;
+                      });
                   },
                   items: _inches
                       .map((inch) =>
@@ -308,17 +314,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
-      validator: (String value) {
-        int weight = int.tryParse(value);
-        if (weight == null) {
-          return 'Field Required';
-        } else if (weight <= 0) {
+      validator: (String? value) {
+        if (value == null) return 'Field Required';
+        int weight = int.tryParse(value)!;
+        if (weight <= 0) {
           return 'Weight must be greater than 0';
         }
         return null;
       },
-      onSaved: (String value) {
-        _weight = int.tryParse(value);
+      onSaved: (String? value) {
+        if (value != null) _weight = int.tryParse(value)!;
       },
     );
   }
@@ -332,10 +337,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           hintText: "Gender"),
       value: dropDownGender,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownGender = Value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownGender = value;
+          });
       },
       items: _genders
           .map((gender) =>
@@ -351,10 +357,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           labelText: 'Race', border: OutlineInputBorder(), hintText: "Race"),
       value: dropDownRace,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownRace = Value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownRace = value;
+          });
       },
       items: _races
           .map((race) => DropdownMenuItem(value: race, child: Text("$race")))
@@ -371,10 +378,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           hintText: "Ethnicity"),
       value: dropDownEthnicities,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownEthnicities = Value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownEthnicities = value;
+          });
       },
       items: _ethnicities
           .map((ethnicity) =>
@@ -391,10 +399,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           hintText: "Activity Level"),
       value: dropDownActivity,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownActivity = Value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownActivity = value;
+          });
       },
       items: _activity
           .map((actLevel) =>
@@ -415,10 +424,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           value: frequentIssues[key],
           activeColor: Theme.of(context).buttonColor,
           checkColor: Colors.white,
-          onChanged: (bool value) {
-            setState(() {
-              frequentIssues[key] = value;
-            });
+          onChanged: (bool? value) {
+            if (value != null)
+              setState(() {
+                frequentIssues[key] = value;
+              });
           },
         );
       }).toList(),
@@ -464,14 +474,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: ListTile(
                 title: const Text('Yes'),
                 leading: Radio(
-                  value: true,
-                  groupValue: _colorectal,
-                  onChanged: (value) {
-                    setState(() {
-                      _colorectal = value;
-                    });
-                  },
-                ),
+                    value: true,
+                    groupValue: _colorectal,
+                    onChanged: (bool? value) {
+                      if (value != null)
+                        setState(() {
+                          _colorectal = value;
+                        });
+                    }),
               ),
             ),
             Expanded(
@@ -480,10 +490,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 leading: Radio(
                   value: false,
                   groupValue: _colorectal,
-                  onChanged: (value) {
-                    setState(() {
-                      _colorectal = value;
-                    });
+                  onChanged: (bool? value) {
+                    if (value != null)
+                      setState(() {
+                        _colorectal = value;
+                      });
                   },
                 ),
               ),
@@ -500,10 +511,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           hintText: "Cancer Stage"),
       value: dropDownStage,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String value) {
-        setState(() {
-          dropDownStage = value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownStage = value;
+          });
       },
       items: _cancerStages
           .map((colStage) =>
@@ -522,11 +534,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ),
       value: dropDownDiagMonth,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownDiagMonth = Value;
-          _diagMonth = _months.indexOf(Value) + 1;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownDiagMonth = value;
+            _diagMonth = _months.indexOf(value) + 1;
+          });
       },
       items: _months
           .map((month) => DropdownMenuItem(value: month, child: Text("$month")))
@@ -542,15 +555,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
-      validator: (String value) {
-        int year = int.tryParse(value);
-        if (year == null || year <= 0) {
+      validator: (String? value) {
+        if (value == null) return null;
+        int year = int.tryParse(value)!;
+        if (year <= 0) {
           return 'Year must be greater than 0';
         }
-        return null;
       },
-      onSaved: (String value) {
-        _diagYear = int.tryParse(value);
+      onSaved: (String? value) {
+        if (value != null) _diagYear = int.tryParse(value)!;
       },
     );
   }
@@ -655,17 +668,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 value: treatmentType[key],
                 activeColor: Theme.of(context).buttonColor,
                 checkColor: Colors.white,
-                onChanged: (bool value) {
-                  setState(() {
-                    treatmentType[key] = value;
-                    if (key == 'Surgery') {
-                      if (_surgery) {
-                        _surgery = false;
-                      } else {
-                        _surgery = true;
+                onChanged: (bool? value) {
+                  if (value != null)
+                    setState(() {
+                      treatmentType[key] = value;
+                      if (key == 'Surgery') {
+                        if (_surgery) {
+                          _surgery = false;
+                        } else {
+                          _surgery = true;
+                        }
                       }
-                    }
-                  });
+                    });
                 },
               );
             }).toList(),
@@ -705,10 +719,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 leading: Radio(
                   value: true,
                   groupValue: _ostomy,
-                  onChanged: (value) {
-                    setState(() {
-                      _ostomy = value;
-                    });
+                  onChanged: (bool? value) {
+                    if (value != null)
+                      setState(() {
+                        _ostomy = value;
+                      });
                   },
                 ),
               ),
@@ -719,10 +734,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 leading: Radio(
                   value: false,
                   groupValue: _ostomy,
-                  onChanged: (value) {
-                    setState(() {
-                      _ostomy = value;
-                    });
+                  onChanged: (bool? value) {
+                    if (value != null)
+                      setState(() {
+                        _ostomy = value;
+                      });
                   },
                 ),
               ),
@@ -936,8 +952,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   next() {
     if (!userConsent) {
       _agreementAlert();
-    } else if (formKeys[currentStep].currentState.validate() && userOptIn) {
-      formKeys[currentStep].currentState.save();
+    } else if (formKeys[currentStep].currentState!.validate() && userOptIn) {
+      formKeys[currentStep].currentState!.save();
 
       if (currentStep + 1 != steps.length) {
         goTo(currentStep + 1);
@@ -962,7 +978,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   goTo(int step) {
-    if (!formKeys[currentStep].currentState.validate()) {
+    if (!formKeys[currentStep].currentState!.validate()) {
       _emptyFieldsAlert();
     } else if (userConsent) {
       setStepState(step);
@@ -1012,7 +1028,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     String gIIssues = "";
     for (var key in frequentIssues.keys) {
-      if (frequentIssues[key]) {
+      if (frequentIssues[key]!) {
         if (gIIssues == "") {
           gIIssues = key;
         } else {
@@ -1021,7 +1037,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       }
     }
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     // if (gIIssues == "") {
     //   gIIssues = "na";
     // }
@@ -1233,7 +1249,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             onStepTapped: (step) => goTo(step),
             onStepCancel: cancel,
             controlsBuilder: (BuildContext context,
-                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
               return Row(
                 children: <Widget>[
                   isLastStep

@@ -7,8 +7,7 @@ class EthnicityDropdownWidget extends StatefulWidget {
 }
 
 class _EthnicityDropdownWidget extends State<EthnicityDropdownWidget> {
-
-  String dropDownEthnicities;
+  late String dropDownEthnicities;
   List<String> _ethnicities = [
     'Not of Hispanic, Latino, or Spanish origin',
     'Mexican, Mexican Am., Chicano',
@@ -18,7 +17,6 @@ class _EthnicityDropdownWidget extends State<EthnicityDropdownWidget> {
     'Other Hispanic, Latino, or Spanish origin',
     'Prefer not to say',
   ];
-  
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +28,15 @@ class _EthnicityDropdownWidget extends State<EthnicityDropdownWidget> {
           hintText: "Ethnicity"),
       value: dropDownEthnicities,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownEthnicities = Value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownEthnicities = value;
+          });
       },
       items: _ethnicities
           .map((ethnicity) =>
-          DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
+              DropdownMenuItem(value: ethnicity, child: Text("$ethnicity")))
           .toList(),
     );
   }

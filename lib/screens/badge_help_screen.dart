@@ -20,7 +20,7 @@ class BadgeHelp extends StatelessWidget {
 }
 
 class BadgePage extends StatefulWidget {
-  BadgePage({Key key, this.title}) : super(key: key);
+  BadgePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -28,7 +28,7 @@ class BadgePage extends StatefulWidget {
 }
 
 class _BadgePageState extends State<BadgePage> {
-  SharedPreferences prefs;
+  late SharedPreferences prefs;
   var db = new WeeklyDBHelper();
   final db2 = WeeklySavedDBHelper();
 
@@ -58,12 +58,12 @@ class _BadgePageState extends State<BadgePage> {
   }
 
   Widget buildGoalView() {
-    return SingleChildScrollView( child:
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
+    return SingleChildScrollView(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
           Text(
             'Badges Explained',
             style: TextStyle(
@@ -99,11 +99,10 @@ class _BadgePageState extends State<BadgePage> {
               ],
             ),
           ),
-
           Container(
             padding: EdgeInsets.only(
                 top: 30.0, left: 15.0, right: 15.0, bottom: 10.0),
-            child:Text(
+            child: Text(
               'Reset Badge Category',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -112,50 +111,49 @@ class _BadgePageState extends State<BadgePage> {
               ),
             ),
           ),
-
-         ElevatedButton(
-              child: Text('Fruits'),
-              style: ElevatedButton.styleFrom(
-                primary: _getColor("Fruits"), // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: () {
-                prefs.setInt("fruit goals total", null);
-                prefs.setInt("fruitBadge1", null);
-                prefs.setInt("fruitBadge2", null);
-                prefs.setInt("fruitBadge3", null);
-                _showSnackBar(context, 'Reset Fruit Badges');
-              },
-            ),
           ElevatedButton(
-              child: Text('Vegetables'),
-              style: ElevatedButton.styleFrom(
-                primary: _getColor("Vegetables"),
-                // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: () {
-                prefs.setInt("vegetable goals total", null);
-                prefs.setInt("vegetableBadge1", null);
-                prefs.setInt("vegetableBadge2", null);
-                prefs.setInt("vegetableBadge3", null);
-                _showSnackBar(context, 'Reset Vegetable Badges');
-              },
+            child: Text('Fruits'),
+            style: ElevatedButton.styleFrom(
+              primary: _getColor("Fruits"), // background
+              onPrimary: Colors.white, // foreground
             ),
+            onPressed: () {
+              prefs.setInt("fruit goals total", 0);
+              prefs.setInt("fruitBadge1", 0);
+              prefs.setInt("fruitBadge2", 0);
+              prefs.setInt("fruitBadge3", 0);
+              _showSnackBar(context, 'Reset Fruit Badges');
+            },
+          ),
           ElevatedButton(
-              child: Text('Grains'),
-              style: ElevatedButton.styleFrom(
-                primary: _getColor("Grains"), // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: () {
-                prefs.setInt("grain goals total", null);
-                prefs.setInt("grainBadge1", null);
-                prefs.setInt("grainBadge2", null);
-                prefs.setInt("grainBadge3", null);
-                _showSnackBar(context, 'Reset Grain Badges');
-              },
+            child: Text('Vegetables'),
+            style: ElevatedButton.styleFrom(
+              primary: _getColor("Vegetables"),
+              // background
+              onPrimary: Colors.white, // foreground
             ),
+            onPressed: () {
+              prefs.setInt("vegetable goals total", 0);
+              prefs.setInt("vegetableBadge1", 0);
+              prefs.setInt("vegetableBadge2", 0);
+              prefs.setInt("vegetableBadge3", 0);
+              _showSnackBar(context, 'Reset Vegetable Badges');
+            },
+          ),
+          ElevatedButton(
+            child: Text('Grains'),
+            style: ElevatedButton.styleFrom(
+              primary: _getColor("Grains"), // background
+              onPrimary: Colors.white, // foreground
+            ),
+            onPressed: () {
+              prefs.setInt("grain goals total", 0);
+              prefs.setInt("grainBadge1", 0);
+              prefs.setInt("grainBadge2", 0);
+              prefs.setInt("grainBadge3", 0);
+              _showSnackBar(context, 'Reset Grain Badges');
+            },
+          ),
           ElevatedButton(
               child: Text('Protein'),
               style: ElevatedButton.styleFrom(
@@ -163,72 +161,70 @@ class _BadgePageState extends State<BadgePage> {
                 onPrimary: Colors.white, // foreground
               ),
               onPressed: () {
-                prefs.setInt("protein goals total", null);
-                prefs.setInt("proteinBadge1", null);
-                prefs.setInt("proteinBadge2", null);
-                prefs.setInt("proteinBadge3", null);
+                prefs.setInt("protein goals total", 0);
+                prefs.setInt("proteinBadge1", 0);
+                prefs.setInt("proteinBadge2", 0);
+                prefs.setInt("proteinBadge3", 0);
                 _showSnackBar(context, 'Reset Protein Badges');
-              }
-            ),
+              }),
           ElevatedButton(
-              child: Text('Dairy'),
-              style: ElevatedButton.styleFrom(
-                primary: _getColor("Dairy"), // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: () {
-                prefs.setInt("dairy goals total", null);
-                prefs.setInt("dairyBadge1", null);
-                prefs.setInt("dairyBadge2", null);
-                prefs.setInt("dairyBadge3", null);
-                _showSnackBar(context, 'Reset Dairy Badges');
-              },
+            child: Text('Dairy'),
+            style: ElevatedButton.styleFrom(
+              primary: _getColor("Dairy"), // background
+              onPrimary: Colors.white, // foreground
             ),
-
-         ElevatedButton(
-              child: Text('Snack'),
-              style: ElevatedButton.styleFrom(
-                primary: _getColor("Snacks and Condiments"),
-                // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: () {
-                prefs.setInt("snack goals total", null);
-                prefs.setInt("snackBadge1", null);
-                prefs.setInt("snackBadge2", null);
-                prefs.setInt("snackBadge3", null);
-                _showSnackBar(context, 'Reset Snack Badges');
-              },
-            ),
+            onPressed: () {
+              prefs.setInt("dairy goals total", 0);
+              prefs.setInt("dairyBadge1", 0);
+              prefs.setInt("dairyBadge2", 0);
+              prefs.setInt("dairyBadge3", 0);
+              _showSnackBar(context, 'Reset Dairy Badges');
+            },
+          ),
           ElevatedButton(
-              child: Text('Beverage'),
-              style: ElevatedButton.styleFrom(
-                primary: _getColor("Beverage"), // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: () {
-                prefs.setInt("beverage goals total", null);
-                prefs.setInt("beverageBadge1", null);
-                prefs.setInt("beverageBadge2", null);
-                prefs.setInt("beverageBadge3", null);
-                _showSnackBar(context, 'Reset Beverage Badges');
-              },
+            child: Text('Snack'),
+            style: ElevatedButton.styleFrom(
+              primary: _getColor("Snacks and Condiments"),
+              // background
+              onPrimary: Colors.white, // foreground
             ),
+            onPressed: () {
+              prefs.setInt("snack goals total", 0);
+              prefs.setInt("snackBadge1", 0);
+              prefs.setInt("snackBadge2", 0);
+              prefs.setInt("snackBadge3", 0);
+              _showSnackBar(context, 'Reset Snack Badges');
+            },
+          ),
           ElevatedButton(
-                child: Text('Activity'),
-                style: ElevatedButton.styleFrom(
-                  primary: _getColor("Physical Activity"),
-                  // background
-                  onPrimary: Colors.white, // foreground
-                ),
-                onPressed: () {
-                  prefs.setInt("activity goals total", null);
-                  prefs.setInt("activityBadge1", null);
-                  prefs.setInt("activityBadge2", null);
-                  prefs.setInt("activityBadge3", null);
-                  _showSnackBar(context, 'Reset Activity Badges');
-                },
-              )
+            child: Text('Beverage'),
+            style: ElevatedButton.styleFrom(
+              primary: _getColor("Beverage"), // background
+              onPrimary: Colors.white, // foreground
+            ),
+            onPressed: () {
+              prefs.setInt("beverage goals total", 0);
+              prefs.setInt("beverageBadge1", 0);
+              prefs.setInt("beverageBadge2", 0);
+              prefs.setInt("beverageBadge3", 0);
+              _showSnackBar(context, 'Reset Beverage Badges');
+            },
+          ),
+          ElevatedButton(
+            child: Text('Activity'),
+            style: ElevatedButton.styleFrom(
+              primary: _getColor("Physical Activity"),
+              // background
+              onPrimary: Colors.white, // foreground
+            ),
+            onPressed: () {
+              prefs.setInt("activity goals total", 0);
+              prefs.setInt("activityBadge1", 0);
+              prefs.setInt("activityBadge2", 0);
+              prefs.setInt("activityBadge3", 0);
+              _showSnackBar(context, 'Reset Activity Badges');
+            },
+          )
         ]));
   }
 
@@ -257,15 +253,15 @@ class _BadgePageState extends State<BadgePage> {
     } else if (index == "Vegetables") {
       return Colors.green;
     } else if (index == "Grains") {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (index == "Protein") {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (index == "Dairy") {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (index == "Snacks and Condiments") {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (index == "Beverage") {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (index == "Physical Activity") {
       return Colors.grey;
     } else {

@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileMenu extends StatelessWidget {
-
-
   const ProfileMenu({
-    Key key,
-    @required this.text,
-    @required this.icon,
-    this.press,
-
+    Key? key,
+    required this.text,
+    required this.icon,
+    required this.press,
   }) : super(key: key);
 
   final String text, icon;
@@ -27,14 +24,21 @@ class ProfileMenu extends StatelessWidget {
         child: Row(
           children: [
             SvgPicture.asset(
-             icon,
+              icon,
               color: Theme.of(context).highlightColor,
               width: 22,
             ),
             SizedBox(width: 20),
-            Expanded(child: Text(text, style: TextStyle(
-              color: Theme.of(context).highlightColor, fontSize: 16.0,))),
-            Icon(Icons.arrow_forward_ios,   color: Theme.of(context).highlightColor,),
+            Expanded(
+                child: Text(text,
+                    style: TextStyle(
+                      color: Theme.of(context).highlightColor,
+                      fontSize: 16.0,
+                    ))),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Theme.of(context).highlightColor,
+            ),
           ],
         ),
       ),

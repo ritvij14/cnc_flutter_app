@@ -64,6 +64,7 @@ class SymptomDBHelper extends DBHelper {
           'dateTime': symptomModel.dateTime.toIso8601String(),
           'userId': symptomModel.userId.toString(),
         }));
+    return uriResponse;
   }
 
   Future<http.Response> getDaySymptomList(int userId) async {

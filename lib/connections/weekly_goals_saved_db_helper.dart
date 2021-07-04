@@ -15,7 +15,7 @@ class WeeklySavedDBHelper extends DBHelperBase {
 
   Future<http.Response> getWeeklySavedGoalsByUserID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/weekly_goals_saved/all/$userId';
     var queryParameters = {
       'userId': userId.toString(),
@@ -34,7 +34,7 @@ class WeeklySavedDBHelper extends DBHelperBase {
   Future<http.Response> saveWeeklySavedGoal(
       WeeklySavedGoalsModel weeklySavedGoalsModel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/weekly_goals_saved/add/';
     var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
@@ -45,6 +45,7 @@ class WeeklySavedDBHelper extends DBHelperBase {
           'help_info': weeklySavedGoalsModel.helpInfo,
           'userId': userId,
         }));
+    return uriResponse;
   }
 
   Future<http.Response> deleteWeeklyGoalsSavedByID(int id) async {

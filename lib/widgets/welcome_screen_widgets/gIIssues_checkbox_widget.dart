@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 class GIIssuesCheckboxWidget extends StatefulWidget {
   final Map<String, bool> frequentIssues;
 
-  const GIIssuesCheckboxWidget({Key key, this.frequentIssues}) : super(key: key);
-
+  const GIIssuesCheckboxWidget({Key? key, required this.frequentIssues})
+      : super(key: key);
 
   @override
   _GIIssuesCheckboxWidget createState() => _GIIssuesCheckboxWidget();
 }
 
 class _GIIssuesCheckboxWidget extends State<GIIssuesCheckboxWidget> {
-  Map<String, bool> checkedFrequentIssues;
+  late Map<String, bool> checkedFrequentIssues;
 
   Widget _buildGICheckBoxes(BuildContext context) {
     return ListView(
@@ -25,10 +25,11 @@ class _GIIssuesCheckboxWidget extends State<GIIssuesCheckboxWidget> {
           value: widget.frequentIssues[key],
           activeColor: Theme.of(context).buttonColor,
           checkColor: Colors.white,
-          onChanged: (bool value) {
-            setState(() {
-              checkedFrequentIssues[key] = value;
-            });
+          onChanged: (bool? value) {
+            if (value != null)
+              setState(() {
+                checkedFrequentIssues[key] = value;
+              });
           },
         );
       }).toList(),

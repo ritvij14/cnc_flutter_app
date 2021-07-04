@@ -40,7 +40,7 @@ class DBHelper extends DBHelperBase {
 
   Future<bool> getFormCompletionStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/formstatus/' + userId;
     http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
 
@@ -61,7 +61,7 @@ class DBHelper extends DBHelperBase {
 
   Future<http.Response> getUserFrequentFoods() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/frequent';
     http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
@@ -69,7 +69,7 @@ class DBHelper extends DBHelperBase {
 
   Future<http.Response> getUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/' + userId + '/get';
     http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
@@ -81,7 +81,7 @@ class DBHelper extends DBHelperBase {
     int carbohydratePercent,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/profile/ratios';
     var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
@@ -96,7 +96,7 @@ class DBHelper extends DBHelperBase {
 
   Future<http.Response> updateWeight(MetricModel metricModel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/$userId/update/weight/';
     var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
@@ -104,6 +104,7 @@ class DBHelper extends DBHelperBase {
           'weight': metricModel.weight.toString(),
           'dateTime': metricModel.dateTime.toIso8601String(),
         }));
+    return uriResponse;
   }
 
   Future<http.Response> saveFormInfo(
@@ -120,7 +121,7 @@ class DBHelper extends DBHelperBase {
       String lastDiagDate,
       String cancerTreatment) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/form/save/';
     var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
@@ -152,7 +153,7 @@ class DBHelper extends DBHelperBase {
     String activityLevel,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/form/update/';
     var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
@@ -174,7 +175,7 @@ class DBHelper extends DBHelperBase {
     String activityLevel,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/form/update/basic';
     var response = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
@@ -219,7 +220,7 @@ class DBHelper extends DBHelperBase {
 
   Future<http.Response> getFoodLog(date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/' + date;
     http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
@@ -235,7 +236,7 @@ class DBHelper extends DBHelperBase {
 
   Future<http.Response> deleteUserGiIssues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/' + userId + '/delete/issues/';
     http.Response response =
         await http.delete(Uri.parse(requestUrl), headers: {});
@@ -245,7 +246,7 @@ class DBHelper extends DBHelperBase {
   Future<http.Response> saveNewFoodLogEntry(
       entryTime, date, foodId, portion) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/foodlog/save/';
     var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
@@ -256,6 +257,7 @@ class DBHelper extends DBHelperBase {
           'foodId': foodId,
           'portion': portion,
         }));
+    return uriResponse;
   }
 
   Future<http.Response> updateFoodLogEntry(id, entryTime, portion) async {
@@ -267,5 +269,6 @@ class DBHelper extends DBHelperBase {
           'entryTime': entryTime,
           'portion': portion,
         }));
+    return uriResponse;
   }
 }

@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:cnc_flutter_app/models/food_log_entry_model.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fraction/fraction.dart';
 
 class DailyNutritionBreakdown extends StatefulWidget {
-  List<FoodLogEntry> dailyFoodLogEntryList;
+  final List<FoodLogEntry> dailyFoodLogEntryList;
 
-  DailyNutritionBreakdown(List<FoodLogEntry> dailyFoodLogEntryList) {
-    this.dailyFoodLogEntryList = dailyFoodLogEntryList;
-  }
+  DailyNutritionBreakdown(this.dailyFoodLogEntryList);
 
   @override
   _DailyNutritionBreakdown createState() =>
@@ -19,7 +14,7 @@ class DailyNutritionBreakdown extends StatefulWidget {
 }
 
 class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
-  List<FoodLogEntry> dailyFoodLogEntryList;
+  late List<FoodLogEntry> dailyFoodLogEntryList;
 
   double kcal = 0;
   double proteinInGrams = 0;

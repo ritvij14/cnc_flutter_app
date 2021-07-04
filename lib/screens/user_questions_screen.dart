@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class UserQuestionsScreen extends StatefulWidget {
-  List<UserQuestion> userQuestions = [];
+  final List<UserQuestion> userQuestions = [];
 
   @override
   _UserQuestionsScreenState createState() => _UserQuestionsScreenState();
@@ -72,19 +72,17 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
                       // return UserQuestionsListTile(widget.userQuestions[index]);
                       return ListTile(
                         contentPadding: EdgeInsets.fromLTRB(10, 10, 15, 10),
-                        leading:  widget.userQuestions[index].is_answered == 0 ?Icon(  Icons.help_outline, color: Colors.red) : Icon(  Icons.done_outline, color: Colors.green),
+                        leading: widget.userQuestions[index].isAnswered == 0
+                            ? Icon(Icons.help_outline, color: Colors.red)
+                            : Icon(Icons.done_outline, color: Colors.green),
                         title: Text(
                           widget.userQuestions[index].question,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        subtitle: widget
-                                        .userQuestions[index].question_notes ==
+                        subtitle: widget.userQuestions[index].questionNotes ==
                                     "" ||
-                                widget.userQuestions[index].question_notes ==
-                                    null ||
-                                widget.userQuestions[index].question_notes ==
-                                    " "
+                                widget.userQuestions[index].questionNotes == " "
                             ? Column(mainAxisSize: MainAxisSize.min, children: <
                                 Widget>[
                                 SizedBox(height: 5),
@@ -104,8 +102,8 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
                                 Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                        widget.userQuestions[index]
-                                            .question_notes,
+                                        widget
+                                            .userQuestions[index].questionNotes,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis)),
                                 SizedBox(height: 5),
@@ -130,7 +128,7 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
                               _deleteDialog(
                                   widget.userQuestions[index].question,
                                   widget.userQuestions[index].id);
-                            } else  if (value == 2){
+                            } else if (value == 2) {
                               updateAnswered(widget.userQuestions[index]);
                             }
                           },
@@ -163,7 +161,7 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
                             PopupMenuItem(
                               child: Row(
                                 children: [
-                                  widget.userQuestions[index].is_answered == 0
+                                  widget.userQuestions[index].isAnswered == 0
                                       ? Text(
                                           "Mark as answered",
                                         )
@@ -210,8 +208,8 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
                       ),
                   value: dropDownSort,
                   validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String value) {
-                    dropDownSort = value;
+                  onChanged: (String? value) {
+                    if (value != null) dropDownSort = value;
                     refresh(context);
                   },
                   items: _sorts
@@ -226,14 +224,15 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
     var userQuestionsFromDB = await dbp.getAllUserQuestions(1);
     if (userQuestionsFromDB != null) {
       for (int i = 0; i < userQuestionsFromDB.length; i++) {
-        UserQuestion userQuestion = new UserQuestion();
-        userQuestion.id = userQuestionsFromDB[i]['id'];
+        UserQuestion userQuestion =
+            UserQuestion.fromMap(userQuestionsFromDB[i]);
+        /*userQuestion.id = userQuestionsFromDB[i]['id'];
         userQuestion.question = userQuestionsFromDB[i]['question'];
         userQuestion.question_notes = userQuestionsFromDB[i]['question_notes'];
         userQuestion.date_created = userQuestionsFromDB[i]['date_created'];
         // getDate(userQuestionsFromDB[i]['date_created']);
         userQuestion.date_updated = userQuestionsFromDB[i]['date_updated'];
-        userQuestion.is_answered =userQuestionsFromDB[i]['is_answered'];
+        userQuestion.is_answered = userQuestionsFromDB[i]['is_answered'];*/
         widget.userQuestions.add(userQuestion);
       }
     }
@@ -241,37 +240,37 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
     if (dropDownSort == 'Date Added: new to old') {
       widget.userQuestions.sort((a, b) => DateFormat.yMd()
           .add_jm()
-          .parse(b.date_created)
-          .compareTo(DateFormat.yMd().add_jm().parse(a.date_created)));
+          .parse(b.dateCreated)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.dateCreated)));
     } else if (dropDownSort == 'Date Added: old to new') {
       widget.userQuestions.sort((a, b) => DateFormat.yMd()
           .add_jm()
-          .parse(a.date_created)
-          .compareTo(DateFormat.yMd().add_jm().parse(b.date_created)));
+          .parse(a.dateCreated)
+          .compareTo(DateFormat.yMd().add_jm().parse(b.dateCreated)));
     } else if (dropDownSort == 'Date Updated: new to old') {
       widget.userQuestions.sort((a, b) => DateFormat.yMd()
           .add_jm()
-          .parse(b.date_updated)
-          .compareTo(DateFormat.yMd().add_jm().parse(a.date_updated)));
+          .parse(b.dateUpdated)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.dateUpdated)));
     } else if (dropDownSort == 'Date Updated: old to new') {
       widget.userQuestions.sort((a, b) => DateFormat.yMd()
           .add_jm()
-          .parse(a.date_updated)
-          .compareTo(DateFormat.yMd().add_jm().parse(b.date_updated)));
+          .parse(a.dateUpdated)
+          .compareTo(DateFormat.yMd().add_jm().parse(b.dateUpdated)));
     } else if (dropDownSort == 'Answered to unanswered') {
       widget.userQuestions.sort((a, b) => DateFormat.yMd()
           .add_jm()
-          .parse(b.date_updated)
-          .compareTo(DateFormat.yMd().add_jm().parse(a.date_updated)));
-      widget.userQuestions.sort((a, b) => b.is_answered.toString()
-          .compareTo(a.is_answered.toString()));
-    }else if (dropDownSort == 'Unanswered to answered') {
+          .parse(b.dateUpdated)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.dateUpdated)));
+      widget.userQuestions.sort(
+          (a, b) => b.isAnswered.toString().compareTo(a.isAnswered.toString()));
+    } else if (dropDownSort == 'Unanswered to answered') {
       widget.userQuestions.sort((a, b) => DateFormat.yMd()
           .add_jm()
-          .parse(b.date_updated)
-          .compareTo(DateFormat.yMd().add_jm().parse(a.date_updated)));
-      widget.userQuestions.sort((a,b) => a.is_answered.toString()
-          .compareTo(b.is_answered.toString()));
+          .parse(b.dateUpdated)
+          .compareTo(DateFormat.yMd().add_jm().parse(a.dateUpdated)));
+      widget.userQuestions.sort(
+          (a, b) => a.isAnswered.toString().compareTo(b.isAnswered.toString()));
     }
   }
 
@@ -279,16 +278,21 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
     await showDialog<String>(
         context: context,
         builder: (context) => new AlertDialog(
-          title: Text("Delete Entry"),
-          content: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: 'Are you sure you would like to delete this question?:\n\n',),
-                TextSpan(text:  "\"" + question + "\"", style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text:  '\n\nThis action cannot be undone.')
-              ],
-            ),
-          ),
+              title: Text("Delete Entry"),
+              content: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                          'Are you sure you would like to delete this question?:\n\n',
+                    ),
+                    TextSpan(
+                        text: "\"" + question + "\"",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '\n\nThis action cannot be undone.')
+                  ],
+                ),
+              ),
               actions: [
                 new FlatButton(
                     child: const Text(
@@ -313,12 +317,14 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
   }
 
   getDate(UserQuestion userQuestion) {
-    if (userQuestion.date_updated != userQuestion.date_created){
-      DateTime dTime = DateFormat.yMd().add_jm().parse(userQuestion.date_updated);
+    if (userQuestion.dateUpdated != userQuestion.dateCreated) {
+      DateTime dTime =
+          DateFormat.yMd().add_jm().parse(userQuestion.dateUpdated);
       var outputFormat = DateFormat.yMd().add_jm();
       return "Last updated: " + outputFormat.format(dTime).toString();
-    }else{
-      DateTime dTime = DateFormat.yMd().add_jm().parse(userQuestion.date_created);
+    } else {
+      DateTime dTime =
+          DateFormat.yMd().add_jm().parse(userQuestion.dateCreated);
       var outputFormat = DateFormat.yMd().add_jm();
       return outputFormat.format(dTime).toString();
     }
@@ -335,7 +341,8 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
   }
 
   updateAnswered(userQuestion) async {
-    userQuestion.date_updated = DateFormat.yMd().add_jm().format(DateTime.now());
+    userQuestion.date_updated =
+        DateFormat.yMd().add_jm().format(DateTime.now());
     if (userQuestion.is_answered == 0) {
       userQuestion.is_answered = 1;
     } else {

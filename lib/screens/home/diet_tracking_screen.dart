@@ -1,4 +1,3 @@
-
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/widgets/food_log_widget.dart';
@@ -8,17 +7,15 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:scrolling_day_calendar/scrolling_day_calendar.dart';
 
-
 class DietTrackingScreen extends StatefulWidget {
   @override
   _DietTrackingScreenState createState() => _DietTrackingScreenState();
 }
 
 class _DietTrackingScreenState extends State<DietTrackingScreen> {
+  Widget _pageItems = Text("Inital value");
   update(BuildContext context) {
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   void rebuildAllChildren(BuildContext context) {
@@ -29,6 +26,7 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
 
     (context as Element).visitChildren(rebuild);
   }
+
   var db = new DBHelper();
   List<Food> foodList = [];
 
@@ -38,32 +36,28 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
   String widgetKeyFormat = "yyyy-MM-dd";
   Map<String, Widget> widgets = Map();
 
-
   @override
   Widget build(BuildContext context) {
     String key = selectedDate.toString().split(" ")[0];
     widgets.putIfAbsent(key, () => FoodLog(key));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Diet Tracking"),
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    showSearch(
-                        context: context,
-                        delegate: FoodSearch(key))
-                        .then((value) => rebuildAllChildren(context));
-                  },
-                  child: Icon(
-                    Icons.add,
-                    // size: 26.0,
-                  ),
-                )),
-          ]),
+      appBar: AppBar(title: Text("Diet Tracking"), actions: <Widget>[
+        Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                showSearch(context: context, delegate: FoodSearch(key))
+                    .then((value) => rebuildAllChildren(context));
+              },
+              child: Icon(
+                Icons.add,
+                // size: 26.0,
+              ),
+            )),
+      ]),
       body: ScrollingDayCalendar(
+        pageItems: _pageItems,
         startDate: startDate,
         endDate: endDate,
         selectedDate: selectedDate,
@@ -87,11 +81,9 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
         widgets: widgets,
         widgetKeyFormat: widgetKeyFormat,
         noItemsWidget: Center(
-          child: Text(
-              ""), // add buttons etc here to add new items for date
+          child: Text(""), // add buttons etc here to add new items for date
         ),
       ),
     );
   }
-
 }

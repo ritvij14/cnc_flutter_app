@@ -55,12 +55,12 @@ class DBProvider {
         " VALUES (?,?,?,?,?,?,?)",
         [
           id,
-          newUserQuestion.user_id,
+          newUserQuestion.userId,
           newUserQuestion.question,
-          newUserQuestion.question_notes,
-          newUserQuestion.date_created,
-          newUserQuestion.date_updated,
-          newUserQuestion.is_answered
+          newUserQuestion.questionNotes,
+          newUserQuestion.dateCreated,
+          newUserQuestion.dateUpdated,
+          newUserQuestion.isAnswered
         ]);
 
     getAllUserQuestions(1);
@@ -76,8 +76,8 @@ class DBProvider {
     WHERE id = ?
     ''', [
       updatedUserQuestion.question,
-      updatedUserQuestion.question_notes,
-      updatedUserQuestion.date_updated,
+      updatedUserQuestion.questionNotes,
+      updatedUserQuestion.dateUpdated,
       updatedUserQuestion.id
     ]);
     // var res = await db.update("user_questions", updatedUserQuestion.toMap(),
@@ -103,8 +103,8 @@ class DBProvider {
     SET  date_updated = ?, is_answered = ?
     WHERE id = ?
     ''', [
-      updatedUserQuestion.date_updated,
-      updatedUserQuestion.is_answered,
+      updatedUserQuestion.dateUpdated,
+      updatedUserQuestion.isAnswered,
       updatedUserQuestion.id
     ]);
   }

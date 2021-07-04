@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.pushNamed(context, '/profile')
                   .then((value) => print("okay"));
-                  // rebuildAllChildren(context));
+              // rebuildAllChildren(context));
             },
           )
         ],
@@ -82,10 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputSymptom')
                     .then((value) => setState(() {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(SnackBar(content: Text("$value")));
-                }));
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
                 await getDailySymptom();
                 // rebuildAllChildren(context);
                 refresh();
@@ -96,10 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () async {
                 await Navigator.pushNamed(context, '/inputMetric')
                     .then((value) => setState(() {
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(SnackBar(content: Text("$value")));
-                }));
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(SnackBar(content: Text("$value")));
+                        }));
                 await getDailyWeight();
                 rebuildAllChildren(context);
                 refresh();
@@ -124,21 +124,21 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Log Food',
               onTap: () async {
                 await showSearch(
-                    context: context,
-                    delegate: FoodSearch(DateTime.now().toString()))
+                        context: context,
+                        delegate: FoodSearch(DateTime.now().toString()))
                     .then((value) => setState(() {
-                  if (value.isNotEmpty) {
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(SnackBar(content: Text("$value")));
-                  }
+                          if (value != null) {
+                            ScaffoldMessenger.of(context)
+                              ..removeCurrentSnackBar()
+                              ..showSnackBar(SnackBar(content: Text("$value")));
+                          }
 
-                  // ScaffoldMessenger.of(context)
-                  //   ..removeCurrentSnackBar()
-                  //   ..showSnackBar(SnackBar(content: Text("$value")));
-                  rebuildAllChildren(context);
-                  refresh();
-                }));
+                          // ScaffoldMessenger.of(context)
+                          //   ..removeCurrentSnackBar()
+                          //   ..showSnackBar(SnackBar(content: Text("$value")));
+                          rebuildAllChildren(context);
+                          refresh();
+                        }));
 
                 // onTap: () {
                 //   showSearch(
@@ -147,7 +147,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 //       .then((value) => rebuildAllChildren(context));
                 // }),
               }),
-
 
           // SpeedDialChild(
           //     child: Icon(MdiIcons.abTesting),
@@ -427,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getDailyActivity() async {
     ActivityDBHelper db = new ActivityDBHelper();
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     var response = await db.getDayActivityList(int.parse(id));
     List<ActivityModel> newActivityList = (json.decode(response.body) as List)
         .map((data) => ActivityModel.fromJson(data))
@@ -438,7 +437,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getDailyWeight() async {
     MetricDBHelper db = new MetricDBHelper();
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     var response = await db.getDayMetricList(int.parse(id));
     List<MetricModel> newMetricList = (json.decode(response.body) as List)
         .map((data) => MetricModel.fromJson(data))
@@ -449,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getDailySymptom() async {
     SymptomDBHelper db = new SymptomDBHelper();
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     var response = await db.getDaySymptomList(int.parse(id));
     List<SymptomModel> newSymptomList = (json.decode(response.body) as List)
         .map((data) => SymptomModel.fromJson(data))

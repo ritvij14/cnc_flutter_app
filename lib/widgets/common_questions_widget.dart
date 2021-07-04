@@ -2,14 +2,12 @@ import 'package:cnc_flutter_app/screens/common_questions_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-
 class CommonQuestionsCard extends StatelessWidget {
-  CommonQuestionsCard({Key key}) : super(key: key);
+  CommonQuestionsCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Card(
+    return Card(
       shadowColor: Colors.black.withOpacity(.60),
       elevation: 8,
       clipBehavior: Clip.antiAlias,
@@ -22,7 +20,8 @@ class CommonQuestionsCard extends StatelessWidget {
           // Navigate to the PreferencePage
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => CQHomePage(),
-          ));},
+          ));
+        },
         child: Container(
           color: Theme.of(context).accentColor,
           // decoration: BoxDecoration(
@@ -39,7 +38,7 @@ class CommonQuestionsCard extends StatelessWidget {
               Text(
                 'Common Questions',
                 style: TextStyle(
-                  fontSize:25,
+                  fontSize: 25,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -57,6 +56,5 @@ class CommonQuestionsCard extends StatelessWidget {
         ),
       ),
     );
-
   }
 }

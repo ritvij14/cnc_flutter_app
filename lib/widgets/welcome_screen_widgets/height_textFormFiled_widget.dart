@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
 
-
 class HeightFormWidget extends StatefulWidget {
   @override
   _HeightFormWidget createState() => _HeightFormWidget();
 }
 
 class _HeightFormWidget extends State<HeightFormWidget> {
-  int _heightFeet;
-  int _heightInches;
-  Widget heightFeet;
-  Widget heightInches;
+  late int _heightFeet;
+  late int _heightInches;
+  late Widget heightFeet;
+  late Widget heightInches;
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-    child: Column(
-    mainAxisSize: MainAxisSize.min,
-    children: <Widget>[
+    return Container(
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       Align(
         alignment: Alignment.centerLeft,
         child: Container(
-          child: Text("Please enter your height:",
-              style: TextStyle(fontSize: 18)),
+          child:
+              Text("Please enter your height:", style: TextStyle(fontSize: 18)),
         ),
       ),
       SizedBox(height: 5),
-     _buildHeightFeet(),
+      _buildHeightFeet(),
       SizedBox(height: 10),
       _buildHeightInches(),
     ]));
   }
-
 
   Widget _buildHeightFeet() {
     return TextFormField(
@@ -41,17 +37,16 @@ class _HeightFormWidget extends State<HeightFormWidget> {
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
-      validator: (String value) {
-        int height = int.tryParse(value);
-        if (height == null) {
-          return "Field Required";
-        } else if (height <= 0) {
+      validator: (value) {
+        if (value == null) return "Field Required";
+        int height = int.tryParse(value)!;
+        if (height <= 0) {
           return 'Height must be greater than 0';
         }
         return null;
       },
-      onSaved: (String value) {
-        _heightFeet = int.tryParse(value);
+      onSaved: (value) {
+        if (value != null) _heightFeet = int.tryParse(value)!;
       },
     );
   }
@@ -64,17 +59,16 @@ class _HeightFormWidget extends State<HeightFormWidget> {
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
-      validator: (String value) {
-        int inches = int.tryParse(value);
-        if (inches == null) {
-          return null;
-        } else if (inches >= 12) {
+      validator: (value) {
+        if (value == null) return null;
+        int inches = int.tryParse(value)!;
+        if (inches >= 12) {
           return 'Inches must be less than 12';
         }
         return null;
       },
-      onSaved: (String value) {
-        _heightInches = int.tryParse(value);
+      onSaved: (value) {
+        if (value != null) _heightInches = int.tryParse(value)!;
       },
     );
   }

@@ -30,7 +30,7 @@ class ChooseWeeklyGoals extends StatelessWidget {
 }
 
 class ChooseGoalsPage extends StatefulWidget {
-  ChooseGoalsPage({Key key, this.title}) : super(key: key);
+  ChooseGoalsPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -67,7 +67,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            color:  Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColor,
             child: ExpansionTile(
               title: Text(
                 "Chosen Goals",
@@ -114,11 +114,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseFruitGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseFruitGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -145,11 +144,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseVegetableGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseVegetableGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -176,11 +174,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseGrainGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseGrainGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -207,11 +204,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseProteinGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseProteinGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -238,11 +234,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseDairyGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseDairyGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -269,11 +264,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseSnackGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseSnackGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -300,11 +294,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseBeverageGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseBeverageGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -331,11 +324,10 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
                     ),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(
-                          new MaterialPageRoute(
-                            builder: (_) =>
-                                ChooseActivityGoals(),
-                          )).then((value) => update(context));
+                          .push(new MaterialPageRoute(
+                            builder: (_) => ChooseActivityGoals(),
+                          ))
+                          .then((value) => update(context));
                     },
                   ),
                 ]),
@@ -370,15 +362,15 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
     } else if (index == "Vegetables") {
       return Colors.green;
     } else if (index == "Grains") {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (index == "Protein") {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (index == "Dairy") {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (index == "Snacks and Condiments") {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (index == "Beverage") {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (index == "Physical Activity") {
       return Colors.grey;
     } else {
@@ -388,7 +380,7 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
 
   Widget _buildEmpty() {
     return Container(color: Colors.white // This is optional
-    );
+        );
   }
 
   Widget _buildListView(int index) {
@@ -396,7 +388,9 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
     return Container(
         padding: EdgeInsets.all(15.0),
         color: Colors.white,
-        child: Text(i.toString() + ". " + weeklySavedGoalsModelList[index].goalDescription));
+        child: Text(i.toString() +
+            ". " +
+            weeklySavedGoalsModelList[index].goalDescription));
   }
 
   Widget _buildSlideView(int index) {
@@ -466,13 +460,18 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
   addSavedGoals(int index) async {
     int i = 1;
     int x = 0;
-    if (weeklySavedGoalsModelList.length > 0){
-      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
-    }
-    else{
+    if (weeklySavedGoalsModelList.length > 0) {
+      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length - 1].id +
+          1;
+    } else {
       x = 1;
     }
-    weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(x,weeklyGoalsModelList[index].type,weeklyGoalsModelList[index].goalDescription, weeklyGoalsModelList[index].helpInfo,1));
+    weeklySavedGoalsModelList.add(WeeklySavedGoalsModel(
+        x,
+        weeklyGoalsModelList[index].type,
+        weeklyGoalsModelList[index].goalDescription,
+        weeklyGoalsModelList[index].helpInfo,
+        1));
     WeeklySavedGoalsModel m = new WeeklySavedGoalsModel(
         x,
         weeklyGoalsModelList[index].type,
@@ -480,6 +479,5 @@ class _ChooseGoalsPageState extends State<ChooseGoalsPage> {
         weeklyGoalsModelList[index].helpInfo,
         1);
     db2.saveWeeklySavedGoal(m);
-
   }
 }

@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -13,8 +11,8 @@ class ProfilePic extends StatelessWidget {
       height: 115,
       width: 115,
       child: Stack(
+        clipBehavior: Clip.none,
         fit: StackFit.expand,
-        overflow: Overflow.visible,
         children: [
           CircleAvatar(
             radius: 50,

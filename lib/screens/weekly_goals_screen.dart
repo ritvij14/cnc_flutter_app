@@ -19,7 +19,7 @@ class WeeklyGoals extends StatelessWidget {
 }
 
 class WeeklyGoalsPage extends StatefulWidget {
-  WeeklyGoalsPage({Key key, this.title}) : super(key: key);
+  WeeklyGoalsPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -27,7 +27,7 @@ class WeeklyGoalsPage extends StatefulWidget {
 }
 
 class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
-  List<String> goals;
+  late List<String> goals;
   List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
 
   var db = new WeeklyDBHelper();
@@ -103,15 +103,15 @@ class _WeeklyGoalsPageState extends State<WeeklyGoalsPage> {
     } else if (index == "Vegetables") {
       return Colors.green;
     } else if (index == "Grains") {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (index == "Protein") {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (index == "Dairy") {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (index == "Snacks and Condiments") {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (index == "Beverage") {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (index == "Physical Activity") {
       return Colors.grey;
     } else {

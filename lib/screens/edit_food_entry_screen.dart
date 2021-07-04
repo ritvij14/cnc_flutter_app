@@ -11,21 +11,14 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 
 class EditFoodLogEntryScreen extends StatefulWidget {
-  Food selection;
-  String selectedDate;
-  String entryTime;
-  double portion;
-  num id;
+  final Food selection;
+  final String selectedDate;
+  final String entryTime;
+  final double portion;
+  final num id;
 
-  EditFoodLogEntryScreen(Food selection, String selectedDate, String entryTime,
-      double portion, num id) {
-    this.selection = selection;
-
-    this.selectedDate = selectedDate;
-    this.entryTime = entryTime;
-    this.portion = portion;
-    this.id = id;
-  }
+  EditFoodLogEntryScreen(
+      this.selection, this.selectedDate, this.entryTime, this.portion, this.id);
 
   @override
   _EditFoodLogEntry createState() =>
@@ -33,9 +26,9 @@ class EditFoodLogEntryScreen extends StatefulWidget {
 }
 
 class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
-  Food currentFood;
-  String selectedDate;
-  String title;
+  late Food currentFood;
+  late String selectedDate;
+  late String title;
   String subtitle = '';
   double titleBottomPadding = 20;
 
@@ -44,16 +37,16 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
   bool showFraction = true;
   bool switched = false;
   bool wasChanged = false;
-  String entryTimeAsString;
-  double portion;
-  num id;
+  late String entryTimeAsString;
+  late double portion;
+  late num id;
 
   DateTime entryTime = DateTime.now();
 
   // DateTime entryTime = new DateTime(1, 1, 1, 13, 29);
   double actualPortion = 1;
   String servingAsFraction = '1';
-  String actualServingAsFraction;
+  late String actualServingAsFraction;
   int initialFirstSelection = 1;
   int initialSecondSelection = 0;
   int initialTimeFirstSelection = 1;
@@ -234,7 +227,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
   }
 
   _pickTime() async {
-    TimeOfDay t = await showTimePicker(
+    TimeOfDay? t = await showTimePicker(
         context: context,
         initialTime:
             new TimeOfDay(hour: entryTime.hour, minute: entryTime.minute),
@@ -402,8 +395,8 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           headingRowHeight: 0,
                           dataRowHeight: 30,
                           dividerThickness: 0,
-                          dataTextStyle:
-                              TextStyle(fontSize: 20, color: Theme.of(context).hintColor),
+                          dataTextStyle: TextStyle(
+                              fontSize: 20, color: Theme.of(context).hintColor),
                           // columnSpacing: MediaQuery.of(context).size.width/ 3,
 
                           columns: <DataColumn>[
@@ -793,7 +786,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                               ],
                               if (!showFraction) ...[
                                 Container(
-                                  color:  Theme.of(context).accentColor,
+                                  color: Theme.of(context).accentColor,
                                   width: 175,
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
@@ -870,7 +863,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                               GestureDetector(
                                 onTap: _pickTime,
                                 child: Container(
-                                  color:  Theme.of(context).accentColor,
+                                  color: Theme.of(context).accentColor,
                                   width: 175,
                                   child: TextFormField(
                                     enabled: false,
