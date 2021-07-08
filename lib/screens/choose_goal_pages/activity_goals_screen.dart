@@ -100,11 +100,11 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
                         shrinkWrap: true,
                         itemCount: weeklySavedGoalsModelList.length,
                         itemBuilder: (context, index) {
-                          if (weeklySavedGoalsModelList[index].type != null) {
-                            return _buildListView(index);
-                          } else {
+                          //if (weeklySavedGoalsModelList[index].type != null) {
+                          return _buildListView(index);
+                          /*} else {
                             return _buildEmpty();
-                          }
+                          }*/
                         }))
               ],
             ),
@@ -167,7 +167,19 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
   }
 
   Widget _buildSlideView(int index) {
-    return Slidable(
+    return GestureDetector(
+      child: Container(
+        child: ListTile(
+          title: Text(weeklyGoalsModelList[index].goalDescription),
+        ),
+      ),
+      onTap: () {
+        _addGoal(weeklyGoalsModelList[index].goalDescription);
+        _showSnackBar(context, 'Added Goal to Weekly Goals');
+        addSavedGoals(index);
+      },
+    );
+    /*Slidable(
       actionPane: SlidableDrawerActionPane(),
       child: Container(
         child: ListTile(
@@ -197,7 +209,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
               addSavedGoals(index);
             }),
       ],
-    );
+    );*/
   }
 
   _showAddDialog() async {
@@ -243,7 +255,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
           wGDecode2[i]['type'],
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
-          wGDecode2[i]['user_id']);
+          wGDecode2[i]['userId']);
       weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
   }

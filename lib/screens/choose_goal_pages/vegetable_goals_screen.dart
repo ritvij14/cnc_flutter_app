@@ -167,7 +167,19 @@ class _ChooseVegetableGoalsPageState extends State<ChooseVegetableGoalsPage> {
   }
 
   Widget _buildSlideView(int index) {
-    return Slidable(
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            title: Text(weeklyGoalsModelList[index].goalDescription),
+          ),
+        ),
+        onTap: () {
+          _addGoal(weeklyGoalsModelList[index].goalDescription);
+          print(goals);
+          _showSnackBar(context, 'Added Goal to Weekly Goals');
+          addSavedGoals(index);
+        });
+    /*Slidable(
       actionPane: SlidableDrawerActionPane(),
       child: Container(
         child: ListTile(
@@ -199,7 +211,7 @@ class _ChooseVegetableGoalsPageState extends State<ChooseVegetableGoalsPage> {
               addSavedGoals(index);
             }),
       ],
-    );
+    )*/
   }
 
   getGoals() async {

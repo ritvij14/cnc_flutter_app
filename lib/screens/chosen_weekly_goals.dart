@@ -1486,7 +1486,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
           wGDecode2[i]['type'],
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
-          wGDecode2[i]['user_id']);
+          wGDecode2[i]['userId']);
       weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
     print(weeklySavedGoalsModelList.length);

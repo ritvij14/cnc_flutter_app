@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
 
   Duration get loginTime => Duration(milliseconds: 2000);
 
-  Future<String> _authUser(LoginData data) {
+  Future<String?> _authUser(LoginData data) {
     return Future.delayed(loginTime).then((_) async {
       //user doesn't exist in db
       if (await db.isEmailValid(data.name) == false) {
@@ -35,16 +35,17 @@ class LoginScreen extends StatelessWidget {
       }
       var response = await db.login(
           data.name, encrypter.encrypt(data.password, iv: iv).base64);
-      if (response == "invalid") {
+      print(encrypter.encrypt(data.password, iv: iv).base64);
+      /*if (response == "invalid") {
         return 'Incorrect password';
-      }
+      }*/
       saveUserIDtoPref(response);
 
       //TODO remove store email code.
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('email', '${data.name}');
 
-      return "login success";
+      return null;
     });
   }
 
