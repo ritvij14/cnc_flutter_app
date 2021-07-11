@@ -47,7 +47,10 @@ dependencies:
     git: https://github.com/ritvij14/scrolling-day-calendar.git
   share: ^2.0.4
   shared_preferences: ^2.0.6
-  sticky_grouped_list: ^2.0.0-nullsafety.1
+  sticky_grouped_list:
+    git:
+      url: https://github.com/ritvij14/sticky_grouped_list.git
+      ref: feature/null-safety
   syncfusion_flutter_pdf: ^19.2.44-beta
   syncfusion_flutter_pdfviewer: ^19.2.44-beta
   table_calendar: ^3.0.1

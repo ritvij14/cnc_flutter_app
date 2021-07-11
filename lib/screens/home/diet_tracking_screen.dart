@@ -3,8 +3,6 @@ import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/widgets/food_log_widget.dart';
 import 'package:cnc_flutter_app/widgets/food_search.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:scrolling_day_calendar/scrolling_day_calendar.dart';
 
 class DietTrackingScreen extends StatefulWidget {
@@ -13,7 +11,6 @@ class DietTrackingScreen extends StatefulWidget {
 }
 
 class _DietTrackingScreenState extends State<DietTrackingScreen> {
-  Widget _pageItems = Text("Inital value");
   update(BuildContext context) {
     setState(() {});
   }
@@ -32,7 +29,7 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
 
   DateTime selectedDate = DateTime.now();
   DateTime startDate = DateTime.now().subtract(Duration(days: 8));
-  DateTime endDate = DateTime.now().add(Duration(days: 1));
+  DateTime endDate = DateTime.now();
   String widgetKeyFormat = "yyyy-MM-dd";
   Map<String, Widget> widgets = Map();
 
@@ -57,7 +54,6 @@ class _DietTrackingScreenState extends State<DietTrackingScreen> {
             )),
       ]),
       body: ScrollingDayCalendar(
-        pageItems: _pageItems,
         startDate: startDate,
         endDate: endDate,
         selectedDate: selectedDate,
