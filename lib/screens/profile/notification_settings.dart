@@ -122,7 +122,7 @@ class _NotificationSettings extends State<NotificationSettings> {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = ElevatedButton(
       child: Text(
         "CANCEL",
         style: TextStyle(color: Colors.grey),
@@ -131,9 +131,11 @@ class _NotificationSettings extends State<NotificationSettings> {
         Navigator.of(context).pop();
       },
     );
-    Widget confirmButton = FlatButton(
+    Widget confirmButton = ElevatedButton(
       child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
-      color: Theme.of(context).buttonColor,
+      style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Theme.of(context).buttonColor)),
       onPressed: () {
         Navigator.of(context).pop();
         closePage();
@@ -363,7 +365,7 @@ class _NotificationSettings extends State<NotificationSettings> {
   }
 
   void clearAllNotifications() async {
-    sharedPreferences.remove('dailyTime');
+    // sharedPreferences.remove('dailyTime');
     sharedPreferences.remove('weeklyDay');
     sharedPreferences.remove('weeklyTime');
     await localNotificationsPlugin.cancelAll();
@@ -423,8 +425,9 @@ class _NotificationSettings extends State<NotificationSettings> {
             Container(
               child: Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SwitchListTile(
+                    /*SwitchListTile(
                       title: Text('Enable Notifications',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text('Receive reminders about tracking'),
@@ -450,187 +453,184 @@ class _NotificationSettings extends State<NotificationSettings> {
                           }
                         });
                       },
-                    ),
+                    ),*/
                     Divider(
                       color: Colors.grey[600],
                       thickness: 0,
                     ),
-                    if (enableNotifications) ...[
-                      SwitchListTile(
-                        title: Text('Daily',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text(
-                            'Receive a daily reminder at a specified time'),
-                        value: enableDailyNotifications,
-                        onChanged: (bool value) {
-                          setState(() {
-                            enableDailyNotifications =
-                                !enableDailyNotifications;
-                            if (enableNotifications !=
-                                enableNotificationsStart) {
+                    // if (enableNotifications) ...[
+                    SwitchListTile(
+                      title: Text('Daily Notifications',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle:
+                          Text('Receive a daily reminder at a specified time'),
+                      value: enableDailyNotifications,
+                      onChanged: (bool value) {
+                        setState(() {
+                          enableDailyNotifications = !enableDailyNotifications;
+                          if (enableNotifications != enableNotificationsStart) {
+                            wasChanged = true;
+                          } else {
+                            if (enableDailyNotifications !=
+                                    enableDailyNotificationsStart ||
+                                enableWeeklyNotifications !=
+                                    enableWeeklyNotificationsStart) {
                               wasChanged = true;
                             } else {
-                              if (enableDailyNotifications !=
-                                      enableDailyNotificationsStart ||
-                                  enableWeeklyNotifications !=
-                                      enableWeeklyNotificationsStart) {
-                                wasChanged = true;
-                              } else {
-                                wasChanged = false;
-                              }
+                              wasChanged = false;
                             }
-                          });
-                        },
+                          }
+                        });
+                      },
+                    ),
+                    if (enableDailyNotifications) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: _pickDailyTime,
+                            child: Container(
+                              width: 175,
+                              child: TextFormField(
+                                enabled: false,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                ),
+                                controller: dailyTimeCtl,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding:
+                                      EdgeInsets.only(bottom: 0, top: 5),
+                                  hintText: "Enter time",
+                                  isDense: true,
+                                ),
+                                onChanged: (text) {
+                                  wasChanged = true;
+                                },
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: _pickDailyTime,
+                            child: Icon(
+                              Icons.edit,
+                              size: 20,
+                              // color: Theme.of(context)
+                              //     .highlightColor,
+                            ),
+                          ),
+                        ],
                       ),
-                      if (enableDailyNotifications) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: _pickDailyTime,
-                              child: Container(
-                                width: 175,
-                                child: TextFormField(
-                                  enabled: false,
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                  ),
-                                  controller: dailyTimeCtl,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    contentPadding:
-                                        EdgeInsets.only(bottom: 0, top: 5),
-                                    hintText: "Enter time",
-                                    isDense: true,
-                                  ),
-                                  onChanged: (text) {
+                    ],
+                    Divider(
+                      color: Colors.grey[600],
+                      thickness: 0,
+                    ),
+                    SwitchListTile(
+                      title: Text('Weekly',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle:
+                          Text('Receive a weekly reminder on a specified day'),
+                      value: enableWeeklyNotifications,
+                      onChanged: (bool value) {
+                        setState(() {
+                          enableWeeklyNotifications =
+                              !enableWeeklyNotifications;
+                          if (enableNotifications != enableNotificationsStart) {
+                            wasChanged = true;
+                          } else {
+                            if (enableDailyNotifications !=
+                                    enableDailyNotificationsStart ||
+                                enableWeeklyNotifications !=
+                                    enableWeeklyNotificationsStart) {
+                              wasChanged = true;
+                            } else {
+                              wasChanged = false;
+                            }
+                          }
+                        });
+                      },
+                    ),
+                    Padding(padding: EdgeInsets.all(5)),
+                    if (enableWeeklyNotifications) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                              padding:
+                                  EdgeInsets.only(top: 0, left: 15, right: 0)),
+                          Expanded(
+                            child: DropdownButtonFormField(
+                              // isExpanded: true,
+                              decoration: InputDecoration(
+                                  labelText: 'Day',
+                                  border: OutlineInputBorder(),
+                                  hintText: "Day"),
+                              value: dropDownDay,
+                              validator: (value) =>
+                                  value == null ? 'Field Required' : null,
+                              onChanged: (String? value) {
+                                if (value != null)
+                                  setState(() {
+                                    dropDownDay = value;
                                     wasChanged = true;
-                                  },
+                                  });
+                              },
+                              items: _days
+                                  .map((day) => DropdownMenuItem(
+                                      value: day, child: Text("$day")))
+                                  .toList(),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: _pickWeeklyTime,
+                                child: Container(
+                                  width: 175,
+                                  child: TextFormField(
+                                    enabled: false,
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                    ),
+                                    controller: weeklyTimeCtl,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      contentPadding:
+                                          EdgeInsets.only(bottom: 0, top: 5),
+                                      hintText: "Enter time",
+                                      isDense: true,
+                                    ),
+                                    onChanged: (text) {
+                                      wasChanged = true;
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: _pickDailyTime,
-                              child: Icon(
-                                Icons.edit,
-                                size: 20,
-                                // color: Theme.of(context)
-                                //     .highlightColor,
+                              GestureDetector(
+                                onTap: _pickWeeklyTime,
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                  // color: Theme.of(context)
+                                  //     .highlightColor,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                      Divider(
-                        color: Colors.grey[600],
-                        thickness: 0,
-                      ),
-                      SwitchListTile(
-                        title: Text('Weekly',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text(
-                            'Receive a weekly reminder on a specified day'),
-                        value: enableWeeklyNotifications,
-                        onChanged: (bool value) {
-                          setState(() {
-                            enableWeeklyNotifications =
-                                !enableWeeklyNotifications;
-                            if (enableNotifications !=
-                                enableNotificationsStart) {
-                              wasChanged = true;
-                            } else {
-                              if (enableDailyNotifications !=
-                                      enableDailyNotificationsStart ||
-                                  enableWeeklyNotifications !=
-                                      enableWeeklyNotificationsStart) {
-                                wasChanged = true;
-                              } else {
-                                wasChanged = false;
-                              }
-                            }
-                          });
-                        },
+                            ],
+                          ),
+                        ],
                       ),
                       Padding(padding: EdgeInsets.all(5)),
-                      if (enableWeeklyNotifications) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: 0, left: 15, right: 0)),
-                            Expanded(
-                              child: DropdownButtonFormField(
-                                // isExpanded: true,
-                                decoration: InputDecoration(
-                                    labelText: 'Day',
-                                    border: OutlineInputBorder(),
-                                    hintText: "Day"),
-                                value: dropDownDay,
-                                validator: (value) =>
-                                    value == null ? 'Field Required' : null,
-                                onChanged: (String? value) {
-                                  if (value != null)
-                                    setState(() {
-                                      dropDownDay = value;
-                                      wasChanged = true;
-                                    });
-                                },
-                                items: _days
-                                    .map((day) => DropdownMenuItem(
-                                        value: day, child: Text("$day")))
-                                    .toList(),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: _pickWeeklyTime,
-                                  child: Container(
-                                    width: 175,
-                                    child: TextFormField(
-                                      enabled: false,
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                      ),
-                                      controller: weeklyTimeCtl,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding:
-                                            EdgeInsets.only(bottom: 0, top: 5),
-                                        hintText: "Enter time",
-                                        isDense: true,
-                                      ),
-                                      onChanged: (text) {
-                                        wasChanged = true;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: _pickWeeklyTime,
-                                  child: Icon(
-                                    Icons.edit,
-                                    size: 20,
-                                    // color: Theme.of(context)
-                                    //     .highlightColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Padding(padding: EdgeInsets.all(5)),
-                      ],
                     ],
-                    if (enableNotifications) ...[
-                      Divider(
-                        color: Colors.grey[600],
-                        thickness: 0,
-                      ),
-                    ],
+                    // ],
+                    // if (enableNotifications) ...[
+                    Divider(
+                      color: Colors.grey[600],
+                      thickness: 0,
+                    ),
+                    // ],
                   ],
                 ),
               ),
