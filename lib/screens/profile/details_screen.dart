@@ -154,14 +154,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
         body: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text("Update your weight:",
-                      style: TextStyle(fontSize: 18)),
-                ),
-              ),
+              Text("Update your weight:", style: TextStyle(fontSize: 18)),
               SizedBox(height: 5),
               TextFormField(
                 decoration: InputDecoration(
@@ -206,14 +201,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 },
               ),
               SizedBox(height: 15),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text(
-                    "Macronutrient Distribution Breakdown: ",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
+              Text(
+                "Macronutrient Distribution Breakdown: ",
+                style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 5),
               Container(
@@ -487,12 +477,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
               SizedBox(height: 15),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text("What is your usual physical activity level?",
-                      style: TextStyle(fontSize: 18)),
-                ),
+              Text("What is your usual physical activity level?",
+                  style: TextStyle(fontSize: 18)),
+              ElevatedButton(
+                onPressed: () {},
+                child: Icon(Icons.info),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).accentColor)),
               ),
               SizedBox(height: 5),
               DropdownButtonFormField(
