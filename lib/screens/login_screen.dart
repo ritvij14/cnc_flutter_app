@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
     });
   }
 
-  Future<String> _registerUser(LoginData data) {
+  Future<String?> _registerUser(LoginData data) {
     return Future.delayed(loginTime).then((_) async {
       //check if username is already taken
       if (await db.isEmailValid(data.name) == true) {
@@ -63,7 +63,7 @@ class LoginScreen extends StatelessWidget {
       var response = await db.registerNewUser(userModel);
       String currentUserID = response.body;
       saveUserIDtoPref(currentUserID);
-      return "Registration success";
+      return null;
     });
   }
 

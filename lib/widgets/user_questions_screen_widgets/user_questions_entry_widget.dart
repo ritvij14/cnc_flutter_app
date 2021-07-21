@@ -19,7 +19,7 @@ class AddQuestionScreen extends StatefulWidget {
 
 class _AddQuestionScreen extends State<AddQuestionScreen> {
   late bool isUpdate;
-  late UserQuestion userQuestion;
+  late UserQuestion? userQuestion;
   final TextEditingController _questionController = new TextEditingController();
   final TextEditingController _noteController = new TextEditingController();
   late String _userQuestion;
@@ -33,11 +33,11 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
     isUpdate = isEdit;
     userQuestion = currentQuestion;
     if (userQuestion != null) {
-      _questionController.text = userQuestion.question;
-      _noteController.text = userQuestion.questionNotes;
-      _userQuestion = userQuestion.question;
-      _userNote = userQuestion.questionNotes;
-      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion.dateCreated);
+      _questionController.text = userQuestion!.question;
+      _noteController.text = userQuestion!.questionNotes;
+      _userQuestion = userQuestion!.question;
+      _userNote = userQuestion!.questionNotes;
+      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion!.dateCreated);
       // if (userQuestion.is_answered == 1) {
       //   _isAnswered = true;
       // } else {
@@ -51,14 +51,14 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   @override
   void initState() {
     if (userQuestion != null) {
-      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion.dateCreated);
+      _createdDate = DateFormat.yMd().add_jm().parse(userQuestion!.dateCreated);
       // _createdDate =
       //     DateFormat("yyyy-MM-dd Hms").parse(userQuestion.date_created);
-      _userQuestion = userQuestion.question;
-      _questionController.text = userQuestion.question;
+      _userQuestion = userQuestion!.question;
+      _questionController.text = userQuestion!.question;
       if (_noteController.text != null || _noteController.text != "") {
-        _noteController.text = userQuestion.questionNotes;
-        _userNote = userQuestion.questionNotes;
+        _noteController.text = userQuestion!.questionNotes;
+        _userNote = userQuestion!.questionNotes;
       } else {
         _noteController.text = "";
         _userNote = "";
@@ -96,13 +96,13 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   updateQuestion() async {
     bool a = formKey.currentState!.validate();
     if (a) {
-      userQuestion.question = _userQuestion;
-      userQuestion.questionNotes = _userNote;
-      userQuestion.dateUpdated =
+      userQuestion!.question = _userQuestion;
+      userQuestion!.questionNotes = _userNote;
+      userQuestion!.dateUpdated =
           DateFormat.yMd().add_jm().format(DateTime.now());
       // userQuestion.date_updated =
       //     DateFormat("yyyy-MM-dd Hms").format(DateTime.now());
-      await DBProvider.db.updateUserQuestion(userQuestion);
+      await DBProvider.db.updateUserQuestion(userQuestion!);
       setState(() {});
       Navigator.pop(context, null);
     }

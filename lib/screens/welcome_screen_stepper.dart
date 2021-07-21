@@ -45,14 +45,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   int _heightFeet = 0;
   int _heightInches = 0;
-  late String dropDownFeet;
-  late String dropDownInches;
+  String? dropDownFeet;
+  String? dropDownInches;
 
   int _weight = 0;
-  late String dropDownGender;
+  String? dropDownGender;
   List<String> _genders = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
-  late String dropDownRace;
+  String? dropDownRace;
   List<String> _races = [
     'American Indian or Alaska Native',
     'Asian',
@@ -63,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Unknown',
     'Prefer not to say',
   ];
-  late String dropDownEthnicities;
+  String? dropDownEthnicities;
   List<String> _ethnicities = [
     'Hispanic or Latinx',
     'Non Hispanic or Latinx',
@@ -76,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Moderately Active',
     'Vigorously Active',
   ];
-  late String dropDownActivity;
+  String? dropDownActivity;
 
   Map<String, bool> frequentIssues = {
     'Abdominal Pain': false,
@@ -88,7 +88,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Stoma Problems': false,
   };
 
-  late String dropDownStage;
+  String? dropDownStage;
 
   bool _colorectal = false;
   bool _surgery = false;
@@ -109,7 +109,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'Stage 4',
   ];
 
-  late String dropDownDiagMonth;
+  String? dropDownDiagMonth;
   int _diagYear = 0;
   int _diagMonth = 0;
   bool _ostomy = false;
@@ -261,7 +261,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     border: OutlineInputBorder(),
                     hintText: "Feet",
                   ),
-                  value: dropDownFeet,
+                  value: dropDownFeet ?? _feet[0],
                   validator: (value) => value == null ? 'Field Required' : null,
                   onChanged: (String? value) {
                     if (value != null)
@@ -290,7 +290,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     border: OutlineInputBorder(),
                     hintText: "Inches",
                   ),
-                  value: dropDownInches,
+                  value: dropDownInches ?? _inches[0],
                   validator: (value) => value == null ? 'Field Required' : null,
                   onChanged: (String? value) {
                     if (value != null)
@@ -335,7 +335,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           labelText: 'Gender',
           border: OutlineInputBorder(),
           hintText: "Gender"),
-      value: dropDownGender,
+      value: dropDownGender ?? _genders[0],
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String? value) {
         if (value != null)
@@ -355,7 +355,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       isExpanded: true,
       decoration: InputDecoration(
           labelText: 'Race', border: OutlineInputBorder(), hintText: "Race"),
-      value: dropDownRace,
+      value: dropDownRace ?? _races[0],
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String? value) {
         if (value != null)
@@ -376,7 +376,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           labelText: 'Ethnicity',
           border: OutlineInputBorder(),
           hintText: "Ethnicity"),
-      value: dropDownEthnicities,
+      value: dropDownEthnicities ?? _ethnicities[0],
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String? value) {
         if (value != null)
@@ -397,7 +397,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           labelText: 'Activity Level',
           border: OutlineInputBorder(),
           hintText: "Activity Level"),
-      value: dropDownActivity,
+      value: dropDownActivity ?? _activity[0],
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String? value) {
         if (value != null)
@@ -509,7 +509,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           labelText: 'Cancer Stage',
           border: OutlineInputBorder(),
           hintText: "Cancer Stage"),
-      value: dropDownStage,
+      value: dropDownStage ?? _cancerStages[0],
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String? value) {
         if (value != null)
@@ -532,7 +532,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         border: OutlineInputBorder(),
         hintText: "Month",
       ),
-      value: dropDownDiagMonth,
+      value: dropDownDiagMonth ?? _months[0],
       validator: (value) => value == null ? 'Field Required' : null,
       onChanged: (String? value) {
         if (value != null)
@@ -1051,15 +1051,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     db.saveFormInfo(
         birthDate.toString().split(" ")[0],
-        dropDownRace.replaceAll(" ", "-"),
-        dropDownEthnicities.replaceAll(" ", "-"),
-        dropDownGender.replaceAll(" ", "-"),
+        dropDownRace ?? 'Null'.replaceAll(" ", "-"),
+        dropDownEthnicities ?? 'Null'.replaceAll(" ", "-"),
+        dropDownGender ?? 'Null'.replaceAll(" ", "-"),
         height.toString(),
         _weight.toString(),
-        dropDownActivity.replaceAll(" ", "-"),
+        dropDownActivity ?? 'Null'.replaceAll(" ", "-"),
         gIIssues,
         _colorectal,
-        dropDownStage,
+        dropDownStage ?? 'Null',
         lastDiagDate.toString().split(" ")[0],
         checkedTreatmentTypes);
   }

@@ -663,7 +663,8 @@ class _NotificationSettings extends State<NotificationSettings> {
                       ),
                     ),
                     onPressed: () {
-                      if (enableNotifications) {
+                      if (enableDailyNotifications ||
+                          enableWeeklyNotifications) {
                         if (enableDailyNotifications) {
                           scheduleDailyNotifications();
                         } else {

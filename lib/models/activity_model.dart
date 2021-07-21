@@ -3,7 +3,7 @@ import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 class ActivityModel {
   late String type;
   late int minutes;
-  late int intensity;
+  late int? intensity;
   late int mets;
   late double metsPerHour;
   late int id;
@@ -15,7 +15,7 @@ class ActivityModel {
     //this.type = type;
     //this.minutes = minutes;
     //this.intensity = intensity;
-    this.mets = _calculateMets(type, minutes, intensity);
+    this.mets = _calculateMets(type, minutes, intensity!);
     //this.dateTime = dateTime;
   }
 
@@ -27,6 +27,7 @@ class ActivityModel {
   ActivityModel.emptyConstructor() {
     this.minutes = 0;
     this.dateTime = new DateTime.now();
+    this.intensity = null;
   }
 
   int _calculateMets(String type, int minutes, int intensity) {
@@ -34,7 +35,7 @@ class ActivityModel {
   }
 
   int getCalories() {
-    return minutes * intensity;
+    return minutes * intensity!;
   }
 
   factory ActivityModel.fromJson(dynamic json) {

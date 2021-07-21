@@ -341,12 +341,11 @@ class _UserQuestionsScreenState extends State<UserQuestionsScreen> {
   }
 
   updateAnswered(userQuestion) async {
-    userQuestion.date_updated =
-        DateFormat.yMd().add_jm().format(DateTime.now());
-    if (userQuestion.is_answered == 0) {
-      userQuestion.is_answered = 1;
+    userQuestion.dateUpdated = DateFormat.yMd().add_jm().format(DateTime.now());
+    if (userQuestion.isAnswered == 0) {
+      userQuestion.isAnswered = 1;
     } else {
-      userQuestion.is_answered = 0;
+      userQuestion.isAnswered = 0;
     }
 
     await DBProvider.db.updateIsAnswered(userQuestion);

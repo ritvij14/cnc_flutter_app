@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'http_overrides.dart';
 import 'nutrition_app.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Authorization auth = Authorization();
@@ -17,6 +16,10 @@ void main() async {
   final bool screenerComplete = await auth.isScreenerComplete();
   print("screen is " + screenerComplete.toString());
   // ignore: unrelated_type_equality_checks
-  final NutritionApp nutritionApp = NutritionApp(initialRoute: loggedIn == false ? '/login' : screenerComplete == false ? '/welcome' : '/home');
-  runApp(nutritionApp);
+  runApp(NutritionApp(
+      initialRoute: loggedIn == false
+          ? '/login'
+          : screenerComplete == false
+              ? '/welcome'
+              : '/home'));
 }

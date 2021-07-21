@@ -1131,24 +1131,18 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
     }
   }
 
+  List<bool> _checked = [false, false, false];
   Widget _buildWeeklyView() {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: weeklySavedGoalsModelList.length,
         itemBuilder: (context, index) {
-          return Slidable(
-            actionPane: SlidableDrawerActionPane(),
-            child: Container(
-              child: ListTile(
-                title: Text(weeklySavedGoalsModelList[index].goalDescription),
-              ),
-            ),
-            actions: <Widget>[
-              IconSlideAction(
-                  caption: 'Completed',
-                  color: Colors.green,
-                  icon: Icons.check,
-                  onTap: () {
+          return Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.check),
+                onPressed: () {
+                  setState(() {
                     if (totalActivityGoals == null &&
                         weeklySavedGoalsModelList[index].type ==
                             "Physical Activity") {
@@ -1259,7 +1253,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     prefs.setInt("vegetable goals total", totalVegetableGoals);
 
                     _eventController2.clear();
-                    update(context);
+                    // update(context);
 
                     if (totalFruitGoals == 1 && fruitBadge1 != 1) {
                       _showCongratsDialog('./assets/images/fruitBadge1.png');
@@ -1417,6 +1411,55 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     }
 
                     _showSnackBar(context, 'Completed Goal');
+                  });
+                  /**/
+                },
+              ),
+              Expanded(
+                child: Text(weeklySavedGoalsModelList[index].goalDescription,
+                    maxLines: 4),
+              ),
+              PopupMenuButton<String>(
+                onSelected: (String value) {
+                  switch (value) {
+                    case 'Share':
+                      Share.share(
+                          weeklySavedGoalsModelList[index]
+                              .goalDescription
+                              .toString(),
+                          subject:
+                              'Check out my new goal on the Enact diet tracking app!');
+                      break;
+                    case 'Delete':
+                      deleteByGoalDescription(
+                          weeklySavedGoalsModelList[index].id);
+                      update(context);
+                      _showSnackBar(context, 'Deleted Goal');
+                      break;
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return {'Share', 'Delete'}.map((e) {
+                    return PopupMenuItem(child: Text(e), value: e);
+                  }).toList();
+                },
+              ),
+            ],
+          );
+          /*Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            child: Container(
+              child: ListTile(
+                title: Text(weeklySavedGoalsModelList[index].goalDescription),
+              ),
+            ),
+            actions: <Widget>[
+              IconSlideAction(
+                  caption: 'Completed',
+                  color: Colors.green,
+                  icon: Icons.check,
+                  onTap: () {
+                    
                   }),
               IconSlideAction(
                   caption: 'Copy',
@@ -1453,7 +1496,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     _showSnackBar(context, 'Deleted Goal');
                   }),
             ],
-          );
+          );*/
         });
   }
 
