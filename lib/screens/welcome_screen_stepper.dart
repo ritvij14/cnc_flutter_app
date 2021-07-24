@@ -1051,15 +1051,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     db.saveFormInfo(
         birthDate.toString().split(" ")[0],
-        dropDownRace ?? 'Null'.replaceAll(" ", "-"),
-        dropDownEthnicities ?? 'Null'.replaceAll(" ", "-"),
-        dropDownGender ?? 'Null'.replaceAll(" ", "-"),
+        dropDownRace ?? _races[0].replaceAll(" ", "-"),
+        dropDownEthnicities ?? _ethnicities[0].replaceAll(" ", "-"),
+        dropDownGender ?? _genders[0].replaceAll(" ", "-"),
         height.toString(),
         _weight.toString(),
-        dropDownActivity ?? 'Null'.replaceAll(" ", "-"),
+        dropDownActivity ?? _activity[0].replaceAll(" ", "-"),
         gIIssues,
         _colorectal,
-        dropDownStage ?? 'Null',
+        dropDownStage ?? _cancerStages[0],
         lastDiagDate.toString().split(" ")[0],
         checkedTreatmentTypes);
   }
