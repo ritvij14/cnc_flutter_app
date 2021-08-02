@@ -67,7 +67,7 @@ class _WeeklyActivityProgressWidgetState
   Future<int> getData() async {
     DateTime dateTime = DateTime.now();
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     int intensity = 1;
     int userId = int.parse(id);
     var x = await db.getDaysActivityList(7, intensity, userId);

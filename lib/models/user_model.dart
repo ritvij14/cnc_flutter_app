@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
+class UserModel {
+  late String email;
+  late String password;
+  late int id;
 
-class UserModel{
-
-  String email;
-  String password;
-  int id;
-
-  UserModel(String email, String password){
+  UserModel(this.email, this.password) {
     this.email = email;
     this.password = password;
   }
@@ -17,5 +14,4 @@ class UserModel{
     UserModel user = UserModel.emptyConstructor();
     return user;
   }
-
 }

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
   //
-  static SharedPreferences preferences;
+  static late SharedPreferences preferences;
   static const String KEY_SELECTED_THEME = 'key_selected_theme';
 
   static init() async {
@@ -12,19 +12,19 @@ class Preferences {
   }
 
   static void saveTheme(AppTheme selectedTheme) async {
-    if (null == selectedTheme) {
+    /*if (selectedTheme == null) {
       selectedTheme = AppTheme.Default;
-    }
+    }*/
     String theme = jsonEncode(selectedTheme.toString());
     preferences.setString(KEY_SELECTED_THEME, theme);
   }
 
-  static AppTheme getTheme() {
-    if (preferences == null){
+  static AppTheme? getTheme() {
+    /*if (preferences == null){
       return AppTheme.Default;
-    }
-    String theme = preferences.getString(KEY_SELECTED_THEME);
-    if (null == theme) {
+    }*/
+    String? theme = preferences.getString(KEY_SELECTED_THEME);
+    if (theme == null) {
       return AppTheme.Default;
     }
     return getThemeFromString(jsonDecode(theme));
@@ -36,6 +36,6 @@ class Preferences {
         return theme;
       }
     }
-    return null;
+    return AppTheme.Default;
   }
 }

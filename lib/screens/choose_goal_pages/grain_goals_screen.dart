@@ -21,7 +21,7 @@ class ChooseGrainGoals extends StatelessWidget {
 }
 
 class ChooseGrainGoalsPage extends StatefulWidget {
-  ChooseGrainGoalsPage({Key key, this.title}) : super(key: key);
+  ChooseGrainGoalsPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -134,15 +134,15 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
     } else if (index == "Vegetables") {
       return Colors.green;
     } else if (index == "Grains") {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (index == "Protein") {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (index == "Dairy") {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (index == "Snacks and Condiments") {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (index == "Beverage") {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (index == "Physical Activity") {
       return Colors.grey;
     } else {
@@ -166,7 +166,19 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
   }
 
   Widget _buildSlideView(int index) {
-    return Slidable(
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            title: Text(weeklyGoalsModelList[index].goalDescription),
+          ),
+        ),
+        onTap: () {
+          //_addGoal(items[index].subtitle);
+          _addGoal(weeklyGoalsModelList[index].goalDescription);
+          print(goals);
+          _showSnackBar(context, 'Added Goal to Weekly Goals');
+        });
+    /*return Slidable(
       actionPane: SlidableDrawerActionPane(),
       child: Container(
         child: ListTile(
@@ -198,7 +210,7 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
               addSavedGoals(index);
             }),
       ],
-    );
+    );*/
   }
 
   getGoals() async {

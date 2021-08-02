@@ -22,7 +22,7 @@ class GoalsHome extends StatelessWidget {
 }
 
 class GoalsHomePage extends StatefulWidget {
-  GoalsHomePage({Key key, this.title}) : super(key: key);
+  GoalsHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override

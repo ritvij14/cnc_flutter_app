@@ -5,15 +5,11 @@ class WeeklyGoalsModel {
   String goalDescription;
   String helpInfo;
 
-  WeeklyGoalsModel(String type, String goalDescription, String helpInfo) {
-    this.type = type;
-    this.goalDescription = goalDescription;
-    this.helpInfo = helpInfo;
-  }
+  WeeklyGoalsModel(this.type, this.goalDescription, this.helpInfo);
 
   factory WeeklyGoalsModel.fromJson(dynamic json) {
-    return WeeklyGoalsModel((json['type'] as String).capitalize(), (json['goal_description'] as String),
-        (json['help_info'] as String));
+    return WeeklyGoalsModel((json['type'] as String).capitalize(),
+        (json['goal_description'] as String), (json['help_info'] as String));
   }
 
   @override
@@ -21,4 +17,5 @@ class WeeklyGoalsModel {
     return 'WeeklyGoalsModel{type: $type, goalDescription: $goalDescription, helpInfo: $helpInfo}';
   }
 }
+
 final List<WeeklyGoalsModel> weeklyGoalsModelList = [];

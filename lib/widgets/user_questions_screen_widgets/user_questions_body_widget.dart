@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'package:cnc_flutter_app/connections/database.dart' as DBHelper;
 import 'package:cnc_flutter_app/connections/database.dart';
 import 'package:cnc_flutter_app/models/user_question_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'user_questions_list_tile_widget.dart';
 
-
 class UserQuestionsBody extends StatefulWidget {
-  List<UserQuestion> userQuestions = [];
+  final List<UserQuestion> userQuestions = [];
 
   @override
   _UserQuestionsBodyState createState() => _UserQuestionsBodyState();
@@ -20,39 +17,34 @@ class _UserQuestionsBodyState extends State<UserQuestionsBody> {
   List<UserQuestion> currentQuestions = [];
   List<String> _sorts = ['New to Old', 'Old to New'];
 
-
-
   @override
   Widget build(BuildContext context) {
-    return
-      SingleChildScrollView(
+    return SingleChildScrollView(
         physics: ScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: 0),
-        child:
-        Column(
-            children: [
-              Container(
-                  padding: EdgeInsets.only(left: 5, right: 0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Sort by '),
-                        _buildSort(),
-                      ])),
-              FutureBuilder(
-                builder: (context, projectSnap) {
-                  return ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: widget.userQuestions.length,
-                    itemBuilder: (context, index) {
-                      return UserQuestionsListTile(widget.userQuestions[index]);
-                    },
-                  );
+        child: Column(children: [
+          Container(
+              padding: EdgeInsets.only(left: 5, right: 0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Sort by '),
+                    _buildSort(),
+                  ])),
+          FutureBuilder(
+            builder: (context, projectSnap) {
+              return ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.userQuestions.length,
+                itemBuilder: (context, index) {
+                  return UserQuestionsListTile(widget.userQuestions[index]);
                 },
-                future: getQuestions(),
-              ),
-            ]));
+              );
+            },
+            future: getQuestions(),
+          ),
+        ]));
   }
 
   Widget _buildSort() {
@@ -70,30 +62,32 @@ class _UserQuestionsBodyState extends State<UserQuestionsBody> {
                   ),
                   value: dropDownSort,
                   validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String value) {
+                  onChanged: (String? value) {
                     setState(() {
-                      dropDownSort = value;
-                      widget.userQuestions =  sortContent();
+                      if (value != null) {
+                        dropDownSort = value;
+                      }
+                      sortContent();
 
                       // _heightInches = _inches.indexOf(Value) + 1;
                     });
                   },
                   items: _sorts
                       .map((sort) =>
-                      DropdownMenuItem(value: sort, child: Text("$sort")))
+                          DropdownMenuItem(value: sort, child: Text("$sort")))
                       .toList(),
                 ))));
   }
-  sortContent(){
-    currentQuestions = widget.userQuestions;
-    if (dropDownSort == "New to Old"){
-      currentQuestions.sort((a,b) {
-        var adate = a.date_created;
-        var bdate = b.date_created;
+
+  sortContent() {
+    //currentQuestions = widget.userQuestions;
+    if (dropDownSort == "New to Old") {
+      widget.userQuestions.sort((a, b) {
+        var adate = a.dateCreated;
+        var bdate = b.dateCreated;
         return -adate.compareTo(bdate);
       });
     }
-
   }
 
   // List<ActivityTrackingListTile> buildFitnessTrackingListTileWidgets(
@@ -112,12 +106,15 @@ class _UserQuestionsBodyState extends State<UserQuestionsBody> {
     var userQuestionsFromDB = await dbp.getAllUserQuestions(1);
     if (userQuestionsFromDB != null) {
       for (int i = 0; i < userQuestionsFromDB.length; i++) {
-        UserQuestion userQuestion = new UserQuestion();
-        userQuestion.id = userQuestionsFromDB[i]['id'];
-        userQuestion.question = userQuestionsFromDB[i]['question'];
-        userQuestion.question_notes = userQuestionsFromDB[i]['question_notes'];
-        userQuestion.date_created = userQuestionsFromDB[i]['date_created'];
-        userQuestion.date_updated = userQuestionsFromDB[i]['date_updated'];
+        UserQuestion userQuestion =
+            UserQuestion.fromMap(userQuestionsFromDB[i]);
+        /*(
+          id: userQuestionsFromDB[i]['id'],
+          question: userQuestionsFromDB[i]['question'],
+          questionNotes: userQuestionsFromDB[i]['question_notes'],
+          dateCreated: userQuestionsFromDB[i]['date_created'],
+          dateUpdated: userQuestionsFromDB[i]['date_updated'], isAnswered: null, userId: 1,
+        );*/
         widget.userQuestions.add(userQuestion);
       }
     }
@@ -127,5 +124,3 @@ class _UserQuestionsBodyState extends State<UserQuestionsBody> {
     setState(() {});
   }
 }
-
-

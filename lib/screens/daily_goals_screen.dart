@@ -1,4 +1,4 @@
-import 'dart:convert';
+/*import 'dart:convert';
 import 'package:cnc_flutter_app/connections/weekly_goals_db_helper.dart';
 import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
@@ -23,7 +23,7 @@ class DailyGoals extends StatelessWidget {
 }
 
 class DailyGoalsPage extends StatefulWidget {
-  DailyGoalsPage({Key key, this.title}) : super(key: key);
+  DailyGoalsPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -398,4 +398,4 @@ class _DailyGoalsPageState extends State<DailyGoalsPage> {
   deleteByGoalDescription(int d) {
     db2.deleteWeeklyGoalsSavedByID(d);
   }
-}
+}*/

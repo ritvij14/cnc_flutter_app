@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SymptomTrackingListTile extends StatefulWidget {
-  SymptomModel symptomModel;
+  late final SymptomModel symptomModel;
 
-  SymptomTrackingListTile(SymptomModel symptomModel) {
-    this.symptomModel = symptomModel;
-  }
+  SymptomTrackingListTile(this.symptomModel);
 
   @override
   _SymptomTrackingListTileState createState() =>
@@ -20,6 +18,7 @@ class _SymptomTrackingListTileState extends State<SymptomTrackingListTile> {
 
   @override
   void initState() {
+    super.initState();
     numberOfSymptoms = countSymptoms();
   }
 
@@ -45,8 +44,7 @@ class _SymptomTrackingListTileState extends State<SymptomTrackingListTile> {
           MaterialPageRoute(
               builder: (context) =>
                   SymptomTrackingModifyScreen(widget.symptomModel)),
-
-        ).then((value){
+        ).then((value) {
           if (value != null) {
             widget.symptomModel = value;
           }

@@ -124,7 +124,10 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
       builder: (context, projectSnap) {
         if (isLoading) {
           return Center(
-            child: CircularProgressIndicator(  valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),),
+            child: CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).buttonColor),
+            ),
           );
         } else {
           return Column(
@@ -231,7 +234,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                                 // }
 
                                 return LineTooltipItem(
-                                  '${weekDays[flSpot.x.toInt()] + ' '+ weekDaysAsDates[flSpot.x.toInt()]} \n${flSpot.y.round()} calories',
+                                  '${weekDays[flSpot.x.toInt()] + ' ' + weekDaysAsDates[flSpot.x.toInt()]} \n${flSpot.y.round()} calories',
                                   const TextStyle(color: Colors.white),
                                 );
                               }).toList();
@@ -390,7 +393,9 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                             return '';
                           },
                           getTextStyles: (value) => TextStyle(
-                              color: Theme.of(context).hintColor, fontSize: 14, fontFamily: 'RobotoMono'),
+                              color: Theme.of(context).hintColor,
+                              fontSize: 14,
+                              fontFamily: 'RobotoMono'),
                         ),
                         bottomTitles: SideTitles(
                           margin: 12,
@@ -403,11 +408,10 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                             final isTouched = value == touchedValue;
                             return TextStyle(
                               fontSize: 14,
-                                fontFamily: 'RobotoMono',
+                              fontFamily: 'RobotoMono',
                               color: isTouched
                                   ? Theme.of(context).hintColor
-                                  : Theme.of(context)
-                                      .hintColor,
+                                  : Theme.of(context).hintColor,
                               // fontWeight: FontWeight.bold,
                             );
                           },
@@ -425,7 +429,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
     );
   }
 
-  double touchedValue;
+  late double touchedValue;
 
   @override
   void initState() {

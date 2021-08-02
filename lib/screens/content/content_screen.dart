@@ -2,13 +2,11 @@ import 'dart:convert';
 import 'package:cnc_flutter_app/connections/video_db_helper.dart';
 import 'package:cnc_flutter_app/models/video_model.dart';
 import 'package:cnc_flutter_app/screens/content/article_viewer.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cnc_flutter_app/connections/article_db_helper.dart';
 import 'package:cnc_flutter_app/models/article_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ContentScreen extends StatefulWidget {
   @override
@@ -45,15 +43,258 @@ class _ContentScreenState extends State<ContentScreen> {
             height: 200,
             child: FutureBuilder(
               builder: (context, projectSnap) {
-    if (isLoading) {
-    return Center(
-    child: CircularProgressIndicator(  valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),),
-    );
-    }else{
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: videoList.length < 3 ? videoList.length : 3,
-                  itemBuilder: (BuildContext context, int index) {
+                if (isLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).buttonColor),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: videoList.length < 3 ? videoList.length : 3,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                              onTap: () {
+                                _launchURL(videoList[index].videoUrl);
+                              },
+                              child: Container(
+                                  width: 200,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).canvasColor,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: Offset(
+                                            1, 1), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(children: <Widget>[
+                                    Container(
+                                        height: 70,
+                                        width: 200,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                            ),
+                                            gradient: LinearGradient(
+                                                begin: Alignment.topRight,
+                                                end: Alignment.bottomLeft,
+                                                colors: getColor(
+                                                    videoList[index]
+                                                        .videoSubject
+                                                        .toUpperCase()))),
+                                        child: getIcon("video")),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 5, bottom: 3, left: 8, right: 8),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          child: Text(
+                                            videoList[index].videoName,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 20),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // Spacer(),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 0, bottom: 5, left: 8, right: 8),
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Container(
+                                          child: videoList[index]
+                                                      .videoSubject
+                                                      .toUpperCase() ==
+                                                  "OTHER"
+                                              ? Text(
+                                                  videoList[index].videoType +
+                                                      " video",
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                )
+                                              : Text(
+                                                  videoList[index].videoType +
+                                                      " video on " +
+                                                      videoList[index]
+                                                          .videoSubject,
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]))));
+                    },
+                  );
+                }
+              },
+              future: getVideos(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+            child:
+                Text('Recently Added Articles', style: TextStyle(fontSize: 24)),
+          ),
+          Container(
+            height: 200,
+            child: FutureBuilder(
+              builder: (context, projectSnap) {
+                if (isLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).buttonColor),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: articleList.length < 3 ? articleList.length : 3,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                              onTap: () {
+                                // print(articleList[index].data);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ArticleViewer(articleList[index])));
+                              },
+                              child: Container(
+                                  width: 200,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).canvasColor,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: Offset(
+                                            1, 1), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(children: <Widget>[
+                                    Container(
+                                        height: 70,
+                                        width: 200,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                            ),
+                                            gradient: LinearGradient(
+                                                begin: Alignment.topRight,
+                                                end: Alignment.bottomLeft,
+                                                colors: getColor(
+                                                    articleList[index]
+                                                        .articleSubject
+                                                        .toUpperCase()))),
+                                        child: getIcon(articleList[index]
+                                            .articleSubject
+                                            .toUpperCase())),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 5, bottom: 3, left: 8, right: 8),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          child: Text(
+                                            articleList[index].articleName,
+                                            // "Diet and Smoking Research study adfsd asv darbsgdf sghsdbs",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 20),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // Spacer(),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 0, bottom: 5, left: 8, right: 8),
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Container(
+                                          child: articleList[index]
+                                                      .articleSubject
+                                                      .toUpperCase() ==
+                                                  "OTHER"
+                                              ? Text(
+                                                  articleList[index]
+                                                          .articleType +
+                                                      " article",
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                )
+                                              : Text(
+                                                  articleList[index]
+                                                          .articleType +
+                                                      " article on " +
+                                                      articleList[index]
+                                                          .articleSubject,
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]))));
+                    },
+                    // childCount: articleList.length,
+                  );
+                }
+              },
+              future: getArticles(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+            child: Text('All Videos', style: TextStyle(fontSize: 24)),
+          ),
+          FutureBuilder(
+            builder: (context, projectSnap) {
+              if (isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).buttonColor),
+                  ),
+                );
+              } else {
+                return Container(
+                    child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  primary: false,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 3.0,
+                    mainAxisSpacing: 5.0,
+                  ),
+                  itemCount: videoList.length,
+                  itemBuilder: (context, index) {
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
@@ -78,8 +319,8 @@ class _ContentScreenState extends State<ContentScreen> {
                                 ),
                                 child: Column(children: <Widget>[
                                   Container(
-                                      height: 70,
-                                      width: 200,
+                                      height: 55,
+                                      width: double.infinity,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -136,231 +377,8 @@ class _ContentScreenState extends State<ContentScreen> {
                                   ),
                                 ]))));
                   },
-                );}
-              },
-              future: getVideos(),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
-            child:
-                Text('Recently Added Articles', style: TextStyle(fontSize: 24)),
-          ),
-          Container(
-            height: 200,
-            child: FutureBuilder(
-              builder: (context, projectSnap) {
-                if (isLoading) {
-                  return Center(
-                    child: CircularProgressIndicator(  valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),),
-                  );
-                }else{
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: articleList.length < 3 ? articleList.length : 3,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                            onTap: () {
-                              // print(articleList[index].data);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ArticleViewer(articleList[index])));
-                            },
-                            child: Container(
-                                width: 200,
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).canvasColor,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.5),
-                                      spreadRadius: 1,
-                                      blurRadius: 2,
-                                      offset: Offset(
-                                          1, 1), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: Column(children: <Widget>[
-                                  Container(
-                                      height: 70,
-                                      width: 200,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                          ),
-                                          gradient: LinearGradient(
-                                              begin: Alignment.topRight,
-                                              end: Alignment.bottomLeft,
-                                              colors: getColor(
-                                                  articleList[index]
-                                                      .articleSubject
-                                                      .toUpperCase()))),
-                                      child: getIcon(articleList[index]
-                                          .articleSubject
-                                          .toUpperCase())),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 5, bottom: 3, left: 8, right: 8),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Container(
-                                        child: Text(
-                                          articleList[index].articleName,
-                                          // "Diet and Smoking Research study adfsd asv darbsgdf sghsdbs",
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 20),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  // Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 0, bottom: 5, left: 8, right: 8),
-                                    child: Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Container(
-                                        child: articleList[index]
-                                                    .articleSubject
-                                                    .toUpperCase() ==
-                                                "OTHER"
-                                            ? Text(
-                                                articleList[index].articleType +
-                                                    " article",
-                                                style: TextStyle(fontSize: 14),
-                                              )
-                                            : Text(
-                                                articleList[index].articleType +
-                                                    " article on " +
-                                                    articleList[index]
-                                                        .articleSubject,
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                ]))));
-                  },
-                  // childCount: articleList.length,
-                );}
-              },
-              future: getArticles(),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
-            child: Text('All Videos', style: TextStyle(fontSize: 24)),
-          ),
-          FutureBuilder(
-            builder: (context, projectSnap) {
-    if (isLoading) {
-    return Center(
-    child: CircularProgressIndicator(  valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),),
-    );
-    }else{
-              return Container(
-                  child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                primary: false,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 3.0,
-                  mainAxisSpacing: 5.0,
-                ),
-                itemCount: videoList.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                          onTap: () {
-                            _launchURL(videoList[index].videoUrl);
-                          },
-                          child: Container(
-                              width: 200,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).canvasColor,
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.5),
-                                    spreadRadius: 1,
-                                    blurRadius: 2,
-                                    offset: Offset(
-                                        1, 1), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child: Column(children: <Widget>[
-                                Container(
-                                    height: 55,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                        ),
-                                        gradient: LinearGradient(
-                                            begin: Alignment.topRight,
-                                            end: Alignment.bottomLeft,
-                                            colors: getColor(videoList[index]
-                                                .videoSubject
-                                                .toUpperCase()))),
-                                    child: getIcon("video")),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 5, bottom: 3, left: 8, right: 8),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      child: Text(
-                                        videoList[index].videoName,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontSize: 20),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // Spacer(),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 0, bottom: 5, left: 8, right: 8),
-                                  child: Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Container(
-                                      child: videoList[index]
-                                                  .videoSubject
-                                                  .toUpperCase() ==
-                                              "OTHER"
-                                          ? Text(
-                                              videoList[index].videoType +
-                                                  " video",
-                                              style: TextStyle(fontSize: 14),
-                                            )
-                                          : Text(
-                                              videoList[index].videoType +
-                                                  " video on " +
-                                                  videoList[index].videoSubject,
-                                              style: TextStyle(fontSize: 14),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                              ]))));
-                },
-              ));}
+                ));
+              }
             },
             future: getVideos(),
           ),
@@ -373,7 +391,8 @@ class _ContentScreenState extends State<ContentScreen> {
               if (isLoading) {
                 return Center(
                   child: CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).buttonColor),
                   ),
                 );
               } else {
@@ -479,8 +498,8 @@ class _ContentScreenState extends State<ContentScreen> {
                                   ),
                                 ]))));
                   },
-                ));}
-
+                ));
+              }
             },
             future: getArticles(),
           ),
@@ -499,7 +518,7 @@ class _ContentScreenState extends State<ContentScreen> {
         .map((data) => ArticleModel.fromJson(data))
         .toList();
     articleList = newArticleList.reversed.toList();
-    isLoading= false;
+    isLoading = false;
     // getCancerResearchArt();
   }
 
@@ -509,7 +528,7 @@ class _ContentScreenState extends State<ContentScreen> {
         .map((data) => VideoModel.fromJson(data))
         .toList();
     videoList = newVideoList.reversed.toList();
-    isLoading= false;
+    isLoading = false;
     // getCancerResearchVid();
   }
 
@@ -594,20 +613,19 @@ class _ContentScreenState extends State<ContentScreen> {
     if (type == "DIET/NUTRITION") {
       return [Colors.limeAccent, Colors.green];
     } else if (type == "FITNESS/EXERCISE") {
-      return [Colors.limeAccent, Colors.orange[600]];
-
+      return [Colors.limeAccent, Colors.orange[600]!];
     } else if (type == "SYMPTOM MANAGEMENT") {
-      return [Colors.red[300], Colors.purple[600]];
+      return [Colors.red[300]!, Colors.purple[600]!];
     } else if (type == "CANCER RESEARCH") {
-      return [Colors.lightBlue[300], Colors.blue[800]];
+      return [Colors.lightBlue[300]!, Colors.blue[800]!];
     } else if (type == "LEARNING ACTIVITIES") {
-      return [Colors.blue[400], Colors.deepPurple[300]];
+      return [Colors.blue[400]!, Colors.deepPurple[300]!];
     } else if (type == "RECIPES") {
-      return [Colors.red[400],  Colors.orange[400]];
+      return [Colors.red[400]!, Colors.orange[400]!];
     } else if (type == "STRESS MANAGEMENT") {
-      return [Colors.green[200], Colors.teal[500]];
+      return [Colors.green[200]!, Colors.teal[500]!];
     } else {
-      return [Colors.tealAccent[400], Colors.blue[400]];
+      return [Colors.tealAccent[400]!, Colors.blue[400]!];
     }
   }
 }

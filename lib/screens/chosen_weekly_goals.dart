@@ -36,28 +36,32 @@ class ChosenWeeklyGoals extends StatelessWidget {
 }
 
 class ChosenWeeklyGoalsPage extends StatefulWidget {
-  ChosenWeeklyGoalsPage({Key key, this.title}) : super(key: key);
+  ChosenWeeklyGoalsPage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _ChosenWeeklyGoalsPageState createState() => _ChosenWeeklyGoalsPageState();
 }
 
 class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
-  CalendarController _controller;
-  Map<DateTime, List<dynamic>> _events;
-  List<dynamic> _selectedEvents;
-  TextEditingController _eventController;
-  SharedPreferences prefs;
+  //CalendarController _controller;
+  late Map<DateTime, List<dynamic>> _events;
+  late List<dynamic> _selectedEvents;
+  late TextEditingController _eventController;
+  late SharedPreferences prefs;
 
-  CalendarController _controller2;
-  Map<DateTime, List<dynamic>> _events2;
-  List<dynamic> _selectedEvents2;
-  TextEditingController _eventController2;
-  SharedPreferences prefs2;
+  //CalendarController _controller2;
+  late Map<DateTime, List<dynamic>> _events2;
+  late List<dynamic> _selectedEvents2;
+  late TextEditingController _eventController2;
+  late SharedPreferences prefs2;
 
-  ConfettiController _controllerCenter = ConfettiController(duration: const Duration(seconds: 2));
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+
+  ConfettiController _controllerCenter =
+      ConfettiController(duration: const Duration(seconds: 2));
 
   int totalWeeklyGoalsCompleted = 0;
   int totalActivityGoals = 0;
@@ -101,7 +105,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
   int vegetableBadge2 = 0;
   int vegetableBadge3 = 0;
 
-  List<String> goals;
+  late List<String> goals;
   List<WeeklyGoalsModel> weeklyGoalsModelList = [];
   List<WeeklySavedGoalsModel> weeklySavedGoalsModelList = [];
   var db = new WeeklyDBHelper();
@@ -110,47 +114,47 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
   initPrefs() async {
     prefs = await SharedPreferences.getInstance();
 
-    totalWeeklyGoalsCompleted = prefs.getInt("weekly goal total");
-    totalActivityGoals = prefs.getInt("activity goals total");
-    totalDairyGoals = prefs.getInt("dairy goals total");
-    totalFruitGoals = prefs.getInt("fruit goals total");
-    totalBeverageGoals = prefs.getInt("beverage goals total");
-    totalGrainGoals = prefs.getInt("grain goals total");
-    totalProteinGoals = prefs.getInt("protein goals total");
-    totalSnackGoals = prefs.getInt("snack goals total");
-    totalVegetableGoals = prefs.getInt("vegetable goals total");
+    totalWeeklyGoalsCompleted = prefs.getInt("weekly goal total")!;
+    totalActivityGoals = prefs.getInt("activity goals total")!;
+    totalDairyGoals = prefs.getInt("dairy goals total")!;
+    totalFruitGoals = prefs.getInt("fruit goals total")!;
+    totalBeverageGoals = prefs.getInt("beverage goals total")!;
+    totalGrainGoals = prefs.getInt("grain goals total")!;
+    totalProteinGoals = prefs.getInt("protein goals total")!;
+    totalSnackGoals = prefs.getInt("snack goals total")!;
+    totalVegetableGoals = prefs.getInt("vegetable goals total")!;
 
-    activityBadge1 = prefs.getInt("activityBadge1");
-    activityBadge2 = prefs.getInt("activityBadge2");
-    activityBadge3 = prefs.getInt("activityBadge3");
+    activityBadge1 = prefs.getInt("activityBadge1")!;
+    activityBadge2 = prefs.getInt("activityBadge2")!;
+    activityBadge3 = prefs.getInt("activityBadge3")!;
 
-    beverageBadge1 = prefs.getInt("beverageBadge1");
-    beverageBadge2 = prefs.getInt("beverageBadge2");
-    beverageBadge3 = prefs.getInt("beverageBadge3");
+    beverageBadge1 = prefs.getInt("beverageBadge1")!;
+    beverageBadge2 = prefs.getInt("beverageBadge2")!;
+    beverageBadge3 = prefs.getInt("beverageBadge3")!;
 
-    dairyBadge1 = prefs.getInt("dairyBadge1");
-    dairyBadge2 = prefs.getInt("dairyBadge2");
-    dairyBadge3 = prefs.getInt("dairyBadge3");
+    dairyBadge1 = prefs.getInt("dairyBadge1")!;
+    dairyBadge2 = prefs.getInt("dairyBadge2")!;
+    dairyBadge3 = prefs.getInt("dairyBadge3")!;
 
-    fruitBadge1 = prefs.getInt("fruitBadge1");
-    fruitBadge2 = prefs.getInt("fruitBadge2");
-    fruitBadge3 = prefs.getInt("fruitBadge3");
+    fruitBadge1 = prefs.getInt("fruitBadge1")!;
+    fruitBadge2 = prefs.getInt("fruitBadge2")!;
+    fruitBadge3 = prefs.getInt("fruitBadge3")!;
 
-    grainBadge1 = prefs.getInt("grainBadge1");
-    grainBadge2 = prefs.getInt("grainBadge2");
-    grainBadge3 = prefs.getInt("grainBadge3");
+    grainBadge1 = prefs.getInt("grainBadge1")!;
+    grainBadge2 = prefs.getInt("grainBadge2")!;
+    grainBadge3 = prefs.getInt("grainBadge3")!;
 
-    proteinBadge1 = prefs.getInt("proteinBadge1");
-    proteinBadge2 = prefs.getInt("proteinBadge2");
-    proteinBadge3 = prefs.getInt("proteinBadge3");
+    proteinBadge1 = prefs.getInt("proteinBadge1")!;
+    proteinBadge2 = prefs.getInt("proteinBadge2")!;
+    proteinBadge3 = prefs.getInt("proteinBadge3")!;
 
-    snackBadge1 = prefs.getInt("snackBadge1");
-    snackBadge2 = prefs.getInt("snackBadge2");
-    snackBadge3 = prefs.getInt("snackBadge3");
+    snackBadge1 = prefs.getInt("snackBadge1")!;
+    snackBadge2 = prefs.getInt("snackBadge2")!;
+    snackBadge3 = prefs.getInt("snackBadge3")!;
 
-    vegetableBadge1 = prefs.getInt("vegetableBadge1");
-    vegetableBadge2 = prefs.getInt("vegetableBadge2");
-    vegetableBadge3 = prefs.getInt("vegetableBadge3");
+    vegetableBadge1 = prefs.getInt("vegetableBadge1")!;
+    vegetableBadge2 = prefs.getInt("vegetableBadge2")!;
+    vegetableBadge3 = prefs.getInt("vegetableBadge3")!;
 
     _events = Map<DateTime, List<dynamic>>.from(
         decodeMap(json.decode(prefs.getString("events") ?? "{}")));
@@ -159,12 +163,12 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
   @override
   void initState() {
     super.initState();
-    _controller = CalendarController();
+    //_controller = CalendarController();
     _eventController = TextEditingController();
     _events = {};
     _selectedEvents = [];
 
-    _controller2 = CalendarController();
+    //_controller2 = CalendarController();
     _eventController2 = TextEditingController();
     _events2 = {};
     _selectedEvents2 = [];
@@ -208,18 +212,33 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TableCalendar(
-            events: _events,
-            initialCalendarFormat: CalendarFormat.week,
+            eventLoader: (DateTime? day) {
+              if (_events.isNotEmpty && day != null)
+                return _events[day]!;
+              else
+                return [];
+            },
+            firstDay: DateTime.utc(1950, 1, 1),
+            lastDay: DateTime.utc(2050, 12, 31),
+            focusedDay: _focusedDay,
+            // events: _events,
+            calendarFormat: CalendarFormat.week,
             calendarStyle: CalendarStyle(
-                canEventMarkersOverflow: true,
-                todayColor: Theme.of(context).accentColor,
-                selectedColor: Theme.of(context).primaryColor,
-                todayStyle: TextStyle(
+                canMarkersOverflow: true,
+                todayDecoration: BoxDecoration(
+                  color: Theme.of(context).accentColor,
+                ),
+                //todayColor:
+                selectedDecoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                //selectedColor:
+                todayTextStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                     color: Colors.white)),
             headerStyle: HeaderStyle(
-              centerHeaderTitle: true,
+              titleCentered: true,
               formatButtonDecoration: BoxDecoration(
                 color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.circular(20.0),
@@ -227,14 +246,23 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
               formatButtonTextStyle: TextStyle(color: Colors.white),
               formatButtonShowsNext: false,
             ),
-            onDaySelected: (date, events, holidays) {
+            selectedDayPredicate: (day) {
+              return isSameDay(_selectedDay, day);
+            },
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                _selectedDay = selectedDay;
+                _focusedDay = focusedDay; // update `_focusedDay` here as well
+              });
+            },
+            /*onDaySelected: (date, events, holidays) {
               update(context);
               setState(() {
                 _selectedEvents = events;
               });
-            },
-            builders: CalendarBuilders(
-              selectedDayBuilder: (context, date, events) => Container(
+            },*/
+            calendarBuilders: CalendarBuilders(
+              selectedBuilder: (context, date, events) => Container(
                   margin: const EdgeInsets.all(4.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -244,7 +272,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     date.day.toString(),
                     style: TextStyle(color: Colors.white),
                   )),
-              todayDayBuilder: (context, date, events) => Container(
+              todayBuilder: (context, date, events) => Container(
                   margin: const EdgeInsets.all(4.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -255,7 +283,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     style: TextStyle(color: Colors.white),
                   )),
             ),
-            calendarController: _controller,
+            //calendarController: _controller,
           ),
           Container(
             padding: EdgeInsets.only(left: 15, right: 15),
@@ -292,7 +320,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                                 .then((value) => update(context));
                           },
                         ),
-                        PopupMenuButton(
+                        PopupMenuButton<String>(
                           icon: Icon(
                             Icons.add,
                             color: Colors.white,
@@ -456,7 +484,6 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     fontWeight: FontWeight.bold),
               ),
               children: <Widget>[
-
                 Padding(padding: EdgeInsets.symmetric(horizontal: 50)),
                 TextButton(
                   child: Icon(Icons.info),
@@ -493,7 +520,10 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalWeeklyGoalsCompleted == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalWeeklyGoalsCompleted != null
                           ? _buildTotalBadge('./assets/images/badge1.png',
@@ -540,7 +570,10 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalFruitGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalFruitGoals != null
                           ? _buildTotalBadge('./assets/images/fruitBadge1.png',
@@ -585,19 +618,28 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalVegetableGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalVegetableGoals != null
-                          ? _buildTotalBadge('./assets/images/vegetableBadge1.png',
-                              'Rank 1', totalVegetableGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/vegetableBadge1.png',
+                              'Rank 1',
+                              totalVegetableGoals)
                           : SizedBox(height: 0),
                       totalVegetableGoals != null && totalVegetableGoals >= 5
-                          ? _buildTotalBadge('./assets/images/vegetableBadge2.png',
-                              'Rank 2', totalVegetableGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/vegetableBadge2.png',
+                              'Rank 2',
+                              totalVegetableGoals)
                           : SizedBox(height: 0),
                       totalVegetableGoals != null && totalVegetableGoals >= 10
-                          ? _buildTotalBadge('./assets/images/vegetableBadge3.png',
-                              'Rank 3', totalVegetableGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/vegetableBadge3.png',
+                              'Rank 3',
+                              totalVegetableGoals)
                           : SizedBox(height: 0),
                     ],
                   ),
@@ -630,7 +672,10 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalGrainGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalGrainGoals != null
                           ? _buildTotalBadge('./assets/images/grainBadge1.png',
@@ -675,19 +720,28 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalProteinGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalProteinGoals != null
-                          ? _buildTotalBadge('./assets/images/proteinBadge1.png',
-                              'Rank 1', totalProteinGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/proteinBadge1.png',
+                              'Rank 1',
+                              totalProteinGoals)
                           : SizedBox(height: 0),
                       totalProteinGoals != null && totalProteinGoals >= 5
-                          ? _buildTotalBadge('./assets/images/proteinBadge2.png',
-                              'Rank 2', totalProteinGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/proteinBadge2.png',
+                              'Rank 2',
+                              totalProteinGoals)
                           : SizedBox(height: 0),
                       totalProteinGoals != null && totalProteinGoals >= 10
-                          ? _buildTotalBadge('./assets/images/proteinBadge3.png',
-                              'Rank 3', totalProteinGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/proteinBadge3.png',
+                              'Rank 3',
+                              totalProteinGoals)
                           : SizedBox(height: 0),
                     ],
                   ),
@@ -720,7 +774,10 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalDairyGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalDairyGoals != null
                           ? _buildTotalBadge('./assets/images/dairyBadge1.png',
@@ -765,7 +822,10 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalSnackGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalSnackGoals != null
                           ? _buildTotalBadge('./assets/images/snackBadge1.png',
@@ -810,7 +870,10 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalBeverageGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalBeverageGoals != null
                           ? _buildTotalBadge('./assets/images/drinkBadge1.png',
@@ -855,19 +918,28 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       totalActivityGoals == null
-                          ? Text("No Badges Achieved Yet", style: TextStyle(fontSize: 18),)
+                          ? Text(
+                              "No Badges Achieved Yet",
+                              style: TextStyle(fontSize: 18),
+                            )
                           : SizedBox(height: 0),
                       totalActivityGoals != null
-                          ? _buildTotalBadge('./assets/images/activityBadge1.png',
-                              'Rank 1', totalActivityGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/activityBadge1.png',
+                              'Rank 1',
+                              totalActivityGoals)
                           : SizedBox(height: 0),
                       totalActivityGoals != null && totalActivityGoals >= 5
-                          ? _buildTotalBadge('./assets/images/activityBadge2.png',
-                              'Rank 2', totalActivityGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/activityBadge2.png',
+                              'Rank 2',
+                              totalActivityGoals)
                           : SizedBox(height: 0),
                       totalActivityGoals != null && totalActivityGoals >= 10
-                          ? _buildTotalBadge('./assets/images/activityBadge3.png',
-                              'Rank 3', totalActivityGoals)
+                          ? _buildTotalBadge(
+                              './assets/images/activityBadge3.png',
+                              'Rank 3',
+                              totalActivityGoals)
                           : SizedBox(height: 0),
                     ],
                   ),
@@ -886,15 +958,15 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
     } else if (index == "Vegetables") {
       return Colors.green;
     } else if (index == "Grains") {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (index == "Protein") {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (index == "Dairy") {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (index == "Snacks and Condiments") {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (index == "Beverage") {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (index == "Physical Activity") {
       return Colors.grey;
     } else {
@@ -1033,52 +1105,44 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
     return path;
   }
 
-  Widget _displayGoalFraction(int x){
-    if(x == null) {
-        return Text("0/5 goals completed");
-    } else if(x == 0) {
+  Widget _displayGoalFraction(int x) {
+    if (x == null) {
       return Text("0/5 goals completed");
-    } else if(x == 1) {
+    } else if (x == 0) {
+      return Text("0/5 goals completed");
+    } else if (x == 1) {
       return Text("1/5 goals completed");
-    } else if(x == 2) {
+    } else if (x == 2) {
       return Text("2/5 goals completed");
-    } else if(x == 3) {
+    } else if (x == 3) {
       return Text("4/5 goals completed");
-    } else if(x == 5) {
+    } else if (x == 5) {
       return Text("0/5 goals completed");
-    } else if(x == 6) {
+    } else if (x == 6) {
       return Text("1/5 goals completed");
-    } else if(x == 7) {
+    } else if (x == 7) {
       return Text("2/5 goals completed");
-    } else if(x == 8) {
+    } else if (x == 8) {
       return Text("3/5 goals completed");
-    } else if(x == 9) {
+    } else if (x == 9) {
       return Text("4/5 goals completed");
     } else {
       return Text("Achieved All Badges");
     }
-
-
   }
 
-    Widget _buildWeeklyView() {
+  List<bool> _checked = [false, false, false];
+  Widget _buildWeeklyView() {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: weeklySavedGoalsModelList.length,
         itemBuilder: (context, index) {
-          return Slidable(
-            actionPane: SlidableDrawerActionPane(),
-            child: Container(
-              child: ListTile(
-                title: Text(weeklySavedGoalsModelList[index].goalDescription),
-              ),
-            ),
-            actions: <Widget>[
-              IconSlideAction(
-                  caption: 'Completed',
-                  color: Colors.green,
-                  icon: Icons.check,
-                  onTap: () {
+          return Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.check),
+                onPressed: () {
+                  setState(() {
                     if (totalActivityGoals == null &&
                         weeklySavedGoalsModelList[index].type ==
                             "Physical Activity") {
@@ -1189,7 +1253,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     prefs.setInt("vegetable goals total", totalVegetableGoals);
 
                     _eventController2.clear();
-                    update(context);
+                    // update(context);
 
                     if (totalFruitGoals == 1 && fruitBadge1 != 1) {
                       _showCongratsDialog('./assets/images/fruitBadge1.png');
@@ -1211,19 +1275,22 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     }
 
                     if (totalVegetableGoals == 1 && vegetableBadge1 != 1) {
-                      _showCongratsDialog('./assets/images/vegetableBadge1.png');
+                      _showCongratsDialog(
+                          './assets/images/vegetableBadge1.png');
                       vegetableBadge1 = 1;
                       prefs.setInt("vegetableBadge1", 1);
                       _controllerCenter.play();
                     }
                     if (totalVegetableGoals == 5 && vegetableBadge2 != 1) {
-                      _showCongratsDialog('./assets/images/vegetableBadge2.png');
+                      _showCongratsDialog(
+                          './assets/images/vegetableBadge2.png');
                       vegetableBadge2 = 1;
                       prefs.setInt("vegetableBadge2", 1);
                       _controllerCenter.play();
                     }
                     if (totalVegetableGoals == 10 && vegetableBadge3 != 1) {
-                      _showCongratsDialog('./assets/images/vegetableBadge3.png');
+                      _showCongratsDialog(
+                          './assets/images/vegetableBadge3.png');
                       vegetableBadge3 = 1;
                       prefs.setInt("vegetableBadge3", 1);
                       _controllerCenter.play();
@@ -1344,6 +1411,55 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     }
 
                     _showSnackBar(context, 'Completed Goal');
+                  });
+                  /**/
+                },
+              ),
+              Expanded(
+                child: Text(weeklySavedGoalsModelList[index].goalDescription,
+                    maxLines: 4),
+              ),
+              PopupMenuButton<String>(
+                onSelected: (String value) {
+                  switch (value) {
+                    case 'Share':
+                      Share.share(
+                          weeklySavedGoalsModelList[index]
+                              .goalDescription
+                              .toString(),
+                          subject:
+                              'Check out my new goal on the Enact diet tracking app!');
+                      break;
+                    case 'Delete':
+                      deleteByGoalDescription(
+                          weeklySavedGoalsModelList[index].id);
+                      update(context);
+                      _showSnackBar(context, 'Deleted Goal');
+                      break;
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return {'Share', 'Delete'}.map((e) {
+                    return PopupMenuItem(child: Text(e), value: e);
+                  }).toList();
+                },
+              ),
+            ],
+          );
+          /*Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            child: Container(
+              child: ListTile(
+                title: Text(weeklySavedGoalsModelList[index].goalDescription),
+              ),
+            ),
+            actions: <Widget>[
+              IconSlideAction(
+                  caption: 'Completed',
+                  color: Colors.green,
+                  icon: Icons.check,
+                  onTap: () {
+                    
                   }),
               IconSlideAction(
                   caption: 'Copy',
@@ -1380,7 +1496,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                     _showSnackBar(context, 'Deleted Goal');
                   }),
             ],
-          );
+          );*/
         });
   }
 
@@ -1413,7 +1529,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
           wGDecode2[i]['type'],
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
-          wGDecode2[i]['user_id']);
+          wGDecode2[i]['userId']);
       weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
     print(weeklySavedGoalsModelList.length);

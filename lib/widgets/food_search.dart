@@ -17,8 +17,8 @@ class FoodSearch extends SearchDelegate<String> {
   List<Food> frequentFoodList = [];
   List<num> ids = [];
   List<num> favorite_ids = [];
-  Food selection;
-  String selectedDate;
+  late Food selection;
+  late String selectedDate;
 
   String searchedQuery = '';
   String message = '';
@@ -52,9 +52,9 @@ class FoodSearch extends SearchDelegate<String> {
         food.alcoholInGrams = data[i]['alcoholInGrams'];
         food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
         food.polyunsaturatedFattyAcidsInGrams =
-        data[i]['polyunsaturatedFattyAcidsInGrams'];
+            data[i]['polyunsaturatedFattyAcidsInGrams'];
         food.monounsaturatedFattyAcidsInGrams =
-        data[i]['monounsaturatedFattyAcidsInGrams'];
+            data[i]['monounsaturatedFattyAcidsInGrams'];
         food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
         food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
         food.sugarInGrams = data[i]['sugarInGrams'];
@@ -63,12 +63,12 @@ class FoodSearch extends SearchDelegate<String> {
         food.vitaminDInMicrograms = data[i]['vitaminDInMicrograms'];
         food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
         food.commonPortionSizeGramWeight =
-        data[i]['commonPortionSizeGramWeight'];
+            data[i]['commonPortionSizeGramWeight'];
         food.commonPortionSizeDescription =
-        data[i]['commonPortionSizeDescription'];
+            data[i]['commonPortionSizeDescription'];
         food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
         food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
-        if(!ids.contains(data[i]['id'])) {
+        if (!ids.contains(data[i]['id'])) {
           foodList.add(food);
           ids.add(data[i]['id']);
           // data[i]['id']
@@ -106,9 +106,9 @@ class FoodSearch extends SearchDelegate<String> {
       food.alcoholInGrams = data[i]['alcoholInGrams'];
       food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
       food.polyunsaturatedFattyAcidsInGrams =
-      data[i]['polyunsaturatedFattyAcidsInGrams'];
+          data[i]['polyunsaturatedFattyAcidsInGrams'];
       food.monounsaturatedFattyAcidsInGrams =
-      data[i]['monounsaturatedFattyAcidsInGrams'];
+          data[i]['monounsaturatedFattyAcidsInGrams'];
       food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
       food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
       food.sugarInGrams = data[i]['sugarInGrams'];
@@ -118,10 +118,10 @@ class FoodSearch extends SearchDelegate<String> {
       food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
       food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
       food.commonPortionSizeDescription =
-      data[i]['commonPortionSizeDescription'];
+          data[i]['commonPortionSizeDescription'];
       food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
       food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
-      if(!favorite_ids.contains(data[i]['id'])) {
+      if (!favorite_ids.contains(data[i]['id'])) {
         frequentFoodList.add(food);
         favorite_ids.add(data[i]['id']);
       }
@@ -212,30 +212,30 @@ class FoodSearch extends SearchDelegate<String> {
 
   Color getColor(String category) {
     if (category == 'Vegetables and vegetable products') {
-      return Colors.green[700];
+      return Colors.green.shade700;
     } else if (category == 'Meat, fish, and poultry') {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple.shade300;
     } else if (category == 'Beverages') {
-      return Colors.teal[400];
+      return Colors.teal.shade400;
     } else if (category == 'Desserts' ||
         category == 'Candy, sugar, and sweets') {
-      return Colors.pink[300];
+      return Colors.pink.shade300;
     } else if (category == 'Grain products') {
-      return Colors.orange[300];
+      return Colors.orange.shade300;
     } else if (category == 'Milk, cream, cheese, and related products') {
-      return Colors.blue[600];
+      return Colors.blue.shade600;
     } else if (category == 'Fats, oils, and nuts') {
-      return Colors.brown[600];
+      return Colors.brown.shade600;
     } else if (category == 'Eggs and related products') {
-      return Colors.yellow[200];
+      return Colors.yellow.shade200;
     } else if (category == 'Fruits and fruit products') {
       return Colors.red;
     } else if (category == 'Commercial entrees and dinners') {
       return Colors.black;
     } else if (category == 'Soups, gravy, and sauces') {
-      return Colors.deepOrange[400];
+      return Colors.deepOrange.shade400;
     }
-    return Colors.indigo[400];
+    return Colors.indigo.shade400;
   }
 
   @override
@@ -270,10 +270,10 @@ class FoodSearch extends SearchDelegate<String> {
                   // searchedQuery = query;
                   Navigator.of(context)
                       .push(
-                    new MaterialPageRoute(
-                        builder: (_) =>
-                            FoodPage(foodList[index], selectedDate)),
-                  )
+                        new MaterialPageRoute(
+                            builder: (_) =>
+                                FoodPage(foodList[index], selectedDate)),
+                      )
                       .then((val) => {setMessage(val)});
                   // close(context, null)
                 },
@@ -335,17 +335,18 @@ class FoodSearch extends SearchDelegate<String> {
                             Padding(
                               padding: EdgeInsets.only(left: 5, right: 5),
                             ),
-                            getIcon(frequentFoodList[index].nccFoodGroupCategory),
+                            getIcon(
+                                frequentFoodList[index].nccFoodGroupCategory),
                           ],
                         ),
                         onTap: () {
                           this.searchedQuery = query;
                           Navigator.of(context)
                               .push(
-                            new MaterialPageRoute(
-                                builder: (_) => FoodPage(
-                                    frequentFoodList[index], selectedDate)),
-                          )
+                                new MaterialPageRoute(
+                                    builder: (_) => FoodPage(
+                                        frequentFoodList[index], selectedDate)),
+                              )
                               .then((val) => {setMessage(val)});
                         },
                         title: Text(
@@ -389,7 +390,7 @@ class FoodSearch extends SearchDelegate<String> {
                         height: double.infinity,
                         child: Text(''),
                         color:
-                        getColor(searchResults[index].nccFoodGroupCategory),
+                            getColor(searchResults[index].nccFoodGroupCategory),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5, right: 5),
@@ -401,10 +402,10 @@ class FoodSearch extends SearchDelegate<String> {
                     this.searchedQuery = query;
                     Navigator.of(context)
                         .push(
-                      new MaterialPageRoute(
-                          builder: (_) =>
-                              FoodPage(searchResults[index], selectedDate)),
-                    )
+                          new MaterialPageRoute(
+                              builder: (_) =>
+                                  FoodPage(searchResults[index], selectedDate)),
+                        )
                         .then((val) => {setMessage(val)});
                   },
                   title: Text(
@@ -463,10 +464,10 @@ class FoodSearch extends SearchDelegate<String> {
                           this.searchedQuery = query;
                           Navigator.of(context)
                               .push(
-                            new MaterialPageRoute(
-                                builder: (_) => FoodPage(
-                                    searchResults[index], selectedDate)),
-                          )
+                                new MaterialPageRoute(
+                                    builder: (_) => FoodPage(
+                                        searchResults[index], selectedDate)),
+                              )
                               .then((val) => {setMessage(val)});
                         },
                         title: Text(

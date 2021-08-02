@@ -11,22 +11,19 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:cnc_flutter_app/extensions/text_formatting_extension.dart';
 
 class FoodPage extends StatefulWidget {
-  Food selection;
-  String selectedDate;
+  final Food selection;
+  final String selectedDate;
 
-  FoodPage(Food selection, String selectedDate) {
-    this.selection = selection;
-    this.selectedDate = selectedDate;
-  }
+  FoodPage(this.selection, this.selectedDate);
 
   @override
   FoodProfile createState() => FoodProfile(selection, selectedDate);
 }
 
 class FoodProfile extends State<FoodPage> {
-  Food currentFood;
-  String selectedDate;
-  String title;
+  late Food currentFood;
+  late String selectedDate;
+  late String title;
   String subtitle = '';
   double titleBottomPadding = 20;
 
@@ -40,7 +37,7 @@ class FoodProfile extends State<FoodPage> {
   double portion = 1;
   double actualPortion = 1;
   String servingAsFraction = '1';
-  String actualServingAsFraction;
+  late String actualServingAsFraction;
   int initialFirstSelection = 1;
   int initialSecondSelection = 0;
   int initialTimeFirstSelection = 1;
@@ -216,7 +213,7 @@ class FoodProfile extends State<FoodPage> {
   }
 
   _pickTime() async {
-    TimeOfDay t = await showTimePicker(
+    TimeOfDay? t = await showTimePicker(
         context: context,
         initialTime:
             new TimeOfDay(hour: entryTime.hour, minute: entryTime.minute),
@@ -261,7 +258,6 @@ class FoodProfile extends State<FoodPage> {
     }
     Icon(Icons.keyboard_arrow_down);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -340,8 +336,8 @@ class FoodProfile extends State<FoodPage> {
                           headingRowHeight: 0,
                           dataRowHeight: 30,
                           dividerThickness: 0,
-                          dataTextStyle:
-                          TextStyle(fontSize: 20, color: Theme.of(context).hintColor),
+                          dataTextStyle: TextStyle(
+                              fontSize: 20, color: Theme.of(context).hintColor),
                           // columnSpacing: MediaQuery.of(context).size.width/ 3,
 
                           columns: <DataColumn>[
@@ -457,7 +453,8 @@ class FoodProfile extends State<FoodPage> {
                                   Row(
                                     children: [
                                       Text(
-                                        (currentFood.carbohydratesInGrams * portion)
+                                        (currentFood.carbohydratesInGrams *
+                                                    portion)
                                                 .round()
                                                 .toString() +
                                             'g',

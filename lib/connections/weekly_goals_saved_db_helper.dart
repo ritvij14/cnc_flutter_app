@@ -7,23 +7,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'db_helper_base.dart';
 
 class WeeklySavedDBHelper extends DBHelperBase {
-
   Future<http.Response> getWeeklySavedGoals() async {
     var requestUrl = baseUrl + 'api/weekly_goals_saved/all/';
-    http.Response response =
-    await http.get(Uri.encodeFull(requestUrl), headers: {});
+    http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }
 
   Future<http.Response> getWeeklySavedGoalsByUserID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/weekly_goals_saved/all/$userId';
     var queryParameters = {
       'userId': userId.toString(),
     };
-    var uri =
-    Uri.https(baseUri, '/api/weekly_goals_saved/all/$userId', queryParameters);
+    var uri = Uri.https(
+        baseUri, '/api/weekly_goals_saved/all/$userId', queryParameters);
 
     var response = await http.get(
       uri,
@@ -36,9 +34,9 @@ class WeeklySavedDBHelper extends DBHelperBase {
   Future<http.Response> saveWeeklySavedGoal(
       WeeklySavedGoalsModel weeklySavedGoalsModel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.get('id');
+    String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/weekly_goals_saved/add/';
-    var uriResponse = await http.post(requestUrl,
+    var uriResponse = await http.post(Uri.parse(requestUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'id': weeklySavedGoalsModel.id,
@@ -47,13 +45,13 @@ class WeeklySavedDBHelper extends DBHelperBase {
           'help_info': weeklySavedGoalsModel.helpInfo,
           'userId': userId,
         }));
+    return uriResponse;
   }
 
   Future<http.Response> deleteWeeklyGoalsSavedByID(int id) async {
     var requestUrl = baseUrl + 'api/weekly_goals_saved/delete/$id';
     http.Response response =
-    await http.delete(Uri.encodeFull(requestUrl), headers: {});
+        await http.delete(Uri.parse(requestUrl), headers: {});
     return response;
   }
-
 }

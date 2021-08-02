@@ -10,33 +10,21 @@ class SymptomModel {
   bool appetiteLoss = false;
   bool stomaProblems = false;
   String other = '';
-  int id;
+  late int id;
   DateTime dateTime = DateTime.now();
-  int userId;
-
+  late int userId;
 
   SymptomModel(
-      bool abdominalPain,
-      bool bloating,
-      bool nausea,
-      bool vomiting,
-      bool constipation,
-      bool diarrhea,
-      bool appetiteLoss,
-      bool stomaProblems,
-      String other,
-      DateTime dateTime) {
-    this.abdominalPain = abdominalPain;
-    this.bloating = bloating;
-    this.nausea = nausea;
-    this.vomiting = vomiting;
-    this.constipation = constipation;
-    this.diarrhea = diarrhea;
-    this.appetiteLoss = appetiteLoss;
-    this.stomaProblems = stomaProblems;
-    this.other = other;
-    this.dateTime = dateTime;
-  }
+      this.abdominalPain,
+      this.bloating,
+      this.nausea,
+      this.vomiting,
+      this.constipation,
+      this.diarrhea,
+      this.appetiteLoss,
+      this.stomaProblems,
+      this.other,
+      this.dateTime);
 
   SymptomModel.emptyConstructor();
 

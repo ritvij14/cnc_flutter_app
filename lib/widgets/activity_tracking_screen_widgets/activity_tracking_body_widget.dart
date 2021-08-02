@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'activity_tracking_list_tile_widget.dart';
 
-
 class ActivityTrackingBody extends StatefulWidget {
-  List<ActivityModel> activityModelList = [];
+  late final List<ActivityModel> activityModelList = [];
 
   @override
   _ActivityTrackingBodyState createState() => _ActivityTrackingBodyState();
@@ -31,7 +30,6 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
         future: getActivities(),
       ),
     );
-
   }
 
   // List<ActivityTrackingListTile> buildFitnessTrackingListTileWidgets(
@@ -47,18 +45,16 @@ class _ActivityTrackingBodyState extends State<ActivityTrackingBody> {
 
   getActivities() async {
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     widget.activityModelList.clear();
     var response = await db.getActivities(int.parse(id));
     List<ActivityModel> fa = (json.decode(response.body) as List)
         .map((data) => ActivityModel.fromJson(data))
         .toList();
-    widget.activityModelList = fa;
+    widget.activityModelList.addAll(fa);
   }
 
   void update() {
-    setState(() {
-    });
+    setState(() {});
   }
-
 }
