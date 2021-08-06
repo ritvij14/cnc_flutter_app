@@ -14,7 +14,7 @@ on:
       - 'web/**'
   push:
     branches:
-    - main
+    - dev
     
 # on: push    # Default will running for every branch.
     
