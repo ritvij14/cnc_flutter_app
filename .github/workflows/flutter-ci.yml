@@ -51,12 +51,12 @@ jobs:
     # Build apk.
     - run: flutter build apk
     
-    # - name: Delete old release assets
-    #   uses: mknejp/delete-release-assets@v1
-    #   with:
-    #     token: ${{ github.token }}
-    #     tag: dev # This may also be of the form 'refs/tags/staging'
-    #     assets: app-release.apk
+    - name: Delete old release assets
+      uses: mknejp/delete-release-assets@v1
+      with:
+        token: ${{ github.token }}
+        tag: dev # This may also be of the form 'refs/tags/staging'
+        assets: app-release.apk
     
     # create release
     - name: Release
