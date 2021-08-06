@@ -5,7 +5,6 @@ class ThemeEvent {
   ThemeEvent({required this.appTheme});
 }
 
-
 // import 'package:equatable/equatable.dart';
 // import 'package:meta/meta.dart';
 //

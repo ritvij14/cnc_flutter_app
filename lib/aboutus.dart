@@ -25,8 +25,8 @@ final List<Widget> entries = [
     padding: EdgeInsets.all(15.0),
     child: Text(
       'ENACT Stands for Electronic Nutrition Approaches for Cancer-'
-          'related Topics. ENACT strives to aid Cancer patients with '
-          'nutrition topics using eHealth tools',
+      'related Topics. ENACT strives to aid Cancer patients with '
+      'nutrition topics using eHealth tools',
       style: TextStyle(
         fontSize: 20.0,
         color: Colors.black,
@@ -47,12 +47,11 @@ final List<Widget> entries = [
   ),
   Container(
     padding: EdgeInsets.all(15.0),
-
     child: Text(
       'ENACT is made up of Benedictine University Research Students and'
-          ' teachers. They hope to provide factual information about '
-          'nutrition along with hopes of aiding survivors with keeping'
-          ' track of goals and progress towards their nutritional needs.',
+      ' teachers. They hope to provide factual information about '
+      'nutrition along with hopes of aiding survivors with keeping'
+      ' track of goals and progress towards their nutritional needs.',
       style: TextStyle(
         fontSize: 20.0,
         color: Colors.black,
@@ -89,8 +88,7 @@ class AboutUs extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             itemCount: entries.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                  child: entries[index]);
+              return Container(child: entries[index]);
             }));
   }
 }

@@ -18,17 +18,19 @@ class _CommunicationsScreenState extends State<CommunicationsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.build,
-              size: 50,)
+              Icon(
+                Icons.build,
+                size: 50,
+              )
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Under Construction",
-              style: TextStyle(
-                fontSize: 30
-              ),),
+              Text(
+                "Under Construction",
+                style: TextStyle(fontSize: 30),
+              ),
             ],
           ),
         ],
