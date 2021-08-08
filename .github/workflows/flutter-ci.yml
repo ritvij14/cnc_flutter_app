@@ -21,7 +21,7 @@ on:
 jobs:
   build:
     # This job will run on ubuntu virtual machine
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     
     # Setup Java environment in order to build the Android app.
@@ -50,19 +50,34 @@ jobs:
     
     # Build apk.
     - run: flutter build apk
+
+    # Build ios
+    - name: Build iOS App
+        run: |
+          flutter build ios --no-codesign
+          cd build/ios/iphoneos
+          mkdir Payload
+          cd Payload
+          ln -s ../Runner.app
+          cd ..
+          zip -r app.ipa Payload
     
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
       with:
         token: ${{ github.token }}
         tag: dev # This may also be of the form 'refs/tags/staging'
-        assets: app-release.apk
+        assets: |
+          app-release.apk
+          app.ipa
     
     # create release
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-          files: build/app/outputs/apk/release/app-release.apk
+          files: |
+            build/app/outputs/apk/release/app-release.apk
+            build/ios/iphoneos/app.ipa
           prerelease: true
           tag_name: dev
       env:
