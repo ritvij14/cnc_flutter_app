@@ -36,9 +36,9 @@ class LoginScreen extends StatelessWidget {
       var response = await db.login(
           data.name, encrypter.encrypt(data.password, iv: iv).base64);
       print(encrypter.encrypt(data.password, iv: iv).base64);
-      /*if (response == "invalid") {
+      if (response == "invalid") {
         return 'Incorrect password';
-      }*/
+      }
       saveUserIDtoPref(response);
 
       //TODO remove store email code.
