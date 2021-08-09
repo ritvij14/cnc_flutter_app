@@ -19,9 +19,9 @@ on:
 # on: push    # Default will running for every branch.
     
 jobs:
-  build:
+  android:
     # This job will run on ubuntu virtual machine
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     
     # Setup Java environment in order to build the Android app.
@@ -50,26 +50,14 @@ jobs:
     
     # Build apk.
     - run: flutter build apk
-
-    # Build ios
-    - name: Build iOS App
-        run: |
-          flutter build ios --no-codesign
-          cd build/ios/iphoneos
-          mkdir Payload
-          cd Payload
-          ln -s ../Runner.app
-          cd ..
-          zip -r app.ipa Payload
     
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
       with:
         token: ${{ github.token }}
+        fail-if-no-assets: false
         tag: dev # This may also be of the form 'refs/tags/staging'
-        assets: |
-          app-release.apk
-          app.ipa
+        assets: app-release.apk
     
     # create release
     - name: Release
@@ -84,7 +72,50 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     # Upload generated apk to the artifacts.
-#     - uses: actions/upload-artifact@v1
-#       with:
-#         name: release-apk
-#         path: build/app/outputs/apk/release/app-release.apk
+  ios:
+    needs: android
+    runs-on: macos-latest
+
+    steps:
+    # Setup Java environment in order to build the Android app.
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    
+    # Setup the flutter environment.
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'beta' # 'dev', 'alpha', default to: 'stable'
+        # flutter-version: '1.12.x' # you can also specify exact version of flutter
+    
+    # Get flutter dependencies.
+    - run: flutter pub get
+    
+    - name: Build iOS App
+      run: |
+        flutter build ios --no-codesign
+        cd build/ios/iphoneos
+        mkdir Payload
+        cd Payload
+        ln -s ../Runner.app
+        cd ..
+        zip -r app.ipa Payload
+
+    - name: Delete old release assets
+      uses: mknejp/delete-release-assets@v1
+      with:
+        token: ${{ github.token }}
+        fail-if-no-assets: false
+        tag: dev # This may also be of the form 'refs/tags/staging'
+        assets: app.ipa
+    
+    # create release
+    - name: Release
+      uses: softprops/action-gh-release@59c3b4891632ff9a897f99a91d7bc557467a3a22
+      with:
+          files: build/ios/iphoneos/app.ipa
+          prerelease: true
+          tag_name: dev
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
