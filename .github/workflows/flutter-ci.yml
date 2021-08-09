@@ -62,11 +62,9 @@ jobs:
     
     # create release
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@59c3b4891632ff9a897f99a91d7bc557467a3a22
       with:
-          files: |
-            build/app/outputs/apk/release/app-release.apk
-            build/ios/iphoneos/app.ipa
+          files: build/app/outputs/apk/release/app-release.apk
           prerelease: true
           tag_name: dev
       env:
