@@ -480,7 +480,32 @@ class _DetailsScreenState extends State<DetailsScreen> {
               Text("What is your usual physical activity level?",
                   style: TextStyle(fontSize: 18)),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    'Light\n- Walking slowly\n- Sitting using computer\n- Standing light work (cooking, washing dishes)\n- Fishing sitting\n- Playing most instruments\n\nModerate\n- Walking very brisk (4 mph)\n- Cleaning heavy (washing windows, vacuuming, mopping)\n- Mowing lawn (power mower)\n- Bicycling light effort (10-12 mph)\n- Bad minton recreational\n- Tennis doubles\n\nVigorous\n- Hiking\n- Jogging at 6 mph\n- Shoveling\n- Carrying heavy loads\n- Bicycling fast (14-16 mph)\n- Basketball game\n- Soccer game\n- Tennis singles',
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text(
+                                      'Ok',
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ));
+                },
                 child: Icon(Icons.info),
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
