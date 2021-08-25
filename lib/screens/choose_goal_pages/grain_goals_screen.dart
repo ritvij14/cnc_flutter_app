@@ -5,7 +5,6 @@ import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 // void main() => runApp(GoalCalendar());
 
@@ -45,7 +44,13 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
       ),
       body: FutureBuilder(
         builder: (context, projectSnap) {
-          return _buildGrainGoalView();
+          if (projectSnap.connectionState == ConnectionState.done) {
+            return _buildGrainGoalView();
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
         future: getGoals(),
       ),
@@ -176,7 +181,7 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
           //_addGoal(items[index].subtitle);
           _addGoal(weeklyGoalsModelList[index].goalDescription);
           print(goals);
-          _showSnackBar(context, 'Added Goal to Weekly Goals');
+          addSavedGoals(index);
         });
     /*return Slidable(
       actionPane: SlidableDrawerActionPane(),
@@ -238,7 +243,7 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
           wGDecode2[i]['type'],
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
-          wGDecode2[i]['user_id']);
+          wGDecode2[i]['userId']);
       weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
   }
@@ -287,6 +292,7 @@ class _ChooseGrainGoalsPageState extends State<ChooseGrainGoalsPage> {
           weeklyGoalsModelList[index].helpInfo,
           12);
       db2.saveWeeklySavedGoal(m);
+      _showSnackBar(context, 'Added Goal to Weekly Goals');
     } else {
       _showAddDialog();
       print("longer than 3");

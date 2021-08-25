@@ -5,7 +5,6 @@ import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 // void main() => runApp(GoalCalendar());
 
@@ -46,7 +45,13 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
       ),
       body: FutureBuilder(
         builder: (context, projectSnap) {
-          return _buildActivityGoalView();
+          if (projectSnap.connectionState == ConnectionState.done) {
+            return _buildActivityGoalView();
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
         future: getGoals(),
       ),
@@ -175,7 +180,6 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
       ),
       onTap: () {
         _addGoal(weeklyGoalsModelList[index].goalDescription);
-        _showSnackBar(context, 'Added Goal to Weekly Goals');
         addSavedGoals(index);
       },
     );
@@ -284,6 +288,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
           weeklyGoalsModelList[index].helpInfo,
           12);
       db2.saveWeeklySavedGoal(m);
+      _showSnackBar(context, 'Added Goal to Weekly Goals');
     } else {
       _showAddDialog();
     }

@@ -114,47 +114,47 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
   initPrefs() async {
     prefs = await SharedPreferences.getInstance();
 
-    totalWeeklyGoalsCompleted = prefs.getInt("weekly goal total")!;
-    totalActivityGoals = prefs.getInt("activity goals total")!;
-    totalDairyGoals = prefs.getInt("dairy goals total")!;
-    totalFruitGoals = prefs.getInt("fruit goals total")!;
-    totalBeverageGoals = prefs.getInt("beverage goals total")!;
-    totalGrainGoals = prefs.getInt("grain goals total")!;
-    totalProteinGoals = prefs.getInt("protein goals total")!;
-    totalSnackGoals = prefs.getInt("snack goals total")!;
-    totalVegetableGoals = prefs.getInt("vegetable goals total")!;
+    totalWeeklyGoalsCompleted = prefs.getInt("weekly goal total") ?? 0;
+    totalActivityGoals = prefs.getInt("activity goals total") ?? 0;
+    totalDairyGoals = prefs.getInt("dairy goals total") ?? 0;
+    totalFruitGoals = prefs.getInt("fruit goals total") ?? 0;
+    totalBeverageGoals = prefs.getInt("beverage goals total") ?? 0;
+    totalGrainGoals = prefs.getInt("grain goals total") ?? 0;
+    totalProteinGoals = prefs.getInt("protein goals total") ?? 0;
+    totalSnackGoals = prefs.getInt("snack goals total") ?? 0;
+    totalVegetableGoals = prefs.getInt("vegetable goals total") ?? 0;
 
-    activityBadge1 = prefs.getInt("activityBadge1")!;
-    activityBadge2 = prefs.getInt("activityBadge2")!;
-    activityBadge3 = prefs.getInt("activityBadge3")!;
+    activityBadge1 = prefs.getInt("activityBadge1") ?? 0;
+    activityBadge2 = prefs.getInt("activityBadge2") ?? 0;
+    activityBadge3 = prefs.getInt("activityBadge3") ?? 0;
 
-    beverageBadge1 = prefs.getInt("beverageBadge1")!;
-    beverageBadge2 = prefs.getInt("beverageBadge2")!;
-    beverageBadge3 = prefs.getInt("beverageBadge3")!;
+    beverageBadge1 = prefs.getInt("beverageBadge1") ?? 0;
+    beverageBadge2 = prefs.getInt("beverageBadge2") ?? 0;
+    beverageBadge3 = prefs.getInt("beverageBadge3") ?? 0;
 
-    dairyBadge1 = prefs.getInt("dairyBadge1")!;
-    dairyBadge2 = prefs.getInt("dairyBadge2")!;
-    dairyBadge3 = prefs.getInt("dairyBadge3")!;
+    dairyBadge1 = prefs.getInt("dairyBadge1") ?? 0;
+    dairyBadge2 = prefs.getInt("dairyBadge2") ?? 0;
+    dairyBadge3 = prefs.getInt("dairyBadge3") ?? 0;
 
-    fruitBadge1 = prefs.getInt("fruitBadge1")!;
-    fruitBadge2 = prefs.getInt("fruitBadge2")!;
-    fruitBadge3 = prefs.getInt("fruitBadge3")!;
+    fruitBadge1 = prefs.getInt("fruitBadge1") ?? 0;
+    fruitBadge2 = prefs.getInt("fruitBadge2") ?? 0;
+    fruitBadge3 = prefs.getInt("fruitBadge3") ?? 0;
 
-    grainBadge1 = prefs.getInt("grainBadge1")!;
-    grainBadge2 = prefs.getInt("grainBadge2")!;
-    grainBadge3 = prefs.getInt("grainBadge3")!;
+    grainBadge1 = prefs.getInt("grainBadge1") ?? 0;
+    grainBadge2 = prefs.getInt("grainBadge2") ?? 0;
+    grainBadge3 = prefs.getInt("grainBadge3") ?? 0;
 
-    proteinBadge1 = prefs.getInt("proteinBadge1")!;
-    proteinBadge2 = prefs.getInt("proteinBadge2")!;
-    proteinBadge3 = prefs.getInt("proteinBadge3")!;
+    proteinBadge1 = prefs.getInt("proteinBadge1") ?? 0;
+    proteinBadge2 = prefs.getInt("proteinBadge2") ?? 0;
+    proteinBadge3 = prefs.getInt("proteinBadge3") ?? 0;
 
-    snackBadge1 = prefs.getInt("snackBadge1")!;
-    snackBadge2 = prefs.getInt("snackBadge2")!;
-    snackBadge3 = prefs.getInt("snackBadge3")!;
+    snackBadge1 = prefs.getInt("snackBadge1") ?? 0;
+    snackBadge2 = prefs.getInt("snackBadge2") ?? 0;
+    snackBadge3 = prefs.getInt("snackBadge3") ?? 0;
 
-    vegetableBadge1 = prefs.getInt("vegetableBadge1")!;
-    vegetableBadge2 = prefs.getInt("vegetableBadge2")!;
-    vegetableBadge3 = prefs.getInt("vegetableBadge3")!;
+    vegetableBadge1 = prefs.getInt("vegetableBadge1") ?? 0;
+    vegetableBadge2 = prefs.getInt("vegetableBadge2") ?? 0;
+    vegetableBadge3 = prefs.getInt("vegetableBadge3") ?? 0;
 
     _events = Map<DateTime, List<dynamic>>.from(
         decodeMap(json.decode(prefs.getString("events") ?? "{}")));
