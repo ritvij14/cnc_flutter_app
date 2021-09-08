@@ -1,28 +1,30 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CancerTreatmentWidget extends StatefulWidget {
-  final  bool surgery;
-  final  bool chemo;
-  final  bool radiation;
+  final bool surgery;
+  final bool chemo;
+  final bool radiation;
   final Map<String, bool> surgeryType;
 
-  const CancerTreatmentWidget({Key key, this.surgery, this.chemo, this.radiation, this.surgeryType}) : super(key: key);
-
+  const CancerTreatmentWidget(
+      {Key? key,
+      required this.surgery,
+      required this.chemo,
+      required this.radiation,
+      required this.surgeryType})
+      : super(key: key);
 
   @override
   _CancerTreatmentWidget createState() => _CancerTreatmentWidget();
 }
 
 class _CancerTreatmentWidget extends State<CancerTreatmentWidget> {
+  late bool _surgery;
+  late bool _chemo;
+  late bool _radiation;
 
-  bool _surgery;
-  bool _chemo;
-  bool _radiation;
-
-  Map<String, bool> selectedSurgeryType;
-
+  late Map<String, bool> selectedSurgeryType;
 
   Widget _buildTreatmentYN(String treatment) {
     return Row(children: <Widget>[
@@ -34,18 +36,19 @@ class _CancerTreatmentWidget extends State<CancerTreatmentWidget> {
             groupValue: treatment == "surgery"
                 ? widget.surgery
                 : treatment == "chemo"
-                ?  widget.chemo
-                :  widget.radiation,
-            onChanged: (value) {
-              setState(() {
-                treatment == "surgery"
-                    ? _surgery = value
-                    : treatment == "chemo"
-                    ? _chemo = value
-                    : _radiation = value;
-                // Navigator.of(context, rootNavigator: true).pop();
-                // _buildCancerHistory();
-              });
+                    ? widget.chemo
+                    : widget.radiation,
+            onChanged: (bool? value) {
+              if (value != null)
+                setState(() {
+                  treatment == "surgery"
+                      ? _surgery = value
+                      : treatment == "chemo"
+                          ? _chemo = value
+                          : _radiation = value;
+                  // Navigator.of(context, rootNavigator: true).pop();
+                  // _buildCancerHistory();
+                });
             },
           ),
         ),
@@ -56,20 +59,21 @@ class _CancerTreatmentWidget extends State<CancerTreatmentWidget> {
           leading: Radio(
             value: false,
             groupValue: treatment == "surgery"
-                ?  widget.surgery
+                ? widget.surgery
                 : treatment == "chemo"
-                ? widget.chemo
-                :  widget.radiation,
-            onChanged: (value) {
-              setState(() {
-                treatment == "surgery"
-                    ? _surgery = value
-                    : treatment == "chemo"
-                    ? _chemo = value
-                    : _radiation = value;
-                // Navigator.of(context, rootNavigator: true).pop();
-                // _buildCancerHistory();
-              });
+                    ? widget.chemo
+                    : widget.radiation,
+            onChanged: (bool? value) {
+              if (value != null)
+                setState(() {
+                  treatment == "surgery"
+                      ? _surgery = value
+                      : treatment == "chemo"
+                          ? _chemo = value
+                          : _radiation = value;
+                  // Navigator.of(context, rootNavigator: true).pop();
+                  // _buildCancerHistory();
+                });
             },
           ),
         ),
@@ -84,14 +88,13 @@ class _CancerTreatmentWidget extends State<CancerTreatmentWidget> {
         return new CheckboxListTile(
           title: new Text(key),
           value: widget.surgeryType[key],
-          activeColor: Theme
-              .of(context)
-              .buttonColor,
+          activeColor: Theme.of(context).buttonColor,
           checkColor: Colors.white,
-          onChanged: (bool value) {
-            setState(() {
-              selectedSurgeryType[key] = value;
-            });
+          onChanged: (bool? value) {
+            if (value != null)
+              setState(() {
+                selectedSurgeryType[key] = value;
+              });
           },
         );
       }).toList(),
@@ -119,12 +122,12 @@ class _CancerTreatmentWidget extends State<CancerTreatmentWidget> {
           _buildTreatmentYN("surgery"),
           _surgery == true
               ? Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text('What procedure did you have?',
-                  style: TextStyle(fontSize: 16)),
-            ),
-          )
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text('What procedure did you have?',
+                        style: TextStyle(fontSize: 16)),
+                  ),
+                )
               : SizedBox(height: 0),
           _surgery == true ? _buildSurgeryDropdown() : SizedBox(height: 0),
           SizedBox(height: 20),

@@ -5,11 +5,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'activity_tracking_modify_activity_widget.dart';
 
 class ActivityTrackingListTile extends StatefulWidget {
-  ActivityModel activityModel;
+  late final ActivityModel activityModel;
 
-  ActivityTrackingListTile(ActivityModel activityModel) {
-    this.activityModel = activityModel;
-  }
+  ActivityTrackingListTile(this.activityModel);
 
   @override
   _ActivityTrackingListTileState createState() =>
@@ -28,11 +26,11 @@ class _ActivityTrackingListTileState extends State<ActivityTrackingListTile> {
       leading: Icon(getActivityIcon()),
       title: Text(widget.activityModel.type),
       subtitle: Text(
-        // widget.activityModel.minutes.toString() +
-        // ' minutes' +
-        // ' at intensity level ' +
-        // widget.activityModel.intensity.toString() +
-        // '\n' +
+          // widget.activityModel.minutes.toString() +
+          // ' minutes' +
+          // ' at intensity level ' +
+          // widget.activityModel.intensity.toString() +
+          // '\n' +
           DateFormat('MM/dd/yyyy').format(widget.activityModel.dateTime)),
       trailing: Text(widget.activityModel.minutes.toString() + ' minutes'),
       onTap: () async {
@@ -41,8 +39,7 @@ class _ActivityTrackingListTileState extends State<ActivityTrackingListTile> {
           MaterialPageRoute(
               builder: (context) =>
                   ActivityTrackingModifyActivity(widget.activityModel)),
-
-        ).then((value){
+        ).then((value) {
           if (value != null) {
             widget.activityModel = value;
           }

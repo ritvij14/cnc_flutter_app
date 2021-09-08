@@ -36,12 +36,11 @@ class _MetricTrackingBodyState extends State<MetricTrackingBody> {
   getMetrics() async {
     metricModelList.clear();
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     var response = await db.getMetrics(int.parse(id));
-    List<MetricModel> newMetricModelList =
-        (json.decode(response.body) as List)
-            .map((data) => MetricModel.fromJson(data))
-            .toList();
+    List<MetricModel> newMetricModelList = (json.decode(response.body) as List)
+        .map((data) => MetricModel.fromJson(data))
+        .toList();
     metricModelList = newMetricModelList;
   }
 }

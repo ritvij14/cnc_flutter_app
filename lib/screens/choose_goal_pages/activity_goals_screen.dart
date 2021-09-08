@@ -5,7 +5,6 @@ import 'package:cnc_flutter_app/connections/weekly_goals_saved_db_helper.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_model.dart';
 import 'package:cnc_flutter_app/models/weekly_goals_saved_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 // void main() => runApp(GoalCalendar());
 
@@ -21,7 +20,7 @@ class ChooseActivityGoals extends StatelessWidget {
 }
 
 class ChooseDairyGoalsPage extends StatefulWidget {
-  ChooseDairyGoalsPage({Key key, this.title}) : super(key: key);
+  ChooseDairyGoalsPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -46,7 +45,13 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
       ),
       body: FutureBuilder(
         builder: (context, projectSnap) {
-          return _buildActivityGoalView();
+          if (projectSnap.connectionState == ConnectionState.done) {
+            return _buildActivityGoalView();
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
         future: getGoals(),
       ),
@@ -71,7 +76,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
             ),
           ),
           Container(
-            height: ((MediaQuery.of(context).size.height) / 2)-75,
+            height: ((MediaQuery.of(context).size.height) / 2) - 75,
             child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: weeklyGoalsModelList.length,
@@ -100,11 +105,11 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
                         shrinkWrap: true,
                         itemCount: weeklySavedGoalsModelList.length,
                         itemBuilder: (context, index) {
-                          if (weeklySavedGoalsModelList[index].type != null) {
-                            return _buildListView(index);
-                          } else {
+                          //if (weeklySavedGoalsModelList[index].type != null) {
+                          return _buildListView(index);
+                          /*} else {
                             return _buildEmpty();
-                          }
+                          }*/
                         }))
               ],
             ),
@@ -135,15 +140,15 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
     } else if (index == "Vegetables") {
       return Colors.green;
     } else if (index == "Grains") {
-      return Colors.orange[300];
+      return Colors.orange[300]!;
     } else if (index == "Protein") {
-      return Colors.deepPurple[300];
+      return Colors.deepPurple[300]!;
     } else if (index == "Dairy") {
-      return Colors.blue[600];
+      return Colors.blue[600]!;
     } else if (index == "Snacks and Condiments") {
-      return Colors.pink[300];
+      return Colors.pink[300]!;
     } else if (index == "Beverage") {
-      return Colors.teal[400];
+      return Colors.teal[400]!;
     } else if (index == "Physical Activity") {
       return Colors.grey;
     } else {
@@ -167,7 +172,18 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
   }
 
   Widget _buildSlideView(int index) {
-    return Slidable(
+    return GestureDetector(
+      child: Container(
+        child: ListTile(
+          title: Text(weeklyGoalsModelList[index].goalDescription),
+        ),
+      ),
+      onTap: () {
+        _addGoal(weeklyGoalsModelList[index].goalDescription);
+        addSavedGoals(index);
+      },
+    );
+    /*Slidable(
       actionPane: SlidableDrawerActionPane(),
       child: Container(
         child: ListTile(
@@ -197,7 +213,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
               addSavedGoals(index);
             }),
       ],
-    );
+    );*/
   }
 
   _showAddDialog() async {
@@ -243,7 +259,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
           wGDecode2[i]['type'],
           wGDecode2[i]['goalDescription'],
           wGDecode2[i]['help_info'],
-          wGDecode2[i]['user_id']);
+          wGDecode2[i]['userId']);
       weeklySavedGoalsModelList.add(weeklySavedGoalsModel);
     }
   }
@@ -251,10 +267,10 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
   addSavedGoals(int index) async {
     int i = 1;
     int x = 0;
-    if (weeklySavedGoalsModelList.length > 0){
-      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length-1].id+1;
-    }
-    else{
+    if (weeklySavedGoalsModelList.length > 0) {
+      x = weeklySavedGoalsModelList[weeklySavedGoalsModelList.length - 1].id +
+          1;
+    } else {
       x = 1;
     }
 
@@ -272,6 +288,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
           weeklyGoalsModelList[index].helpInfo,
           12);
       db2.saveWeeklySavedGoal(m);
+      _showSnackBar(context, 'Added Goal to Weekly Goals');
     } else {
       _showAddDialog();
     }

@@ -30,7 +30,6 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-
   int initialProteinRatio = 0;
   int initialCarbohydrateRatio = 0;
   int initialFatRatio = 0;
@@ -59,13 +58,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
     newWeight = this.initialWeight;
   }
 
-  int newWeight;
+  late int newWeight;
 
-  int newCarbohydrates;
-  int newFat;
-  int newProtein;
+  late int newCarbohydrates;
+  late int newFat;
+  late int newProtein;
 
-  String newActivity;
+  late String newActivity;
   bool weightChanged = false;
   bool proteinChanged = false;
   bool carbohydrateChanged = false;
@@ -77,9 +76,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final fatKey = GlobalKey<FormState>();
 
   Future<void> save() async {
-    bool a = carbohydrateKey.currentState.validate();
-    bool b = proteinKey.currentState.validate();
-    bool c = fatKey.currentState.validate();
+    bool a = carbohydrateKey.currentState!.validate();
+    bool b = proteinKey.currentState!.validate();
+    bool c = fatKey.currentState!.validate();
     var db = new DBHelper();
     if (a && b && c) {
       await db.saveRatios(newFat, newProtein, newCarbohydrates);
@@ -155,38 +154,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
         body: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text("Update your weight:",
-                      style: TextStyle(fontSize: 18)),
-                ),
-              ),
+              Text("Update your weight:", style: TextStyle(fontSize: 18)),
               SizedBox(height: 5),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Weight(lbs)',
                   hintText: 'Enter your weight in pounds(lbs).',
-                    labelStyle: TextStyle(
-                        color:  Theme.of(context).hintColor
-                    ),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).buttonColor, width: 2),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide:
-                    BorderSide(color: Theme.of(context).hintColor),
+                    borderSide: BorderSide(color: Theme.of(context).hintColor),
                   ),
                 ),
                 keyboardType: TextInputType.number,
                 controller: weightCtl,
-                validator: (String value) {
-                  int weight = int.tryParse(value);
-                  if (weight == null) {
-                    return 'Field Required';
-                  } else if (weight <= 0) {
+                validator: (String? value) {
+                  if (value == null) return 'Field Required';
+                  int weight = int.tryParse(value)!;
+                  if (weight <= 0) {
                     return 'Weight must be greater than 0';
                   }
                   return null;
@@ -197,7 +187,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ],
                 onChanged: (String value) {
                   if (value.isNotEmpty) {
-                    newWeight = int.tryParse(value);
+                    newWeight = int.tryParse(value)!;
                     if (newWeight != initialWeight) {
                       weightChanged = true;
                     } else {
@@ -211,14 +201,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 },
               ),
               SizedBox(height: 15),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text(
-                    "Macronutrient Distribution Breakdown: ",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
+              Text(
+                "Macronutrient Distribution Breakdown: ",
+                style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 5),
               Container(
@@ -322,28 +307,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'Carbs %',
-
                                 labelStyle: TextStyle(
-                                    color:  Theme.of(context).hintColor
-                                ),
+                                    color: Theme.of(context).hintColor),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).buttonColor,
+                                      width: 2),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Theme.of(context).hintColor),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).hintColor),
                                 ),
                               ),
                               keyboardType: TextInputType.number,
                               controller: carbohydrateCtl,
-                              validator: (String value) {
-                                int carbs = int.tryParse(value);
-                                if (carbs == null) {
-                                  return 'Field Required';
-                                } else if (newCarbohydrates +
-                                        newProtein +
-                                        newFat !=
+                              validator: (String? value) {
+                                if (value == null) return 'Field Required';
+                                int carbs = int.tryParse(value)!;
+                                if (newCarbohydrates + newProtein + newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (carbs <= 0) {
@@ -360,7 +341,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ],
                               onChanged: (String value) {
                                 if (value.isNotEmpty) {
-                                  newCarbohydrates = int.tryParse(value);
+                                  newCarbohydrates = int.tryParse(value)!;
                                   if (newCarbohydrates !=
                                       initialCarbohydrateRatio) {
                                     carbohydrateChanged = true;
@@ -384,26 +365,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               decoration: InputDecoration(
                                 labelText: 'Protein %',
                                 labelStyle: TextStyle(
-                                    color:  Theme.of(context).hintColor
-                                ),
+                                    color: Theme.of(context).hintColor),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).buttonColor,
+                                      width: 2),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Theme.of(context).hintColor),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).hintColor),
                                 ),
                               ),
                               keyboardType: TextInputType.number,
                               controller: proteinCtl,
-                              validator: (String value) {
-                                int protein = int.tryParse(value);
-                                if (protein == null) {
-                                  return 'Field Required';
-                                } else if (newProtein +
-                                        newCarbohydrates +
-                                        newFat !=
+                              validator: (String? value) {
+                                if (value == null) return 'Field Required';
+                                int protein = int.tryParse(value)!;
+                                if (newProtein + newCarbohydrates + newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (protein <= 0) {
@@ -420,7 +398,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ],
                               onChanged: (String value) {
                                 if (value.isNotEmpty) {
-                                  newProtein = int.tryParse(value);
+                                  newProtein = int.tryParse(value)!;
                                   if (newProtein != initialProteinRatio) {
                                     proteinChanged = true;
                                   } else {
@@ -443,26 +421,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               decoration: InputDecoration(
                                 labelText: 'Fat %',
                                 labelStyle: TextStyle(
-                                    color:  Theme.of(context).hintColor
-                                ),
+                                    color: Theme.of(context).hintColor),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).buttonColor,
+                                      width: 2),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Theme.of(context).hintColor),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).hintColor),
                                 ),
                               ),
                               keyboardType: TextInputType.number,
                               controller: fatCtl,
-                              validator: (String value) {
-                                int fat = int.tryParse(value);
-                                if (fat == null) {
-                                  return 'Field Required';
-                                } else if (newFat +
-                                        newCarbohydrates +
-                                        newProtein !=
+                              validator: (String? value) {
+                                if (value == null) return 'Field Required';
+                                int fat = int.tryParse(value)!;
+                                if (newFat + newCarbohydrates + newProtein !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (fat <= 0) {
@@ -479,7 +454,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ],
                               onChanged: (String value) {
                                 if (value.isNotEmpty) {
-                                  newFat = int.tryParse(value);
+                                  newFat = int.tryParse(value)!;
                                   if (newFat != initialFatRatio) {
                                     fatChanged = true;
                                   } else {
@@ -502,33 +477,59 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
               SizedBox(height: 15),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text("What is your usual physical activity level?",
-                      style: TextStyle(fontSize: 18)),
-                ),
+              Text("What is your usual physical activity level?",
+                  style: TextStyle(fontSize: 18)),
+              ElevatedButton(
+                onPressed: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    'Light\n- Walking slowly\n- Sitting using computer\n- Standing light work (cooking, washing dishes)\n- Fishing sitting\n- Playing most instruments\n\nModerate\n- Walking very brisk (4 mph)\n- Cleaning heavy (washing windows, vacuuming, mopping)\n- Mowing lawn (power mower)\n- Bicycling light effort (10-12 mph)\n- Bad minton recreational\n- Tennis doubles\n\nVigorous\n- Hiking\n- Jogging at 6 mph\n- Shoveling\n- Carrying heavy loads\n- Bicycling fast (14-16 mph)\n- Basketball game\n- Soccer game\n- Tennis singles',
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text(
+                                      'Ok',
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ));
+                },
+                child: Icon(Icons.info),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).accentColor)),
               ),
               SizedBox(height: 5),
               DropdownButtonFormField(
                 decoration: InputDecoration(
                     labelText: 'Activity Level',
-                    labelStyle: TextStyle(
-                        color:  Theme.of(context).hintColor
-                    ),
+                    labelStyle: TextStyle(color: Theme.of(context).hintColor),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(color: Theme.of(context).buttonColor,width: 2),
+                      borderSide: BorderSide(
+                          color: Theme.of(context).buttonColor, width: 2),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide:
-                      BorderSide(color: Theme.of(context).hintColor),
+                          BorderSide(color: Theme.of(context).hintColor),
                     ),
                     hintText: "Activity Level"),
                 value: newActivity,
                 validator: (value) => value == null ? 'Field Required' : null,
-                onChanged: (String Value) {
-                  newActivity = Value;
+                onChanged: (String? value) {
+                  if (value == null) return;
+                  newActivity = value;
                   if (initialActivity != newActivity) {
                     activityChanged = true;
                   } else {

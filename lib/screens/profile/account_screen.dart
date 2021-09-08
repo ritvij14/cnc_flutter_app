@@ -55,30 +55,30 @@ class _AccountScreenState extends State<AccountScreen> {
     newProtein = this.initialProteinRatio;
     newFat = this.initialFatRatio;
     newActivity = this.initialActivity;
-    newWeight=this.initialWeight;
+    newWeight = this.initialWeight;
   }
 
-  int newWeight;
+  late int newWeight;
 
-  int newCarbohydrates;
-  int newFat;
-  int newProtein;
+  late int newCarbohydrates;
+  late int newFat;
+  late int newProtein;
 
-  String newActivity;
-  bool weightChanged = false;
-  bool proteinChanged = false;
-  bool carbohydrateChanged = false;
-  bool fatChanged = false;
-  bool activityChanged = false;
+  late String newActivity;
+  late bool weightChanged = false;
+  late bool proteinChanged = false;
+  late bool carbohydrateChanged = false;
+  late bool fatChanged = false;
+  late bool activityChanged = false;
 
   final carbohydrateKey = GlobalKey<FormState>();
   final proteinKey = GlobalKey<FormState>();
   final fatKey = GlobalKey<FormState>();
 
   Future<void> save() async {
-    bool a = carbohydrateKey.currentState.validate();
-    bool b = proteinKey.currentState.validate();
-    bool c = fatKey.currentState.validate();
+    bool a = carbohydrateKey.currentState!.validate();
+    bool b = proteinKey.currentState!.validate();
+    bool c = fatKey.currentState!.validate();
     var db = new DBHelper();
     if (a && b && c) {
       await db.saveRatios(newFat, newProtein, newCarbohydrates);
@@ -166,11 +166,10 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 keyboardType: TextInputType.number,
                 controller: weightCtl,
-                validator: (String value) {
-                  int weight = int.tryParse(value);
-                  if (weight == null) {
-                    return 'Field Required';
-                  } else if (weight <= 0) {
+                validator: (String? value) {
+                  if (value == null) return 'Field Required';
+                  int weight = int.tryParse(value)!;
+                  if (weight <= 0) {
                     return 'Weight must be greater than 0';
                   }
                   return null;
@@ -179,9 +178,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   LengthLimitingTextInputFormatter(3),
                   FilteringTextInputFormatter.deny(new RegExp('[ -.]')),
                 ],
-                onChanged: (String value) {
-                  if (value.isNotEmpty) {
-                    newWeight = int.tryParse(value);
+                onChanged: (String? value) {
+                  if (value != null) {
+                    newWeight = int.tryParse(value)!;
                     if (newWeight != initialWeight) {
                       weightChanged = true;
                     } else {
@@ -311,13 +310,10 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                               keyboardType: TextInputType.number,
                               controller: carbohydrateCtl,
-                              validator: (String value) {
-                                int carbs = int.tryParse(value);
-                                if (carbs == null) {
-                                  return 'Field Required';
-                                } else if (newCarbohydrates +
-                                        newProtein +
-                                        newFat !=
+                              validator: (String? value) {
+                                if (value == null) return 'Field Required';
+                                int carbs = int.tryParse(value)!;
+                                if (newCarbohydrates + newProtein + newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (carbs <= 0) {
@@ -334,7 +330,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               ],
                               onChanged: (String value) {
                                 if (value.isNotEmpty) {
-                                  newCarbohydrates = int.tryParse(value);
+                                  newCarbohydrates = int.tryParse(value)!;
                                   if (newCarbohydrates !=
                                       initialCarbohydrateRatio) {
                                     carbohydrateChanged = true;
@@ -362,13 +358,10 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                               keyboardType: TextInputType.number,
                               controller: proteinCtl,
-                              validator: (String value) {
-                                int protein = int.tryParse(value);
-                                if (protein == null) {
-                                  return 'Field Required';
-                                } else if (newProtein +
-                                        newCarbohydrates +
-                                        newFat !=
+                              validator: (String? value) {
+                                if (value == null) return 'Field Required';
+                                int protein = int.tryParse(value)!;
+                                if (newProtein + newCarbohydrates + newFat !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (protein <= 0) {
@@ -385,7 +378,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               ],
                               onChanged: (String value) {
                                 if (value.isNotEmpty) {
-                                  newProtein = int.tryParse(value);
+                                  newProtein = int.tryParse(value)!;
                                   if (newProtein != initialProteinRatio) {
                                     proteinChanged = true;
                                   } else {
@@ -412,13 +405,10 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                               keyboardType: TextInputType.number,
                               controller: fatCtl,
-                              validator: (String value) {
-                                int fat = int.tryParse(value);
-                                if (fat == null) {
-                                  return 'Field Required';
-                                } else if (newFat +
-                                        newCarbohydrates +
-                                        newProtein !=
+                              validator: (String? value) {
+                                if (value == null) return 'Field Required';
+                                int fat = int.tryParse(value)!;
+                                if (newFat + newCarbohydrates + newProtein !=
                                     100) {
                                   return 'Values must add up to 100';
                                 } else if (fat <= 0) {
@@ -435,7 +425,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               ],
                               onChanged: (String value) {
                                 if (value.isNotEmpty) {
-                                  newFat = int.tryParse(value);
+                                  newFat = int.tryParse(value)!;
                                   if (newFat != initialFatRatio) {
                                     fatChanged = true;
                                   } else {
@@ -473,8 +463,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     hintText: "Activity Level"),
                 value: newActivity,
                 validator: (value) => value == null ? 'Field Required' : null,
-                onChanged: (String Value) {
-                  newActivity = Value;
+                onChanged: (String? value) {
+                  if (value == null) return;
+                  newActivity = value;
                   if (initialActivity != newActivity) {
                     activityChanged = true;
                   } else {

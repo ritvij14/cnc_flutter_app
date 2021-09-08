@@ -6,11 +6,9 @@ import 'package:intl/intl.dart';
 import '../alerts.dart';
 
 class SymptomTrackingModifyScreen extends StatefulWidget {
-  SymptomModel symptomModel;
+  final SymptomModel symptomModel;
 
-  SymptomTrackingModifyScreen(SymptomModel symptomModel) {
-    this.symptomModel = symptomModel;
-  }
+  SymptomTrackingModifyScreen(this.symptomModel);
 
   @override
   _SymptomTrackingModifyScreenState createState() =>
@@ -20,15 +18,15 @@ class SymptomTrackingModifyScreen extends StatefulWidget {
 class _SymptomTrackingModifyScreenState
     extends State<SymptomTrackingModifyScreen> {
   final db = SymptomDBHelper();
-  bool initialAbdominal;
-  bool initialAppetite;
-  bool initialBloating;
-  bool initialConstipation;
-  bool initialDiarrhea;
-  bool initialNausea;
-  bool initialStoma;
-  bool initialVomiting;
-  String initialOther;
+  late bool initialAbdominal;
+  late bool initialAppetite;
+  late bool initialBloating;
+  late bool initialConstipation;
+  late bool initialDiarrhea;
+  late bool initialNausea;
+  late bool initialStoma;
+  late bool initialVomiting;
+  late String initialOther;
   TextEditingController dateCtl = TextEditingController(
       text: DateFormat('MM/dd/yyyy').format(DateTime.now()));
 

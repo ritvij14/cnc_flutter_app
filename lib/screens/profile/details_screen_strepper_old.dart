@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,32 +9,29 @@ import 'dart:convert';
 import '../nutrient_ratio_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
-
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  List<Step> steps;
+  late List<Step> steps;
 
-  int _heightFeet;
-  int _heightInches;
-  int _weight;
+  late int _heightFeet;
+  late int _heightInches;
+  late int _weight;
 
-  String dropDownActivity;
-  String dropDownStage;
-  String dropDownSurgery;
-  String dropDownGender;
-  String dropDownRace;
-  String dropDownEthnicities;
-  String dropDownFeet;
-  String dropDownInches;
-  String dropDownDiagMonth;
-
-
+  late String dropDownActivity;
+  late String dropDownStage;
+  late String dropDownSurgery;
+  late String dropDownGender;
+  late String dropDownRace;
+  late String dropDownEthnicities;
+  late String dropDownFeet;
+  late String dropDownInches;
+  late String dropDownDiagMonth;
 
   var _dateTime;
-  String buns;
+  late String buns;
 
   List<String> _feet = List<String>.generate(9, (int index) => '${index + 1}');
   List<String> _inches = List<String>.generate(12, (int index) => '${index}');
@@ -57,7 +56,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     'Prefer not to say',
   ];
 
-
   int proteinRatio = 0;
   int carbohydrateRatio = 0;
   int fatRatio = 0;
@@ -81,7 +79,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final proteinKey = GlobalKey<FormState>();
   final fatKey = GlobalKey<FormState>();
 
-
   _NutrientRatioScreenState(
       int carbohydratePercent, int proteinPercent, int fatPercent) {
     this.carbohydratePercent = carbohydratePercent;
@@ -100,9 +97,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void updateRatios() async {
-    bool a = carbohydrateKey.currentState.validate();
-    bool b = proteinKey.currentState.validate();
-    bool c = fatKey.currentState.validate();
+    bool a = carbohydrateKey.currentState!.validate();
+    bool b = proteinKey.currentState!.validate();
+    bool c = fatKey.currentState!.validate();
 
     if (a && b && c) {
       var db = new DBHelper();
@@ -111,7 +108,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
       valid = true;
     }
   }
-
 
   getRatioData() async {
     var db = new DBHelper();
@@ -123,12 +119,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
     fatRatio = userData['fatPercent'];
   }
 
-  update() async{
+  update() async {
     await getRatioData();
     setState(() {});
   }
 
-  Future<bool> setUserData() async {
+  Future<Null> setUserData() async {
     var db = new DBHelper();
     var response = await db.getUserInfo();
     var data = json.decode(response.body);
@@ -165,17 +161,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
         Expanded(
             child: Container(
           child: TextFormField(
-            // initialValue: '5',
+            // initialvalue: '5',
             controller: dateCtl,
             decoration: InputDecoration(hintText: 'Select Date'),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null) {
                 return 'Date required';
               }
               return null;
             },
             onTap: () async {
-              DateTime date = DateTime.now();
+              DateTime? date = DateTime.now();
               FocusScope.of(context).requestFocus(new FocusNode());
               date = await showDatePicker(
                   context: context,
@@ -183,7 +179,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now());
 
-              dateCtl.text = DateFormat('MM-dd-yyyy').format(date);
+              dateCtl.text = DateFormat('MM-dd-yyyy').format(date!);
               _dateTime = dateCtl.text;
             },
           ),
@@ -209,9 +205,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                   value: dropDownFeet,
                   validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String Value) {
-                    dropDownFeet = Value;
-                    _heightFeet = _feet.indexOf(Value) + 1;
+                  onChanged: (String? value) {
+                    if (value == null) return;
+                    dropDownFeet = value;
+                    _heightFeet = _feet.indexOf(value) + 1;
                   },
                   items: _feet
                       .map((feet) =>
@@ -235,9 +232,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                   value: dropDownInches,
                   validator: (value) => value == null ? 'Field Required' : null,
-                  onChanged: (String Value) {
-                    dropDownInches = Value;
-                    _heightInches = _inches.indexOf(Value) + 1;
+                  onChanged: (String? value) {
+                    if (value == null) return;
+                    dropDownInches = value;
+                    _heightInches = _inches.indexOf(value) + 1;
                   },
                   items: _inches
                       .map((inch) =>
@@ -255,21 +253,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ),
       keyboardType: TextInputType.number,
       controller: _weightController,
-      validator: (String value) {
-        int weight = int.tryParse(value);
-        if (weight == null) {
-          return 'Field Required';
-        } else if (weight <= 0) {
+      validator: (String? value) {
+        if (value == null) return 'Field Required';
+        int weight = int.tryParse(value)!;
+        if (weight <= 0) {
           return 'Weight must be greater than 0';
         }
         return null;
       },
       onChanged: (String value) {
-        _weight = int.tryParse(value);
+        _weight = int.tryParse(value)!;
         print(_weight);
       },
     );
-
   }
 
   Widget _buildRace() {
@@ -279,8 +275,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
           labelText: 'Race', border: OutlineInputBorder(), hintText: "Race"),
       value: dropDownRace,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownRace = Value;
+      onChanged: (String? value) {
+        if (value != null) dropDownRace = value;
       },
       items: _races
           .map((race) => DropdownMenuItem(value: race, child: Text("$race")))
@@ -297,8 +293,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
           hintText: "Ethnicity"),
       value: dropDownEthnicities,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownEthnicities = Value;
+      onChanged: (String? value) {
+        if (value != null) dropDownEthnicities = value;
       },
       items: _ethnicities
           .map((ethnicity) =>
@@ -316,8 +312,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
           hintText: "Gender"),
       value: dropDownGender,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownGender = Value;
+      onChanged: (String? value) {
+        if (value != null) dropDownGender = value;
       },
       items: _genders
           .map((gender) =>
@@ -333,10 +329,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
     'Vigorously Active',
   ];
 
-  Widget activity;
+  late Widget activity;
 
   Widget _buildActivity() {
-
     return DropdownButtonFormField(
       decoration: InputDecoration(
           labelText: 'Activity Level',
@@ -344,9 +339,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
           hintText: "Activity Level"),
       value: dropDownActivity,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        dropDownActivity = Value;
-
+      onChanged: (String? value) {
+        if (value != null) dropDownActivity = value;
       },
       items: _activity
           .map((actLevel) =>
@@ -394,7 +388,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     birthDate = _dateTime;
     int height = (_heightFeet * 12) + _heightInches;
 
-    if(_weightController.text == null || _weightController.text.isEmpty) {
+    if (_weightController.text == null || _weightController.text.isEmpty) {
       _weight = userWeight;
     }
 
@@ -414,8 +408,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final TextEditingController dateCtl = new TextEditingController();
 
   final TextEditingController _weightController = new TextEditingController();
-  int userWeight;
-  int userDiagYear;
+  late int userWeight;
+  late int userDiagYear;
 
   @override
   void initState() {
@@ -450,7 +444,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     SizedBox(height: 5),
                     _buildWeight(_weightController),
-                    NutrientRatioScreen(carbohydrateRatio, proteinRatio, fatRatio),
+                    NutrientRatioScreen(
+                        carbohydrateRatio, proteinRatio, fatRatio),
                     SizedBox(height: 15),
                     Align(
                       alignment: Alignment.centerLeft,

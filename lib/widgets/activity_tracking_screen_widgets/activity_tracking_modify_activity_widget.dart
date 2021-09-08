@@ -8,14 +8,10 @@ import 'package:intl/intl.dart';
 
 import '../alerts.dart';
 
-
 class ActivityTrackingModifyActivity extends StatefulWidget {
-  ActivityModel activityModel;
+  final ActivityModel activityModel;
 
-
-  ActivityTrackingModifyActivity(ActivityModel activityModel) {
-    this.activityModel = activityModel;
-  }
+  ActivityTrackingModifyActivity(this.activityModel);
 
   @override
   _ActivityTrackingModifyActivityState createState() =>
@@ -24,8 +20,8 @@ class ActivityTrackingModifyActivity extends StatefulWidget {
 
 class _ActivityTrackingModifyActivityState
     extends State<ActivityTrackingModifyActivity> {
-  int initialMinutes;
-  DateTime initialDate;
+  late int initialMinutes;
+  late DateTime initialDate;
   bool minutesEntered = false;
   final db = ActivityDBHelper();
   final _formKey = GlobalKey<FormState>();
@@ -36,41 +32,41 @@ class _ActivityTrackingModifyActivityState
   List<ActivityModel> activityOptions = [];
 
   _ActivityTrackingModifyActivityState(ActivityModel activityModel) {
-    initialMinutes= activityModel.minutes;
+    initialMinutes = activityModel.minutes;
     initialDate = activityModel.dateTime;
   }
 
   getActivityOptions() async {
     //only do if list is empty?
     // activityOptions.clear();
-    if(activityOptions.isEmpty) {
+    if (activityOptions.isEmpty) {
       var response = await db.getActivityOptions();
       var data = json.decode(response.body);
-      for(int i = 0; i < data.length; i++) {
-        if(data[i]['isVisible']) {
-          ActivityModel temp = ActivityModel.activityOptions(data[i]['type'], data[i]['intensity']);
+      for (int i = 0; i < data.length; i++) {
+        if (data[i]['isVisible']) {
+          ActivityModel temp = ActivityModel.activityOptions(
+              data[i]['type'], data[i]['intensity']);
           activityOptions.add(temp);
           activitiesList.add(data[i]['type']);
         }
       }
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-    dateCtl = TextEditingController(text: DateFormat('MM/dd/yyyy').format(widget.activityModel.dateTime));
+    dateCtl = TextEditingController(
+        text: DateFormat('MM/dd/yyyy').format(widget.activityModel.dateTime));
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Modify Activity'),
-        leading:
-        IconButton(
+        leading: IconButton(
           icon: Icon(Icons.clear),
-          onPressed: (){
-            if(initialMinutes != widget.activityModel.minutes) {
+          onPressed: () {
+            if (initialMinutes != widget.activityModel.minutes) {
               Alerts().showAlert(context, true);
-            } else{
+            } else {
               Navigator.of(context).pop();
             }
           },
@@ -168,7 +164,13 @@ class _ActivityTrackingModifyActivityState
                       Text('Intensity'),
                       Container(
                         width: 200,
-                        child: Text(widget.activityModel.intensity == null ? '' : widget.activityModel.intensity == 1 ? 'Light' : widget.activityModel.intensity == 2 ? 'Moderate' : 'Vigorous'),
+                        child: Text(widget.activityModel.intensity == null
+                            ? ''
+                            : widget.activityModel.intensity == 1
+                                ? 'Light'
+                                : widget.activityModel.intensity == 2
+                                    ? 'Moderate'
+                                    : 'Vigorous'),
                       ),
                     ],
                   ),
@@ -181,7 +183,7 @@ class _ActivityTrackingModifyActivityState
                         width: 200,
                         child: TextFormField(
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value == null) {
                               return 'Minutes required';
                             }
                             return null;
@@ -196,16 +198,13 @@ class _ActivityTrackingModifyActivityState
                             hintText: "enter",
                           ),
                           onChanged: (text) {
-                            if(text.isNotEmpty) {
+                            if (text.isNotEmpty) {
                               widget.activityModel.minutes = int.parse(text);
                               minutesEntered = true;
-                            }
-                            else {
+                            } else {
                               minutesEntered = false;
                             }
-                            setState(() {
-
-                            });
+                            setState(() {});
                           },
                         ),
                       )
@@ -217,7 +216,8 @@ class _ActivityTrackingModifyActivityState
                       Text('Date'),
                       Container(
                         width: 200,
-                        child: Text(DateFormat('MM/dd/yyyy').format(widget.activityModel.dateTime)),
+                        child: Text(DateFormat('MM/dd/yyyy')
+                            .format(widget.activityModel.dateTime)),
 
                         // TextFormField(
                         //   enableInteractiveSelection: false,
@@ -251,8 +251,7 @@ class _ActivityTrackingModifyActivityState
                   ),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child:
-                    Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         FlatButton(
@@ -260,7 +259,8 @@ class _ActivityTrackingModifyActivityState
                           child: Text('CANCEL',
                               style: TextStyle(color: Colors.grey)),
                           onPressed: () {
-                            if(initialMinutes != widget.activityModel.minutes) {
+                            if (initialMinutes !=
+                                widget.activityModel.minutes) {
                               Alerts().showAlert(context, true);
                               // showAlertDialog(context);
                             } else {
@@ -268,7 +268,8 @@ class _ActivityTrackingModifyActivityState
                             }
                           },
                         ),
-                        if(minutesEntered && initialMinutes!=widget.activityModel.minutes) ... [
+                        if (minutesEntered &&
+                            initialMinutes != widget.activityModel.minutes) ...[
                           FlatButton(
                             color: Theme.of(context).buttonColor,
                             // padding: EdgeInsets.symmetric(vertical: 20),
@@ -279,8 +280,9 @@ class _ActivityTrackingModifyActivityState
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                var x = db.updateExistingActivity(widget.activityModel);
+                              if (_formKey.currentState!.validate()) {
+                                var x = db.updateExistingActivity(
+                                    widget.activityModel);
 
                                 Navigator.pop(context, widget.activityModel);
                               }
@@ -289,8 +291,8 @@ class _ActivityTrackingModifyActivityState
                             },
                           ),
                         ],
-
-                        if(initialMinutes==widget.activityModel.minutes || !minutesEntered) ... [
+                        if (initialMinutes == widget.activityModel.minutes ||
+                            !minutesEntered) ...[
                           FlatButton(
                               color: Colors.grey,
                               // padding: EdgeInsets.symmetric(vertical: 20),
@@ -300,12 +302,8 @@ class _ActivityTrackingModifyActivityState
                                   color: Theme.of(context).highlightColor,
                                 ),
                               ),
-                              onPressed: () => {
-
-                              }
-                          ),
+                              onPressed: () => {}),
                         ],
-
                       ],
                     ),
 

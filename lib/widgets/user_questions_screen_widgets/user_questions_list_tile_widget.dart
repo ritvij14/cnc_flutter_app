@@ -3,14 +3,11 @@ import 'package:cnc_flutter_app/models/user_question_model.dart';
 import 'package:cnc_flutter_app/widgets/user_questions_screen_widgets/user_questions_entry_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class UserQuestionsListTile extends StatefulWidget {
-  UserQuestion userQuestion;
+  final UserQuestion userQuestion;
 
-  UserQuestionsListTile(UserQuestion userQuestion) {
-    this.userQuestion = userQuestion;
-  }
+  UserQuestionsListTile(this.userQuestion);
 
   @override
   _UserQuestionsListTileState createState() => _UserQuestionsListTileState();
@@ -23,7 +20,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
 
   deleteQuestion(userQuestionID) async {
     await DBProvider.db.deleteUserQuestion(userQuestionID);
-   refresh();
+    refresh();
   }
 
   @override
@@ -36,9 +33,10 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: widget.userQuestion.question_notes == "" ||
-              widget.userQuestion.question_notes == null ||
-              widget.userQuestion.question_notes == " "
+      subtitle: widget.userQuestion.questionNotes == ""
+          /* ||
+              widget.userQuestion.questionNotes == null ||
+              widget.userQuestion.questionNotes == " "*/
           ? Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
               SizedBox(height: 5),
               Align(
@@ -52,7 +50,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
               SizedBox(height: 5),
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(widget.userQuestion.question_notes,
+                  child: Text(widget.userQuestion.questionNotes,
                       maxLines: 3, overflow: TextOverflow.ellipsis)),
               SizedBox(height: 5),
               Align(alignment: Alignment.centerLeft, child: Text(getDate())),
@@ -83,8 +81,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
     await showDialog<String>(
         context: context,
         builder: (context) => new AlertDialog(
-              title:
-                  Text("Delete Question?"),
+              title: Text("Delete Question?"),
               content: Text("\"" + question + "\""),
               actions: [
                 new FlatButton(
@@ -110,9 +107,8 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
   }
 
   getDate() {
-
-    DateTime dTime = DateFormat.yMd().add_jm()
-        .parse(widget.userQuestion.date_updated);
+    DateTime dTime =
+        DateFormat.yMd().add_jm().parse(widget.userQuestion.dateUpdated);
     var outputFormat = DateFormat.yMd().add_jm();
     // DateTime dTime = DateFormat("yyyy-MM-dd Hms")
     //     .parse(widget.userQuestion.date_updated);

@@ -1,8 +1,6 @@
 import 'package:cnc_flutter_app/screens/home/activity_tracking_screen.dart';
-import 'package:cnc_flutter_app/screens/home/ask_screen.dart';
 import 'package:cnc_flutter_app/screens/home/diet_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goals_home_screen.dart';
-import 'package:cnc_flutter_app/screens/home/home_screen.dart';
 import 'package:cnc_flutter_app/screens/home/symptom_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/home/metric_tracking_screen.dart';
 import 'package:cnc_flutter_app/screens/login_screen.dart';
@@ -18,14 +16,12 @@ import 'package:cnc_flutter_app/widgets/metric_tracking_widgets/metric_tracking_
 import 'package:cnc_flutter_app/widgets/symptom_tracking_widgets/symptom_tracking_input_symptoms_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart' ;
+import 'package:flutter/services.dart';
 
 class NutritionApp extends StatelessWidget {
   final String initialRoute;
 
-  const NutritionApp({Key key, this.initialRoute}) : super(key: key);
-
+  const NutritionApp({Key? key, required this.initialRoute}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +46,13 @@ class NutritionApp extends StatelessWidget {
                   '/fitnessTracking': (context) => ActivityTrackingScreen(),
                   '/symptomTracking': (context) => SymptomTrackingScreen(),
                   '/metricTracking': (context) => MetricTrackingScreen(),
-                  '/goals': (context) => GoalsHomePage(),
+                  '/goals': (context) => GoalsHome(),
                   '/welcome': (context) => WelcomeScreen(),
                   '/inputActivity': (context) => ActivityTrackingInputScreen(),
-                  '/inputSymptom' : (context) => SymptomTrackingInputScreen(),
-                  '/inputMetric' : (context) => MetricTrackingInputScreen(),
-                  '/questions' : (context) => UserQuestionsScreen(),
-                  '/profile' : (context) => ProfileScreen(),
+                  '/inputSymptom': (context) => SymptomTrackingInputScreen(),
+                  '/inputMetric': (context) => MetricTrackingInputScreen(),
+                  '/questions': (context) => UserQuestionsScreen(),
+                  '/profile': (context) => ProfileScreen(),
                 });
           },
         ),

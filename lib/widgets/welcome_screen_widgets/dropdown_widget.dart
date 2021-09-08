@@ -1,22 +1,27 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DropdownWidget extends StatefulWidget {
   final List<String> list;
-  final  String dropDownSelect;
+  final String dropDownSelect;
   final String labelText;
   final String hintText;
 
-  const DropdownWidget({Key key, this.list, this.dropDownSelect, this.labelText, this.hintText}) : super(key: key);
+  const DropdownWidget(
+      {Key? key,
+      required this.list,
+      required this.dropDownSelect,
+      required this.labelText,
+      required this.hintText})
+      : super(key: key);
   @override
   _DropdownWidget createState() => _DropdownWidget();
 }
 
 class _DropdownWidget extends State<DropdownWidget> {
-  String _dropDownSelect;
+  late String _dropDownSelect;
 
-  getDropdownAct(){
+  getDropdownAct() {
     return _dropDownSelect;
   }
 
@@ -26,17 +31,18 @@ class _DropdownWidget extends State<DropdownWidget> {
       decoration: InputDecoration(
           labelText: widget.labelText,
           border: OutlineInputBorder(),
-          hintText:  widget.hintText),
+          hintText: widget.hintText),
       value: widget.dropDownSelect,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          _dropDownSelect = Value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            _dropDownSelect = value;
+          });
       },
       items: widget.list
           .map((actLevel) =>
-          DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
+              DropdownMenuItem(value: actLevel, child: Text("$actLevel")))
           .toList(),
     );
   }

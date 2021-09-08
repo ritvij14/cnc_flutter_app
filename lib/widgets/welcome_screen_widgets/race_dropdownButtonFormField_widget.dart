@@ -7,8 +7,7 @@ class RaceDropdownWidget extends StatefulWidget {
 }
 
 class _RaceDropdownWidget extends State<RaceDropdownWidget> {
-
-  String dropDownRace;
+  late String dropDownRace;
   List<String> _races = [
     'American Indian or Alaska Native',
     'Asian',
@@ -20,7 +19,6 @@ class _RaceDropdownWidget extends State<RaceDropdownWidget> {
     'Prefer not to say',
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
@@ -29,10 +27,11 @@ class _RaceDropdownWidget extends State<RaceDropdownWidget> {
           labelText: 'Race', border: OutlineInputBorder(), hintText: "Race"),
       value: dropDownRace,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String Value) {
-        setState(() {
-          dropDownRace = Value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownRace = value;
+          });
       },
       items: _races
           .map((race) => DropdownMenuItem(value: race, child: Text("$race")))

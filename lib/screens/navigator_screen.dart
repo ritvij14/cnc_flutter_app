@@ -1,12 +1,12 @@
+import 'package:cnc_flutter_app/screens/chosen_weekly_goals.dart';
 import 'package:cnc_flutter_app/screens/communication_screen.dart';
 import 'package:cnc_flutter_app/screens/content/content_screen.dart';
 import 'package:cnc_flutter_app/screens/home/goals_home_screen.dart';
 import 'package:cnc_flutter_app/screens/user_questions_screen.dart';
+import 'package:cnc_flutter_app/theme/app_themes.dart';
 import 'package:flutter/material.dart';
 
 import 'home/home_screen.dart';
-
-
 
 import 'package:flutter/cupertino.dart';
 import '../settings/preferences.dart';
@@ -25,12 +25,11 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   int _selectedIndex = 0;
   // SpeedDialController _controller = SpeedDialController();
 
-
   List<Widget> screens = <Widget>[
     HomeScreen(),
     ContentScreen(),
     UserQuestionsScreen(),
-    GoalsHome(),
+    ChosenWeeklyGoalsPage(),
   ];
 
   @override
@@ -40,7 +39,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   }
 
   _loadTheme() async {
-    context.bloc<ThemeBloc>().add(ThemeEvent(appTheme: Preferences.getTheme()));
+    context
+        .read<ThemeBloc>()
+        .add(ThemeEvent(appTheme: Preferences.getTheme() ?? AppTheme.Default));
   }
 
   @override
@@ -49,9 +50,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
       body: getCurrentScreen(),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        color: Theme
-            .of(context)
-            .primaryColor,
+        color: Theme.of(context).primaryColor,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -59,10 +58,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
             IconButton(
               tooltip: "Home",
               icon: Icon(Icons.home,
-                  color: _selectedIndex == 0 ? Theme
-                      .of(context).highlightColor : Theme
-                      .of(context)
-                      .backgroundColor),
+                  color: _selectedIndex == 0
+                      ? Theme.of(context).highlightColor
+                      : Theme.of(context).backgroundColor),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(0);
@@ -71,11 +69,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
             IconButton(
               tooltip: "Content",
               icon: Icon(Icons.library_books,
-                  color: _selectedIndex == 1 ? Theme
-                      .of(context)
-                      .highlightColor  : Theme
-                      .of(context)
-                      .backgroundColor  ),
+                  color: _selectedIndex == 1
+                      ? Theme.of(context).highlightColor
+                      : Theme.of(context).backgroundColor),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(1);
@@ -84,11 +80,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
             IconButton(
               tooltip: "Communication",
               icon: Icon(Icons.chat,
-                  color: _selectedIndex == 2 ? Theme
-                      .of(context)
-                      .highlightColor  : Theme
-                      .of(context)
-                      .backgroundColor  ),
+                  color: _selectedIndex == 2
+                      ? Theme.of(context).highlightColor
+                      : Theme.of(context).backgroundColor),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(2);
@@ -97,11 +91,9 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
             IconButton(
               tooltip: "Goals",
               icon: Icon(Icons.verified,
-                  color: _selectedIndex == 3 ? Theme
-                      .of(context)
-                      .highlightColor  : Theme
-                      .of(context)
-                      .backgroundColor  ),
+                  color: _selectedIndex == 3
+                      ? Theme.of(context).highlightColor
+                      : Theme.of(context).backgroundColor),
               iconSize: 30,
               onPressed: () {
                 _updateIndex(3);

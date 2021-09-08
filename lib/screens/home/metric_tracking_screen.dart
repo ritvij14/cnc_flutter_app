@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 class MetricTrackingScreen extends StatefulWidget {
-  List<MetricModel> metricModelList = [];
+  final List<MetricModel> metricModelList = [];
 
   @override
   _MetricTrackingScreenState createState() => _MetricTrackingScreenState();
@@ -56,9 +56,9 @@ class _MetricTrackingScreenState extends State<MetricTrackingScreen> {
                         child: Container(
                           width: 120,
                           decoration: BoxDecoration(
-                            color: Colors.blue[300],
+                            color: Colors.blue[300]!,
                             border: Border.all(
-                              color: Colors.blue[300],
+                              color: Colors.blue[300]!,
                             ),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
@@ -90,11 +90,11 @@ class _MetricTrackingScreenState extends State<MetricTrackingScreen> {
 
   getMetrics() async {
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     var response = await db.getMetrics(int.parse(id));
     List<MetricModel> newMetricModelList = (json.decode(response.body) as List)
         .map((data) => MetricModel.fromJson(data))
         .toList();
-    widget.metricModelList = newMetricModelList;
+    widget.metricModelList.addAll(newMetricModelList);
   }
 }

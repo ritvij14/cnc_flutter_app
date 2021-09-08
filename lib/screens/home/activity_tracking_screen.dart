@@ -10,7 +10,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 class ActivityTrackingScreen extends StatefulWidget {
-  List<ActivityModel> activityModelList = [];
+  final List<ActivityModel> activityModelList = [];
 
   @override
   _ActivityTrackingScreenState createState() => _ActivityTrackingScreenState();
@@ -63,9 +63,9 @@ class _ActivityTrackingScreenState extends State<ActivityTrackingScreen> {
                         child: Container(
                           width: 120,
                           decoration: BoxDecoration(
-                            color: Colors.blue[300],
+                            color: Colors.blue[300]!,
                             border: Border.all(
-                              color: Colors.blue[300],
+                              color: Colors.blue[300]!,
                             ),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
@@ -104,12 +104,12 @@ class _ActivityTrackingScreenState extends State<ActivityTrackingScreen> {
   getActivities() async {
     widget.activityModelList.clear();
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     var response = await db.getActivities(int.parse(id));
     List<ActivityModel> fa = (json.decode(response.body) as List)
         .map((data) => ActivityModel.fromJson(data))
         .toList();
-    widget.activityModelList = fa;
+    widget.activityModelList.addAll(fa);
   }
 
   void refresh() {

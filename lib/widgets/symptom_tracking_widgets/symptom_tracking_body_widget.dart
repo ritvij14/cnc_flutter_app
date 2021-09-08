@@ -6,9 +6,7 @@ import 'package:cnc_flutter_app/widgets/symptom_tracking_widgets/symptom_trackin
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class SymptomTrackingBody extends StatefulWidget {
-
   @override
   _SymptomTrackingBodyState createState() => _SymptomTrackingBodyState();
 }
@@ -22,10 +20,10 @@ class _SymptomTrackingBodyState extends State<SymptomTrackingBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        builder: (context, projectSnap){
+        builder: (context, projectSnap) {
           return ListView.builder(
             itemCount: symptomModelList.length,
-            itemBuilder: (context, index){
+            itemBuilder: (context, index) {
               return SymptomTrackingListTile(symptomModelList[index]);
             },
           );
@@ -38,14 +36,14 @@ class _SymptomTrackingBodyState extends State<SymptomTrackingBody> {
   getSymptoms() async {
     symptomModelList.clear();
     var sharedPref = await SharedPreferences.getInstance();
-    String id = sharedPref.getString('id');
+    String id = sharedPref.getString('id')!;
     var response = await db.getSymptoms(int.parse(id));
-    List<SymptomModel> newSymptomModelList = (json.decode(response.body) as List).map((data) => SymptomModel.fromJson(data)).toList();
+    List<SymptomModel> newSymptomModelList =
+        (json.decode(response.body) as List)
+            .map((data) => SymptomModel.fromJson(data))
+            .toList();
     symptomModelList = newSymptomModelList;
   }
 
-  test() {
-  }
-
-
+  test() {}
 }

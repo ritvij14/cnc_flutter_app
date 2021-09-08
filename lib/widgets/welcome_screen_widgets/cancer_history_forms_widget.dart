@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,26 +12,33 @@ class CancerHistoryWidget extends StatefulWidget {
   final TextEditingController monthController;
   final TextEditingController yearController;
 
-  const CancerHistoryWidget({Key key, this.yearLastDiag, this.monthLastDiag, this.cancerStages, this.dropDownColon, this.dropDownRectum, this.colon, this.rectum, this.monthController, this.yearController}) : super(key: key);
-
+  const CancerHistoryWidget(
+      {Key? key,
+      required this.yearLastDiag,
+      required this.monthLastDiag,
+      required this.cancerStages,
+      required this.dropDownColon,
+      required this.dropDownRectum,
+      required this.colon,
+      required this.rectum,
+      required this.monthController,
+      required this.yearController})
+      : super(key: key);
 
   @override
   _CancerHistoryWidget createState() => _CancerHistoryWidget();
 }
 
 class _CancerHistoryWidget extends State<CancerHistoryWidget> {
+  late int _diagYear;
+  late int _diagMonth;
 
+  late String dropDownColon;
+  late String dropDownRectum;
+  late String dropDownSurgery;
 
-  int _diagYear;
-  int _diagMonth;
-
-  String dropDownColon;
-  String dropDownRectum;
-  String dropDownSurgery;
-
-  bool _colon;
-  bool _rectum;
-
+  late bool _colon;
+  late bool _rectum;
 
   List<String> _cancerStages = [
     'Stage 0',
@@ -42,7 +48,7 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
     'Stage 4',
   ];
 
-  Widget cancerHistory;
+  late Widget cancerHistory;
 
   Widget _buildCancerHistoryYN(String cancer) {
     return Row(children: <Widget>[
@@ -52,10 +58,11 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
           leading: Radio(
             value: true,
             groupValue: cancer == "rectum" ? widget.rectum : widget.colon,
-            onChanged: (value) {
-              setState(() {
-                cancer == "rectum" ? _rectum = value : _colon = value;
-              });
+            onChanged: (bool? value) {
+              if (value != null)
+                setState(() {
+                  cancer == "rectum" ? _rectum = value : _colon = value;
+                });
             },
           ),
         ),
@@ -66,12 +73,13 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
           leading: Radio(
             value: false,
             groupValue: cancer == "rectum" ? widget.rectum : widget.colon,
-            onChanged: (value) {
-              setState(() {
-                cancer == "rectum" ? _rectum = value : _colon = value;
-                // Navigator.of(context, rootNavigator: true).pop();
-                // _buildCancerHistory();
-              });
+            onChanged: (bool? value) {
+              if (value != null)
+                setState(() {
+                  cancer == "rectum" ? _rectum = value : _colon = value;
+                  // Navigator.of(context, rootNavigator: true).pop();
+                  // _buildCancerHistory();
+                });
             },
           ),
         ),
@@ -87,14 +95,15 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
           hintText: "Colon Cancer Stage"),
       value: widget.dropDownColon,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String value) {
-        setState(() {
-          dropDownColon = value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownColon = value;
+          });
       },
       items: widget.cancerStages
           .map((colStage) =>
-          DropdownMenuItem(value: colStage, child: Text("$colStage")))
+              DropdownMenuItem(value: colStage, child: Text("$colStage")))
           .toList(),
     );
   }
@@ -107,18 +116,18 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
           hintText: "Rectum Cancer Stage"),
       value: widget.dropDownRectum,
       validator: (value) => value == null ? 'Field Required' : null,
-      onChanged: (String value) {
-        setState(() {
-          dropDownRectum = value;
-        });
+      onChanged: (String? value) {
+        if (value != null)
+          setState(() {
+            dropDownRectum = value;
+          });
       },
-      items:widget.cancerStages
+      items: widget.cancerStages
           .map((recStage) =>
-          DropdownMenuItem(value: recStage, child: Text("$recStage")))
+              DropdownMenuItem(value: recStage, child: Text("$recStage")))
           .toList(),
     );
   }
-
 
   Widget _buildLastDiagMonth() {
     return TextFormField(
@@ -129,24 +138,21 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
       ),
       keyboardType: TextInputType.number,
       controller: widget.monthController,
-      validator: (String value) {
-        int month = int.tryParse(value);
-        if (month == null) {
-          return null;
-        }
-        else if (month <= 0) {
+      validator: (String? value) {
+        if (value == null) return null;
+        int month = int.tryParse(value)!;
+        if (month <= 0) {
           return 'Month must be greater than 0';
         } else if (month >= 13) {
           return 'Month cannot be greater than 12';
         }
         return null;
       },
-      onSaved: (String value) {
-        _diagMonth = int.tryParse(value);
+      onSaved: (String? value) {
+        if (value != null) _diagMonth = int.tryParse(value)!;
       },
     );
   }
-
 
   Widget _buildLastDiagYear() {
     return TextFormField(
@@ -157,15 +163,17 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
       ),
       keyboardType: TextInputType.number,
       controller: widget.yearController,
-      validator: (String value) {
-        int year = int.tryParse(value);
-        if (year == null || year <= 0) {
-          return 'Year must be greater than 0';
+      validator: (String? value) {
+        if (value != null) {
+          int year = int.tryParse(value)!;
+          if (year <= 0) {
+            return 'Year must be greater than 0';
+          }
         }
         return null;
       },
-      onSaved: (String value) {
-        _diagYear = int.tryParse(value);
+      onSaved: (String? value) {
+        if (value != null) _diagYear = int.tryParse(value)!;
       },
     );
   }
@@ -205,13 +213,13 @@ class _CancerHistoryWidget extends State<CancerHistoryWidget> {
               : SizedBox(height: 0),
           _rectum == true || _colon == true
               ? Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                  'When was your last cancer (any type of cancer) diagnosis?',
-                  style: TextStyle(fontSize: 16)),
-            ),
-          )
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text(
+                        'When was your last cancer (any type of cancer) diagnosis?',
+                        style: TextStyle(fontSize: 16)),
+                  ),
+                )
               : SizedBox(height: 0),
           _rectum == true || _colon == true
               ? SizedBox(height: 10)

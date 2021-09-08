@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class BirthdayFormWidget extends StatefulWidget {
   @override
   _BirthdayFormWidget createState() => _BirthdayFormWidget();
@@ -13,30 +12,23 @@ class _BirthdayFormWidget extends State<BirthdayFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text("Please enter your birth date:",
-                      style: TextStyle(fontSize: 18)),
-                ),
-              ),
-              SizedBox(height: 5),
-              _buildBirthMonth(),
-              SizedBox(height: 10),
-              _buildBirthDay(),
-              SizedBox(height: 10),
-              _buildBirthYear(),
-            ]));
+    return Container(
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          child: Text("Please enter your birth date:",
+              style: TextStyle(fontSize: 18)),
+        ),
+      ),
+      SizedBox(height: 5),
+      _buildBirthMonth(),
+      SizedBox(height: 10),
+      _buildBirthDay(),
+      SizedBox(height: 10),
+      _buildBirthYear(),
+    ]));
   }
-
-
-
-
-
 
   Widget _buildBirthMonth() {
     return TextFormField(
@@ -46,17 +38,16 @@ class _BirthdayFormWidget extends State<BirthdayFormWidget> {
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
-      validator: (String value) {
-        int month = int.tryParse(value);
-        if (month == null) {
-          return "Field Required";
-        } else if (month <= 0 || month >= 13) {
+      validator: (String? value) {
+        if (value == null) return "Field Required";
+        int month = int.tryParse(value)!;
+        if (month <= 0 || month >= 13) {
           return 'Month must be an integer 1 to 12';
         }
         return null;
       },
-      onSaved: (String value) {
-        _month = int.tryParse(value);
+      onSaved: (String? value) {
+        if (value != null) _month = int.tryParse(value)!;
       },
     );
   }
@@ -69,11 +60,10 @@ class _BirthdayFormWidget extends State<BirthdayFormWidget> {
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
-      validator: (String value) {
-        int day = int.tryParse(value);
-        if (day == null) {
-          return "Field Required";
-        } else if (day <= 0) {
+      validator: (String? value) {
+        if (value == null) return "Field Required";
+        int day = int.tryParse(value)!;
+        if (day <= 0) {
           return 'Day must be greater than 0';
         } else if (day > 31) {
           return 'Day cannot be greater than 31';
@@ -94,8 +84,8 @@ class _BirthdayFormWidget extends State<BirthdayFormWidget> {
         }
         return null;
       },
-      onSaved: (String value) {
-        _day = int.tryParse(value);
+      onSaved: (String? value) {
+        if (value != null) _day = int.tryParse(value)!;
       },
     );
   }
@@ -108,17 +98,16 @@ class _BirthdayFormWidget extends State<BirthdayFormWidget> {
         border: OutlineInputBorder(),
       ),
       keyboardType: TextInputType.number,
-      validator: (String value) {
-        int year = int.tryParse(value);
-        if (year == null) {
-          return "Field Required";
-        } else if (year <= 0) {
+      validator: (String? value) {
+        if (value == null) return "Field Required";
+        int year = int.tryParse(value)!;
+        if (year <= 0) {
           return 'Year must be greater than 0';
         }
         return null;
       },
-      onSaved: (String value) {
-        _year = int.tryParse(value);
+      onSaved: (String? value) {
+        if (value != null) _year = int.tryParse(value)!;
       },
     );
   }

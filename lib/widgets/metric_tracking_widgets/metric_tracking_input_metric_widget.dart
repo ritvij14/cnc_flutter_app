@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../alerts.dart';
 
 class MetricTrackingInputScreen extends StatefulWidget {
-  MetricModel metricModel = new MetricModel.emptyConstructor();
+  final MetricModel metricModel = MetricModel.emptyConstructor();
 
   @override
   _MetricTrackingInputScreenState createState() =>
@@ -27,13 +27,12 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading:
-          IconButton(
-            icon: Icon(Icons.clear),
-            onPressed: (){
-              Alerts().showAlert(context, false);
-            },
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            Alerts().showAlert(context, false);
+          },
+        ),
         title: Text('New Metrics'),
       ),
       body: Container(
@@ -54,7 +53,7 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     enableInteractiveSelection: false,
                     controller: dateCtl,
                     onTap: () async {
-                      DateTime date = widget.metricModel.dateTime;
+                      DateTime? date = widget.metricModel.dateTime;
                       DateTime now = DateTime.now();
                       FocusScope.of(context).requestFocus(new FocusNode());
                       date = await showDatePicker(
@@ -64,8 +63,10 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                         firstDate: DateTime(now.year, now.month, now.day - 100),
                         lastDate: DateTime.now(),
                       );
-                      dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
-                      widget.metricModel.dateTime = date;
+                      if (date != null) {
+                        dateCtl.text = DateFormat('MM/dd/yyyy').format(date);
+                        widget.metricModel.dateTime = date;
+                      }
                     },
                   ),
                 ),
@@ -82,7 +83,7 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                   width: 200,
                   child: TextFormField(
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value == null) {
                         return 'Weight required';
                       }
                       return null;
@@ -97,15 +98,13 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     //   hintText: "enter",
                     // ),
                     onChanged: (text) {
-                      if(text.isNotEmpty) {
+                      if (text.isNotEmpty) {
                         widget.metricModel.weight = int.parse(text);
                         isEnabled = true;
                       } else {
                         isEnabled = false;
                       }
-                      setState(() {
-
-                      });
+                      setState(() {});
                     },
                   ),
                 )
@@ -115,7 +114,6 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
 
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-
               children: [
                 FlatButton(
                   child: Text('CANCEL', style: TextStyle(color: Colors.grey)),
@@ -126,35 +124,39 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                     // );
                   },
                 ),
-                if(isEnabled)... [
+                if (isEnabled) ...[
                   FlatButton(
                     color: Theme.of(context).buttonColor,
-                    child: Text('SAVE ENTRY', style: TextStyle(color: Theme.of(context).highlightColor),),
+                    child: Text(
+                      'SAVE ENTRY',
+                      style: TextStyle(color: Theme.of(context).highlightColor),
+                    ),
                     onPressed: () async {
-                      if(widget.metricModel.weight != null) {
+                      if (widget.metricModel.weight != null) {
                         var sharedPref = await SharedPreferences.getInstance();
-                        String id = sharedPref.getString('id');
+                        String id = sharedPref.getString('id')!;
                         dbHelper.updateWeight(widget.metricModel);
                         widget.metricModel.userId = int.parse(id);
                         var x = db.saveNewMetric(widget.metricModel);
-                        Navigator.pop(context, 'Saved Weight of ' + widget
-                            .metricModel.weight.toString() + 'lbs');
+                        Navigator.pop(
+                            context,
+                            'Saved Weight of ' +
+                                widget.metricModel.weight.toString() +
+                                'lbs');
                       }
                     },
                   ),
-
                 ],
-                if(!isEnabled)... [
+                if (!isEnabled) ...[
                   FlatButton(
                     color: Colors.grey,
-                    child: Text('SAVE ENTRY', style: TextStyle(color: Theme.of(context).highlightColor),),
-                    onPressed: () {
-
-                    },
+                    child: Text(
+                      'SAVE ENTRY',
+                      style: TextStyle(color: Theme.of(context).highlightColor),
+                    ),
+                    onPressed: () {},
                   ),
-
                 ],
-
               ],
             ),
             // Expanded(

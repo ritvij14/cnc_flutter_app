@@ -25,7 +25,12 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
 
   int _currentIndex = 0;
 
-  List cardList = [DailySummaryWidget(), WeeklyActivityProgressWidget(), WeeklyCalorieWidget(), MetricSummaryWidget()];
+  List cardList = [
+    DailySummaryWidget(),
+    WeeklyActivityProgressWidget(),
+    WeeklyCalorieWidget(),
+    MetricSummaryWidget()
+  ];
 
   List<Food> foods = [];
   List<FoodLogEntry> foodLogEntries = [];
@@ -71,7 +76,9 @@ class _DietSummaryWidgetState extends State<DietSummaryWidget> {
               margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _currentIndex == index ? Theme.of(context).buttonColor : Colors.grey,
+                color: _currentIndex == index
+                    ? Theme.of(context).buttonColor
+                    : Colors.grey,
               ),
             );
           }),

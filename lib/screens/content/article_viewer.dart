@@ -4,26 +4,19 @@ import 'package:cnc_flutter_app/models/article_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:flutter/services.dart' ;
-
-
+import 'package:flutter/services.dart';
 
 class ArticleViewer extends StatefulWidget {
-  ArticleModel articleModel;
-  ArticleViewer(ArticleModel articleModel){
-    this.articleModel = articleModel;
-  }
+  final ArticleModel articleModel;
+  ArticleViewer(this.articleModel);
 
   @override
   _ArticleViewerState createState() => _ArticleViewerState();
 }
 
-class Article {
-}
+class Article {}
 
 class _ArticleViewerState extends State<ArticleViewer> {
-
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -40,7 +33,6 @@ class _ArticleViewerState extends State<ArticleViewer> {
               DeviceOrientation.portraitUp,
             ]);
             Navigator.of(context).pop();
-
           },
         ),
         title: Text(widget.articleModel.articleName),
