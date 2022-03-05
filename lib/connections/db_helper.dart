@@ -222,6 +222,7 @@ class DBHelper extends DBHelperBase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.get('id') as String;
     var requestUrl = baseUrl + 'api/users/' + userId + '/foodlog/' + date;
+    print(requestUrl);
     http.Response response = await http.get(Uri.parse(requestUrl), headers: {});
     return response;
   }

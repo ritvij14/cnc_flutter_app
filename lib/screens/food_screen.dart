@@ -210,6 +210,7 @@ class FoodProfile extends State<FoodPage> {
     var dateTime = selectedDate + " " + time;
     var response = await db.saveNewFoodLogEntry(
         dateTime, selectedDate, currentFood.id, portion);
+    print(response.body);
   }
 
   _pickTime() async {
@@ -533,21 +534,21 @@ class FoodProfile extends State<FoodPage> {
                                 )),
                               ],
                             ),
-                            DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text(
-                                  'Alcohol',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )),
-                                DataCell(Text(
-                                  (currentFood.alcoholInGrams * portion)
-                                          .round()
-                                          .toString() +
-                                      'g',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )),
-                              ],
-                            ),
+                            // DataRow(
+                            //   cells: <DataCell>[
+                            //     DataCell(Text(
+                            //       'Alcohol',
+                            //       style: TextStyle(fontWeight: FontWeight.bold),
+                            //     )),
+                            //     DataCell(Text(
+                            //       (currentFood.alcoholInGrams * portion)
+                            //               .round()
+                            //               .toString() +
+                            //           'g',
+                            //       style: TextStyle(fontWeight: FontWeight.bold),
+                            //     )),
+                            //   ],
+                            // ),
                             DataRow(
                               cells: <DataCell>[
                                 DataCell(Text(
@@ -850,7 +851,7 @@ class FoodProfile extends State<FoodPage> {
                             onPressed: () {
                               saveNewEntry();
                               Navigator.pop(context, 'Saved Food');
-                              // Navigator.pop(context, null);
+                              Navigator.pop(context, null);
                             },
                           ),
                         ],

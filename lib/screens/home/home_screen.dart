@@ -389,7 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
       FoodLogEntry foodLogEntry = new FoodLogEntry();
       foodLogEntry.portion = data[i]['portion'];
       Food food = new Food();
-      String description = data[i]['food']['description'].toString();
+      String description = data[i]['food']['shortDescription'].toString();
       description = description.replaceAll('"', "");
       food.description = description;
 

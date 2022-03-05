@@ -1248,19 +1248,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             onStepContinue: next,
             onStepTapped: (step) => goTo(step),
             onStepCancel: cancel,
-            controlsBuilder: (BuildContext context,
-                {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) {
+            controlsBuilder:
+                (BuildContext context, ControlsDetails controlsDetails) {
               return Row(
                 children: <Widget>[
                   isLastStep
                       ? FlatButton(
-                          onPressed: onStepContinue,
+                          onPressed: controlsDetails.onStepContinue,
                           child: const Text('SUBMIT',
                               style: TextStyle(color: Colors.white)),
                           color: Colors.blue,
                         )
                       : FlatButton(
-                          onPressed: onStepContinue,
+                          onPressed: controlsDetails.onStepContinue,
                           child: const Text('CONTINUE',
                               style: TextStyle(color: Colors.white)),
                           color: Colors.blue,
@@ -1271,7 +1271,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   isFirstStep
                       ? SizedBox(height: 0)
                       : FlatButton(
-                          onPressed: onStepCancel,
+                          onPressed: controlsDetails.onStepCancel,
                           child: const Text(
                             'BACK',
                             style: TextStyle(color: Colors.grey),

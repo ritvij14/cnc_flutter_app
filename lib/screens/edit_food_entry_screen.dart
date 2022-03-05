@@ -591,21 +591,21 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 )),
                               ],
                             ),
-                            DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text(
-                                  'Alcohol',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )),
-                                DataCell(Text(
-                                  (currentFood.alcoholInGrams * portion)
-                                          .round()
-                                          .toString() +
-                                      'g',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )),
-                              ],
-                            ),
+                            // DataRow(
+                            //   cells: <DataCell>[
+                            //     DataCell(Text(
+                            //       'Alcohol',
+                            //       style: TextStyle(fontWeight: FontWeight.bold),
+                            //     )),
+                            //     DataCell(Text(
+                            //       (currentFood.alcoholInGrams * portion)
+                            //               .round()
+                            //               .toString() +
+                            //           'g',
+                            //       style: TextStyle(fontWeight: FontWeight.bold),
+                            //     )),
+                            //   ],
+                            // ),
                             DataRow(
                               cells: <DataCell>[
                                 DataCell(Text(

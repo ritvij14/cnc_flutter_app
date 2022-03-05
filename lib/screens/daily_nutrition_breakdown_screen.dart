@@ -28,7 +28,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
   double polyunsaturatedFattyAcidsInGrams = 0;
   double monounsaturatedFattyAcidsInGrams = 0;
   double sugarInGrams = 0;
-  double alcoholInGrams = 0;
+  // double alcoholInGrams = 0;
   double vitaminDInMicrograms = 0;
   bool showFat = false;
   bool showCarbs = false;
@@ -53,7 +53,7 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
       monounsaturatedFattyAcidsInGrams +=
           (food.monounsaturatedFattyAcidsInGrams * portion);
       sugarInGrams += (food.sugarInGrams * portion);
-      alcoholInGrams += (food.alcoholInGrams * portion);
+      // alcoholInGrams += (food.alcoholInGrams * portion);
       vitaminDInMicrograms += (food.vitaminDInMicrograms * portion);
     }
   }
@@ -247,20 +247,20 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                   ),
                 ),
               ),
-              Ink(
-                child: ListTile(
-                  title: Text(
-                    'Alcohol ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  trailing: Text(
-                    alcoholInGrams.round().toString() + 'g',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              // Ink(
+              //   child: ListTile(
+              //     title: Text(
+              //       'Alcohol ',
+              //       style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontStyle: FontStyle.italic),
+              //     ),
+              //     trailing: Text(
+              //       alcoholInGrams.round().toString() + 'g',
+              //       style: TextStyle(fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
               Ink(
                 child: ListTile(
                   title: Text(
@@ -446,20 +446,20 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                   ),
                 ),
               ),
-              Ink(
-                child: ListTile(
-                  title: Text(
-                    'Alcohol ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  trailing: Text(
-                    alcoholInGrams.round().toString() + 'g',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              // Ink(
+              //   child: ListTile(
+              //     title: Text(
+              //       'Alcohol ',
+              //       style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontStyle: FontStyle.italic),
+              //     ),
+              //     trailing: Text(
+              //       alcoholInGrams.round().toString() + 'g',
+              //       style: TextStyle(fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
               Ink(
                 child: ListTile(
                   title: Text(
@@ -645,20 +645,20 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                   ),
                 ),
               ),
-              Ink(
-                child: ListTile(
-                  title: Text(
-                    'Alcohol ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  trailing: Text(
-                    alcoholInGrams.round().toString() + 'g',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              // Ink(
+              //   child: ListTile(
+              //     title: Text(
+              //       'Alcohol ',
+              //       style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontStyle: FontStyle.italic),
+              //     ),
+              //     trailing: Text(
+              //       alcoholInGrams.round().toString() + 'g',
+              //       style: TextStyle(fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
               Ink(
                 child: ListTile(
                   title: Text(
@@ -804,20 +804,20 @@ class _DailyNutritionBreakdown extends State<DailyNutritionBreakdown> {
                   ),
                 ),
               ),
-              Ink(
-                child: ListTile(
-                  title: Text(
-                    'Alcohol ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  trailing: Text(
-                    alcoholInGrams.round().toString() + 'g',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              // Ink(
+              //   child: ListTile(
+              //     title: Text(
+              //       'Alcohol ',
+              //       style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontStyle: FontStyle.italic),
+              //     ),
+              //     trailing: Text(
+              //       alcoholInGrams.round().toString() + 'g',
+              //       style: TextStyle(fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
               Ink(
                 child: ListTile(
                   title: Text(

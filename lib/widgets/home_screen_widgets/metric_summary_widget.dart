@@ -169,7 +169,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          getTextStyles: (value) => TextStyle(
+          getTextStyles: (context, value) => TextStyle(
               color: Theme.of(context).hintColor,
               fontWeight: FontWeight.bold,
               fontSize: 16),
@@ -191,7 +191,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => TextStyle(
+          getTextStyles: (context, value) => TextStyle(
             color: Theme.of(context).hintColor,
             fontWeight: FontWeight.bold,
             fontSize: 15,
@@ -266,7 +266,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          getTextStyles: (value) => const TextStyle(
+          getTextStyles: (context, value) => const TextStyle(
               color: Color(0xff68737d),
               fontWeight: FontWeight.bold,
               fontSize: 16),
@@ -288,7 +288,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => const TextStyle(
+          getTextStyles: (context, value) => const TextStyle(
             color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
             fontSize: 15,
@@ -363,7 +363,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          getTextStyles: (value) => const TextStyle(
+          getTextStyles: (context, value) => const TextStyle(
               color: Color(0xff68737d),
               fontWeight: FontWeight.bold,
               fontSize: 16),
@@ -385,7 +385,7 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => const TextStyle(
+          getTextStyles: (context, value) => const TextStyle(
             color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
             fontSize: 15,

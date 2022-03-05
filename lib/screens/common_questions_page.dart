@@ -11,7 +11,7 @@ class CQHomePage extends StatelessWidget {
         child: Container(
           child: Text(
             'Temp Common Questions',
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
         ),
       ),

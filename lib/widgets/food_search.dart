@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:cnc_flutter_app/connections/db_helper.dart';
 import 'package:cnc_flutter_app/models/food_model.dart';
 import 'package:cnc_flutter_app/screens/food_screen.dart';
@@ -27,9 +28,10 @@ class FoodSearch extends SearchDelegate<String> {
     this.selectedDate = selectedDate;
   }
 
-  Future<bool> getFood() async {
+  Future<List> getFood() async {
     var db = new DBHelper();
-    if (query.isNotEmpty) {
+    // if (query.isNotEmpty) {
+    try {
       isSearching = true;
       // await getFrequentFood();
       foodList.clear();
@@ -38,49 +40,98 @@ class FoodSearch extends SearchDelegate<String> {
       // var db = new DBHelper();
       await db.getUserInfo();
       var response = await db.searchFood(query);
-      var data = json.decode(response.body);
-      for (int i = 0; i < data.length; i++) {
-        Food food = new Food();
-        food.id = data[i]['id'];
-        food.keylist = data[i]['keyList'];
-        food.description = data[i]['description'];
-        food.description = food.description.replaceAll('"', '');
-        food.kcal = data[i]['kcal'];
-        food.proteinInGrams = data[i]['proteinInGrams'];
-        food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
-        food.fatInGrams = data[i]['fatInGrams'];
-        food.alcoholInGrams = data[i]['alcoholInGrams'];
-        food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
-        food.polyunsaturatedFattyAcidsInGrams =
-            data[i]['polyunsaturatedFattyAcidsInGrams'];
-        food.monounsaturatedFattyAcidsInGrams =
-            data[i]['monounsaturatedFattyAcidsInGrams'];
-        food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
-        food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
-        food.sugarInGrams = data[i]['sugarInGrams'];
-        food.calciumInMilligrams = data[i]['calciumInMilligrams'];
-        food.sodiumInMilligrams = data[i]['sodiumInMilligrams'];
-        food.vitaminDInMicrograms = data[i]['vitaminDInMicrograms'];
-        food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
-        food.commonPortionSizeGramWeight =
-            data[i]['commonPortionSizeGramWeight'];
-        food.commonPortionSizeDescription =
-            data[i]['commonPortionSizeDescription'];
-        food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
-        food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
-        if (!ids.contains(data[i]['id'])) {
-          foodList.add(food);
-          ids.add(data[i]['id']);
-          // data[i]['id']
-        }
-      }
-    } else {
-      foodList.clear();
-      await getFrequentFood();
-      await db.getUserInfo();
+      List data = jsonDecode(response.body) as List;
+      isSearching = false;
+      return data;
+      // log(data.toString());
+      // print(data[3]['baseId']);
+      // data.forEach((item) {
+      //   Food food = new Food();
+      //   // log('$i ----- ${data[i].toString()}');
+      //   food.id = item['baseId'];
+      //   print(item['baseId']);
+      //   food.keylist = item['keyList'];
+      //   food.description = item['shortDescription'];
+
+      //   food.description = food.description.replaceAll('"', '');
+      //   food.kcal = item['kcal'];
+      //   food.proteinInGrams = item['proteinInGrams'];
+      //   food.carbohydratesInGrams = item['carbohydratesInGrams'];
+      //   food.fatInGrams = item['fatInGrams'];
+      //   // food.alcoholInGrams = data[i]['alcoholInGrams'];
+      //   food.saturatedFattyAcidsInGrams = item['saturatedFattyAcidsInGrams'];
+      //   food.polyunsaturatedFattyAcidsInGrams =
+      //       item['polyunsaturatedFattyAcidsInGrams'];
+      //   food.monounsaturatedFattyAcidsInGrams =
+      //       item['monounsaturatedFattyAcidsInGrams'];
+      //   food.insolubleFiberInGrams = item['insolubleFiberInGrams'];
+      //   food.solubleFiberInGrams = item['solubleFiberInGrams'];
+      //   food.sugarInGrams = item['sugarInGrams'];
+      //   food.calciumInMilligrams = item['calciumInMilligrams'];
+      //   food.sodiumInMilligrams = item['sodiumInMilligrams'];
+      //   food.vitaminDInMicrograms = item['vitaminDInMicrograms'];
+      //   food.commonPortionSizeAmount = item['commonPortionSizeAmount'];
+      //   food.commonPortionSizeGramWeight =
+      //       item['commonPortionSizeGramWeight'];
+      //   food.commonPortionSizeDescription =
+      //       item['commonPortionSizeDescription'];
+      //   food.commonPortionSizeUnit = item['commonPortionSizeUnit'];
+      //   food.nccFoodGroupCategory = item['nccFoodGroupCategory'];
+      //   if (!ids.contains(item['id'])) {
+      //     foodList.add(food);
+      //     ids.add(item['id']);
+      //     // data[i]['id']
+      //   }
+      // });
+      // for (int i = 0; i < data.length; i++) {
+      // for (var item in data) {
+      //   Food food = new Food();
+      //   // log('$i ----- ${data[i].toString()}');
+      //   food.id = item['baseId'];
+      //   print(food.id);
+      //   food.keylist = item['keyList'];
+      //   food.description = item['shortDescription'];
+
+      //   food.description = food.description.replaceAll('"', '');
+      //   food.kcal = item['kcal'];
+      //   food.proteinInGrams = item['proteinInGrams'];
+      //   food.carbohydratesInGrams = item['carbohydratesInGrams'];
+      //   food.fatInGrams = item['fatInGrams'];
+      //   // food.alcoholInGrams = data[i]['alcoholInGrams'];
+      //   food.saturatedFattyAcidsInGrams = item['saturatedFattyAcidsInGrams'];
+      //   food.polyunsaturatedFattyAcidsInGrams =
+      //       item['polyunsaturatedFattyAcidsInGrams'];
+      //   food.monounsaturatedFattyAcidsInGrams =
+      //       item['monounsaturatedFattyAcidsInGrams'];
+      //   food.insolubleFiberInGrams = item['insolubleFiberInGrams'];
+      //   food.solubleFiberInGrams = item['solubleFiberInGrams'];
+      //   food.sugarInGrams = item['sugarInGrams'];
+      //   food.calciumInMilligrams = item['calciumInMilligrams'];
+      //   food.sodiumInMilligrams = item['sodiumInMilligrams'];
+      //   food.vitaminDInMicrograms = item['vitaminDInMicrograms'];
+      //   food.commonPortionSizeAmount = item['commonPortionSizeAmount'];
+      //   food.commonPortionSizeGramWeight =
+      //       item['commonPortionSizeGramWeight'];
+      //   food.commonPortionSizeDescription =
+      //       item['commonPortionSizeDescription'];
+      //   food.commonPortionSizeUnit = item['commonPortionSizeUnit'];
+      //   food.nccFoodGroupCategory = item['nccFoodGroupCategory'];
+      //   if (!ids.contains(item['id'])) {
+      //     foodList.add(food);
+      //     ids.add(item['id']);
+      //     // data[i]['id']
+      //   }
+      // }
+    } catch (e) {
+      print(e);
+      return [];
     }
-    isSearching = false;
-    return true;
+    // } else {
+    //   foodList.clear();
+    //   await getFrequentFood();
+    //   await db.getUserInfo();
+    // }
+    // return true;
   }
 
   void setMessage(message) {
@@ -97,13 +148,13 @@ class FoodSearch extends SearchDelegate<String> {
       Food food = new Food();
       food.id = data[i]['id'];
       food.keylist = data[i]['keyList'];
-      food.description = data[i]['description'];
+      food.description = data[i]['shortDescription'];
       food.description = food.description.replaceAll('"', '');
       food.kcal = data[i]['kcal'];
       food.proteinInGrams = data[i]['proteinInGrams'];
       food.carbohydratesInGrams = data[i]['carbohydratesInGrams'];
       food.fatInGrams = data[i]['fatInGrams'];
-      food.alcoholInGrams = data[i]['alcoholInGrams'];
+      // food.alcoholInGrams = data[i]['alcoholInGrams'];
       food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
       food.polyunsaturatedFattyAcidsInGrams =
           data[i]['polyunsaturatedFattyAcidsInGrams'];
@@ -301,10 +352,10 @@ class FoodSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     var searchResults;
     if (query.isEmpty) {
-      // searchResults = frequentFoodList;
+      searchResults = frequentFoodList;
       return FutureBuilder(
         builder: (context, projectSnap) {
-          if (isSearching) {
+          if (projectSnap.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(
                 valueColor: new AlwaysStoppedAnimation<Color>(
@@ -312,6 +363,7 @@ class FoodSearch extends SearchDelegate<String> {
               ),
             );
           } else {
+            print(frequentFoodList);
             return ListView.builder(
               itemCount: frequentFoodList.length,
               itemBuilder: (context, index) {
@@ -425,8 +477,9 @@ class FoodSearch extends SearchDelegate<String> {
       );
     } else {
       return FutureBuilder(
+        future: getFood(),
         builder: (context, projectSnap) {
-          if (isSearching) {
+          if (!projectSnap.hasData) {
             return Center(
               child: CircularProgressIndicator(
                 valueColor: new AlwaysStoppedAnimation<Color>(
@@ -434,8 +487,9 @@ class FoodSearch extends SearchDelegate<String> {
               ),
             );
           } else {
+            List items = projectSnap.data as List;
             return ListView.builder(
-              itemCount: searchResults.length,
+              itemCount: items.length,
               itemBuilder: (context, index) {
                 return Column(
                   children: [
@@ -452,26 +506,67 @@ class FoodSearch extends SearchDelegate<String> {
                               height: double.infinity,
                               child: Text(''),
                               color: getColor(
-                                  searchResults[index].nccFoodGroupCategory),
+                                  items[index]['nccFoodGroupCategory']),
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: 5, right: 5),
                             ),
-                            getIcon(searchResults[index].nccFoodGroupCategory),
+                            getIcon(items[index]['nccFoodGroupCategory']),
                           ],
                         ),
                         onTap: () {
                           this.searchedQuery = query;
-                          Navigator.of(context)
-                              .push(
-                                new MaterialPageRoute(
-                                    builder: (_) => FoodPage(
-                                        searchResults[index], selectedDate)),
-                              )
-                              .then((val) => {setMessage(val)});
+                          Navigator.of(context).push(
+                            new MaterialPageRoute(builder: (_) {
+                              Food food = new Food();
+                              food.id = items[index]['baseId'];
+                              food.keylist = items[index]['keyList'];
+                              food.description =
+                                  items[index]['shortDescription'];
+                              food.description =
+                                  food.description.replaceAll('"', '');
+                              food.kcal = items[index]['kcal'];
+                              food.proteinInGrams =
+                                  items[index]['proteinInGrams'];
+                              food.carbohydratesInGrams =
+                                  items[index]['carbohydratesInGrams'];
+                              food.fatInGrams = items[index]['fatInGrams'];
+                              // food.alcoholInGrams = data[i]['alcoholInGrams'];
+                              food.saturatedFattyAcidsInGrams =
+                                  items[index]['saturatedFattyAcidsInGrams'];
+                              food.polyunsaturatedFattyAcidsInGrams =
+                                  items[index]
+                                      ['polyunsaturatedFattyAcidsInGrams'];
+                              food.monounsaturatedFattyAcidsInGrams =
+                                  items[index]
+                                      ['monounsaturatedFattyAcidsInGrams'];
+                              food.insolubleFiberInGrams =
+                                  items[index]['insolubleFiberInGrams'];
+                              food.solubleFiberInGrams =
+                                  items[index]['solubleFiberInGrams'];
+                              food.sugarInGrams = items[index]['sugarInGrams'];
+                              food.calciumInMilligrams =
+                                  items[index]['calciumInMilligrams'];
+                              food.sodiumInMilligrams =
+                                  items[index]['sodiumInMilligrams'];
+                              food.vitaminDInMicrograms =
+                                  items[index]['vitaminDInMicrograms'];
+                              food.commonPortionSizeAmount =
+                                  items[index]['commonPortionSizeAmount'];
+                              food.commonPortionSizeGramWeight =
+                                  items[index]['commonPortionSizeGramWeight'];
+                              food.commonPortionSizeDescription =
+                                  items[index]['commonPortionSizeDescription'];
+                              food.commonPortionSizeUnit =
+                                  items[index]['commonPortionSizeUnit'];
+                              food.nccFoodGroupCategory =
+                                  items[index]['nccFoodGroupCategory'];
+                              return FoodPage(food, selectedDate);
+                            }),
+                          ).then((val) => {setMessage(val)});
                         },
                         title: Text(
-                          searchResults[index].description,
+                          items[index]['shortDescription'],
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -487,7 +582,6 @@ class FoodSearch extends SearchDelegate<String> {
             );
           }
         },
-        future: getFood(),
       );
     }
 

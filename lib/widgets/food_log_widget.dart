@@ -109,7 +109,7 @@ class _FoodLogState extends State<FoodLog> {
       foodLogEntry.date = data[i]['date'];
       foodLogEntry.portion = data[i]['portion'];
       Food food = new Food();
-      String description = data[i]['food']['description'].toString();
+      String description = data[i]['food']['shortDescription'].toString();
       description = description.replaceAll('"', "");
       food.description = description;
 
@@ -117,7 +117,7 @@ class _FoodLogState extends State<FoodLog> {
       food.proteinInGrams = data[i]['food']['proteinInGrams'];
       food.carbohydratesInGrams = data[i]['food']['carbohydratesInGrams'];
       food.fatInGrams = data[i]['food']['fatInGrams'];
-      food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
+      // food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
       food.saturatedFattyAcidsInGrams =
           data[i]['food']['saturatedFattyAcidsInGrams'];
       food.polyunsaturatedFattyAcidsInGrams =

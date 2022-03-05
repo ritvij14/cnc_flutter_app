@@ -96,14 +96,14 @@ class _DailySummaryWidgetState extends State<DailySummaryWidget> {
       foodLogEntry.date = data[i]['date'];
       foodLogEntry.portion = data[i]['portion'];
       Food food = new Food();
-      String description = data[i]['food']['description'].toString();
+      String description = data[i]['food']['shortDescription'].toString();
       description = description.replaceAll('"', "");
       food.description = description;
       food.kcal = data[i]['food']['kcal'];
       food.proteinInGrams = data[i]['food']['proteinInGrams'];
       food.carbohydratesInGrams = data[i]['food']['carbohydratesInGrams'];
       food.fatInGrams = data[i]['food']['fatInGrams'];
-      food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
+      // food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
       food.saturatedFattyAcidsInGrams =
           data[i]['food']['saturatedFattyAcidsInGrams'];
       food.polyunsaturatedFattyAcidsInGrams =

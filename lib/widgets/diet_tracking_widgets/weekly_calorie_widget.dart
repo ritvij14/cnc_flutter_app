@@ -41,14 +41,14 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
         foodLogEntry.date = data[i]['date'];
         foodLogEntry.portion = data[i]['portion'];
         Food food = new Food();
-        String description = data[i]['food']['description'].toString();
+        String description = data[i]['food']['shortDescription'].toString();
         description = description.replaceAll('"', "");
         food.description = description;
         food.kcal = data[i]['food']['kcal'];
         food.proteinInGrams = data[i]['food']['proteinInGrams'];
         food.carbohydratesInGrams = data[i]['food']['carbohydratesInGrams'];
         food.fatInGrams = data[i]['food']['fatInGrams'];
-        food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
+        // food.alcoholInGrams = data[i]['food']['alcoholInGrams'];
         food.saturatedFattyAcidsInGrams =
             data[i]['food']['saturatedFattyAcidsInGrams'];
         food.polyunsaturatedFattyAcidsInGrams =
@@ -392,7 +392,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                             }
                             return '';
                           },
-                          getTextStyles: (value) => TextStyle(
+                          getTextStyles: (context, value) => TextStyle(
                               color: Theme.of(context).hintColor,
                               fontSize: 14,
                               fontFamily: 'RobotoMono'),
@@ -404,7 +404,7 @@ class _WeeklyCalorieWidgetState extends State<WeeklyCalorieWidget> {
                           getTitles: (value) {
                             return weekDays[value.toInt()];
                           },
-                          getTextStyles: (value) {
+                          getTextStyles: (context, value) {
                             final isTouched = value == touchedValue;
                             return TextStyle(
                               fontSize: 14,
