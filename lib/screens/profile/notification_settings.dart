@@ -306,8 +306,11 @@ class _NotificationSettings extends State<NotificationSettings> {
         tod;
 
     var androidDetails = new AndroidNotificationDetails(
-        "dailyChannelId", "dailyChannelName", "dailyChannelDescription",
-        importance: Importance.max);
+      "dailyChannelId",
+      "dailyChannelName",
+      channelDescription: "dailyChannelDescription",
+      importance: Importance.max,
+    );
     var iOSDetails = new IOSNotificationDetails();
     var generalNotificationDetails =
         new NotificationDetails(android: androidDetails, iOS: iOSDetails);
@@ -338,8 +341,11 @@ class _NotificationSettings extends State<NotificationSettings> {
         tod;
 
     var androidDetails = new AndroidNotificationDetails(
-        "weeklyChannelId", "weeklyChannelName", "weeklyChannelDescription",
-        importance: Importance.high);
+      "weeklyChannelId",
+      "weeklyChannelName",
+      channelDescription: "weeklyChannelDescription",
+      importance: Importance.high,
+    );
     var iOSDetails = new IOSNotificationDetails();
     var generalNotificationDetails =
         new NotificationDetails(android: androidDetails, iOS: iOSDetails);

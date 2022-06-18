@@ -49,17 +49,17 @@ class LoginScreen extends StatelessWidget {
     });
   }
 
-  Future<String?> _registerUser(LoginData data) {
+  Future<String?>? _registerUser(SignupData data) {
     return Future.delayed(loginTime).then((_) async {
       //check if username is already taken
-      if (await db.isEmailValid(data.name) == true) {
+      if (await db.isEmailValid(data.name!) == true) {
         return 'Username is already taken.';
       }
       //create new user, save to db, then save to shared pref
       // final encryptedPass = encrypter.encrypt(data.password, iv: iv);
       // print(encryptedPass.runtimeType);
       UserModel userModel = new UserModel(
-          data.name, encrypter.encrypt(data.password, iv: iv).base64);
+          data.name!, encrypter.encrypt(data.password!, iv: iv).base64);
       var response = await db.registerNewUser(userModel);
       String currentUserID = response.body;
       saveUserIDtoPref(currentUserID);
