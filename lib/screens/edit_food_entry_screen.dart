@@ -279,7 +279,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
         child: const Text(
           'CANCEL',
           style: TextStyle(color: Colors.grey),
@@ -287,11 +287,12 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
         onPressed: () {
           Navigator.of(context).pop();
         });
-    Widget confirmButton = FlatButton(
+    Widget confirmButton = TextButton(
         child: const Text('CONFIRM', style: TextStyle(color: Colors.white)),
-        color: Theme.of(context).buttonColor,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.grey[800],
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).primaryColor),
+        ),
         onPressed: () {
           Navigator.of(context).pop();
           closePage();
@@ -667,7 +668,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Expanded(
-                                child: RaisedButton(
+                                child: ElevatedButton(
                               onPressed: () {
                                 showFraction = true;
                                 switched = true;
@@ -680,11 +681,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                               ),
                             )),
                             Expanded(
-                                child: OutlineButton(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
+                                child: OutlinedButton(
                               onPressed: () {
                                 showFraction = false;
                                 switched = true;
@@ -701,11 +698,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Expanded(
-                                child: OutlineButton(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
+                                child: OutlinedButton(
                               onPressed: () {
                                 showFraction = true;
                                 switched = true;
@@ -716,7 +709,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                       color: Theme.of(context).buttonColor)),
                             )),
                             Expanded(
-                                child: RaisedButton(
+                                child: ElevatedButton(
                               onPressed: () {
                                 showFraction = false;
                                 switched = true;
@@ -896,7 +889,7 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          FlatButton(
+                          TextButton(
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text('CANCEL',
                                 style: TextStyle(color: Colors.grey)),
@@ -910,8 +903,11 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                             },
                           ),
                           if (wasChanged) ...[
-                            FlatButton(
-                              color: Theme.of(context).buttonColor,
+                            TextButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).primaryColor),
+                              ),
                               // padding: EdgeInsets.symmetric(vertical: 20),
                               child: Text(
                                 'UPDATE',
@@ -926,8 +922,11 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                             ),
                           ],
                           if (!wasChanged) ...[
-                            FlatButton(
-                                color: Colors.grey,
+                            TextButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.grey),
+                                ),
                                 // padding: EdgeInsets.symmetric(vertical: 20),
                                 child: Text(
                                   'UPDATE',

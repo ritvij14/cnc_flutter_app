@@ -988,12 +988,13 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                   i.toString() +
                   " goals so far!"),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child:
                       const Text('OKAY', style: TextStyle(color: Colors.white)),
-                  color: Theme.of(context).buttonColor,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.grey[800],
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).primaryColor),
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -1019,12 +1020,13 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
                 ],
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child:
                       const Text('OKAY', style: TextStyle(color: Colors.white)),
-                  color: Theme.of(context).buttonColor,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.grey[800],
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).primaryColor),
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -1501,7 +1503,7 @@ class _ChosenWeeklyGoalsPageState extends State<ChosenWeeklyGoalsPage> {
   }
 
   void _showSnackBar(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   getGoals() async {

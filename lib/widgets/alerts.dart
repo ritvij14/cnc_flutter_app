@@ -18,8 +18,10 @@ class Alerts {
               Navigator.of(context).pop();
             },
           ),
-          FlatButton(
-            color: Theme.of(context).buttonColor,
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
+            ),
             // padding: EdgeInsets.symmetric(vertical: 20),
             child: Text(
               'CONFIRM',
@@ -49,8 +51,10 @@ class Alerts {
               Navigator.of(context).pop();
             },
           ),
-          FlatButton(
-            color: Theme.of(context).buttonColor,
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
+            ),
             // padding: EdgeInsets.symmetric(vertical: 20),
             child: Text(
               'CONFIRM',

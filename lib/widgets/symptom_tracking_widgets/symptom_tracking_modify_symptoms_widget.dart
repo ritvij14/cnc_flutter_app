@@ -1,6 +1,7 @@
 import 'package:cnc_flutter_app/connections/symptom_db_helper.dart';
 import 'package:cnc_flutter_app/models/symptom_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../alerts.dart';
@@ -189,7 +190,7 @@ class _SymptomTrackingModifyScreenState
             child: TextFormField(
                 initialValue: widget.symptomModel.other,
                 maxLength: 256,
-                maxLengthEnforced: true,
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 onChanged: (value) {
                   widget.symptomModel.other = value;
                 },
@@ -204,7 +205,7 @@ class _SymptomTrackingModifyScreenState
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FlatButton(
+                  child: TextButton(
                     child: Text(
                       'CANCEL',
                       style: TextStyle(color: Colors.grey),
@@ -221,8 +222,11 @@ class _SymptomTrackingModifyScreenState
                 if (wasChanged()) ...[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: FlatButton(
-                      color: Theme.of(context).buttonColor,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).primaryColor),
+                      ),
                       child: Text(
                         'UPDATE',
                         style: TextStyle(
@@ -239,8 +243,10 @@ class _SymptomTrackingModifyScreenState
                 if (!wasChanged()) ...[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: FlatButton(
-                      color: Colors.grey,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.grey),
+                      ),
                       child: Text(
                         'UPDATE',
                         style: TextStyle(

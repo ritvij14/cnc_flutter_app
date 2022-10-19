@@ -610,7 +610,7 @@ class FoodProfile extends State<FoodPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Expanded(
-                                child: RaisedButton(
+                                child: ElevatedButton(
                               onPressed: () {
                                 showFraction = true;
                                 switched = true;
@@ -623,11 +623,7 @@ class FoodProfile extends State<FoodPage> {
                               ),
                             )),
                             Expanded(
-                                child: OutlineButton(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
+                                child: OutlinedButton(
                               onPressed: () {
                                 showFraction = false;
                                 switched = true;
@@ -644,11 +640,7 @@ class FoodProfile extends State<FoodPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Expanded(
-                                child: OutlineButton(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).buttonColor,
-                                  style: BorderStyle.solid,
-                                  width: 2),
+                                child: OutlinedButton(
                               onPressed: () {
                                 showFraction = true;
                                 switched = true;
@@ -659,7 +651,7 @@ class FoodProfile extends State<FoodPage> {
                                       color: Theme.of(context).buttonColor)),
                             )),
                             Expanded(
-                                child: RaisedButton(
+                                child: ElevatedButton(
                               onPressed: () {
                                 showFraction = false;
                                 switched = true;
@@ -830,7 +822,7 @@ class FoodProfile extends State<FoodPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          FlatButton(
+                          TextButton(
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text('CANCEL',
                                 style: TextStyle(color: Colors.grey)),
@@ -839,8 +831,11 @@ class FoodProfile extends State<FoodPage> {
                               // Navigator.pop(context, null);
                             },
                           ),
-                          FlatButton(
-                            color: Theme.of(context).buttonColor,
+                          TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColor),
+                            ),
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
                               'SAVE',

@@ -254,7 +254,7 @@ class _ActivityTrackingModifyActivityState
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        FlatButton(
+                        TextButton(
                           // padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text('CANCEL',
                               style: TextStyle(color: Colors.grey)),
@@ -270,8 +270,11 @@ class _ActivityTrackingModifyActivityState
                         ),
                         if (minutesEntered &&
                             initialMinutes != widget.activityModel.minutes) ...[
-                          FlatButton(
-                            color: Theme.of(context).buttonColor,
+                          TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColor),
+                            ),
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
                               'UPDATE',
@@ -293,8 +296,11 @@ class _ActivityTrackingModifyActivityState
                         ],
                         if (initialMinutes == widget.activityModel.minutes ||
                             !minutesEntered) ...[
-                          FlatButton(
-                              color: Colors.grey,
+                          TextButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.grey),
+                              ),
                               // padding: EdgeInsets.symmetric(vertical: 20),
                               child: Text(
                                 'UPDATE',

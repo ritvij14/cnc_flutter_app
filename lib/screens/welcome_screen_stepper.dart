@@ -1253,24 +1253,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               return Row(
                 children: <Widget>[
                   isLastStep
-                      ? FlatButton(
+                      ? TextButton(
                           onPressed: controlsDetails.onStepContinue,
                           child: const Text('SUBMIT',
                               style: TextStyle(color: Colors.white)),
-                          color: Colors.blue,
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue),
+                          ),
                         )
-                      : FlatButton(
+                      : TextButton(
                           onPressed: controlsDetails.onStepContinue,
                           child: const Text('CONTINUE',
                               style: TextStyle(color: Colors.white)),
-                          color: Colors.blue,
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue),
+                          ),
                         ),
                   new Padding(
                     padding: new EdgeInsets.all(10),
                   ),
                   isFirstStep
                       ? SizedBox(height: 0)
-                      : FlatButton(
+                      : TextButton(
                           onPressed: controlsDetails.onStepCancel,
                           child: const Text(
                             'BACK',

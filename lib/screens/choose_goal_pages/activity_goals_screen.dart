@@ -120,7 +120,7 @@ class _ChooseActivityGoalsPageState extends State<ChooseDairyGoalsPage> {
   }
 
   void _showSnackBar(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   _addGoal(String goal) {

@@ -644,7 +644,7 @@ class _NotificationSettings extends State<NotificationSettings> {
             Padding(
               padding: EdgeInsets.only(right: 15),
               child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                FlatButton(
+                TextButton(
                   // padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text('CANCEL', style: TextStyle(color: Colors.grey)),
                   onPressed: () {
@@ -659,8 +659,10 @@ class _NotificationSettings extends State<NotificationSettings> {
                     enableDailyNotifications != enableDailyNotificationsStart ||
                     enableWeeklyNotifications !=
                         enableWeeklyNotificationsStart) ...[
-                  FlatButton(
-                    color: Theme.of(context).buttonColor,
+                  TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).primaryColor)),
                     // padding: EdgeInsets.symmetric(vertical: 20),
                     child: Text(
                       'UPDATE',
@@ -697,8 +699,10 @@ class _NotificationSettings extends State<NotificationSettings> {
                     enableDailyNotifications == enableDailyNotificationsStart &&
                     enableWeeklyNotifications ==
                         enableWeeklyNotificationsStart) ...[
-                  FlatButton(
-                      color: Colors.grey,
+                  TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.grey),
+                      ),
                       // padding: EdgeInsets.symmetric(vertical: 20),
                       child: Text(
                         'UPDATE',
