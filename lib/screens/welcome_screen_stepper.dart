@@ -316,7 +316,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       keyboardType: TextInputType.number,
       validator: (String? value) {
         if (value == null) return 'Field Required';
-        int weight = int.tryParse(value)!;
+        int weight = int.tryParse(value) ?? 0;
         if (weight <= 0) {
           return 'Weight must be greater than 0';
         }

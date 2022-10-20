@@ -695,21 +695,21 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                     ],
                     if (!showFraction) ...[
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                                child: OutlinedButton(
-                              onPressed: () {
-                                showFraction = true;
-                                switched = true;
-                                setState(() {});
-                              },
-                              child: Text("Fraction",
-                                  style: TextStyle(
-                                      color: Theme.of(context).buttonColor)),
-                            )),
-                            Expanded(
-                                child: ElevatedButton(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                              child: OutlinedButton(
+                            onPressed: () {
+                              showFraction = true;
+                              switched = true;
+                              setState(() {});
+                            },
+                            child: Text("Fraction",
+                                style: TextStyle(
+                                    color: Theme.of(context).buttonColor)),
+                          )),
+                          Expanded(
+                            child: ElevatedButton(
                               onPressed: () {
                                 showFraction = false;
                                 switched = true;
@@ -720,8 +720,10 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                                 style: TextStyle(
                                     color: Theme.of(context).highlightColor),
                               ),
-                            )),
-                          ]),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 15),
@@ -733,7 +735,9 @@ class _EditFoodLogEntry extends State<EditFoodLogEntryScreen> {
                               Text(
                                 'Serving Size',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 22),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                ),
                               ),
                               Text(
                                 servingSizeAsFraction +
