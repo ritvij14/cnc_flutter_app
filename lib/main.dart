@@ -16,10 +16,13 @@ void main() async {
   final bool screenerComplete = await auth.isScreenerComplete();
   print("screen is " + screenerComplete.toString());
   // ignore: unrelated_type_equality_checks
-  runApp(NutritionApp(
+  runApp(
+    NutritionApp(
       initialRoute: loggedIn == false
           ? '/login'
           : screenerComplete == false
               ? '/welcome'
-              : '/home'));
+              : '/home',
+    ),
+  );
 }

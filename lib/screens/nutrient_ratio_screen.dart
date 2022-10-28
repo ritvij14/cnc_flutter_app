@@ -76,7 +76,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text(
         "CANCEL",
         style: TextStyle(color: Colors.grey),
@@ -85,9 +85,11 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
         Navigator.of(context).pop();
       },
     );
-    Widget confirmButton = FlatButton(
+    Widget confirmButton = TextButton(
       child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
-      color: Colors.blue,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.blue),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         closePage();
@@ -381,7 +383,7 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      FlatButton(
+                      TextButton(
                         // padding: EdgeInsets.symmetric(vertical: 20),
                         child: Text('CANCEL',
                             style: TextStyle(color: Colors.grey)),
@@ -394,8 +396,11 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                         },
                       ),
                       if (wasChanged) ...[
-                        FlatButton(
-                          color: Colors.blue,
+                        TextButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue),
+                          ),
                           // padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text(
                             'UPDATE',
@@ -412,8 +417,11 @@ class _NutrientRatioScreenState extends State<NutrientRatioScreen> {
                         ),
                       ],
                       if (!wasChanged) ...[
-                        FlatButton(
-                            color: Colors.grey,
+                        TextButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.grey),
+                            ),
                             // padding: EdgeInsets.symmetric(vertical: 20),
                             child: Text(
                               'UPDATE',

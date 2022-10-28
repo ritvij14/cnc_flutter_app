@@ -244,7 +244,7 @@ class _BadgePageState extends State<BadgePage> {
   }
 
   void _showSnackBar(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   Color _getColor(String index) {

@@ -239,7 +239,7 @@ class _FoodLogState extends State<FoodLog> {
   showAlertDialog(
       BuildContext context, foodLogEntryId, description, action, portion) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text(
         "CANCEL",
         style: TextStyle(color: Colors.grey),
@@ -248,18 +248,23 @@ class _FoodLogState extends State<FoodLog> {
         Navigator.of(context).pop();
       },
     );
-    Widget deleteButton = FlatButton(
+    Widget deleteButton = TextButton(
       child: Text("DELETE", style: TextStyle(color: Colors.white)),
-      color: Theme.of(context).buttonColor,
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).primaryColor),
+      ),
       onPressed: () {
         deleteEntry(foodLogEntryId);
         Navigator.of(context).pop();
       },
     );
 
-    Widget updateButton = FlatButton(
+    Widget updateButton = TextButton(
       child: Text("UPDATE", style: TextStyle(color: Colors.white)),
-      color: Colors.blue,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.blue),
+      ),
       onPressed: () {
         updateEntry(foodLogEntryId);
         Navigator.of(context).pop();
@@ -303,7 +308,7 @@ class _FoodLogState extends State<FoodLog> {
 
   showInfoDialog(BuildContext context, Food food, portion) {
     // set up the buttons
-    Widget closeButton = FlatButton(
+    Widget closeButton = TextButton(
       child: Text("Close"),
       onPressed: () {
         Navigator.of(context).pop();
@@ -456,10 +461,13 @@ class _FoodLogState extends State<FoodLog> {
             } else {
               return Column(
                 children: [
-                  FlatButton(
+                  TextButton(
                     child: Text("View Today's Nutrient Breakdown",
                         style: TextStyle(color: Colors.white)),
-                    color: Theme.of(context).buttonColor,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor),
+                    ),
                     onPressed: () {
                       Navigator.of(context).push(
                         new MaterialPageRoute(

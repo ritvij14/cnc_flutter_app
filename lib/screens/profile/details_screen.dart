@@ -93,7 +93,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text(
         "CANCEL",
         style: TextStyle(color: Colors.grey),
@@ -102,9 +102,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
         Navigator.of(context).pop();
       },
     );
-    Widget confirmButton = FlatButton(
+    Widget confirmButton = TextButton(
       child: Text("CONFIRM", style: TextStyle(color: Colors.white)),
-      color: Theme.of(context).buttonColor,
+      style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).primaryColor)),
       onPressed: () {
         Navigator.of(context).pop();
         closePage();
@@ -553,7 +555,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    FlatButton(
+                    TextButton(
                       // padding: EdgeInsets.symmetric(vertical: 20),
                       child:
                           Text('CANCEL', style: TextStyle(color: Colors.grey)),
@@ -575,8 +577,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             carbohydrateChanged ||
                             fatChanged) &&
                         (newFat + newProtein + newCarbohydrates == 100)) ...[
-                      FlatButton(
-                        color: Theme.of(context).buttonColor,
+                      TextButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                Theme.of(context).primaryColor)),
                         // padding: EdgeInsets.symmetric(vertical: 20),
                         child: Text(
                           'UPDATE',
@@ -599,8 +603,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             !carbohydrateChanged &&
                             !fatChanged ||
                         (newFat + newProtein + newCarbohydrates != 100)) ...[
-                      FlatButton(
-                          color: Colors.grey,
+                      TextButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.grey),
+                          ),
                           // padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text(
                             'UPDATE',

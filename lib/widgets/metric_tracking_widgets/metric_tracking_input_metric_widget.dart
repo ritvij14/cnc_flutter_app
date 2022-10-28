@@ -115,7 +115,7 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                FlatButton(
+                TextButton(
                   child: Text('CANCEL', style: TextStyle(color: Colors.grey)),
                   onPressed: () async {
                     Alerts().showAlert(context, false);
@@ -125,8 +125,11 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                   },
                 ),
                 if (isEnabled) ...[
-                  FlatButton(
-                    color: Theme.of(context).buttonColor,
+                  TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor),
+                    ),
                     child: Text(
                       'SAVE ENTRY',
                       style: TextStyle(color: Theme.of(context).highlightColor),
@@ -148,8 +151,10 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
                   ),
                 ],
                 if (!isEnabled) ...[
-                  FlatButton(
-                    color: Colors.grey,
+                  TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.grey),
+                    ),
                     child: Text(
                       'SAVE ENTRY',
                       style: TextStyle(color: Theme.of(context).highlightColor),
@@ -169,7 +174,7 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
             //         children: [
             //           Padding(
             //             padding: const EdgeInsets.all(8.0),
-            //             child: FlatButton(
+            //             child: TextButton(
             //               child: Text('CANCEL', style: TextStyle(color: Colors.grey)),
             //               onPressed: () async {
             //                 Alerts().showAlert(context, false);
@@ -181,7 +186,7 @@ class _MetricTrackingInputScreenState extends State<MetricTrackingInputScreen> {
             //           ),
             //           Padding(
             //             padding: const EdgeInsets.all(8.0),
-            //             child: FlatButton(
+            //             child: TextButton(
             //               color: Theme.of(context).buttonColor,
             //               child: Text('SAVE ENTRY', style: TextStyle(color: Theme.of(context).highlightColor),),
             //               onPressed: () async {

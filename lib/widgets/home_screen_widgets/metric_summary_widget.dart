@@ -71,8 +71,11 @@ class _MetricSummaryWidgetState extends State<MetricSummaryWidget> {
                   ),
                 ),
               ),
-              FlatButton(
-                color: Theme.of(context).buttonColor,
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Theme.of(context).primaryColor),
+                ),
                 onPressed: () {
                   setState(() {
                     if (chart == 2) {

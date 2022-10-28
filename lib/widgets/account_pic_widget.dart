@@ -29,12 +29,17 @@ class AccountPic extends StatelessWidget {
             child: SizedBox(
               height: 46,
               width: 46,
-              child: FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  side: BorderSide(color: Theme.of(context).highlightColor),
+              child: TextButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                      side: BorderSide(color: Theme.of(context).highlightColor),
+                    ),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.secondary),
                 ),
-                color: Theme.of(context).accentColor,
                 onPressed: () {},
                 child: SvgPicture.asset(
                   "assets/icons/Camera Icon.svg",

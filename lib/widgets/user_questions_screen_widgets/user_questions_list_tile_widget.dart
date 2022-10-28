@@ -84,7 +84,7 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
               title: Text("Delete Question?"),
               content: Text("\"" + question + "\""),
               actions: [
-                new FlatButton(
+                new TextButton(
                     child: const Text(
                       'CANCEL',
                       style: TextStyle(color: Colors.grey),
@@ -93,10 +93,13 @@ class _UserQuestionsListTileState extends State<UserQuestionsListTile> {
                       Navigator.of(context, rootNavigator: true).pop();
                       // refresh();
                     }),
-                new FlatButton(
+                new TextButton(
                     child: const Text('DELETE',
                         style: TextStyle(color: Colors.white)),
-                    color: Theme.of(context).buttonColor,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor),
+                    ),
                     onPressed: () {
                       deleteQuestion(userQuestionID);
                       Navigator.of(context, rootNavigator: true).pop();

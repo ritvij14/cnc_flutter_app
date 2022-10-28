@@ -35,7 +35,6 @@ dependencies:
   flutter_svg: ^0.22.0
   fraction: ^3.0.1
   flutter_picker:
-    git: https://github.com/yangyxd/flutter_picker.git
   font_awesome_flutter: ^9.1.0
   http: ^0.13.3
   material_design_icons_flutter: ^5.0.5955-rc.1

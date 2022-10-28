@@ -144,9 +144,10 @@ class FoodSearch extends SearchDelegate<String> {
     var db = new DBHelper();
     var response = await db.getUserFrequentFoods();
     var data = json.decode(response.body);
+    log(data.toString());
     for (int i = 0; i < data.length; i++) {
       Food food = new Food();
-      food.id = data[i]['id'];
+      food.id = data[i]['id'] ?? 0; //TODO: Changed by ShivamHP
       food.keylist = data[i]['keyList'];
       food.description = data[i]['shortDescription'];
       food.description = food.description.replaceAll('"', '');
@@ -157,9 +158,9 @@ class FoodSearch extends SearchDelegate<String> {
       // food.alcoholInGrams = data[i]['alcoholInGrams'];
       food.saturatedFattyAcidsInGrams = data[i]['saturatedFattyAcidsInGrams'];
       food.polyunsaturatedFattyAcidsInGrams =
-          data[i]['polyunsaturatedFattyAcidsInGrams'];
+      data[i]['polyunsaturatedFattyAcidsInGrams'];
       food.monounsaturatedFattyAcidsInGrams =
-          data[i]['monounsaturatedFattyAcidsInGrams'];
+      data[i]['monounsaturatedFattyAcidsInGrams'];
       food.insolubleFiberInGrams = data[i]['insolubleFiberInGrams'];
       food.solubleFiberInGrams = data[i]['solubleFiberInGrams'];
       food.sugarInGrams = data[i]['sugarInGrams'];
@@ -169,12 +170,12 @@ class FoodSearch extends SearchDelegate<String> {
       food.commonPortionSizeAmount = data[i]['commonPortionSizeAmount'];
       food.commonPortionSizeGramWeight = data[i]['commonPortionSizeGramWeight'];
       food.commonPortionSizeDescription =
-          data[i]['commonPortionSizeDescription'];
+      data[i]['commonPortionSizeDescription'];
       food.commonPortionSizeUnit = data[i]['commonPortionSizeUnit'];
       food.nccFoodGroupCategory = data[i]['nccFoodGroupCategory'];
       if (!favorite_ids.contains(data[i]['id'])) {
         frequentFoodList.add(food);
-        favorite_ids.add(data[i]['id']);
+        favorite_ids.add(data[i]['id']); //TODO: Removed by ShivamHP
       }
       // frequentFoodList.add(food);
     }
@@ -299,7 +300,9 @@ class FoodSearch extends SearchDelegate<String> {
           children: [
             Card(
               margin: EdgeInsets.zero,
-              color: Theme.of(context).canvasColor,
+              color: Theme
+                  .of(context)
+                  .canvasColor,
               child: ListTile(
                 contentPadding: EdgeInsets.only(left: 0, right: 7),
                 leading: Row(
@@ -321,10 +324,11 @@ class FoodSearch extends SearchDelegate<String> {
                   // searchedQuery = query;
                   Navigator.of(context)
                       .push(
-                        new MaterialPageRoute(
-                            builder: (_) =>
-                                FoodPage(foodList[index], selectedDate)),
-                      )
+                    new MaterialPageRoute(
+                      builder: (_) =>
+                          FoodPage(foodList[index], selectedDate),
+                    ),
+                  )
                       .then((val) => {setMessage(val)});
                   // close(context, null)
                 },
@@ -359,7 +363,10 @@ class FoodSearch extends SearchDelegate<String> {
             return Center(
               child: CircularProgressIndicator(
                 valueColor: new AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).buttonColor),
+                  Theme
+                      .of(context)
+                      .primaryColor,
+                ),
               ),
             );
           } else {
@@ -371,7 +378,9 @@ class FoodSearch extends SearchDelegate<String> {
                   children: [
                     Card(
                       margin: EdgeInsets.zero,
-                      color: Theme.of(context).canvasColor,
+                      color: Theme
+                          .of(context)
+                          .canvasColor,
                       child: ListTile(
                         contentPadding: EdgeInsets.only(left: 0, right: 7),
                         leading: Row(
@@ -395,11 +404,15 @@ class FoodSearch extends SearchDelegate<String> {
                           this.searchedQuery = query;
                           Navigator.of(context)
                               .push(
-                                new MaterialPageRoute(
-                                    builder: (_) => FoodPage(
-                                        frequentFoodList[index], selectedDate)),
-                              )
-                              .then((val) => {setMessage(val)});
+                            new MaterialPageRoute(
+                              builder: (_) =>
+                                  FoodPage(
+                                      frequentFoodList[index], selectedDate),
+                            ),
+                          )
+                              .then(
+                                (val) => {setMessage(val)},
+                          );
                         },
                         title: Text(
                           frequentFoodList[index].description,
@@ -421,6 +434,7 @@ class FoodSearch extends SearchDelegate<String> {
         future: getFrequentFood(),
       );
     } else {
+      log(foodList.toString());
       searchResults = foodList;
     }
     if (searchedQuery == query) {
@@ -431,7 +445,9 @@ class FoodSearch extends SearchDelegate<String> {
             children: [
               Card(
                 margin: EdgeInsets.zero,
-                color: Theme.of(context).canvasColor,
+                color: Theme
+                    .of(context)
+                    .canvasColor,
                 child: ListTile(
                   contentPadding: EdgeInsets.only(left: 0, right: 7),
                   leading: Row(
@@ -441,8 +457,9 @@ class FoodSearch extends SearchDelegate<String> {
                         width: 15,
                         height: double.infinity,
                         child: Text(''),
-                        color:
-                            getColor(searchResults[index].nccFoodGroupCategory),
+                        color: getColor(
+                          searchResults[index].nccFoodGroupCategory,
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5, right: 5),
@@ -454,11 +471,14 @@ class FoodSearch extends SearchDelegate<String> {
                     this.searchedQuery = query;
                     Navigator.of(context)
                         .push(
-                          new MaterialPageRoute(
-                              builder: (_) =>
-                                  FoodPage(searchResults[index], selectedDate)),
-                        )
-                        .then((val) => {setMessage(val)});
+                      new MaterialPageRoute(
+                        builder: (_) =>
+                            FoodPage(searchResults[index], selectedDate),
+                      ),
+                    )
+                        .then(
+                          (val) => {setMessage(val)},
+                    );
                   },
                   title: Text(
                     searchResults[index].description,
@@ -483,108 +503,150 @@ class FoodSearch extends SearchDelegate<String> {
             return Center(
               child: CircularProgressIndicator(
                 valueColor: new AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).buttonColor),
+                  Theme
+                      .of(context)
+                      .primaryColor,
+                ),
               ),
             );
           } else {
             List items = projectSnap.data as List;
-            return ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Card(
-                      margin: EdgeInsets.zero,
-                      color: Theme.of(context).canvasColor,
-                      child: ListTile(
-                        contentPadding: EdgeInsets.only(left: 0, right: 7),
-                        leading: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 15,
-                              height: double.infinity,
-                              child: Text(''),
-                              color: getColor(
-                                  items[index]['nccFoodGroupCategory']),
-                            ),
+            log(items.sublist(0,2).toString());
+            List<String> category =[];
+            for(int index=0; index<items.length; index++){
+              List<String> tempCategory = items[index]['description'].split(', ');
+              for(int j=0; j<tempCategory.length; j++){
+                if(!category.contains(tempCategory[j])){
+                  category.add(tempCategory[j]);
+                }
+              }
+            }
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 64,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for(int i = 0; i < category.length; i++)
                             Padding(
-                              padding: EdgeInsets.only(left: 5, right: 5),
+                              padding: const EdgeInsets.all(4.0),
+                              child: Chip(label: Text(category[i])),
                             ),
-                            getIcon(items[index]['nccFoodGroupCategory']),
-                          ],
-                        ),
-                        onTap: () {
-                          this.searchedQuery = query;
-                          Navigator.of(context).push(
-                            new MaterialPageRoute(builder: (_) {
-                              Food food = new Food();
-                              food.id = items[index]['baseId'];
-                              food.keylist = items[index]['keyList'];
-                              food.description =
-                                  items[index]['shortDescription'];
-                              food.description =
-                                  food.description.replaceAll('"', '');
-                              food.kcal = items[index]['kcal'];
-                              food.proteinInGrams =
-                                  items[index]['proteinInGrams'];
-                              food.carbohydratesInGrams =
-                                  items[index]['carbohydratesInGrams'];
-                              food.fatInGrams = items[index]['fatInGrams'];
-                              // food.alcoholInGrams = data[i]['alcoholInGrams'];
-                              food.saturatedFattyAcidsInGrams =
-                                  items[index]['saturatedFattyAcidsInGrams'];
-                              food.polyunsaturatedFattyAcidsInGrams =
-                                  items[index]
-                                      ['polyunsaturatedFattyAcidsInGrams'];
-                              food.monounsaturatedFattyAcidsInGrams =
-                                  items[index]
-                                      ['monounsaturatedFattyAcidsInGrams'];
-                              food.insolubleFiberInGrams =
-                                  items[index]['insolubleFiberInGrams'];
-                              food.solubleFiberInGrams =
-                                  items[index]['solubleFiberInGrams'];
-                              food.sugarInGrams = items[index]['sugarInGrams'];
-                              food.calciumInMilligrams =
-                                  items[index]['calciumInMilligrams'];
-                              food.sodiumInMilligrams =
-                                  items[index]['sodiumInMilligrams'];
-                              food.vitaminDInMicrograms =
-                                  items[index]['vitaminDInMicrograms'];
-                              food.commonPortionSizeAmount =
-                                  items[index]['commonPortionSizeAmount'];
-                              food.commonPortionSizeGramWeight =
-                                  items[index]['commonPortionSizeGramWeight'];
-                              food.commonPortionSizeDescription =
-                                  items[index]['commonPortionSizeDescription'];
-                              food.commonPortionSizeUnit =
-                                  items[index]['commonPortionSizeUnit'];
-                              food.nccFoodGroupCategory =
-                                  items[index]['nccFoodGroupCategory'];
-                              return FoodPage(food, selectedDate);
-                            }),
-                          ).then((val) => {setMessage(val)});
-                        },
-                        title: Text(
-                          items[index]['shortDescription'],
-                          textAlign: TextAlign.left,
-                        ),
+                        ],
                       ),
                     ),
-                    Divider(
-                      color: Colors.grey[600],
-                      height: 0,
-                      thickness: 1,
-                    )
-                  ],
-                );
-              },
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for(int index = 0; index <
+                          items.length; index++)
+                        Card(
+                          margin: EdgeInsets.zero,
+                          color: Theme
+                              .of(context)
+                              .canvasColor,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.only(
+                                left: 0, right: 7),
+                            leading: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 15,
+                                  height: double.infinity,
+                                  child: Text(''),
+                                  color: getColor(
+                                      items[index]['nccFoodGroupCategory']),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 5, right: 5),
+                                ),
+                                getIcon(
+                                    items[index]['nccFoodGroupCategory']),
+                              ],
+                            ),
+                            onTap: () {
+                              this.searchedQuery = query;
+                              Navigator.of(context).push(
+                                new MaterialPageRoute(builder: (_) {
+                                  Food food = new Food();
+                                  food.id = items[index]['baseId'];
+                                  food.keylist = items[index]['keyList'];
+                                  food.description =
+                                  items[index]['shortDescription'];
+                                  food.description =
+                                      food.description.replaceAll(
+                                          '"', '');
+                                  food.kcal = items[index]['kcal'];
+                                  food.proteinInGrams =
+                                  items[index]['proteinInGrams'];
+                                  food.carbohydratesInGrams =
+                                  items[index]['carbohydratesInGrams'];
+                                  food.fatInGrams =
+                                  items[index]['fatInGrams'];
+                                  // food.alcoholInGrams = data[i]['alcoholInGrams'];
+                                  food.saturatedFattyAcidsInGrams =
+                                  items[index]['saturatedFattyAcidsInGrams'];
+                                  food.polyunsaturatedFattyAcidsInGrams =
+                                  items[index]
+                                  ['polyunsaturatedFattyAcidsInGrams'];
+                                  food.monounsaturatedFattyAcidsInGrams =
+                                  items[index]
+                                  ['monounsaturatedFattyAcidsInGrams'];
+                                  food.insolubleFiberInGrams =
+                                  items[index]['insolubleFiberInGrams'];
+                                  food.solubleFiberInGrams =
+                                  items[index]['solubleFiberInGrams'];
+                                  food.sugarInGrams =
+                                  items[index]['sugarInGrams'];
+                                  food.calciumInMilligrams =
+                                  items[index]['calciumInMilligrams'];
+                                  food.sodiumInMilligrams =
+                                  items[index]['sodiumInMilligrams'];
+                                  food.vitaminDInMicrograms =
+                                  items[index]['vitaminDInMicrograms'];
+                                  food.commonPortionSizeAmount =
+                                  items[index]['commonPortionSizeAmount'];
+                                  food.commonPortionSizeGramWeight =
+                                  items[index]['commonPortionSizeGramWeight'];
+                                  food.commonPortionSizeDescription =
+                                  items[index]['commonPortionSizeDescription'];
+                                  food.commonPortionSizeUnit =
+                                  items[index]['commonPortionSizeUnit'];
+                                  food.nccFoodGroupCategory =
+                                  items[index]['nccFoodGroupCategory'];
+                                  return FoodPage(food, selectedDate);
+                                }),
+                              ).then((val) => {setMessage(val)});
+                            },
+                            title: Text(
+                              items[index]['shortDescription'],
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      //   Divider(
+                      //   color: Colors.grey[600],
+                      //   height: 0,
+                      //   thickness: 1,
+                      // );
+                    ],
+                  ),
+                ],
+              ),
             );
           }
         },
       );
     }
 
-    // }
-  }
-}
+// }
+}}

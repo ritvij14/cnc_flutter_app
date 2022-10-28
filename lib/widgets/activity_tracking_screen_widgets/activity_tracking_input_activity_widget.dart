@@ -212,7 +212,7 @@ class _ActivityTrackingInputScreenState
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          FlatButton(
+                          TextButton(
                             child: Text('CANCEL',
                                 style: TextStyle(color: Colors.grey)),
                             onPressed: () async {
@@ -225,8 +225,11 @@ class _ActivityTrackingInputScreenState
                           if (activitySelected &&
                               minutesEntered &&
                               dateSelected) ...[
-                            FlatButton(
-                              color: Theme.of(context).buttonColor,
+                            TextButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).primaryColor),
+                              ),
                               child: Text(
                                 'SAVE ENTRY',
                                 style: TextStyle(
@@ -249,8 +252,11 @@ class _ActivityTrackingInputScreenState
                           if (!activitySelected ||
                               !minutesEntered ||
                               !dateSelected) ...[
-                            FlatButton(
-                              color: Colors.grey,
+                            TextButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.grey),
+                              ),
                               child: Text(
                                 'SAVE ENTRY',
                                 style: TextStyle(
@@ -282,7 +288,7 @@ class _ActivityTrackingInputScreenState
                       //           ),
                       //           Padding(
                       //             padding: const EdgeInsets.all(8.0),
-                      //             child: FlatButton(
+                      //             child: TextButton(
                       //               color: Colors.blue,
                       //               child: Text('SAVE ENTRY'),
                       //               onPressed: () async {

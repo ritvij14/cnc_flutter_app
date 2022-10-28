@@ -2,6 +2,7 @@ import 'package:cnc_flutter_app/connections/database.dart';
 import 'package:cnc_flutter_app/models/user_question_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../alerts.dart';
@@ -158,7 +159,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                           child: TextFormField(
                             style: TextStyle(fontSize: 18),
                             maxLength: 256,
-                            maxLengthEnforced: true,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             maxLines: null,
                             minLines: 3,
                             decoration: InputDecoration.collapsed(
@@ -196,7 +197,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                           child: TextFormField(
                             style: TextStyle(fontSize: 18),
                             maxLength: 1024,
-                            maxLengthEnforced: true,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
                             maxLines: null,
                             minLines: 6,
                             decoration: InputDecoration.collapsed(
@@ -218,7 +219,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              FlatButton(
+                              TextButton(
                                   child: const Text(
                                     'CANCEL',
                                     style: TextStyle(color: Colors.grey),
@@ -234,26 +235,30 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                     // Navigator.pop(context, null);
                                   }),
                               isUpdate
-                                  ? FlatButton(
+                                  ? TextButton(
                                       child: const Text('UPDATE',
                                           style:
                                               TextStyle(color: Colors.white)),
-                                      color: Theme.of(context).buttonColor,
-                                      disabledColor: Colors.grey,
-                                      disabledTextColor: Colors.grey[800],
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Theme.of(context).primaryColor),
+                                      ),
                                       onPressed: hasMadeEdit
                                           ? () {
                                               updateQuestion();
                                               // Navigator.pop(context, null);
                                             }
                                           : null)
-                                  : FlatButton(
+                                  : TextButton(
                                       child: const Text('SAVE',
                                           style:
                                               TextStyle(color: Colors.white)),
-                                      color: Theme.of(context).buttonColor,
-                                      disabledColor: Colors.grey,
-                                      disabledTextColor: Colors.grey[800],
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Theme.of(context).primaryColor),
+                                      ),
                                       onPressed: hasMadeEdit
                                           ? () {
                                               saveNewQuestion();
@@ -282,7 +287,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   //           ),
   //         ),
   //         actions: <Widget>[
-  //           FlatButton(
+  //           TextButton(
   //               child: const Text(
   //                 'DISCARD',
   //                 style: TextStyle(color: Colors.grey),
@@ -291,7 +296,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
   //                 Navigator.of(context).pop();
   //                 closePage();
   //               }),
-  //           FlatButton(
+  //           TextButton(
   //               child:
   //                   const Text('SAVE', style: TextStyle(color: Colors.white)),
   //               color: Colors.blue,
@@ -329,7 +334,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
         child: const Text(
           'CANCEL',
           style: TextStyle(color: Colors.grey),
@@ -337,11 +342,12 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
         onPressed: () {
           Navigator.of(context).pop();
         });
-    Widget confirmButton = FlatButton(
+    Widget confirmButton = TextButton(
         child: const Text('CONFIRM', style: TextStyle(color: Colors.white)),
-        color: Theme.of(context).buttonColor,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.grey[800],
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).primaryColor),
+        ),
         onPressed: () {
           Navigator.of(context).pop();
           closePage();
